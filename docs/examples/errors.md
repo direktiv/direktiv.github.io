@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Events
+title: Errors
 nav_order: 9
 parent: Examples
 ---
