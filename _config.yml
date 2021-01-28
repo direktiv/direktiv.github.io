@@ -31,9 +31,10 @@ logo: "/assets/banner-logo.png"
 footer_content: "Copyright &copy; 2021 Vorteil.io."
 
 # Build settings
-theme: just-the-docs
-plugins:
-  - jekyll-feed
+remote_theme: pmarsceill/just-the-docs
+# theme: just-the-docs
+# plugins:
+#   - jekyll-feed
 
 # Exclude from processing.
 # The following items will not be processed, by default.
