@@ -12,7 +12,7 @@ nav_order: 16
 | ---------- | -------------------------------------------------- | ------------------------------------- | -------- |
 | id         | State unique identifier.                           | string                                | yes      |
 | type       | State type ("validate").                           | string                                | yes      |
-| schema     | Name of the referenced state data schema.          | string                                | yes      |
+| schema     | Name of the referenced state data schema.          | object                                | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                | no       |
 | transition | State to transition to next.                       | string                                | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](../fields.html#errordefinition) | no       |
