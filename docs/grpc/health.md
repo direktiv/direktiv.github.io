@@ -1,4 +1,11 @@
-# Protocol Documentation
+---
+layout: default
+title: Health
+nav_order: 1
+parent: gRPC
+---
+
+# Health
 <a name="top"></a>
 
 ## Table of Contents

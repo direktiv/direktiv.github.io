@@ -1,4 +1,11 @@
-# Protocol Documentation
+---
+layout: default
+title: Secrets
+nav_order: 1
+parent: gRPC
+---
+# Secrets
+
 <a name="top"></a>
 
 ## Table of Contents

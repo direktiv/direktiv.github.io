@@ -1,4 +1,10 @@
-# Protocol Documentation
+---
+layout: default
+title: DNS
+nav_order: 1
+parent: gRPC
+---
+# DNS
 <a name="top"></a>
 
 ## Table of Contents
