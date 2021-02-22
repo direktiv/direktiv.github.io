@@ -148,7 +148,7 @@ If a `retry` strategy is defined the state will be immediately retried. Only onc
 | input     | `jq` command to generate the input for the action.                                                           | string   | no                            |
 | secrets   | List of secrets to temporarily add to the state data under `.secrets` before running the input `jq` command. | []string | no                            |
 
-<details><summary><strong>Click to view example definition</strong></summary>
+##### An example definition
 
 ```yaml
 - id: insertIntoDatabase
@@ -158,7 +158,7 @@ If a `retry` strategy is defined the state will be immediately retried. Only onc
     input: '{ customer: .customer }'
 ```
 
-</details>
+
 
 The Action State runs another workflow as a subflow, or a function as defined in the `functions` section of the workflow definition. Functions may include things such as containers or Vorteil virtual-machines.
 
@@ -187,7 +187,7 @@ If `async` is `true`, the workflow will not wait for it to return before transit
 | type      | CloudEvent type.                                               | string | yes      |
 | context   | Key-value pairs for CloudEvent context values that must match. | object | no       |
 
-<details><summary><strong>Click to view example definition</strong></summary>
+##### An example definition
 
 ```yaml
 - id: waitForBooking
@@ -202,8 +202,6 @@ If `async` is `true`, the workflow will not wait for it to return before transit
   transform: '.customer'
   transition: addBookingToDatabase
 ```
-
-</details>
 
 The ConsumeEvent State is the simplest state you can use to listen for CloudEvents in the middle of a workflow (for triggering a workflow when receiving an event, see [Start](#Start)). More complex event consumers include the [Callback State](#CallbackState), the [EventXor State](#EventXorState), and the [EventAnd State](#EventAndState).
 
@@ -224,7 +222,8 @@ The event payload will stored at a variable with the same name as the event's `t
 | transition | State to transition to next.                       | string                                | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#ErrorDefinition) | no       |
 
-<details><summary><strong>Click to view example definition</strong></summary>
+#### An example definition
+
 
 ```yaml
 - id: Sleep
@@ -233,7 +232,6 @@ The event payload will stored at a variable with the same name as the event's `t
   transition: fetchData
 ```
 
-</details>
 
 The Delay State pauses execution of the workflow for a predefined length of time.
 
@@ -249,7 +247,7 @@ The Delay State pauses execution of the workflow for a predefined length of time
 | transform  | `jq` command to transform the state's data output.                                             | string   | no       |
 | transition | State to transition to next.                                                                   | string   | no       |
 
-<details><summary><strong>Click to view example definition</strong></summary>
+#### An example definition
 
 ```yaml
 - id: ErrorOutOfDate
@@ -260,7 +258,6 @@ The Delay State pauses execution of the workflow for a predefined length of time
   - '.item.name'
 ```
 
-</details>
 
 The Error State allows a subflow to throw an error, catchable by the calling workflow.
 
@@ -364,7 +361,7 @@ If the optional `datacontenttype` is defined and set to something other than `ap
 | transition | State to transition to next.                       | string                                | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#ErrorDefinition) | no       |
 
-<details><summary><strong>Click to view example definition</strong></summary>
+#### An example definition
 
 ```yaml
 - id: Hello
@@ -373,7 +370,6 @@ If the optional `datacontenttype` is defined and set to something other than `ap
   transition: World
 ```
 
-</details>
 
 The No-op State exists for when nothing more than generic state functionality is required. A common use-case would be to perform a `jq` operation on the state data without performing another operation.
 
@@ -419,7 +415,7 @@ If the `timeout` is reached before the state can transition a `direktiv.stateTim
 | transition | State to transition to if this branch is selected.                        | string | no       |
 | transform  | `jq` command to transform the state's data output.                        | string | no       |
 
-<details><summary><strong>Click to view example definition</strong></summary>
+##### An example definition
 
 ```yaml
 - id: Decision
@@ -434,7 +430,6 @@ If the `timeout` is reached before the state can transition a `direktiv.stateTim
   defaultTransition: Email
 ```
 
-</details>
 
 The Switch State is used to perform conditional transitions based on the current state information. A `condition` can be any `jq` command. The command will be run on the current state information and a result of anything other than `null`, `false`, `{}`, `[]`, `""`, or `0` will cause the condition to be considered a match.
 
@@ -452,7 +447,7 @@ The list of conditions is evaluated in-order and the first match determines what
 | transition | State to transition to next.                                                                 | string                                | no       |
 | catch      | Error handling.                                                                              | [[]ErrorDefinition](#ErrorDefinition) | no       |
 
-<details><summary><strong>Click to view example definition</strong></summary>
+#### An example definition
 
 ```yaml
 - id: ValidateInput
@@ -485,6 +480,5 @@ This schema is based off the following JSON Schema:
 }
 ```
 
-</details>
 
 The Validate State can be used to validate the structure of the state's data. The schema field takes a yaml-ified representation of a JSON Schema document.
