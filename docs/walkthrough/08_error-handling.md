@@ -2,6 +2,7 @@
 layout: default
 title: Error Handling
 nav_order: 8
+parent: Walkthrough
 ---
 
 # Error Handling 

@@ -2,6 +2,7 @@
 layout: default
 title: Introduction to Isolates
 nav_order: 3
+parent: Walkthrough
 ---
 
 # Introduction to Isolates
