@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Example Configuration
+title: Configuration
 nav_order: 2
 --- 
 
-# Example Configuration
+# Configuration
 
 ```toml
 [Certs]
