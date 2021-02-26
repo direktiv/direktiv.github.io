@@ -1,0 +1,149 @@
+---
+layout: default
+title: Example Configuration
+nav_order: 2
+--- 
+
+# Example Configuration
+
+```toml
+[Certs]
+  Directory = "/tmp/certs"
+  Secure = 0
+
+[Database]
+  DB = "host=127.0.0.1 port=5432 user=postgres password=example sslmode=disable"
+
+[InstanceLogging]
+  Driver = "database"
+
+[Kernel]
+  Linux = " "
+  Runtime = " "
+
+[Minio]
+  Encrypt = " "
+  Endpoint = "localhost:9000"
+  Password = "example-password"
+  Region = " "
+  SSL = 0
+  Secure = 0
+  User = "example-user"
+
+[flowAPI]
+  Bind = ":7777"
+  Endpoint = "localhost:7777"
+
+  [flowAPI.Registry]
+    Name = "docker.io"
+    Token = "TH1S-1SNT-4-R34L-T0K3N"
+    User = "my-user"
+
+[healthAPI]
+  Bind = ":9999"
+  Endpoint = "localhost:9999"
+
+[ingressAPI]
+  Bind = ":9999"
+  Endpoint = "localhost:9999"
+
+[isolateAPI]
+  Bind = ":9999"
+  Endpoint = "localhost:9999"
+
+[quotasAPI]
+  Endpoint = ""
+
+[secretsAPI]
+  Bind = ":9999"
+  DB = "host=127.0.0.1 port=5432 user=postgres password=example sslmode=disable"
+  Endpoint = "localhost:9999"
+
+```
+
+## Fields
+
+### Certs
+- Directory 
+  - Points to an existing directory containing TLS certificate/key files for direktiv server components to establish a secure server/client. Within the directory, an individual folder is expected for each of the following four direktiv server components ('flow', 'ingress', 'isolate', 'secrets'). 
+  - Files within each component folder are expected to be named:
+    - ca.cert
+    - ca.key
+    - ca.pem
+    - ca.srl
+    - client.key
+    - client.pem
+    - client.req
+    - server.key
+    - server.pem
+- Secure 
+  - Setting to `1` will ensure that all certs are validated and correct. To skip certificate verification, set this field to `0`.
+
+### Database 
+  - DB
+    - Contains a database 'connection string', used for the direktiv server to establish a connection to a postgres server. 
+
+### InstanceLogging
+  - Driver 
+    - Currently only supports `database`, which will store logs from instances in the configured database. More drivers will be added over time.
+
+### Kernel
+  - Linux
+    - Specifies the version of the kernel to use.
+  - Runtime
+    - Specifies the version of the kernel used for firecracker instances (usually the same value as the `linux` field).
+
+### Minio
+  - Encrypt
+    - An encryption key used for encrypting/decrypting files.
+  - Endpoint
+    - Endpoint for Minio API requests to be sent.
+  - User 
+    - Username for authentication/authorisation purposes.
+  - Password
+    - Password for authentication/authorisation purposes.
+  - Region
+    - Specifies a region if using Minio with a remote cloud provider (such as Google Cloud Platform or Amazon Web Services).
+  - SSL
+    - Specifies whether a secure connection (HTTPS) should be used. Setting this field to `0` will result in the use of HTTP.
+  - Secure
+    - Supported values: `0`, `1`. If set to `0`, certificates will not be verified when communicating with the Minio server.
+
+### flowAPI
+  - Bind
+    - Address to bind the flowAPI endpoint running on the direktiv server.
+  - Endpoint 
+    - Endpoint to send flowAPI requests to.
+  - Registry
+    - Name 
+      - Name of the targeted container registry (ie. `docker.io`).
+    - User
+      - Username that will be used when authenticating/authorising with the container registry. 
+    - Token
+      - Authentication token for the specified user.
+
+### healthAPI
+  - Bind
+    - Address to bind the healthAPI endpoint running on the direktiv server.
+  - Endpoint 
+    - Endpoint to send healthAPI requests to.
+
+### ingressAPI
+  - Bind
+    - Address to bind the ingressAPI endpoint running on the direktiv server.
+  - Endpoint 
+    - Endpoint to send ingressAPI requests to.
+
+### isolateAPI
+  - Bind
+    - Address to bind the isolateAPI endpoint running on the direktiv server.
+  - Endpoint 
+    - Endpoint to send isolateAPI requests to.
+
+### secretsAPI
+  - Bind
+    - Address to bind the secretsAPI endpoint running on the direktiv server.
+  - Endpoint
+    - Endpoint to send secretsAPI requests to.
+  - DB
+    - Contains a database 'connection string', used for the direktiv server to establish a connection to a postgres server. 
