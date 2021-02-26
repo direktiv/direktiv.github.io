@@ -1,3 +1,9 @@
+---
+layout: default
+title: direktiv
+nav_exclude: true
+---
+
 # direktiv
 
 Direktiv is a specification for a serverless computing workflow language that aims to be simple and powerful above all else.
