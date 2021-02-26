@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Walkthrough
+title: Getting Started
 nav_order: 2
 has_children: true
 ---
 
-# Walkthrough
+# Getting Started
