@@ -3,7 +3,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/vorteil/direktiv">
-    <img src="assets/images/direktiv-logo.png" alt="vorteil">
+    <img src="assets/direktiv-logo.png" alt="vorteil">
   </a>
     <h5 align="center">event-based serverless container workflows</h5>
 </p>
@@ -19,7 +19,7 @@ Direktiv defines a selection of intentionally primitive states, which can be str
 This repository contains a reference implementation that runs Docker containers as isolated virtual machines on [Firecracker](https://github.com/firecracker-microvm/firecracker) using [Vorteil.io](github.com/vorteil/vorteil).
 
 <p align="center">
-  <img src="assets/images/direktiv-diagram.png" alt="direktiv">
+  <img src="assets/direktiv-diagram.png" alt="direktiv">
 </p>
 
 ## Quickstart
