@@ -2,7 +2,7 @@
 layout: default
 title: Subflows
 nav_order: 5
-parent: Walkthrough
+parent: Getting Started
 ---
 
 # Subflows

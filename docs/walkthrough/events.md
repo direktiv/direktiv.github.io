@@ -2,7 +2,7 @@
 layout: default
 title: Events
 nav_order: 7
-parent: Walkthrough
+parent: Getting Started
 ---
 # Events
 

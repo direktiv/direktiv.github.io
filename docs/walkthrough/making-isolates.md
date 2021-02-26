@@ -2,7 +2,7 @@
 layout: default
 title: Making Custom Isolates
 nav_order: 10
-parent: Walkthrough
+parent: Getting Started
 ---
 # Making Custom Isolates
 
