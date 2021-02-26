@@ -147,3 +147,35 @@ nav_order: 2
     - Endpoint to send secretsAPI requests to.
   - DB
     - Contains a database 'connection string', used for the direktiv server to establish a connection to a postgres server. 
+
+## Environment Variable Overrides
+
+A number of environment variables can be provided which will be used to set/override the value of a field in a configuration file. Below is a table containing all supported 'override' environment variables.
+
+| KEY | FIELD |
+|---|---|
+| DIREKTIV_FLOW_BIND | flowAPI.Bind |
+| DIREKTIV_FLOW_ENDPOINT | flowAPI.Endpoint |
+| DIREKTIV_FLOW_REGISTRY | flowAPI.Registry.Name |
+| DIREKTIV_FLOW_REGISTRY_USER | flowAPI.Registry.User |
+| DIREKTIV_FLOW_REGISTRY_TOKEN | flowAPI.Registry.Token |
+| DIREKTIV_HEALTH_BIND | healthAPI.Bind |
+| DIREKTIV_HEALTH_ENDPOINT | healthAPI.Endpoint |
+| DIREKTIV_INGRESS_BIND | ingressAPI.Bind |
+| DIREKTIV_INGRESS_ENDPOINT | ingressAPI.Endpoint |
+| DIREKTIV_ISOLATE_BIND | isolateAPI.Bind |
+| DIREKTIV_ISOLATE_ENDPOINT | isolateAPI.Endpoint |
+| DIREKTIV_SECRETS_BIND | secretsAPI.Bind |
+| DIREKTIV_SECRETS_ENDPOINT | secretsAPI.Endpoint |
+| DIREKTIV_SECRETS_DB | secretsAPI.DB |
+| DIREKTIV_DB | database.DB |
+| DIREKTIV_MINIO_ENDPOINT | Minio.Endpoint |
+| DIREKTIV_MINIO_USER | Minio.User |
+| DIREKTIV_MINIO_PASSWORD | Minio.Password |
+| DIREKTIV_MINIO_INSECURE | Minio.Insecure |
+| DIREKTIV_MINIO_SSL | Minio.SSL |
+| DIREKTIV_MINIO_ENCRYPT | Minio.Encrypt |
+| DIREKTIV_MINIO_REGION | Minio.Region |
+| DIREKTIV_KERNEL_LINUX | Kernel.Linux |
+| DIREKTIV_KERNEL_RUNTIME | Kernel.Runtime |
+| DIREKTIV_INSTANCE_LOGGING_DRIVER | InstanceLogging.Driver |
