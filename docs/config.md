@@ -77,7 +77,7 @@ nav_order: 2
     - server.key
     - server.pem
 - Secure 
-  - Setting to `1` will ensure that all certs are validated and correct. To skip certificate verification, set this field to `0`.
+  - Setting to `1` will require that all certs are verifiable. To skip certificate verification, set this field to `0`.
 
 ### Database 
   - DB
