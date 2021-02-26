@@ -7,7 +7,6 @@ parent: Walkthrough
 
 # Error Handling 
 
-TODO: this whole article needs extra review
 
 Handling errors can be an important part of a workflow. In this article you'll learn about timeouts, how to catch errors, retries, and recovery. 
 
