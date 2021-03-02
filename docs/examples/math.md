@@ -16,7 +16,7 @@ functions:
 states:
 - id: solve
   type: foreach
-  input: '.expressions'
+  array: '.expressions[] | { expressions: . }'
   action:
     function: solveMathExpressionFunction
     input: '{ x: . }'
