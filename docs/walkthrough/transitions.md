@@ -2,7 +2,7 @@
 layout: default
 title: Transitions
 nav_order: 2
-parent: Walkthrough
+parent: Getting Started
 ---
 
 # Transitions

@@ -2,7 +2,7 @@
 layout: default
 title: Helloworld
 nav_order: 1
-parent: Walkthrough
+parent: Getting Started
 ---
 
 

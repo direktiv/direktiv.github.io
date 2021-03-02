@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Scheduling
-parent: Walkthrough
+parent: Getting Started
 nav_order: 6
 ---
 # Scheduling 
