@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Getting Started
+title: Examples
 nav_order: 2
 has_children: true
 ---
 
-# Getting Started
+# Examples
