@@ -12,27 +12,44 @@ parent: Examples
 id: math
 functions: 
 - id: solveMathExpressionFunction
-  image: apps.vorteil.io/direktive-demos/solve
+  image: vorteil/solve
 states:
 - id: solve
   type: foreach
-  array: '.expressions[] | { expressions: . }'
+  array: '.expressions[] | { expression: . }'
   action:
     function: solveMathExpressionFunction
-    input: '{ x: . }'
-  transform: '.return'
+    input: '{ x: .expression }'
 ```
 
 ## Input 
 
 ```json
 {
-	"expressions": ["2+2", "4-1", "10*3", "20/2"]
+  "expressions": [
+    "2+2",
+    "4-1",
+    "10*3",
+    "20/2"
+  ]
 }
 ```
 
 ## Output
 
 ```json
-["4", "3", "30", "10"]
+{
+  "expressions": [
+    "2+2",
+    "4-1",
+    "10*3",
+    "20/2"
+  ],
+  "return": [
+    "4",
+    "3",
+    "30",
+    "10"
+  ]
+}
 ```
