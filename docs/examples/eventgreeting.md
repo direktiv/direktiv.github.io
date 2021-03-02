@@ -12,7 +12,7 @@ parent: Examples
 id: eventgreeting
 functions: 
 - id: greetingFunction
-  image: apps.vorteil.io/direktive-demos/greeting
+  image: vorteil/greeting
 states:
 - id: Begin
   type: consumeEvent

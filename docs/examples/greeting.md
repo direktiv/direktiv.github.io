@@ -13,7 +13,7 @@ parent: Examples
 id: greeting
 functions: 
 - id: greetingFunction
-  image: apps.vorteil.io/direktive-demos/greeting
+  image: vorteil/greeting
 states:
 - id: Greet
   type: action
