@@ -7,6 +7,11 @@ parent: Getting Started
 
 # Parallel Execution and Wait Example
 
+This example demonstrates the use of parallel subflows that must all complete before the `run` state will succeed.
+
+A hypothetical scenario where this approach may be used could involve a CI/CD process for which 3 different binaries are built (one each on Windows, Linux, and Mac) before creating a new product release. The `run` workflow will wait until all three subflows have received an event before proceeding.
+
+
 ## Parallel Workflow YAML
 
 ```yaml
@@ -23,7 +28,7 @@ states:
 
 ## wait-for Workflow YAML
 
-Replace os with windows, mac and linux for three different workflows.
+Replace `{OS}` with `windows`, `mac`, and `linux`, to create the 3 subflows referenced by the `run` state.
 
 ```yaml
 id: wait-for-{OS}
@@ -36,7 +41,7 @@ states:
 
 ## generateEvent Workflow YAML
 
-Replace os with windows, mac and linux for three different workflows.
+Replace `{OS}` with `windows`, `mac` and `linux` to create workflows that will generate the events that the previous three subflows are waiting to receive.
 
 
 ```yaml
@@ -48,7 +53,3 @@ states:
     type: gen-event-{OS}
     source: direktiv
 ```
-
-## Description
-
-This example shows the potential of tieing this to CI/CD where we need to build 3 different binaries before releasing. The parallel workflow will wait until every event has been received from the subflows.

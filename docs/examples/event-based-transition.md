@@ -7,6 +7,8 @@ parent: Getting Started
 
 # Check Credit Score
 
+This example demonstrates the use of a `switch` state in an event-based workflow. The state waits for the arrival of a `checkcredit` event, and conditionally 'approves' or 'rejects' a hypothetical loan request based on data included in the `checkcredit` event using a state.
+
 ## check-credit Workflow YAML
 ```yaml
 id: check-credit
@@ -44,7 +46,3 @@ states:
       "value": 501
     }'
 ```
-
-## Description
-
-In this example we use a consumeEvent state to wait for the arrival of whether your credit score is above or below 500. Depending on which side of the coin we land on we will approve or reject the loan.

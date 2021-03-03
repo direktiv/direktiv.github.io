@@ -7,6 +7,10 @@ parent: Getting Started
 
 # Event-based Greeting Example
 
+This example demonstrates a workflow that waits for a `greetingcloudevent` event. When the event is received, a state will be triggered using the data provided by the event. 
+
+The `generate-greeting` workflow generates the `greetingcloudevent` that the `eventbased-greeting` workflow is waiting for.
+
 ## Event Listener Workflow YAML 
 
 ```yaml
@@ -43,8 +47,3 @@ states:
       "name": "Trent"
     }'
 ```
-
-
-## Description
-
-This example creates a workflow that listens to a greeting event and will execute that workflow with the data the event was provided. The GenerateEvent workflow will execute the EventListener workflow.
