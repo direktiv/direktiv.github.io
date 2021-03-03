@@ -157,7 +157,7 @@ functions:
 states:
 - id: poster
   type: foreach
-  array: '{ .names }'
+  array: '.names[] | { name: . }'
   action:
     function: httprequest
     input: '{
