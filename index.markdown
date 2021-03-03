@@ -9,7 +9,7 @@ nav_exclude: true
 <br />
 <p align="center">
   <a href="https://github.com/vorteil/direktiv">
-    <img src="assets/images/direktiv-logo.png" alt="vorteil">
+    <img src="assets/direktiv-logo.png" alt="vorteil">
   </a>
     <h5 align="center">event-based serverless container workflows</h5>
 </p>
@@ -45,7 +45,7 @@ Direktiv was created to address 4 problems faced with workflow engines in genera
 This repository contains a reference implementation that runs Docker containers as isolated virtual machines on [Firecracker](https://github.com/firecracker-microvm/firecracker) using [Vorteil.io](github.com/vorteil/vorteil).
 
 <p align="center">
-  <img src="assets/images/direktiv-overview-solid.png" alt="direktiv">
+  <img src="assets/direktiv-overview-solid.png" alt="direktiv">
 </p>
 
 
