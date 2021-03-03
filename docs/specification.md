@@ -11,9 +11,7 @@ has_toc: true
 * auto-gen TOC:
 {:toc}
 
-# Specification
-
-## Workflow Definition
+# Workflow Definition
 
 | Parameter   | Description                      | Type                                        | Required |
 | ----------- | -------------------------------- | ------------------------------------------- | -------- |
