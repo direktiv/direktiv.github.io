@@ -105,7 +105,7 @@ Output: {"msg":"Hello, Alan!"}
 
 ### Next steps
 
-For more complex examples review the [Getting Started](docs/walkthrough) seciton of the documentation.
+For more complex examples review the [Getting Started](docs/walkthrough/walkthrough.html) seciton of the documentation.
 
 ## See Also
 
