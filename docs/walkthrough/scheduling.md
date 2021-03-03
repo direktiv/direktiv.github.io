@@ -17,7 +17,7 @@ start:
   cron: "0 */2 * * *"
 functions:
 - id: httprequest
-  image: vorteil/request
+  image: vorteil/request:v1
 states:
 - id: getter 
   type: action
