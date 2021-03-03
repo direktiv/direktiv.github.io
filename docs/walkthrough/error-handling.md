@@ -19,15 +19,15 @@ start:
   cron: "0 * * * *"
 functions:
 - id: select
-  image: vorteil/select
+  image: vorteil/select:v1
 - id: insert
-  image: vorteil/insert
+  image: vorteil/insert:v1
 - id: delete
-  image: vorteil/delete
+  image: vorteil/delete:v1
 - id: cruncher
-  image: vorteil/cruncher
+  image: vorteil/cruncher:v1
 - id: notify
-  image: vorteil/notifier
+  image: vorteil/notifier:v1
 states:
 - id: selectRows
   type: action
