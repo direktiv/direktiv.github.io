@@ -3,7 +3,7 @@ layout: default
 title: Use Cases
 nav_order: 0
 ---
-** Note: the use-cases below are documented within the [Serverless Workflow Specification](https://github.com/serverlessworkflow/specification/tree/master/usecases) page**
+*Note: the use-cases below are documented within the [Serverless Workflow Specification](https://github.com/serverlessworkflow/specification/tree/master/usecases) page*
 
 # Use Cases
 
