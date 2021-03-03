@@ -4,6 +4,8 @@ title: Specification
 nav_order: 1
 ---
 
+{:toc}
+
 # Specification
 
 ### Workflow Definition
