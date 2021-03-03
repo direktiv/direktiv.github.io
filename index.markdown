@@ -60,7 +60,7 @@ The team has also built an online demo platform - check it out!
 **[wf.direktiv.io](https://wf.direktiv.io)**
 
 <p align="center">
-  <a href="https://wf.direktiv.io">
+  <a href="https://wf.direktiv.io" target="_blank">
     <img src="assets/direktiv-workflow.png" alt="wf-direktiv">
   </a>
     <h5 align="center">Online Direktiv event-based serverless container workflows</h5>
