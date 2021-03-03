@@ -13,7 +13,7 @@ has_toc: true
 
 # Specification
 
-### Workflow Definition
+## Workflow Definition
 
 | Parameter   | Description                      | Type                                        | Required |
 | ----------- | -------------------------------- | ------------------------------------------- | -------- |
@@ -26,57 +26,7 @@ has_toc: true
 | timeouts    | Workflow global timeouts.        | [TimeoutDefinition](#timeoutdefinition)     | no       |
 | start       | Workflow start configuration.    | [Start](#start)                             | no       |
 
-## Start
-
-### ScheduledStartDefinition
-
-| Parameter | Description                                | Type   | Required |
-| --------- | ------------------------------------------ | ------ | -------- |
-| type      | Start type ("scheduled").                  | string | yes      |
-| state     | ID of the state to use as the start state. | string | no       |
-| cron      | Cron expression to schedule workflow.      | string | no       |
-
-### EventStartDefinition
-
-| Parameter | Description                                          | Type                                            | Required |
-| --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
-| type      | Start type ("event").                                | string                                          | yes      |
-| state     | ID of the state to use as the start state.           | string                                          | no       |
-| event     | Event to listen for, which can trigger the workflow. | [StartEventDefinition](#consumeeventdefinition) | yes      |
-
-#### StartEventDefinition
-
-| Parameter | Description                                                          | Type   | Required |
-| --------- | -------------------------------------------------------------------- | ------ | -------- |
-| type      | CloudEvent type.                                                     | string | yes      |
-| filters   | Key-value regex pairs for CloudEvent context values that must match. | object | no       |
-
-### EventsXorStartDefinition
-
-| Parameter | Description                                          | Type                                            | Required |
-| --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
-| type      | Start type ("eventsXor").                            | string                                          | yes      |
-| state     | ID of the state to use as the start state.           | string                                          | no       |
-| events    | Event to listen for, which can trigger the workflow. | [[]StartEventDefinition](#starteventdefinition) | yes      |
-
-### EventsAndStartDefinition
-
-| Parameter | Description                                                                                              | Type                                            | Required |
-| --------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------- |
-| type      | Start type ("eventsAnd").                                                                                | string                                          | yes      |
-| state     | ID of the state to use as the start state.                                                               | string                                          | no       |
-| events    | Event to listen for, which can trigger the workflow.                                                     | [[]StartEventDefinition](#starteventdefinition) | yes      |
-| lifespan  | Maximum duration an event can be stored before being discarded while waiting for other events (ISO8601). | string                                          | no       |
-| correlate | Context keys that must exist on every event and have matching values to be grouped together.             | []string                                        | no       |
-
-### TimeoutDefinition
-
-| Parameter | Description                                                                   | Type   | Required |
-| --------- | ----------------------------------------------------------------------------- | ------ | -------- |
-| interrupt | Duration to wait before triggering a timeout error in the workflow (ISO8601). | string | no       |
-| kill      | Duration to wait before killing the workflow (ISO8601).                       | string | no       |
-
-### FunctionDefinition
+## FunctionDefinition
 
 | Parameter | Description                            | Type   | Required |
 | --------- | -------------------------------------- | ------ | -------- |
@@ -85,11 +35,15 @@ has_toc: true
 | cmd       | Command to run in container            | string | no       |
 | size      | Size of virtual machine                | enum   | no       |
 
-A function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much storage a virtual machine is given for a function when their virtual machine is created.
+A function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
 
-NOTE: more fields to come
+| Size      | CPU | Memory  | Storage |
+| --------- | --- | ------- | ------- |
+| small     |  1  | 256 MB  | 10 GB   |
+| medium    |  2  | 512 MB  | 20 GB   |
+| large     |  4  | 1024 MB | 50 GB   |
 
-### SchemaDefinition
+## SchemaDefinition
 
 | Parameter | Description                          | Type   | Required |
 | --------- | ------------------------------------ | ------ | -------- |
@@ -487,5 +441,54 @@ This schema is based off the following JSON Schema:
 }
 ```
 
-
 The Validate State can be used to validate the structure of the state's data. The schema field takes a yaml-ified representation of a JSON Schema document.
+
+## TimeoutDefinition
+
+| Parameter | Description                                                                   | Type   | Required |
+| --------- | ----------------------------------------------------------------------------- | ------ | -------- |
+| interrupt | Duration to wait before triggering a timeout error in the workflow (ISO8601). | string | no       |
+| kill      | Duration to wait before killing the workflow (ISO8601).                       | string | no       |
+
+## Start
+
+### ScheduledStartDefinition
+
+| Parameter | Description                                | Type   | Required |
+| --------- | ------------------------------------------ | ------ | -------- |
+| type      | Start type ("scheduled").                  | string | yes      |
+| state     | ID of the state to use as the start state. | string | no       |
+| cron      | Cron expression to schedule workflow.      | string | no       |
+
+### EventStartDefinition
+
+| Parameter | Description                                          | Type                                            | Required |
+| --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
+| type      | Start type ("event").                                | string                                          | yes      |
+| state     | ID of the state to use as the start state.           | string                                          | no       |
+| event     | Event to listen for, which can trigger the workflow. | [StartEventDefinition](#consumeeventdefinition) | yes      |
+
+#### StartEventDefinition
+
+| Parameter | Description                                                          | Type   | Required |
+| --------- | -------------------------------------------------------------------- | ------ | -------- |
+| type      | CloudEvent type.                                                     | string | yes      |
+| filters   | Key-value regex pairs for CloudEvent context values that must match. | object | no       |
+
+### EventsXorStartDefinition
+
+| Parameter | Description                                          | Type                                            | Required |
+| --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
+| type      | Start type ("eventsXor").                            | string                                          | yes      |
+| state     | ID of the state to use as the start state.           | string                                          | no       |
+| events    | Event to listen for, which can trigger the workflow. | [[]StartEventDefinition](#starteventdefinition) | yes      |
+
+### EventsAndStartDefinition
+
+| Parameter | Description                                                                                              | Type                                            | Required |
+| --------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------- |
+| type      | Start type ("eventsAnd").                                                                                | string                                          | yes      |
+| state     | ID of the state to use as the start state.                                                               | string                                          | no       |
+| events    | Event to listen for, which can trigger the workflow.                                                     | [[]StartEventDefinition](#starteventdefinition) | yes      |
+| lifespan  | Maximum duration an event can be stored before being discarded while waiting for other events (ISO8601). | string                                          | no       |
+| correlate | Context keys that must exist on every event and have matching values to be grouped together.             | []string                                        | no       |
