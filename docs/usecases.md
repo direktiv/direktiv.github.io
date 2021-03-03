@@ -15,11 +15,11 @@ So what can you automate with Serverless Workflows? You can get some ideas from 
 
 ## Table of Contents
 
-- [Online Vehicle Auction](#Online-Vehicle-Auction)
-- [Payment Processing](#Payment-Processing)
-- [Data Analysis](#Data-Analysis)
-- [Error Notifications](#Error-Notifications)
-- [Continuous Integration And Deployment](#Continuous-Integration-And-Deployment)
+- [Online Vehicle Auction](#online-vehicle-auction)
+- [Payment Processing](#payment-processing)
+- [Data Analysis](#data-analysis)
+- [Error Notifications](#error-notifications)
+- [Continuous Integration And Deployment](#continuous-integration-and-deployment)
 
 ## Online Vehicle Auction
 
