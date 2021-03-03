@@ -7,6 +7,8 @@ parent: Getting Started
 
 # Greeting Example
 
+This simple example workflow uses a single `action` state to call the `vorteil/greeting` action, which 'greets' the user specified in the `"name"` field of the input provided to the workflow.
+
 ## Workflow YAML
 
 ```yaml
@@ -24,9 +26,7 @@ states:
   transform: '{ "greeting": .return.greeting }'
 ```
 
-## Description
-
-This example shows a single Action state that calls a "greeting" container. The workflow data input is the name you wish to greet.
+## Input
 
 ```json
 {
@@ -34,7 +34,9 @@ This example shows a single Action state that calls a "greeting" container. The 
 }
 ```
 
-The results of this action will be the name provided with a greeting.
+## Output
+
+The results of this action will contain a greeting addressed to the provided name.
 
 ```json
 {
