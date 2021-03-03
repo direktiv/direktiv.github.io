@@ -419,7 +419,7 @@ The list of conditions is evaluated in-order and the first match determines what
     - name
     properties:
       name:
-	type: string
+        type: string
     additionalProperties: false
   transition: processRequest
 ```
