@@ -21,7 +21,6 @@ nav_exclude: true
 > 
 >
 > **Check out our online demo: [wf.direktiv.io](https://wf.direktiv.io)**
-> 
 
 >  
 
@@ -53,6 +52,21 @@ This repository contains a reference implementation that runs Docker containers 
 ## Use Cases for Direktiv?
 
 Use Cases for Direktiv (or more generically Serverless Workflows) can range from simple batch procesing jobs to more complex event-driven business workflows. Some of these use cases are captured in the [Use Cases](docs/usecases.html) section
+
+## Online Demo
+
+The team has also built an online demo platform - check it out!
+
+**[wf.direktiv.io](https://wf.direktiv.io)**
+
+<p align="center">
+  <a href="https://wf.direktiv.io">
+    <img src="assets/direktiv-workflow.png" alt="wf-direktiv">
+  </a>
+    <h5 align="center">Online Direktiv event-based serverless container workflows</h5>
+</p>
+
+
 
 
 ## Code of Conduct
