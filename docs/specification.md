@@ -11,6 +11,8 @@ has_toc: true
 * auto-gen TOC:
 {:toc}
 
+
+
 # Workflow Definition
 
 | Parameter   | Description                      | Type                                        | Required |
@@ -35,11 +37,11 @@ has_toc: true
 
 A function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
 
-| Size      | CPU | Memory  | Storage |
-| --------- | --- | ------- | ------- |
-| small     |  1  | 256 MB  | 10 GB   |
-| medium    |  2  | 512 MB  | 20 GB   |
-| large     |  4  | 1024 MB | 50 GB   |
+| Size      | CPU | Memory   | Storage  |
+| --------- | --- | -------- | -------- |
+| small     |  1  | 256 MB   | +64 MB   |
+| medium    |  1  | 512 MB   | +64 MB   |
+| large     |  2  | 1024 MB  | +64 MB   |
 
 ## SchemaDefinition
 
