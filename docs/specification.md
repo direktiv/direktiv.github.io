@@ -20,11 +20,11 @@ has_toc: true
 | id          | Workflow unique identifier.      | string                                      | yes      |
 | name        | Workflow name (metadata).        | string                                      | no       |
 | description | Workflow description (metadata). | string                                      | no       |
-| functions   | Workflow function definitions.   | [[]FunctionDefinition](#FunctionDefinition) | no       |
-| schemas     | Workflow schema definitions.     | [[]SchemaDefinition](#SchemaDefinition)     | no       |
-| states      | Workflow states.                 | [[]StateDefinition](#States)                | no       |
-| timeouts    | Workflow global timeouts.        | [TimeoutDefinition](#TimeoutDefinition)     | no       |
-| start       | Workflow start configuration.    | [Start](#Start)                             | no       |
+| functions   | Workflow function definitions.   | [[]FunctionDefinition](#unctiondefinition) | no       |
+| schemas     | Workflow schema definitions.     | [[]SchemaDefinition](#schemadefinition)     | no       |
+| states      | Workflow states.                 | [[]StateDefinition](#states)                | no       |
+| timeouts    | Workflow global timeouts.        | [TimeoutDefinition](#timeoutdefinition)     | no       |
+| start       | Workflow start configuration.    | [Start](#start)                             | no       |
 
 ## Start
 
@@ -42,7 +42,7 @@ has_toc: true
 | --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
 | type      | Start type ("event").                                | string                                          | yes      |
 | state     | ID of the state to use as the start state.           | string                                          | no       |
-| event     | Event to listen for, which can trigger the workflow. | [StartEventDefinition](#ConsumeEventDefinition) | yes      |
+| event     | Event to listen for, which can trigger the workflow. | [StartEventDefinition](#consumeeventdefinition) | yes      |
 
 #### StartEventDefinition
 
@@ -57,7 +57,7 @@ has_toc: true
 | --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
 | type      | Start type ("eventsXor").                            | string                                          | yes      |
 | state     | ID of the state to use as the start state.           | string                                          | no       |
-| events    | Event to listen for, which can trigger the workflow. | [[]StartEventDefinition](#StartEventDefinition) | yes      |
+| events    | Event to listen for, which can trigger the workflow. | [[]StartEventDefinition](#starteventdefinition) | yes      |
 
 ### EventsAndStartDefinition
 
@@ -65,7 +65,7 @@ has_toc: true
 | --------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------- |
 | type      | Start type ("eventsAnd").                                                                                | string                                          | yes      |
 | state     | ID of the state to use as the start state.                                                               | string                                          | no       |
-| events    | Event to listen for, which can trigger the workflow.                                                     | [[]StartEventDefinition](#StartEventDefinition) | yes      |
+| events    | Event to listen for, which can trigger the workflow.                                                     | [[]StartEventDefinition](#starteventdefinition) | yes      |
 | lifespan  | Maximum duration an event can be stored before being discarded while waiting for other events (ISO8601). | string                                          | no       |
 | correlate | Context keys that must exist on every event and have matching values to be grouped together.             | []string                                        | no       |
 
@@ -105,7 +105,7 @@ NOTE: more fields to come
 | id         | State unique identifier.                           | string                                | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                | no       |
 | transition | State to transition to next.                       | string                                | no       |
-| catch      | Error handling.                                    | [[]ErrorDefinition](#ErrorDefinition) | no       |
+| catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition) | no       |
 
 The `id` field must be unique amongst all states in the workflow, and may consist of only alphanumeric characters as well as periods, dashes, and underscores.
 
