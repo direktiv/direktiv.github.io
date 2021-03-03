@@ -34,14 +34,14 @@ Getting a local playground environment can be easily done with either [Vorteil.i
 
 With Vorteil installed (full instructions [here](https://github.com/vorteil/vorteil)):
 
- 1. download `direktiv.vorteil` from the [releases page](https://github.com/vorteil/direktiv/releases), 
+ 1. download `direktiv.vorteil` from the [releases page](https://github.com/vorteil/direktiv/releases) (contained in the ZIP file), 
  2. run `vorteil run direktiv.vorteil` from within your downloads folder.
 
 
 
 ***Testing Direktiv***:
 
-Download the `direkcli` command-line tool from the [releases page](https://github.com/vorteil/direktiv/releases)  and create your first namespace by running:
+Download the `direkcli` command-line tool from the [releases page](https://github.com/vorteil/direktiv/releases)  (contained in the ZIP file) and create your first namespace by running:
 
 `direkcli namespaces create demo`
 
@@ -60,7 +60,7 @@ $ direkcli namespaces list
 
 ### Workflow specification
 
-The below example is the minimal configuration needed for a workflow, following the [workflow language specification](https://docs.direktiv.io/docs/specification.html): 
+The below example is the minimal configuration needed for a workflow, following the [workflow language specification](docs/specification.html): 
 
 ```yaml
 id: helloworld

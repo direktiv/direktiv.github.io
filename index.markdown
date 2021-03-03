@@ -52,14 +52,14 @@ This repository contains a reference implementation that runs Docker containers 
 
 ## Use Cases for Direktiv?
 
-Use Cases for Direktiv (or more generically Serverless Workflows) can range from simple batch procesing jobs to more complex event-driven business workflows. Some of these use cases are captured in the [Use Cases](docs/usecases.md) section
+Use Cases for Direktiv (or more generically Serverless Workflows) can range from simple batch procesing jobs to more complex event-driven business workflows. Some of these use cases are captured in the [Use Cases](docs/usecases.html) section
 
 
-### Code of Conduct
+## Code of Conduct
 
 We have adopted the [Contributor Covenant](https://github.com/vorteil/.github/blob/master/CODE_OF_CONDUCT.md) code of conduct.
 
-### Contributing
+## Contributing
 
 Any feedback and contributions are welcome. Read our [contributing guidelines](https://github.com/vorteil/.github/blob/master/CONTRIBUTING.md) for details.
 
