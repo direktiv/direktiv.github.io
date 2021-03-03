@@ -60,7 +60,7 @@ $ direkcli namespaces list
 
 ### Workflow specification
 
-The below example is the minimal configuration needed for a workflow, following the [workflow language specification](docs/specification.html): 
+The below example is the minimal configuration needed for a workflow, following the [workflow language specification](specification.html): 
 
 ```yaml
 id: helloworld
@@ -105,7 +105,7 @@ Output: {"msg":"Hello, Alan!"}
 
 ### Next steps
 
-For more complex examples review the [Getting Started](docs/walkthrough/walkthrough.html) seciton of the documentation.
+For more complex examples review the [Getting Started](walkthrough/walkthrough.html) seciton of the documentation.
 
 ## See Also
 
