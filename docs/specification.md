@@ -1,75 +1,32 @@
 ---
 layout: default
 title: Specification
-nav_order: 1
+nav_order: 3
+has_toc: true
 ---
 
-# Specification
+# Contents
+{:.no_toc}
 
-### Workflow Definition
+* auto-gen TOC:
+{:toc}
+
+
+
+# Workflow Definition
 
 | Parameter   | Description                      | Type                                        | Required |
 | ----------- | -------------------------------- | ------------------------------------------- | -------- |
 | id          | Workflow unique identifier.      | string                                      | yes      |
 | name        | Workflow name (metadata).        | string                                      | no       |
 | description | Workflow description (metadata). | string                                      | no       |
-| functions   | Workflow function definitions.   | [[]FunctionDefinition](#FunctionDefinition) | no       |
-| schemas     | Workflow schema definitions.     | [[]SchemaDefinition](#SchemaDefinition)     | no       |
-| states      | Workflow states.                 | [[]StateDefinition](#States)                | no       |
-| timeouts    | Workflow global timeouts.        | [TimeoutDefinition](#TimeoutDefinition)     | no       |
-| start       | Workflow start configuration.    | [Start](#Start)                             | no       |
+| functions   | Workflow function definitions.   | [[]FunctionDefinition](#functiondefinition) | no       |
+| schemas     | Workflow schema definitions.     | [[]SchemaDefinition](#schemadefinition)     | no       |
+| states      | Workflow states.                 | [[]StateDefinition](#states)                | no       |
+| timeouts    | Workflow global timeouts.        | [TimeoutDefinition](#timeoutdefinition)     | no       |
+| start       | Workflow start configuration.    | [Start](#start)                             | no       |
 
-## Start
-
-### ScheduledStartDefinition
-
-| Parameter | Description                                | Type   | Required |
-| --------- | ------------------------------------------ | ------ | -------- |
-| type      | Start type ("scheduled").                  | string | yes      |
-| state     | ID of the state to use as the start state. | string | no       |
-| cron      | Cron expression to schedule workflow.      | string | no       |
-
-### EventStartDefinition
-
-| Parameter | Description                                          | Type                                            | Required |
-| --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
-| type      | Start type ("event").                                | string                                          | yes      |
-| state     | ID of the state to use as the start state.           | string                                          | no       |
-| event     | Event to listen for, which can trigger the workflow. | [StartEventDefinition](#ConsumeEventDefinition) | yes      |
-
-#### StartEventDefinition
-
-| Parameter | Description                                                          | Type   | Required |
-| --------- | -------------------------------------------------------------------- | ------ | -------- |
-| type      | CloudEvent type.                                                     | string | yes      |
-| filters   | Key-value regex pairs for CloudEvent context values that must match. | object | no       |
-
-### EventsXorStartDefinition
-
-| Parameter | Description                                          | Type                                            | Required |
-| --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
-| type      | Start type ("eventsXor").                            | string                                          | yes      |
-| state     | ID of the state to use as the start state.           | string                                          | no       |
-| events    | Event to listen for, which can trigger the workflow. | [[]StartEventDefinition](#StartEventDefinition) | yes      |
-
-### EventsAndStartDefinition
-
-| Parameter | Description                                                                                              | Type                                            | Required |
-| --------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------- |
-| type      | Start type ("eventsAnd").                                                                                | string                                          | yes      |
-| state     | ID of the state to use as the start state.                                                               | string                                          | no       |
-| events    | Event to listen for, which can trigger the workflow.                                                     | [[]StartEventDefinition](#StartEventDefinition) | yes      |
-| lifespan  | Maximum duration an event can be stored before being discarded while waiting for other events (ISO8601). | string                                          | no       |
-| correlate | Context keys that must exist on every event and have matching values to be grouped together.             | []string                                        | no       |
-
-### TimeoutDefinition
-
-| Parameter | Description                                                                   | Type   | Required |
-| --------- | ----------------------------------------------------------------------------- | ------ | -------- |
-| interrupt | Duration to wait before triggering a timeout error in the workflow (ISO8601). | string | no       |
-| kill      | Duration to wait before killing the workflow (ISO8601).                       | string | no       |
-
-### FunctionDefinition
+## FunctionDefinition
 
 | Parameter | Description                            | Type   | Required |
 | --------- | -------------------------------------- | ------ | -------- |
@@ -78,11 +35,15 @@ nav_order: 1
 | cmd       | Command to run in container            | string | no       |
 | size      | Size of virtual machine                | enum   | no       |
 
-A function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much storage a virtual machine is given for a function when their virtual machine is created.
+A function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
 
-NOTE: more fields to come
+| Size      | CPU | Memory   | Storage  |
+| --------- | --- | -------- | -------- |
+| small     |  1  | 256 MB   | +64 MB   |
+| medium    |  1  | 512 MB   | +64 MB   |
+| large     |  2  | 1024 MB  | +64 MB   |
 
-### SchemaDefinition
+## SchemaDefinition
 
 | Parameter | Description                          | Type   | Required |
 | --------- | ------------------------------------ | ------ | -------- |
@@ -98,7 +59,7 @@ NOTE: more fields to come
 | id         | State unique identifier.                           | string                                | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                | no       |
 | transition | State to transition to next.                       | string                                | no       |
-| catch      | Error handling.                                    | [[]ErrorDefinition](#ErrorDefinition) | no       |
+| catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition) | no       |
 
 The `id` field must be unique amongst all states in the workflow, and may consist of only alphanumeric characters as well as periods, dashes, and underscores.
 
@@ -111,7 +72,7 @@ The `transition`, if provided, must be set to the `id` of a state within the wor
 | Parameter  | Description                                     | Type                                | Required |
 | ---------- | ----------------------------------------------- | ----------------------------------- | -------- |
 | error      | A glob pattern to test error codes for a match. | string                              | yes      |
-| retry      | Retry strategy.                                 | [RetryDefinition](#RetryDefinition) | no       |
+| retry      | Retry strategy.                                 | [RetryDefinition](#retrydefinition) | no       |
 | transition | State to transition to next.                    | string                              | no       |
 
 The `error` parameter can be a glob pattern to match multiple types of errors. When an error is thrown it will be compared against each ErrorDefinition in order until it finds a match. If no matches are found the workflow will immediately abort and escalate the error to any caller.
@@ -132,12 +93,12 @@ If a `retry` strategy is defined the state will be immediately retried. Only onc
 | ---------- | ---------------------------------------------------------------------------- | ------------------------------------- | -------- |
 | id         | State unique identifier.                                                     | string                                | yes      |
 | type       | State type ("action").                                                       | string                                | yes      |
-| action     | Action to perform.                                                           | [Action](#ActionDefinition)           | yes      |
+| action     | Action to perform.                                                           | [Action](#actiondefinition)           | yes      |
 | async      | If workflow execution can continue without waiting for the action to return. | boolean                               | no       |
 | timeout    | Duration to wait for action to complete (ISO8601).                           | string                                | no       |
 | transform  | `jq` command to transform the state's data output.                           | string                                | no       |
 | transition | State to transition to next.                                                 | string                                | no       |
-| catch      | Error handling.                                                              | [[]ErrorDefinition](#ErrorDefinition) | no       |
+| catch      | Error handling.                                                              | [[]ErrorDefinition](#errordefinition) | no       |
 
 #### ActionDefinition
 
@@ -174,11 +135,11 @@ If `async` is `true`, the workflow will not wait for it to return before transit
 | ---------- | -------------------------------------------------- | ------------------------------------------------- | -------- |
 | id         | State unique identifier.                           | string                                            | yes      |
 | type       | State type ("consumeEvent").                       | string                                            | yes      |
-| event      | Event to consume.                                  | [ConsumeEventDefinition](#ConsumeEventDefinition) | yes      |
+| event      | Event to consume.                                  | [ConsumeEventDefinition](#consumeeventdefinition) | yes      |
 | timeout    | Duration to wait to receive event (ISO8601).       | string                                            | no       |
 | transform  | `jq` command to transform the state's data output. | string                                            | no       |
 | transition | State to transition to next.                       | string                                            | no       |
-| catch      | Error handling.                                    | [[]ErrorDefinition](#ErrorDefinition)             | no       |
+| catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)             | no       |
 
 #### ConsumeEventDefinition
 
@@ -203,7 +164,7 @@ If `async` is `true`, the workflow will not wait for it to return before transit
   transition: addBookingToDatabase
 ```
 
-The ConsumeEvent State is the simplest state you can use to listen for CloudEvents in the middle of a workflow (for triggering a workflow when receiving an event, see [Start](#Start)). More complex event consumers include the [Callback State](#CallbackState), the [EventXor State](#EventXorState), and the [EventAnd State](#EventAndState).
+The ConsumeEvent State is the simplest state you can use to listen for CloudEvents in the middle of a workflow (for triggering a workflow when receiving an event, see [Start](#start)). More complex event consumers include the [Callback State](#callbackstate), the [EventXor State](#eventxorstate), and the [EventAnd State](#eventandstate).
 
 When a workflow reaches a ConsumeEvent State it will halt its execution until it receives a matching event, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with `{{` and ends with `}}` it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
 
@@ -220,7 +181,7 @@ The event payload will stored at a variable with the same name as the event's `t
 | duration   | Duration to delay (ISO8601).                       | string                                | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                | no       |
 | transition | State to transition to next.                       | string                                | no       |
-| catch      | Error handling.                                    | [[]ErrorDefinition](#ErrorDefinition) | no       |
+| catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition) | no       |
 
 #### An example definition
 
@@ -271,11 +232,11 @@ An error consists of two parts: an error code, and an error message. The code sh
 | ---------- | -------------------------------------------------- | --------------------------------------------------- | -------- |
 | id         | State unique identifier.                           | string                                              | yes      |
 | type       | State type ("eventAnd").                           | string                                              | yes      |
-| events     | Events to consume.                                 | [[]ConsumeEventDefinition](#ConsumeEventDefinition) | yes      |
+| events     | Events to consume.                                 | [[]ConsumeEventDefinition](#consumeeventdefinition) | yes      |
 | timeout    | Duration to wait to receive all events (ISO8601).  | string                                              | no       |
 | transform  | `jq` command to transform the state's data output. | string                                              | no       |
 | transition | State to transition to next.                       | string                                              | no       |
-| catch      | Error handling.                                    | [[]ErrorDefinition](#ErrorDefinition)               | no       |
+| catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)               | no       |
 
 When a workflow reaches an EventAnd State it will halt its execution until it receives a matching event for every event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with `{{` and ends with `}}` it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
 
@@ -289,15 +250,15 @@ The event payloads will stored in variables with the same names as each event's 
 | --------- | -------------------------------------------------------------------- | ------------------------------------------------------- | -------- |
 | id        | State unique identifier.                                             | string                                                  | yes      |
 | type      | State type ("eventXor").                                             | string                                                  | yes      |
-| events    | Events to consume, and what to do based on which event was received. | [[]EventConditionDefinition](#EventConditionDefinition) | yes      |
+| events    | Events to consume, and what to do based on which event was received. | [[]EventConditionDefinition](#eventconditiondefinition) | yes      |
 | timeout   | Duration to wait to receive event (ISO8601).                         | string                                                  | no       |
-| catch     | Error handling.                                                      | [[]ErrorDefinition](#ErrorDefinition)                   | no       |
+| catch     | Error handling.                                                      | [[]ErrorDefinition](#errordefinition)                   | no       |
 
 #### EventConditionDefinition
 
 | Parameter  | Description                                        | Type                                              | Required |
 | ---------- | -------------------------------------------------- | ------------------------------------------------- | -------- |
-| event      | Event to consume.                                  | [ConsumeEventDefinition](#ConsumeEventDefinition) | yes      |
+| event      | Event to consume.                                  | [ConsumeEventDefinition](#consumeeventdefinition) | yes      |
 | transition | State to transition to if this branch is selected. | string                                            | no       |
 | transform  | `jq` command to transform the state's data output. | string                                            | no       |
 
@@ -314,11 +275,11 @@ The received event payload will stored in a variable with the same name as its e
 | id         | State unique identifier.                                     | string                                | yes      |
 | type       | State type ("foreach").                                      | string                                | yes      |
 | array      | `jq` command to produce an array of objects to loop through. | string                                | yes      |
-| action     | Action to perform.                                           | [Action](#Action)                     | yes      |
+| action     | Action to perform.                                           | [Action](#action)                     | yes      |
 | timeout    | Duration to wait for all actions to complete (ISO8601).      | string                                | no       |
 | transform  | `jq` command to transform the state's data output.           | string                                | no       |
 | transition | State to transition to next.                                 | string                                | no       |
-| catch      | Error handling.                                              | [[]ErrorDefinition](#ErrorDefinition) | no       |
+| catch      | Error handling.                                              | [[]ErrorDefinition](#errordefinition) | no       |
 
 The ForeachState can be used to split up state data into an array and then perform an action on each element in parallel.
 
@@ -332,10 +293,10 @@ The return values of each action will be included in an array stored at `.return
 | ---------- | -------------------------------------------------- | --------------------------------------------------- | -------- |
 | id         | State unique identifier.                           | string                                              | yes      |
 | type       | State type ("generateEvent").                      | string                                              | yes      |
-| event      | Event to generate.                                 | [GenerateEventDefinition](#GenerateEventDefinition) | yes      |
+| event      | Event to generate.                                 | [GenerateEventDefinition](#generateeventdefinition) | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                              | no       |
 | transition | State to transition to next.                       | string                                              | no       |
-| catch      | Error handling.                                    | [[]ErrorDefinition](#ErrorDefinition)               | no       |
+| catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)               | no       |
 
 ### GenerateEventDefinition
 
@@ -359,7 +320,7 @@ If the optional `datacontenttype` is defined and set to something other than `ap
 | type       | State type ("noop").                               | string                                | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                | no       |
 | transition | State to transition to next.                       | string                                | no       |
-| catch      | Error handling.                                    | [[]ErrorDefinition](#ErrorDefinition) | no       |
+| catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition) | no       |
 
 #### An example definition
 
@@ -381,14 +342,14 @@ Other states may avoid logging verbosely to keep logs concise and manageable, bu
 | ---------- | --------------------------------------------------------------------------- | --------------------------------------- | -------- |
 | id         | State unique identifier.                                                    | string                                  | yes      |
 | type       | State type ("parallel").                                                    | string                                  | yes      |
-| actions    | Actions to perform.                                                         | [[]ActionDefinition](#ActionDefinition) | yes      |
+| actions    | Actions to perform.                                                         | [[]ActionDefinition](#actiondefinition) | yes      |
 | mode       | Option types on how to complete branch execution: "and" (default), or "or". | enum                                    | no       |
 | timeout    | Duration to wait for all actions to complete (ISO8601).                     | string                                  | no       |
 | transform  | `jq` command to transform the state's data output.                          | string                                  | no       |
 | transition | State to transition to next.                                                | string                                  | no       |
-| catch      | Error handling.                                                             | [[]ErrorDefinition](#ErrorDefinition)   | no       |
+| catch      | Error handling.                                                             | [[]ErrorDefinition](#errordefinition)   | no       |
 
-The Parallel State is an expansion on the [Action State](#ActionState), used for running multiple actions in parallel.
+The Parallel State is an expansion on the [Action State](#actionstate), used for running multiple actions in parallel.
 
 The state can operate in two different modes: `and` and `or`. In `and` mode all actions must return successfully before completing. In `or` mode the state can complete as soon as any one action returns without error.
 
@@ -402,10 +363,10 @@ If the `timeout` is reached before the state can transition a `direktiv.stateTim
 | ----------------- | ----------------------------------------------------------------------- | --------------------------------------------------------- | -------- |
 | id                | State unique identifier.                                                | string                                                    | yes      |
 | type              | State type ("switch").                                                  | string                                                    | yes      |
-| conditions        | Conditions to evaluate and determine which state to transition to next. | [[]SwitchConditionDefinition](#SwitchConditionDefinition) | yes      |
+| conditions        | Conditions to evaluate and determine which state to transition to next. | [[]SwitchConditionDefinition](#switchconditiondefinition) | yes      |
 | defaultTransition | State to transition to next if no conditions are matched.               | string                                                    | no       |
 | defaultTransform  | `jq` command to transform the state's data output.                      | string                                                    | no       |
-| catch             | Error handling.                                                         | [[]ErrorDefinition](#ErrorDefinition)                     | no       |
+| catch             | Error handling.                                                         | [[]ErrorDefinition](#errordefinition)                     | no       |
 
 #### SwitchConditionDefinition
 
@@ -445,7 +406,7 @@ The list of conditions is evaluated in-order and the first match determines what
 | schema     | Name of the referenced state data schema.                                                    | string                                | yes      |
 | transform  | `jq` command to transform the state's data output.                                           | string                                | no       |
 | transition | State to transition to next.                                                                 | string                                | no       |
-| catch      | Error handling.                                                                              | [[]ErrorDefinition](#ErrorDefinition) | no       |
+| catch      | Error handling.                                                                              | [[]ErrorDefinition](#errordefinition) | no       |
 
 #### An example definition
 
@@ -458,7 +419,7 @@ The list of conditions is evaluated in-order and the first match determines what
     - name
     properties:
       name:
-	type: string
+        type: string
     additionalProperties: false
   transition: processRequest
 ```
@@ -480,5 +441,54 @@ This schema is based off the following JSON Schema:
 }
 ```
 
-
 The Validate State can be used to validate the structure of the state's data. The schema field takes a yaml-ified representation of a JSON Schema document.
+
+## TimeoutDefinition
+
+| Parameter | Description                                                                   | Type   | Required |
+| --------- | ----------------------------------------------------------------------------- | ------ | -------- |
+| interrupt | Duration to wait before triggering a timeout error in the workflow (ISO8601). | string | no       |
+| kill      | Duration to wait before killing the workflow (ISO8601).                       | string | no       |
+
+## Start
+
+### ScheduledStartDefinition
+
+| Parameter | Description                                | Type   | Required |
+| --------- | ------------------------------------------ | ------ | -------- |
+| type      | Start type ("scheduled").                  | string | yes      |
+| state     | ID of the state to use as the start state. | string | no       |
+| cron      | Cron expression to schedule workflow.      | string | no       |
+
+### EventStartDefinition
+
+| Parameter | Description                                          | Type                                            | Required |
+| --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
+| type      | Start type ("event").                                | string                                          | yes      |
+| state     | ID of the state to use as the start state.           | string                                          | no       |
+| event     | Event to listen for, which can trigger the workflow. | [StartEventDefinition](#consumeeventdefinition) | yes      |
+
+#### StartEventDefinition
+
+| Parameter | Description                                                          | Type   | Required |
+| --------- | -------------------------------------------------------------------- | ------ | -------- |
+| type      | CloudEvent type.                                                     | string | yes      |
+| filters   | Key-value regex pairs for CloudEvent context values that must match. | object | no       |
+
+### EventsXorStartDefinition
+
+| Parameter | Description                                          | Type                                            | Required |
+| --------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
+| type      | Start type ("eventsXor").                            | string                                          | yes      |
+| state     | ID of the state to use as the start state.           | string                                          | no       |
+| events    | Event to listen for, which can trigger the workflow. | [[]StartEventDefinition](#starteventdefinition) | yes      |
+
+### EventsAndStartDefinition
+
+| Parameter | Description                                                                                              | Type                                            | Required |
+| --------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------- |
+| type      | Start type ("eventsAnd").                                                                                | string                                          | yes      |
+| state     | ID of the state to use as the start state.                                                               | string                                          | no       |
+| events    | Event to listen for, which can trigger the workflow.                                                     | [[]StartEventDefinition](#starteventdefinition) | yes      |
+| lifespan  | Maximum duration an event can be stored before being discarded while waiting for other events (ISO8601). | string                                          | no       |
+| correlate | Context keys that must exist on every event and have matching values to be grouped together.             | []string                                        | no       |
