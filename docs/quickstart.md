@@ -10,13 +10,13 @@ nav_order: 10
 
 Getting a local playground environment can be easily done with either [Vorteil.io](github.com/vorteil/vorteil) or Docker:
 
-****
+
 
 ***Using Docker:***
 
 `docker run --net=host --privileged vorteil/direktiv`. 
 
-*Note: *
+*Note:*
 
 - *You may need to run this command as an administrator.*
 
