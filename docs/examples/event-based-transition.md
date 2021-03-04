@@ -2,7 +2,7 @@
 layout: default
 title: Check Credit Score (consumeEvent)
 nav_order: 5
-parent: Getting Started
+parent: Examples
 ---
 
 # Check Credit Score

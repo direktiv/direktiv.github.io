@@ -2,7 +2,7 @@
 layout: default
 title: Event-based Greeting (StartEvent)
 nav_order: 2
-parent: Getting Started
+parent: Examples
 ---
 
 # Event-based Greeting Example

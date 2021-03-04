@@ -2,7 +2,7 @@
 layout: default
 title: Parallel Execution (Parallel)
 nav_order: 4
-parent: Getting Started
+parent: Examples
 ---
 
 # Parallel Execution and Wait Example

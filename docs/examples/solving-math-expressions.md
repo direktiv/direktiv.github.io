@@ -2,7 +2,7 @@
 layout: default
 title: Solving Math Expressions (Foreach)
 nav_order: 3
-parent: Getting Started
+parent: Examples
 ---
 
 # Solving Math Expressions Example
