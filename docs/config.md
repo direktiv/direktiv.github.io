@@ -6,6 +6,8 @@ nav_order: 3
 
 # Configuration
 
+The Direktiv server can be provided a configuration file on startup (`-c /conf.toml`) that will be used to configure the various server components. Below is an example of a server configuration file, along with a brief description of what is expected of each field.
+
 ```toml
 [Certs]
   Directory = "/tmp/certs"
