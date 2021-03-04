@@ -15,7 +15,7 @@ Oftentimes a workflow needs to be a little bit smarter than an immutable sequenc
 id: multiposter
 functions:
 - id: httprequest
-  image: vorteil/request
+  image: vorteil/request:v1
 states:
 - id: ifelse
   type: switch
@@ -153,11 +153,11 @@ For range loops like the one in this demo there's another state called a Foreach
 id: multiposter
 functions:
 - id: httprequest
-  image: vorteil/request
+  image: vorteil/request:v1
 states:
 - id: poster
   type: foreach
-  array: '{ .names }'
+  array: '.names[] | { name: . }'
   action:
     function: httprequest
     input: '{

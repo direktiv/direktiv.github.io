@@ -15,7 +15,7 @@ Workflows wouldn't be very powerful if they were limited to just the predefined 
 id: httpget
 functions:
 - id: httprequest
-  image: vorteil/request
+  image: vorteil/request:v1
 states:
 - id: getter 
   type: action
@@ -63,7 +63,7 @@ Isolate is just a fancy term we use when we run a tiny virtual machine on Vortei
 ```yaml
 functions:
 - id: httprequest
-  image: vorteil/request
+  image: vorteil/request:v1
 ```
 
 To use an Isolate it must first be defined at the top of the workflow definition. Each function definition needs an identifier that must be unique within the workflow definition, and an `image` that references a Docker container to use.
