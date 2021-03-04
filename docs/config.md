@@ -8,6 +8,14 @@ nav_order: 3
 
 The Direktiv server can be provided a configuration file on startup (`-c /conf.toml`) that will be used to configure the various server components. Below is an example of a server configuration file, along with a brief description of what is expected of each field.
 
+The following flags instruct the server to run certain components (any combination of the three flags may be provided):
+
+```
+-i    Enables the 'Isolates' server component 
+-w    Enables the 'Workflow' server component 
+-s    Enables the 'Secrets' server component
+```
+
 ```toml
 [Certs]
   Directory = "/tmp/certs"
@@ -52,6 +60,7 @@ The Direktiv server can be provided a configuration file on startup (`-c /conf.t
 [isolateAPI]
   Bind = ":9999"
   Endpoint = "localhost:9999"
+  Isolation = "vorteil" # or "container"
 
 [quotasAPI]
   Endpoint = ""
@@ -141,6 +150,8 @@ The Direktiv server can be provided a configuration file on startup (`-c /conf.t
     - Address to bind the isolateAPI endpoint running on the direktiv server.
   - Endpoint 
     - Endpoint to send isolateAPI requests to.
+  - Isolation
+    - Accepts 'vorteil' (runs actions in Vorteil virtual machines) or 'container' (runs actions in containers)
 
 ### secretsAPI
   - Bind
