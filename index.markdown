@@ -5,11 +5,6 @@ nav_exclude: true
 ---
 
 # direktiv
-> 
->
-> **Check out our online demo: [wf.direktiv.io](https://wf.direktiv.io)**
-
->  
 
 ## What is Direktiv?
 
