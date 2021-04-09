@@ -8,35 +8,11 @@ nav_order: 10
 
 ### Starting the Server
 
-Getting a local playground environment can be easily done with either [Vorteil.io](github.com/vorteil/vorteil) or Docker:
+Getting a local playground environment can be easily done with Docker. The following command starts a docker container with kubernetes. *On startup it can take a few minutes to download all images.* When the installation is done all pods should show "Running" or "Completed".
 
-
-
-***Using Docker:***
-
-`docker run --net=host --privileged vorteil/direktiv`. 
-
-*Note:*
-
-- *You may need to run this command as an administrator.*
-
-- *In a public cloud instance, nested virualization is needed to support the firecracker micro-VMs. Each public cloud provider has different configuration settings which need to be applied to enable nested virtualization. Examples are shown below for each public cloud provider:*
-  - [Google Cloud Platform](https://cloud.google.com/compute/docs/instances/enable-nested-virtualization-vm-instances)
-  - Amazon Web Services (only supported on bare metal instances)
-  - [Microsoft Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/nested-virtualization)
-  - Alibaba (only supported on bare metal instances)
-  - [Oracle Cloud](https://blogs.oracle.com/cloud-infrastructure/nested-kvm-virtualization-on-oracle-iaas)
-  - [VMware](https://communities.vmware.com/t5/Nested-Virtualization-Documents/Running-Nested-VMs/ta-p/2781466)
-
-
-
-***Using Vorteil:***
-
-With Vorteil installed (full instructions [here](https://github.com/vorteil/vorteil)):
-
- 1. download `direktiv.vorteil` from the [releases page](https://github.com/vorteil/direktiv/releases) (contained in the ZIP file), 
- 2. run `vorteil run direktiv.vorteil` from within your downloads folder.
-
+```
+docker run --privileged -p 6666:32222 -p 8080:32221 -ti vorteil/direktiv-kube
+```
 
 
 ***Testing Direktiv***:
@@ -60,7 +36,7 @@ $ direkcli namespaces list
 
 ### Workflow specification
 
-The below example is the minimal configuration needed for a workflow, following the [workflow language specification](specification.html): 
+The below example is the minimal configuration needed for a workflow, following the [workflow language specification](specification.html):
 
 ```yaml
 id: helloworld
@@ -111,5 +87,4 @@ For more complex examples review the [Getting Started](walkthrough/walkthrough.h
 
 * The [direktiv.io](https://direktiv.io/) website.
 * The [vorteil.io](https://github.com/vorteil/vorteil/) repository.
-* The [Direktiv Beta UI](http://wf.direktiv.io/).
 * The [Godoc](https://godoc.org/github.com/vorteil/direktiv) library documentation.

@@ -5,19 +5,19 @@ nav_order: 6
 parent: Examples
 ---
 
-# Logging 
+# Logging
 
 Though Direktiv provides instance logs viewable on the instance's information page, it won't keep them forever. Sending logs to a third-party logging service can be useful for taking control of your data. Here's how we can do it.
 
 ## The 'log' Parameter
 
-Every state in a workflow definition supports an optional `log` parameter. If this parameter is defined, Direktiv will evaluate it as a `jq` query against the instance data before executing the state's logic, and send the results to the instance logs. 
+Every state in a workflow definition supports an optional `log` parameter. If this parameter is defined, Direktiv will evaluate it as a `jq` query against the instance data before executing the state's logic, and send the results to the instance logs.
 
 ## CloudEvents From Logs
 
-Workflows can be configured to generate CloudEvents on their namespace anytime the `log` parameter produces data. Look for a field called "Log To Event" on the workflow definition (YAML) page. If this field is set to anything other than an empty string CloudEvents will be generated with an additional extension `logger` set to the value saved here. 
+Workflows can be configured to generate CloudEvents on their namespace anytime the `log` parameter produces data. Look for a field called "Log To Event" on the workflow definition (YAML) page. If this field is set to anything other than an empty string CloudEvents will be generated with an additional extension `logger` set to the value saved here.
 
-Using this it's easy to capture instance logs and do whatever you want with them. Create another workflow that is triggered by matching CloudEvents, then send them to your own Logstash server, for example. 
+Using this it's easy to capture instance logs and do whatever you want with them. Create another workflow that is triggered by matching CloudEvents, then send them to your own Logstash server, for example.
 
 ```yaml
 id: helloworld
@@ -49,16 +49,16 @@ This workflow, configured to Log To Event to `mylog`, will produce a CloudEvent 
 id: gcp-logger
 functions:
 - id: sendLog
-  image: vorteil/gcplog:v1
+  image: vorteil/gcplog:v2
 start:
-  type: event 
+  type: event
   event:
     type: direktiv.instanceLog
     filters:
       logger: gcpLogger
 states:
 - id: log
-  type: action 
+  type: action
   action:
     function: sendLog
     secrets: [GCP_SERVICEACCOUNTKEY]
@@ -76,16 +76,16 @@ states:
 id: aws-logger
 functions:
 - id: sendLog
-  image: vorteil/awslog:v1
+  image: vorteil/awslog:v2
 start:
-  type: event 
+  type: event
   event:
     type: direktiv.instanceLog
     filters:
       logger: awsLogger
 states:
 - id: log
-  type: action 
+  type: action
   action:
     function: sendLog
     secrets: [AWS_KEY, AWS_SECRET]
@@ -105,16 +105,16 @@ states:
 id: azure-logger
 functions:
 - id: sendLog
-  image: vorteil/azlog:v1
+  image: vorteil/azlog:v2
 start:
-  type: event 
+  type: event
   event:
     type: direktiv.instanceLog
     filters:
       logger: azureLogger
 states:
 - id: log
-  type: action 
+  type: action
   action:
     function: sendLog
     secrets: [AZURE_WORKSPACE_ID, AZURE_WORKSPACE_KEY]

@@ -4,11 +4,11 @@ title: Scheduling
 parent: Getting Started
 nav_order: 6
 ---
-# Scheduling 
+# Scheduling
 
 Sometimes you want a workflow to run periodically. Direktiv supports scheduling based on "cron", and in this article you'll see how that's done.
 
-## Demo 
+## Demo
 
 ```yaml
 id: scraper
@@ -17,9 +17,9 @@ start:
   cron: "0 */2 * * *"
 functions:
 - id: httprequest
-  image: vorteil/request:v1
+  image: vorteil/request:v2
 states:
-- id: getter 
+- id: getter
   type: action
   action:
     function: httprequest
@@ -30,7 +30,7 @@ states:
   transform: '.return'
   transition: storer
 - id: storer
-  type: action 
+  type: action
   action:
     function: httprequest
     input: '{
@@ -62,6 +62,6 @@ With scheduled workflows we can finally see why this setting could be useful: yo
 
 ## Cron
 
-Cron is a time-based job scheduler in Unix-like operating systems. Direktiv doesn't run cron, but it does borrow their syntax and expressions for scheduling. 
+Cron is a time-based job scheduler in Unix-like operating systems. Direktiv doesn't run cron, but it does borrow their syntax and expressions for scheduling.
 
 In the example above our cron expression is "`0 */2 * * *`". This tells Direktiv to run the workflow once every two hours. There are many great resources online to help you create your own custom cron expressions.

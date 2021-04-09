@@ -5,17 +5,17 @@ nav_order: 4
 parent: Getting Started
 ---
 
-# Conditional Transitions 
+# Conditional Transitions
 
 Oftentimes a workflow needs to be a little bit smarter than an immutable sequence of states. That's when you might need conditional transitions. In this article you'll learn about instance input data, the Switch State, and how to define loops.
 
-## Demo 
+## Demo
 
 ```yaml
 id: multiposter
 functions:
 - id: httprequest
-  image: vorteil/request:v1
+  image: vorteil/request:v2
 states:
 - id: ifelse
   type: switch
@@ -30,14 +30,14 @@ states:
       "method": "POST",
       "url": "https://jsonplaceholder.typicode.com/posts",
       "body": {
-        "name": .names[0]	
+        "name": .names[0]
       }
     }'
   transform: 'del(.names[0])'
   transition: ifelse
 ```
 
-### Input 
+### Input
 
 ```json
 {
@@ -69,7 +69,7 @@ If the input is a JSON object it will become the instance data.
 
 ```json
 {
-  "key": "value"	
+  "key": "value"
 }
 ```
 
@@ -77,7 +77,7 @@ If the input is a JSON object it will become the instance data.
 
 ```json
 {
-  "key": "value"	
+  "key": "value"
 }
 ```
 
@@ -95,7 +95,7 @@ If the input is valid JSON but **not** an object it will be stored under `"input
 
 ```json
 {
-  "input": [1, 2, 3]	
+  "input": [1, 2, 3]
 }
 ```
 
@@ -111,7 +111,7 @@ Hello, world!
 
 ```json
 {
-  "input": "SGVsbG8sIHdvcmxkIQ=="	
+  "input": "SGVsbG8sIHdvcmxkIQ=="
 }
 ```
 
@@ -130,10 +130,10 @@ The Switch State can make decisions about where to transition to next based on t
     transition: reject
     #transform:
   defaultTransition: failure
-  #defaultTransform: 
+  #defaultTransform:
 ```
 
-Each of the `conditions` will be evaluated in the order it appears by running the `jq` command in `condition`. Any result other than `null`, `false`, `{}`, `[]`, `""`, or `0` will cause the condition to be considered a successful match. If no conditions match the default transition will be used. 
+Each of the `conditions` will be evaluated in the order it appears by running the `jq` command in `condition`. Any result other than `null`, `false`, `{}`, `[]`, `""`, or `0` will cause the condition to be considered a successful match. If no conditions match the default transition will be used.
 
 In the demo example the switch state will transition to `poster` until the list of names is empty, at which point the workflow will end.
 
@@ -153,7 +153,7 @@ For range loops like the one in this demo there's another state called a Foreach
 id: multiposter
 functions:
 - id: httprequest
-  image: vorteil/request:v1
+  image: vorteil/request:v2
 states:
 - id: poster
   type: foreach
@@ -164,7 +164,7 @@ states:
       "method": "POST",
       "url": "https://jsonplaceholder.typicode.com/posts",
       "body": {
-        "name": .	
+        "name": .
       }
     }'
   transform: 'del(.names) | .names = []'

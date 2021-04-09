@@ -8,22 +8,22 @@ parent: Getting Started
 
 Direktiv has built-in support for CloudEvents, which can be a great way to interact with workflows. In this article you'll learn about events.
 
-## Demo 
+## Demo
 
-```yaml 
+```yaml
 id: notifier
 start:
   type: event
-  event: 
+  event:
     type: com.github.pull.create
     filters:
       source: "https://github.com/cloudevents/spec/pull"
 functions:
 - id: httprequest
-  image: vorteil/request:v1
+  image: vorteil/request:v2
 states:
 - id: notify
-  type: action 
+  type: action
   action:
     function: httprequest
     input: '{
@@ -33,7 +33,7 @@ states:
     }'
 ```
 
-## CloudEvents 
+## CloudEvents
 
 [CloudEvents](https://cloudevents.io/) are specification for describing event data in a common way. They're JSON objects with a number of required fields, some optional fields, and a payload. Here's an example CloudEvent:
 
@@ -52,7 +52,7 @@ states:
 }
 ```
 
-CloudEvents can be sent via the API to a namespace, to be handled by any number of interested receivers on that namespace. 
+CloudEvents can be sent via the API to a namespace, to be handled by any number of interested receivers on that namespace.
 
 ## Start Types
 
@@ -61,7 +61,7 @@ The most common use for events in Direktiv is to have external services generate
 ```yaml
 start:
   type: event
-  event: 
+  event:
     type: com.github.pull.create
     filters:
       source: "https://github.com/cloudevents/spec/pull"
@@ -69,13 +69,13 @@ start:
 
 In this example a new instance will be created from our workflow whenever a cloudevent is received that has the matching `type` and `source` values.
 
-Two other event-based start types exist in Direktiv: the `eventsXor`, and the `eventsAnd`. 
+Two other event-based start types exist in Direktiv: the `eventsXor`, and the `eventsAnd`.
 
-The `eventsXor` registers an interest in multiple events and will trigger a new instance as soon as any one of them is received. The `eventsAnd` also registers an interest in multiple events, but will only trigger once all have been received. 
+The `eventsXor` registers an interest in multiple events and will trigger a new instance as soon as any one of them is received. The `eventsAnd` also registers an interest in multiple events, but will only trigger once all have been received.
 
 ## Event Payloads
 
-Whenever an event is received its payload will be added to the instance data under a field with the same name as the event "type". This allows for a uniform approach to accepting events that supports single events, eventsXor, and eventsAnd. 
+Whenever an event is received its payload will be added to the instance data under a field with the same name as the event "type". This allows for a uniform approach to accepting events that supports single events, eventsXor, and eventsAnd.
 
 Like direct input, the payload will be treated as nested JSON if possible, but will be base64 encoded if it's some other content type. So, for the example workflow and event above, the instance data before running the first state would be the following:
 
@@ -85,19 +85,19 @@ Like direct input, the payload will be treated as nested JSON if possible, but w
 }
 ```
 
-## Instances Waiting for Events 
+## Instances Waiting for Events
 
 Triggering workflows is not the only thing you can do with events. Workflows can be constructed to run some logic and then wait for an event before proceeding. Like the event-based start types, there are three event consuming states: `consumeEvent`, `eventsXor`, and `eventsAnd`. Here's an example of what a ConsumeEvent State could look like:
 
 ```yaml
 - id: waitEvent
-  type: consumeEvent 
-  event: 
-    type: com.github.pull.create 
+  type: consumeEvent
+  event:
+    type: com.github.pull.create
     context:
       source: "https://github.com/cloudevents/spec/pull"
       repository: '{{ .repo }}'
-  timeout: PT5M 
+  timeout: PT5M
   transform: '."com.github.pull.create"'
   transition: nextState
 ```
@@ -108,11 +108,11 @@ It's rarely a good idea to leave a workflow waiting indefinitely. Direktiv allow
 
 The `timeout` field is not required, but Direktiv caps the maximum timeout whether specified or not to prevent workflows from living forever.
 
-### Context 
+### Context
 
 Similar to how the event-based start types have a `filters` field, event-consuming states have a `context` field. Like filters, the context field can restrict which events are considered matches by requiring an exact match on a CloudEvent context field.
 
-Unlike filters, context values can be determined dynamically based on instance data. If a context value begins with "`{{`" and ends with "`}}`" everything inbetween will be evaluated as a `jq` command based on the instance data. 
+Unlike filters, context values can be determined dynamically based on instance data. If a context value begins with "`{{`" and ends with "`}}`" everything inbetween will be evaluated as a `jq` command based on the instance data.
 
 ## GenerateEvent State
 
