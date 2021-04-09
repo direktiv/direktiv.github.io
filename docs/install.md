@@ -11,10 +11,10 @@ Follow the Knative [installations instructions](https://knative.dev/docs/install
 
 - [serving-crds.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/serving-crds.yaml)
 - [serving-core.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/serving-core.yaml)
-- [contour.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/contour.yaml)
-- [net-contour.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/net-contour.yaml)
+- [istio.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/istio.yaml)
+- [net-istio.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/net-istio.yaml)
 
-After applying the scripts with *kubectl apply -f* all the pods in the namespaces *knative-serving*, *contour-internal* and *contour-external* should be in in either "Running" or "Completed" state.
+After applying the scripts with *kubectl apply -f* all the pods in the namespaces *knative-serving* and *istio-system* should be in in either "Running" or "Completed" state.
 
 The second step is installing Direktiv with [helm](https://helm.sh/):
 
