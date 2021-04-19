@@ -34,8 +34,11 @@ has_toc: true
 | image     | Image URI                              | string | yes      |
 | cmd       | Command to run in container            | string | no       |
 | size      | Size of virtual machine                | enum   | no       |
+| scale     | minimum number of instances            | int    | no       |
 
 A function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
+
+The default value for "**scale**" is 0 which means the service will be removed after a ceratin amount of time. It defines the minimum number of containers to run for this services if it is greater than 0. 
 
 | Size      | CPU | Memory   | Storage  |
 | --------- | --- | -------- | -------- |
