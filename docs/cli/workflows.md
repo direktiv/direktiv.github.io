@@ -39,7 +39,7 @@ states:
 Execute a workflow
 
 ```sh
-direkcli workflows execute NAMESPACE WORKFLOW_ID
+direkcli workflows execute NAMESPACE WORKFLOW
 ```
 
 ## Get
@@ -47,7 +47,7 @@ direkcli workflows execute NAMESPACE WORKFLOW_ID
 Fetch the YAML from a workflow
 
 ```sh
-direkcli workflows get NAMESPACE WORKFLOW_ID
+direkcli workflows get NAMESPACE WORKFLOW
 ```
 
 ## Update
@@ -55,7 +55,7 @@ direkcli workflows get NAMESPACE WORKFLOW_ID
 Update the workflow
 
 ```sh
-direkcli workflows update NAMESPACE WORKFLOW_ID FILEPATH
+direkcli workflows update NAMESPACE WORKFLOW FILEPATH
 ```
 
 The filepath you need to provide is a workflow in YAML. Like the following
@@ -74,7 +74,7 @@ states:
 Delete a workflow
 
 ```sh
-direkcli workflows delete NAMESPACE WORKFLOW_ID
+direkcli workflows delete NAMESPACE WORKFLOW
 ```
 
 ## Toggle
@@ -82,5 +82,5 @@ direkcli workflows delete NAMESPACE WORKFLOW_ID
 Enable or disable a workflow
 
 ```sh
-direkcli workflows toggle NAMESPACE WORKFLOW_ID
+direkcli workflows toggle NAMESPACE WORKFLOW
 ```

@@ -7,8 +7,8 @@ has_children: true
 
 # direkcli
 
-To hit an external direktiv via the ingress gRPC. Simply provide the following flag. By default it will hit localhost on port 6666.
+To hit the external API server for Direktiv. Simply provide the following flag or overwrite the environment variable DIREKTIV_CLI_ENDPOINT.
 
 ```sh
---grpc 127.0.0.1:6666
+--grpc 127.0.0.1:8080
 ```
