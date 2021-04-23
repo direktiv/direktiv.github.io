@@ -27,12 +27,7 @@ helm repo add direktiv https://charts.direktiv.io
 
 # install
 helm install -n direktiv direktiv direktiv/direktiv  
-
-# forward UI
-kubectl port-forward service/direktiv-ui 1605:1605 -n direktiv
-
-# forward API
-kubectl port-forward service/direktiv-ui 6666:6666 -n direktiv
 ```
 
+You should now be able to reach Direktiv at http://localhost:80
 To uninstall direktiv run *helm uninstall direktiv -n direktiv*
