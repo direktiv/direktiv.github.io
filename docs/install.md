@@ -48,7 +48,7 @@ helm repo add direktiv https://charts.direktiv.io
 helm install -n direktiv direktiv direktiv/direktiv  
 ```
 
-You should now be able to reach Direktiv at http://<kubernetes-loadbalancer-ip>:80.
+You should now be able to reach Direktiv at http://kubernetes-loadbalancer-ip:80.
 
 To uninstall direktiv run:
 
