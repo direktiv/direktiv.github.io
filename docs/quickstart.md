@@ -32,7 +32,9 @@ $ direkcli namespaces list
 +------+
 ```
 
+### Kubernetes installation
 
+For instructions on how to install in a pre-existing Kubernetes environment, following the [installation instructions](install.html).
 
 ### Workflow specification
 
