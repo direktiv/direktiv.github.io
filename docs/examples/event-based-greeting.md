@@ -17,7 +17,7 @@ The `generate-greeting` workflow generates the `greetingcloudevent` that the `ev
 id: eventbased-greeting
 functions:
 - id: greeter
-  image: vorteil/greeting
+  image: vorteil/greeting:v2
 start:
   type: event
   state: greeter

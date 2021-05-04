@@ -15,7 +15,7 @@ This simple example workflow uses a single `action` state to call the `vorteil/g
 id: greeting
 functions:
 - id: greeter
-  image: vorteil/greeting
+  image: vorteil/greeting:v2
 description: "A simple action that greets you" 
 states:
 - id: greeter

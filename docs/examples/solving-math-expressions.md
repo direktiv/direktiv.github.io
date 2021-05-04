@@ -18,7 +18,7 @@ id: solver
 description: "Solves a string array of expressions"
 functions: 
 - id: solveMathExpressionFunction
-  image: vorteil/solve
+  image: vorteil/solve:v2
 states:
 - id: solve
   type: foreach
