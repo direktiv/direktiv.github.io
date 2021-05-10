@@ -1,8 +1,8 @@
 ---
 layout: default
-title: gRPC
-nav_order: 70
+title: API
+nav_order: 59
 has_children: true
 ---
 
-# gRPC
+# API
