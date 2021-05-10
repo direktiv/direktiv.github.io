@@ -1,7 +1,7 @@
 ---
 layout: default
 title: List Instances for a Workflow
-nav_order: 1
+nav_order: 10
 parent: Workflows
 grand_parent: API
 ---
