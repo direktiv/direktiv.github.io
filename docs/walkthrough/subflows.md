@@ -40,7 +40,7 @@ states:
   action:
     function: httprequest
     input: '{
-      "method": "POST",
+      "method": "GET",
       "url": "https://jsonplaceholder.typicode.com/todos/1",
       "body": .input
     }'
@@ -71,7 +71,7 @@ states:
   action:
     function: httprequest
     input: '{
-      "method": "POST",
+      "method": "GET",
       "url": "https://jsonplaceholder.typicode.com/todos/1",
       "body": .input
     }'
@@ -86,13 +86,27 @@ states:
 
 ### Input
 
-```
-Hello, world!
+```json
+{
+	"contact": "1",
+	"payload": "2"
+}
 ```
 
 ### Output
 
-TODO
+```json
+{
+	"contact": "1",
+	"payload": "2",
+	"return": {
+		"completed": false,
+		"id": 1,
+		"title": "delectus aut autem",
+		"userId": 1
+	}
+}
+```
 
 ## Namespaces
 
