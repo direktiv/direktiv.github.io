@@ -15,7 +15,7 @@ Every state in a workflow definition supports an optional `log` parameter. If th
 
 ## CloudEvents From Logs
 
-Workflows can be configured to generate CloudEvents on their namespace anytime the `log` parameter produces data. Look for a field called "Log To Event" on the workflow definition (YAML) page. If this field is set to anything other than an empty string CloudEvents will be generated with an additional extension `logger` set to the value saved here.
+Workflows can be configured to generate CloudEvents on their namespace anytime the `log` parameter produces data. Look for a field called "Log To Event" on the workflow definition (YAML) UI page. If this field is set to anything other than an empty string CloudEvents will be generated with an additional extension `logger` set to the value saved here.
 
 Using this it's easy to capture instance logs and do whatever you want with them. Create another workflow that is triggered by matching CloudEvents, then send them to your own Logstash server, for example.
 
@@ -45,6 +45,8 @@ This workflow, configured to Log To Event to `mylog`, will produce a CloudEvent 
 
 ## Google Cloud Platform Stackdriver Example
 
+This workflow listens for the logger `gcpLogger` and sends it to gcp:
+
 ```yaml
 id: gcp-logger
 functions:
@@ -71,6 +73,8 @@ states:
 ```
 
 ## AWS Cloudwatch Example
+
+This workflow listens for the logger `awsLogger` and sends it to aws:
 
 ```yaml
 id: aws-logger
@@ -100,6 +104,8 @@ states:
 ```
 
 ## Azure Log Analytics Example
+
+This workflow listens for the logger `azureLogger` and sends it to azure:
 
 ```yaml
 id: azure-logger
