@@ -40,11 +40,11 @@ A function can be defined in three different sizes: "**small**"(default), "**med
 
 The default value for "**scale**" is 0 which means the service will be removed after a ceratin amount of time. It defines the minimum number of containers to run for this services if it is greater than 0. 
 
-| Size      | CPU | Memory   | Storage  |
-| --------- | --- | -------- | -------- |
-| small     |  1  | 256 MB   | +64 MB   |
-| medium    |  1  | 512 MB   | +64 MB   |
-| large     |  2  | 1024 MB  | +64 MB   |
+| Size   | CPU | Memory  | Storage |
+| ------ | --- | ------- | ------- |
+| small  | 1   | 256 MB  | +64 MB  |
+| medium | 1   | 512 MB  | +64 MB  |
+| large  | 2   | 1024 MB | +64 MB  |
 
 ## SchemaDefinition
 
@@ -57,13 +57,14 @@ The default value for "**scale**" is 0 which means the service will be removed a
 
 ### Common Fields
 
-| Parameter  | Description                                        | Type                                  | Required |
-| ---------- | -------------------------------------------------- | ------------------------------------- | -------- |
-| id         | State unique identifier.                           | string                                | yes      |
-| transform  | `jq` command to transform the state's data output. | string                                | no       |
-| transition | State to transition to next.                       | string                                | no       |
-| log        | `jq` command to generate data for instance-logging.| string                                | no       |
-| catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition) | no       |
+| Parameter  | Description                                         | Type                                  | Required |
+| ---------- | --------------------------------------------------- | ------------------------------------- | -------- |
+| id         | State unique identifier.                            | string                                | yes      |
+| transform  | `jq` command to transform the state's data output.  | string                                | no       |
+| transition | State to transition to next.                        | string                                | no       |
+| log        | `jq` command to generate data for instance-logging. | string                                | no       |
+| retries    | Retry policy.                                       | [RetryDefinition](#retrydefinition)   | no       |
+| catch      | Error handling.                                     | [[]ErrorDefinition](#errordefinition) | no       |
 
 The `id` field must be unique amongst all states in the workflow, and may consist of only alphanumeric characters as well as periods, dashes, and underscores.
 
@@ -73,23 +74,23 @@ The `transition`, if provided, must be set to the `id` of a state within the wor
 
 #### ErrorDefinition
 
-| Parameter  | Description                                     | Type                                | Required |
-| ---------- | ----------------------------------------------- | ----------------------------------- | -------- |
-| error      | A glob pattern to test error codes for a match. | string                              | yes      |
-| retry      | Retry strategy.                                 | [RetryDefinition](#retrydefinition) | no       |
-| transition | State to transition to next.                    | string                              | no       |
+| Parameter  | Description                                     | Type   | Required |
+| ---------- | ----------------------------------------------- | ------ | -------- |
+| error      | A glob pattern to test error codes for a match. | string | yes      |
+| transition | State to transition to next.                    | string | no       |
 
-The `error` parameter can be a glob pattern to match multiple types of errors. When an error is thrown it will be compared against each ErrorDefinition in order until it finds a match. If no matches are found the workflow will immediately abort and escalate the error to any caller.
-
-If a `retry` strategy is defined the state will be immediately retried. Only once `maxAttempts` has been reached will the error transition or end the workflow.
+The `error` parameter can be a glob pattern to match multiple types of errors. When an error is thrown it will be compared against each ErrorDefinition in order until it finds a match. If no matches are found the workflow will immediately abort and escalate the error to any caller, unless the retry policy is ready to take over.
 
 #### RetryDefinition
 
-| Parameter   | Description                                                | Type   | Required |
-| ----------- | ---------------------------------------------------------- | ------ | -------- |
-| maxAttempts | Maximum number of retry attempts.                          | int    | yes      |
-| delay       | Time delay between retry attempts (ISO8601).               | string | no       |
-| multiplier  | Value by which the delay is multiplied after each attempt. | float  | no       |
+| Parameter   | Description                                                               | Type   | Required |
+| ----------- | ------------------------------------------------------------------------- | ------ | -------- |
+| maxAttempts | Maximum number of retry attempts.                                         | int    | yes      |
+| delay       | Time delay between retry attempts (ISO8601).                              | string | no       |
+| multiplier  | Value by which the delay is multiplied after each attempt.                | float  | no       |
+| throw       | Error code to throw if the number of failed attempts exceeds maxAttempts. | string | no       |
+
+If a `retry` strategy is defined the state will be retried on an uncaught failure. If the state fails `maxAttempts` times and `throw` is defined the error catchers will be checked one last time using the error code defined in `throw`, otherwise the workflow will end with a failure.
 
 ### ActionState
 
@@ -102,6 +103,7 @@ If a `retry` strategy is defined the state will be immediately retried. Only onc
 | timeout    | Duration to wait for action to complete (ISO8601).                           | string                                | no       |
 | transform  | `jq` command to transform the state's data output.                           | string                                | no       |
 | transition | State to transition to next.                                                 | string                                | no       |
+| retries    | Retry policy.                                                                | [RetryDefinition](#retrydefinition)   | no       |
 | catch      | Error handling.                                                              | [[]ErrorDefinition](#errordefinition) | no       |
 
 #### ActionDefinition
@@ -143,6 +145,7 @@ If `async` is `true`, the workflow will not wait for it to return before transit
 | timeout    | Duration to wait to receive event (ISO8601).       | string                                            | no       |
 | transform  | `jq` command to transform the state's data output. | string                                            | no       |
 | transition | State to transition to next.                       | string                                            | no       |
+| retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)               | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)             | no       |
 
 #### ConsumeEventDefinition
@@ -185,6 +188,7 @@ The event payload will stored at a variable with the same name as the event's `t
 | duration   | Duration to delay (ISO8601).                       | string                                | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                | no       |
 | transition | State to transition to next.                       | string                                | no       |
+| retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)   | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition) | no       |
 
 #### An example definition
@@ -202,15 +206,17 @@ The Delay State pauses execution of the workflow for a predefined length of time
 
 ### ErrorState
 
-| Parameter  | Description                                                                                    | Type     | Required |
-| ---------- | ---------------------------------------------------------------------------------------------- | -------- | -------- |
-| id         | State unique identifier.                                                                       | string   | yes      |
-| type       | State type ("error").                                                                          | string   | yes      |
-| error      | Error code, catchable on a calling workflow.                                                   | string   | yes      |
-| message    | Format string to provide more context to the error.                                            | string   | yes      |
-| args       | A list of `jq` commands to generate arguments for substitution in the `message` format string. | []string | no       |
-| transform  | `jq` command to transform the state's data output.                                             | string   | no       |
-| transition | State to transition to next.                                                                   | string   | no       |
+| Parameter  | Description                                                                                    | Type                                  | Required |
+| ---------- | ---------------------------------------------------------------------------------------------- | ------------------------------------- | -------- |
+| id         | State unique identifier.                                                                       | string                                | yes      |
+| type       | State type ("error").                                                                          | string                                | yes      |
+| error      | Error code, catchable on a calling workflow.                                                   | string                                | yes      |
+| message    | Format string to provide more context to the error.                                            | string                                | yes      |
+| args       | A list of `jq` commands to generate arguments for substitution in the `message` format string. | []string                              | no       |
+| transform  | `jq` command to transform the state's data output.                                             | string                                | no       |
+| transition | State to transition to next.                                                                   | string                                | no       |
+| retries    | Retry policy.                                                                                  | [RetryDefinition](#retrydefinition)   | no       |
+| catch      | Error handling.                                                                                | [[]ErrorDefinition](#errordefinition) | no       |
 
 #### An example definition
 
@@ -240,6 +246,7 @@ An error consists of two parts: an error code, and an error message. The code sh
 | timeout    | Duration to wait to receive all events (ISO8601).  | string                                              | no       |
 | transform  | `jq` command to transform the state's data output. | string                                              | no       |
 | transition | State to transition to next.                       | string                                              | no       |
+| retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)                 | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)               | no       |
 
 When a workflow reaches an EventAnd State it will halt its execution until it receives a matching event for every event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with `{{` and ends with `}}` it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
@@ -256,6 +263,7 @@ The event payloads will stored in variables with the same names as each event's 
 | type      | State type ("eventXor").                                             | string                                                  | yes      |
 | events    | Events to consume, and what to do based on which event was received. | [[]EventConditionDefinition](#eventconditiondefinition) | yes      |
 | timeout   | Duration to wait to receive event (ISO8601).                         | string                                                  | no       |
+| retries   | Retry policy.                                                        | [RetryDefinition](#retrydefinition)                     | no       |
 | catch     | Error handling.                                                      | [[]ErrorDefinition](#errordefinition)                   | no       |
 
 #### EventConditionDefinition
@@ -283,6 +291,7 @@ The received event payload will stored in a variable with the same name as its e
 | timeout    | Duration to wait for all actions to complete (ISO8601).      | string                                | no       |
 | transform  | `jq` command to transform the state's data output.           | string                                | no       |
 | transition | State to transition to next.                                 | string                                | no       |
+| retries    | Retry policy.                                                | [RetryDefinition](#retrydefinition)   | no       |
 | catch      | Error handling.                                              | [[]ErrorDefinition](#errordefinition) | no       |
 
 The ForeachState can be used to split up state data into an array and then perform an action on each element in parallel.
@@ -300,6 +309,7 @@ The return values of each action will be included in an array stored at `.return
 | event      | Event to generate.                                 | [GenerateEventDefinition](#generateeventdefinition) | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                              | no       |
 | transition | State to transition to next.                       | string                                              | no       |
+| retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)                 | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)               | no       |
 
 ### GenerateEventDefinition
@@ -316,6 +326,27 @@ The GenerateEvent State will produce an event that other workflows could listen 
 
 If the optional `datacontenttype` is defined and set to something other than `application/json`, and the `jq` command defined in `data` produces a base64 encoded string, it will be decoded before being used as the event payload.
 
+### GetterState
+
+| Parameter  | Description                                        | Type                                                    | Required |
+| ---------- | -------------------------------------------------- | ------------------------------------------------------- | -------- |
+| id         | State unique identifier.                           | string                                                  | yes      |
+| type       | State type ("getter").                             | string                                                  | yes      |
+| variables  | Variables to fetch.                                | [[]VariableGetterDefinition](#variablegetterdefinition) | yes      |
+| transform  | `jq` command to transform the state's data output. | string                                                  | no       |
+| transition | State to transition to next.                       | string                                                  | no       |
+| retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)                     | no       |
+| catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)                   | no       |
+
+#### VariableGetterDefinition 
+
+| Parameter | Description                                              | Type   | Required |
+| --------- | -------------------------------------------------------- | ------ | -------- |
+| key       | Variable name.                                           | string | yes      |
+| scope     | Variable scope ("instance", "workflow", or "namespace"). | string | yes      |
+
+The getter state is used to retrieve persistent data.
+
 ### NoopState
 
 | Parameter  | Description                                        | Type                                  | Required |
@@ -324,6 +355,7 @@ If the optional `datacontenttype` is defined and set to something other than `ap
 | type       | State type ("noop").                               | string                                | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                | no       |
 | transition | State to transition to next.                       | string                                | no       |
+| retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)   | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition) | no       |
 
 #### An example definition
@@ -334,7 +366,6 @@ If the optional `datacontenttype` is defined and set to something other than `ap
   transform: '{ message: "Hello" }'
   transition: World
 ```
-
 
 The No-op State exists for when nothing more than generic state functionality is required. A common use-case would be to perform a `jq` operation on the state data without performing another operation.
 
@@ -349,6 +380,7 @@ The No-op State exists for when nothing more than generic state functionality is
 | timeout    | Duration to wait for all actions to complete (ISO8601).                     | string                                  | no       |
 | transform  | `jq` command to transform the state's data output.                          | string                                  | no       |
 | transition | State to transition to next.                                                | string                                  | no       |
+| retries    | Retry policy.                                                               | [RetryDefinition](#retrydefinition)     | no       |
 | catch      | Error handling.                                                             | [[]ErrorDefinition](#errordefinition)   | no       |
 
 The Parallel State is an expansion on the [Action State](#actionstate), used for running multiple actions in parallel.
@@ -359,6 +391,28 @@ Return values from each of the actions will be stored in an array at `.return` i
 
 If the `timeout` is reached before the state can transition a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`. Any actions still running when the state transitions will be cancelled with "best effort" attempts.
 
+### SetterState
+
+| Parameter  | Description                                        | Type                                                    | Required |
+| ---------- | -------------------------------------------------- | ------------------------------------------------------- | -------- |
+| id         | State unique identifier.                           | string                                                  | yes      |
+| type       | State type ("setter").                             | string                                                  | yes      |
+| variables  | Variables to push.                                 | [[]VariableSetterDefinition](#variablesetterdefinition) | yes      |
+| transform  | `jq` command to transform the state's data output. | string                                                  | no       |
+| transition | State to transition to next.                       | string                                                  | no       |
+| retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)                     | no       |
+| catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)                   | no       |
+
+#### VariableSetterDefinition 
+
+| Parameter | Description                                              | Type   | Required |
+| --------- | -------------------------------------------------------- | ------ | -------- |
+| key       | Variable name.                                           | string | yes      |
+| scope     | Variable scope ("instance", "workflow", or "namespace"). | string | yes      |
+| value     | `jq` command to generate variable value.                 | string | yes      |
+
+The setter state is used to store persistent data.
+
 ### SwitchState
 
 | Parameter         | Description                                                             | Type                                                      | Required |
@@ -368,6 +422,7 @@ If the `timeout` is reached before the state can transition a `direktiv.stateTim
 | conditions        | Conditions to evaluate and determine which state to transition to next. | [[]SwitchConditionDefinition](#switchconditiondefinition) | yes      |
 | defaultTransition | State to transition to next if no conditions are matched.               | string                                                    | no       |
 | defaultTransform  | `jq` command to transform the state's data output.                      | string                                                    | no       |
+| retries           | Retry policy.                                                           | [RetryDefinition](#retrydefinition)                       | no       |
 | catch             | Error handling.                                                         | [[]ErrorDefinition](#errordefinition)                     | no       |
 
 #### SwitchConditionDefinition
@@ -408,6 +463,7 @@ The list of conditions is evaluated in-order and the first match determines what
 | schema     | Name of the referenced state data schema.                                                    | string                                | yes      |
 | transform  | `jq` command to transform the state's data output.                                           | string                                | no       |
 | transition | State to transition to next.                                                                 | string                                | no       |
+| retries    | Retry policy.                                                                                | [RetryDefinition](#retrydefinition)   | no       |
 | catch      | Error handling.                                                                              | [[]ErrorDefinition](#errordefinition) | no       |
 
 #### An example definition
