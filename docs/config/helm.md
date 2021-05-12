@@ -27,11 +27,10 @@ debug: false
 
 ```toml
 flow:
-  # image to use for flow
+  # image and tag to use for flow
   image: "vorteil/flow"
-  # tag to use for flow
   tag: "latest"
-  # exchange key for flow/knative communication
+  # simple exchange key for flow/knative communication
   exchange: "checkMe"
   # sidecar to use for knative services
   sidecar: "vorteil/sidecar"
@@ -41,16 +40,13 @@ flow:
 
 ```toml
 ingress:
-  # hostname of the ingress server
+  # host can be empty for HTTP
   host: ""
-  # secret used for tls
-  secret:
-    name: "ingress-tls-secret"
-    namespace: "istio-system"
+  # name of tls secret
+  certificate: none
+  # ingress class
+  class: "contour-external"
 ```
-
-Additionally *'ingress.crt'* and *'ingress.key'* need to be set if TLS is being used. This
-creates the secret.name secret with those files provided.
 
 **Secrets Config:**
 
@@ -61,14 +57,15 @@ secrets:
   tag: "latest"
   # secret backend, defaults to database
   backend: "db"
-  # db connection string for secrets
+  # db connection string for secrets if backend is database
   db: ""
   # encryption key for secrets in database
   key: "01234567890123456789012345678912"
 ```
+
 **UI & API Config:**
 
-User interface and API configuration is image and tag only:
+User interface and API configuration is image and tag plus certificate:
 
 ```toml
 ui:
@@ -78,4 +75,7 @@ ui:
 api:
   image: vorteil/api
   tag: "latest"
+
+# name of tls secret to use for TLS on API/UI level
+uiapiCertificate: mysecret
 ```
