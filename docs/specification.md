@@ -62,6 +62,7 @@ The default value for "**scale**" is 0 which means the service will be removed a
 | id         | State unique identifier.                           | string                                | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                | no       |
 | transition | State to transition to next.                       | string                                | no       |
+| log        | `jq` command to generate data for instance-logging.| string                                | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition) | no       |
 
 The `id` field must be unique amongst all states in the workflow, and may consist of only alphanumeric characters as well as periods, dashes, and underscores.
@@ -96,7 +97,7 @@ If a `retry` strategy is defined the state will be immediately retried. Only onc
 | ---------- | ---------------------------------------------------------------------------- | ------------------------------------- | -------- |
 | id         | State unique identifier.                                                     | string                                | yes      |
 | type       | State type ("action").                                                       | string                                | yes      |
-| action     | Action to perform.                                                           | [ActionDefinition](#ActionDefinition) | yes      |
+| action     | Action to perform.                                                           | [ActionDefinition](#actiondefinition) | yes      |
 | async      | If workflow execution can continue without waiting for the action to return. | boolean                               | no       |
 | timeout    | Duration to wait for action to complete (ISO8601).                           | string                                | no       |
 | transform  | `jq` command to transform the state's data output.                           | string                                | no       |
@@ -278,7 +279,7 @@ The received event payload will stored in a variable with the same name as its e
 | id         | State unique identifier.                                     | string                                | yes      |
 | type       | State type ("foreach").                                      | string                                | yes      |
 | array      | `jq` command to produce an array of objects to loop through. | string                                | yes      |
-| action     | Action to perform.                                           | [ActionDefinition](#ActionDefinition) | yes      |
+| action     | Action to perform.                                           | [ActionDefinition](#actiondefinition) | yes      |
 | timeout    | Duration to wait for all actions to complete (ISO8601).      | string                                | no       |
 | transform  | `jq` command to transform the state's data output.           | string                                | no       |
 | transition | State to transition to next.                                 | string                                | no       |
@@ -336,8 +337,6 @@ If the optional `datacontenttype` is defined and set to something other than `ap
 
 
 The No-op State exists for when nothing more than generic state functionality is required. A common use-case would be to perform a `jq` operation on the state data without performing another operation.
-
-Other states may avoid logging verbosely to keep logs concise and manageable, but the No-op State also logs its input and output, which can make it useful for debugging purposes.
 
 ### ParallelState
 

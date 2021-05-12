@@ -7,7 +7,7 @@ parent: Examples
 
 # Solving Math Expressions Example
 
-This example shows how we can iterate over data using the ForEach state. Which executes an action that solves a math expression. The workflow data input are the expressions you want to solve as a string array.
+This example shows how we can iterate over data using the [ForEach](specification.html#foreachstate) state. Which executes an action that solves a math expression. The workflow data input are the expressions you want to solve as a string array.
 
 The example demonstrates the use of an action isolate to solve a number of mathematical expressions using a `foreach` state. For each expression in the input array, the isolate will be run once. 
 
