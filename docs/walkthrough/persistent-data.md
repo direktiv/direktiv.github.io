@@ -73,3 +73,60 @@ A key doesn't need to exist in storage to return successfully, but the value ret
 ## Concurrency
 
 Direktiv makes no effort to guarantee any thread-safety on persistent data. Multiple instances that interact with the same variable may have inconsistent results. 
+
+## Getting & Setting from Isolates
+
+### Getting
+
+Accessing persistent data from within an isolate is a fairly straightforward process. The request that the custom isolate receives from Direktiv contains a header 'Direktiv-TempDir', which contains all of the variables specified in the isolate function definition. The `as`, `key`, and `type` fields can all play a role in the placement and naming of files within this directory:
+
+- `key`
+  - The key used to select a variable from within the workflow definition. If no `as` field is provided, the file on a custom isolate will correspond to the value of `key`.
+- `as`
+  - An optional field used to set the name of the file as it appears on the isolate.
+- `type`
+  - `plain`
+    - The variable data inside of the file will be written 'as-is'.
+  - `base64`
+    - If the variable is stored as base64-encoded data, it will be decoded before being written to the file system.
+  - `tar`
+    - If the variable is a valid tar archive, a directory will be created instead of a file, with the contents of the tar archive populating it.
+  - `targz`
+    - Similar to `tar`, this will result in a populated directory being created from a valid `.tar.gz` file.
+
+For example, given the following state definition, a directory named 'myFiles' should exist within the directory specified by the `Direktiv-TempDir` header. Assuming that this header has a value of `/mnt/shared/example`, the following structure would be expected:
+
+```yaml
+  - id: get
+    image: localhost:5000/iv-getter:v4
+    files:
+    - key: "myFiles"
+      type: tar
+```
+
+```
+/mnt/shared/example/
+└── myFiles
+    └── file-1
+    └── file-2
+    └── file-3
+```
+
+### Setting
+
+From within an isolate running on Direktiv, variables can be set by sending a `POST` request:
+
+```
+POST http://localhost:8889/var?aid=<EXAMPLE>&scope=instance&key=myFiles
+
+Body: <VARIABLE DATA>
+```
+
+- query parameters
+  - aid
+    - The action ID, found from the `Direktiv-ActionID` header of the request being served by the isolate.
+  - scope
+    - The scope for which the variable is set (`namespace`, `workflow`, or `instance`)
+  - key
+    - The key used by subsequent actions to access the variable.
+
