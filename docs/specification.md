@@ -20,6 +20,7 @@ has_toc: true
 | id          | Workflow unique identifier.      | string                                      | yes      |
 | name        | Workflow name (metadata).        | string                                      | no       |
 | description | Workflow description (metadata). | string                                      | no       |
+| version     | Version information.             | string                                      | no       |
 | functions   | Workflow function definitions.   | [[]FunctionDefinition](#functiondefinition) | no       |
 | schemas     | Workflow schema definitions.     | [[]SchemaDefinition](#schemadefinition)     | no       |
 | states      | Workflow states.                 | [[]StateDefinition](#states)                | no       |
