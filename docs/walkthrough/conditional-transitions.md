@@ -147,7 +147,7 @@ By transitioning to a state that has already happened it's possible to create lo
 
 ### Foreach State
 
-For range loops like the one in this demo there's another state called a Foreach State that simplifies the logic and splits up a data set to run many actions in parallel without doing lots of transitions. A fuller explanation of the Foreach State will be discussed in a later article, but here's an equivalent workflow definition to the demo if you're curious:
+For range loops like the one in this demo there's another state called a Foreach State that simplifies the logic and splits up a data set to run many actions in parallel without doing lots of transitions. A fuller explanation of the Foreach State will be discussed in [another article](examples/solving-math-expressions.html), but here's an equivalent workflow definition to the demo if you're curious:
 
 ```yaml
 id: multiposter
