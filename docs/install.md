@@ -14,12 +14,13 @@ For testing and evaluation we are providing [test images](#install-test-server) 
 latest build.
 
 ## Installation of Knative
-Knative can be installed using the instructions from the Knative website: [installations instructions](https://knative.dev/docs/install/). Alternatively, following scripts from the Direktiv [github repository](https://github.com/vorteil/direktiv/tree/main/scripts/knative) have been provided to make the installation simpler:
+This knative is a slightly modified version so the installation instructions from knative's website don't apply. Following scripts from the Direktiv [github repository](https://github.com/vorteil/direktiv/tree/main/scripts/knative) have been provided to make the installation simpler.
 
 - [serving-crds.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/serving-crds.yaml)
 - [serving-core.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/serving-core.yaml)
-- [istio.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/istio.yaml)
-- [net-istio.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/net-istio.yaml)
+- [contour.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/contour.yaml)
+- [net-contour.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/net-contour.yaml)
+- [knative-default.yaml](https://github.com/vorteil/direktiv/tree/main/scripts/knative/knative-default.yaml)
 
 The scripts can be used in the following way:
 
@@ -29,12 +30,20 @@ $ kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/scrip
 $ kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/scripts/knative/serving-core.yaml
 
 # Install an Istio & Knative Istio controller
-$ kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/scripts/knative/istio.yaml
-$ kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/scripts/knative/net-istio.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/scripts/knative/contour.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/scripts/knative/net-contour.yaml
 
+$ kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/scripts/knative/knative-default.yaml
+
+$ kubectl patch configmap/config-network \
+  --namespace knative-serving \
+  --type merge \
+  --patch '{"data":{"ingress.class":"contour.ingress.networking.knative.dev"}}'
 ```
 
 After applying the scripts with `kubectl apply -f` all the pods in the namespaces `knative-serving` and `istio-system` should be in in either "Running" or "Completed" state.
+
+The script 'install-knative.sh' will execute these commands.
 
 ## Installation of Direktiv
 The second step is installing Direktiv with [helm](https://helm.sh/):
