@@ -15,17 +15,18 @@ has_toc: true
 
 # Workflow Definition
 
-| Parameter   | Description                      | Type                                        | Required |
-| ----------- | -------------------------------- | ------------------------------------------- | -------- |
-| id          | Workflow unique identifier.      | string                                      | yes      |
-| name        | Workflow name (metadata).        | string                                      | no       |
-| description | Workflow description (metadata). | string                                      | no       |
-| version     | Version information.             | string                                      | no       |
-| functions   | Workflow function definitions.   | [[]FunctionDefinition](#functiondefinition) | no       |
-| schemas     | Workflow schema definitions.     | [[]SchemaDefinition](#schemadefinition)     | no       |
-| states      | Workflow states.                 | [[]StateDefinition](#states)                | no       |
-| timeouts    | Workflow global timeouts.        | [TimeoutDefinition](#timeoutdefinition)     | no       |
-| start       | Workflow start configuration.    | [Start](#start)                             | no       |
+| Parameter   | Description                                                             | Type                                        | Required |
+| ----------- | ----------------------------------------------------------------------- | ------------------------------------------- | -------- |
+| id          | Workflow unique identifier.                                             | string                                      | yes      |
+| name        | Workflow name (metadata).                                               | string                                      | no       |
+| description | Workflow description (metadata).                                        | string                                      | no       |
+| version     | Version information.                                                    | string                                      | no       |
+| singular    | Attempts to invoke this workflow will fail when an instance is running. | no                                          | bool     |
+| functions   | Workflow function definitions.                                          | [[]FunctionDefinition](#functiondefinition) | no       |
+| schemas     | Workflow schema definitions.                                            | [[]SchemaDefinition](#schemadefinition)     | no       |
+| states      | Workflow states.                                                        | [[]StateDefinition](#states)                | no       |
+| timeouts    | Workflow global timeouts.                                               | [TimeoutDefinition](#timeoutdefinition)     | no       |
+| start       | Workflow start configuration.                                           | [Start](#start)                             | no       |
 
 ## FunctionDefinition
 
