@@ -4,7 +4,6 @@ title: Google Cloud EventArc
 parent: Cloud
 grand_parent: Events
 nav_order: 1
-has_children: true
 ---
 
 # Google Cloud EventArc

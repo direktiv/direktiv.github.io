@@ -4,7 +4,6 @@ title: Amazon EventBridge
 parent: Cloud
 grand_parent: Events
 nav_order: 3
-has_children: true
 ---
 
 # Amazon EventBridge

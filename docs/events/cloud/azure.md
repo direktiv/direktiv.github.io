@@ -4,7 +4,6 @@ title: Azure EventGrid
 parent: Cloud
 grand_parent: Events
 nav_order: 2
-has_children: true
 ---
 
 # Azure EventGrid
