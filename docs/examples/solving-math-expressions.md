@@ -17,14 +17,14 @@ The example demonstrates the use of an action isolate to solve a number of mathe
 id: solver
 description: "Solves a string array of expressions"
 functions: 
-- id: solveMathExpressionFunction
+- id: solve-math-expression
   image: vorteil/solve:v2
 states:
 - id: solve
   type: foreach
   array: '.expressions[] | { expression: . }'
   action:
-    function: solveMathExpressionFunction
+    function: solve-math-expression
     input: '{ x: .expression }'
   transform: '{ solved: .return }'
 ```
