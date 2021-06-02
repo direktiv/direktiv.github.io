@@ -93,7 +93,7 @@ Accessing persistent data from within an isolate is a fairly straightforward pro
     - If the variable is stored as base64-encoded data, it will be decoded before being written to the file system.
   - `tar`
     - If the variable is a valid tar archive, a directory will be created instead of a file, with the contents of the tar archive populating it.
-  - `targz`
+  - `tar.gz`
     - Similar to `tar`, this will result in a populated directory being created from a valid `.tar.gz` file.
 
 For example, given the following state definition, a directory named 'myFiles' should exist within the directory specified by the `Direktiv-TempDir` header. Assuming that this header has a value of `/mnt/shared/example`, the following structure would be expected:
