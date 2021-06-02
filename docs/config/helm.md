@@ -75,7 +75,12 @@ ui:
 api:
   image: vorteil/api
   tag: "latest"
+  # apiKey for Authorization [Optional]
+  key: "aGVsbG8gdGhlcmU="
 
 # name of tls secret to use for TLS on API/UI level
 uiapiCertificate: mysecret
 ```
+
+The api.key value when set will enable apiKey authorization on the api server and will require you set the header `Authorization: apiKey {api.key}`
+when making any requests to the api server. If unset or the incorrect apiKey is set, the response to the request will return 401.
