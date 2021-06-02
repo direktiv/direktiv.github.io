@@ -78,10 +78,12 @@ Direktiv makes no effort to guarantee any thread-safety on persistent data. Mult
 
 ### Getting
 
-Accessing persistent data from within an isolate is a fairly straightforward process. The request that the custom isolate receives from Direktiv contains a header 'Direktiv-TempDir', which contains all of the variables specified in the isolate function definition. The `as`, `key`, and `type` fields can all play a role in the placement and naming of files within this directory:
+Accessing persistent data from within an isolate is a fairly straightforward process. The request that the custom isolate receives from Direktiv contains a header 'Direktiv-TempDir', which contains all of the variables specified in the isolate function definition. The `as`, `key`, `scope`, and `type` fields can all play a role in the placement and naming of files within this directory:
 
 - `key`
   - The key used to select a variable from within the workflow definition. If no `as` field is provided, the file on a custom isolate will correspond to the value of `key`.
+- `scope`
+  - Which scope to get the variable from: `instance`, `workflow`, or `namespace`. Defaults to `instance` if omitted.
 - `as`
   - An optional field used to set the name of the file as it appears on the isolate.
 - `type`
@@ -101,6 +103,7 @@ For example, given the following state definition, a directory named 'myFiles' s
     image: localhost:5000/iv-getter:v4
     files:
     - key: "myFiles"
+      scope: instance
       type: tar
 ```
 
