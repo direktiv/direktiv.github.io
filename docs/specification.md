@@ -30,13 +30,14 @@ has_toc: true
 
 ## FunctionDefinition
 
-| Parameter | Description                            | Type   | Required |
-| --------- | -------------------------------------- | ------ | -------- |
-| id        | Function definition unique identifier. | string | yes      |
-| image     | Image URI                              | string | yes      |
-| cmd       | Command to run in container            | string | no       |
-| size      | Size of virtual machine                | enum   | no       |
-| scale     | minimum number of instances            | int    | no       |
+| Parameter | Description                            | Type                     | Required |
+| --------- | -------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier. | string                   | yes      |
+| image     | Image URI                              | string                   | yes      |
+| cmd       | Command to run in container            | string                   | no       |
+| size      | Size of virtual machine                | enum                     | no       |
+| scale     | minimum number of instances            | int                      | no       |
+| files     | Workflow file definition.              | []FunctionFileDefinition | no       |
 
 A function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
 
@@ -47,6 +48,15 @@ The default value for "**scale**" is 0 which means the service will be removed a
 | small  | 1   | 256 MB  | +64 MB  |
 | medium | 1   | 512 MB  | +64 MB  |
 | large  | 2   | 1024 MB | +64 MB  |
+
+## FunctionFileDefinition 
+
+| Parameter | Description                                                                                  | Type   | Required |
+| --------- | -------------------------------------------------------------------------------------------- | ------ | -------- |
+| key       | Key used to select variable.                                                                 | string | yes      |
+| scope     | Scope used to select variable. Defaults to 'instance', but can be 'workflow' or 'namespace'. | string | no       |
+| as        | Set the filename of the file. The default is the same as the key.                            | string | no       |
+| type      | How to treat the file. Options include 'plain', 'base64', 'tar', 'tar.gz'.                   | string | no       |
 
 ## SchemaDefinition
 
