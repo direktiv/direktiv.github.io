@@ -14,20 +14,20 @@ This example demonstrates the use of a `switch` state in an event-based workflow
 id: check-credit
 start:
   type: event
-  state: Check-Credit
+  state: check-credit
   event:
     type: checkcredit
 states:
-- id: Check-Credit
+- id: check-credit
   type: switch
   conditions:
   - condition: '.checkcredit.value > 500'
-    transition: Approve-Loan
-  defaultTransition: Reject-Loan
-- id: Reject-Loan
+    transition: approve-loan
+  defaultTransition: reject-loan
+- id: reject-loan
   type: noop
   transform: '{ "msg": "You have been rejected for this loan" }'
-- id: Approve-Loan
+- id: approve-loan
   type: noop
   transform: '{ "msg": "You have been approved for this loan" }'
 ```

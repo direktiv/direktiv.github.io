@@ -142,7 +142,7 @@ So far we've never demonstrated any way to validate external inputs. Validation 
 From the example in the demo, here's what a Validate State definition might look like:
 
 ```yaml
-- id: validateInput
+- id: validate-input
   type: validate
   schema:
     type: object

@@ -47,7 +47,7 @@ Replace `{OS}` with `windows`, `mac` and `linux` to create workflows that will g
 ```yaml
 id: send-event-for-{OS}
 states:
-- id: sendEvent
+- id: send-event
   type: generateEvent
   event:
     type: gen-event-{OS}

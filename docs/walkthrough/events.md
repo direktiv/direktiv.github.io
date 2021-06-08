@@ -90,7 +90,7 @@ Like direct input, the payload will be treated as nested JSON if possible, but w
 Triggering workflows is not the only thing you can do with events. Workflows can be constructed to run some logic and then wait for an event before proceeding. Like the event-based start types, there are three event consuming states: `consumeEvent`, `eventsXor`, and `eventsAnd`. Here's an example of what a ConsumeEvent State could look like:
 
 ```yaml
-- id: waitEvent
+- id: wait-event
   type: consumeEvent
   event:
     type: com.github.pull.create
@@ -99,7 +99,7 @@ Triggering workflows is not the only thing you can do with events. Workflows can
       repository: '{{ .repo }}'
   timeout: PT5M
   transform: '."com.github.pull.create"'
-  transition: nextState
+  transition: next-state
 ```
 
 ### Timeouts
@@ -119,7 +119,7 @@ Unlike filters, context values can be determined dynamically based on instance d
 Workflows can generate events for their namespace without relying on an Isolate using the GenerateEvent State. The fields for this state are fairly self-explanatory. Here's an example:
 
 ```yaml
-- id: genEvent
+- id: gen-event
   type: generateEvent
   event:
     type: "my.custom.event"

@@ -110,19 +110,19 @@ This workflow listens for the logger `azureLogger` and sends it to azure:
 ```yaml
 id: azure-logger
 functions:
-- id: sendLog
+- id: send-log
   image: vorteil/azlog:v2
 start:
   type: event
   event:
     type: direktiv.instanceLog
     filters:
-      logger: azureLogger
+      logger: azure-logger
 states:
 - id: log
   type: action
   action:
-    function: sendLog
+    function: send-log
     secrets: [AZURE_WORKSPACE_ID, AZURE_WORKSPACE_KEY]
     input: '{
       "workspace-id": .secrets.AZURE_WORKSPACE_ID,

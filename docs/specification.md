@@ -119,10 +119,10 @@ If a `retry` strategy is defined the state will be retried on an uncaught failur
 ##### An example definition
 
 ```yaml
-- id: insertIntoDatabase
+- id: insert-into-database
   type: action
   action:
-    function: insertIntoDatabaseFunction
+    function: insert-into-database-function
     input: '{ customer: .customer }'
 ```
 
@@ -159,7 +159,7 @@ If `async` is `true`, the workflow will not wait for it to return before transit
 ##### An example definition
 
 ```yaml
-- id: waitForBooking
+- id: wait-for-booking
   type: consumeEvent
   event:
     type: guestbooking
@@ -169,7 +169,7 @@ If `async` is `true`, the workflow will not wait for it to return before transit
       venue: Sydney
   timeout: PT1H
   transform: '.customer'
-  transition: addBookingToDatabase
+  transition: add-booking-to-database
 ```
 
 The ConsumeEvent State is the simplest state you can use to listen for CloudEvents in the middle of a workflow (for triggering a workflow when receiving an event, see [Start](#start)). More complex event consumers include the [Callback State](#callbackstate), the [EventXor State](#eventxorstate), and the [EventAnd State](#eventandstate).
@@ -196,10 +196,10 @@ The event payload will stored at a variable with the same name as the event's `t
 
 
 ```yaml
-- id: Sleep
+- id: sleep
   type: delay
   duration: PT1H
-  transition: fetchData
+  transition: fetch-data
 ```
 
 
@@ -222,7 +222,7 @@ The Delay State pauses execution of the workflow for a predefined length of time
 #### An example definition
 
 ```yaml
-- id: ErrorOutOfDate
+- id: error-out-of-date
   type: error
   error: validation.outOfDate
   message: "food item %s is out of date"
@@ -362,10 +362,10 @@ The getter state is used to retrieve persistent data.
 #### An example definition
 
 ```yaml
-- id: Hello
+- id: hello
   type: noop
   transform: '{ message: "Hello" }'
-  transition: World
+  transition: world
 ```
 
 The No-op State exists for when nothing more than generic state functionality is required. A common use-case would be to perform a `jq` operation on the state data without performing another operation.
@@ -437,16 +437,16 @@ The setter state is used to store persistent data.
 ##### An example definition
 
 ```yaml
-- id: Decision
+- id: decision
   type: switch
   conditions:
   - condition: '.patient.contactInfo.mobile'
-    transition: SMS
+    transition: sms
     transform: '. + { phone: .contact.mobile }'
   - condition: '.patient.contactInfo.landline'
-    transition: Call
+    transition: call
     transform: '. + { phone: .contact.landline }'
-  defaultTransition: Email
+  defaultTransition: email
 ```
 
 
@@ -470,7 +470,7 @@ The list of conditions is evaluated in-order and the first match determines what
 #### An example definition
 
 ```yaml
-- id: ValidateInput
+- id: validate-input
   type: validate
   schema:
     type: object
@@ -480,7 +480,7 @@ The list of conditions is evaluated in-order and the first match determines what
       name:
         type: string
     additionalProperties: false
-  transition: processRequest
+  transition: process-request
 ```
 
 This schema is based off the following JSON Schema:
