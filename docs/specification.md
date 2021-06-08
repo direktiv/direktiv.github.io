@@ -15,27 +15,29 @@ has_toc: true
 
 # Workflow Definition
 
-| Parameter   | Description                      | Type                                        | Required |
-| ----------- | -------------------------------- | ------------------------------------------- | -------- |
-| id          | Workflow unique identifier.      | string                                      | yes      |
-| name        | Workflow name (metadata).        | string                                      | no       |
-| description | Workflow description (metadata). | string                                      | no       |
-| version     | Version information.             | string                                      | no       |
-| functions   | Workflow function definitions.   | [[]FunctionDefinition](#functiondefinition) | no       |
-| schemas     | Workflow schema definitions.     | [[]SchemaDefinition](#schemadefinition)     | no       |
-| states      | Workflow states.                 | [[]StateDefinition](#states)                | no       |
-| timeouts    | Workflow global timeouts.        | [TimeoutDefinition](#timeoutdefinition)     | no       |
-| start       | Workflow start configuration.    | [Start](#start)                             | no       |
+| Parameter   | Description                                                             | Type                                        | Required |
+| ----------- | ----------------------------------------------------------------------- | ------------------------------------------- | -------- |
+| id          | Workflow unique identifier.                                             | string                                      | yes      |
+| name        | Workflow name (metadata).                                               | string                                      | no       |
+| description | Workflow description (metadata).                                        | string                                      | no       |
+| version     | Version information.                                                    | string                                      | no       |
+| singular    | Attempts to invoke this workflow will fail when an instance is running. | no                                          | bool     |
+| functions   | Workflow function definitions.                                          | [[]FunctionDefinition](#functiondefinition) | no       |
+| schemas     | Workflow schema definitions.                                            | [[]SchemaDefinition](#schemadefinition)     | no       |
+| states      | Workflow states.                                                        | [[]StateDefinition](#states)                | no       |
+| timeouts    | Workflow global timeouts.                                               | [TimeoutDefinition](#timeoutdefinition)     | no       |
+| start       | Workflow start configuration.                                           | [Start](#start)                             | no       |
 
 ## FunctionDefinition
 
-| Parameter | Description                            | Type   | Required |
-| --------- | -------------------------------------- | ------ | -------- |
-| id        | Function definition unique identifier. | string | yes      |
-| image     | Image URI                              | string | yes      |
-| cmd       | Command to run in container            | string | no       |
-| size      | Size of virtual machine                | enum   | no       |
-| scale     | minimum number of instances            | int    | no       |
+| Parameter | Description                            | Type                     | Required |
+| --------- | -------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier. | string                   | yes      |
+| image     | Image URI                              | string                   | yes      |
+| cmd       | Command to run in container            | string                   | no       |
+| size      | Size of virtual machine                | enum                     | no       |
+| scale     | minimum number of instances            | int                      | no       |
+| files     | Workflow file definition.              | []FunctionFileDefinition | no       |
 
 A function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
 
@@ -46,6 +48,15 @@ The default value for "**scale**" is 0 which means the service will be removed a
 | small  | 1   | 256 MB  | +64 MB  |
 | medium | 1   | 512 MB  | +64 MB  |
 | large  | 2   | 1024 MB | +64 MB  |
+
+## FunctionFileDefinition 
+
+| Parameter | Description                                                                                  | Type   | Required |
+| --------- | -------------------------------------------------------------------------------------------- | ------ | -------- |
+| key       | Key used to select variable.                                                                 | string | yes      |
+| scope     | Scope used to select variable. Defaults to 'instance', but can be 'workflow' or 'namespace'. | string | no       |
+| as        | Set the filename of the file. The default is the same as the key.                            | string | no       |
+| type      | How to treat the file. Options include 'plain', 'base64', 'tar', 'tar.gz'.                   | string | no       |
 
 ## SchemaDefinition
 
@@ -174,7 +185,7 @@ If `async` is `true`, the workflow will not wait for it to return before transit
 
 The ConsumeEvent State is the simplest state you can use to listen for CloudEvents in the middle of a workflow (for triggering a workflow when receiving an event, see [Start](#start)). More complex event consumers include the [Callback State](#callbackstate), the [EventXor State](#eventxorstate), and the [EventAnd State](#eventandstate).
 
-When a workflow reaches a ConsumeEvent State it will halt its execution until it receives a matching event, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with `{{` and ends with `}}` it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
+When a workflow reaches a ConsumeEvent State it will halt its execution until it receives a matching event, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with {{ "`{{`  and ends with " }} it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
 
 If the `timeout` is reached without receiving a matching event a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 
@@ -250,7 +261,29 @@ An error consists of two parts: an error code, and an error message. The code sh
 | retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)                 | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)               | no       |
 
-When a workflow reaches an EventAnd State it will halt its execution until it receives a matching event for every event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with `{{` and ends with `}}` it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
+##### An example definition
+
+```yaml
+- id: event-and
+  type: eventAnd
+  timeout: PT1H
+  transition: done
+  events:
+    - event:
+        type: purchasePaid
+        context:
+          source: 'purchase.*'
+          customerId: '{{ .customerId }}'
+          country: Australia
+    - event:
+        type: purchaseSent
+        context:
+          source: 'purchase.*'
+          customerId: '{{ .customerId }}'
+          country:  Australia
+```
+
+When a workflow reaches an EventAnd State it will halt its execution until it receives a matching event for every event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with {{ "`{{`  and ends with " }} it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
 
 If the `timeout` is reached without receiving matches for all required events a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 
@@ -275,7 +308,30 @@ The event payloads will stored in variables with the same names as each event's 
 | transition | State to transition to if this branch is selected. | string                                            | no       |
 | transform  | `jq` command to transform the state's data output. | string                                            | no       |
 
-When a workflow reaches an EventXor State it will halt its execution until it receives any matching event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with `{{` and ends with `}}` it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
+##### An example definition
+
+```yaml
+- id: event-xor
+  type: eventXor
+  timeout: PT1H
+  events:
+    - transition: "reservation-accept"
+      event:
+        type: reservationAccept
+        context:
+          source: "reservation.*"
+          guestName: '{{ .guestName }}'
+          venue: "Compu Global HMN"
+    - transition: "reservation-decline"
+      event:
+        type: reservationDecline
+        context:
+          source: "reservation.*"
+          guestName: '{{ .guestName }}'
+          venue: "Compu Global HMN"
+```
+
+When a workflow reaches an EventXor State it will halt its execution until it receives any matching event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with{{ "`{{`  and ends with " }} it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
 
 If the `timeout` is reached without receiving matches for any required event a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 

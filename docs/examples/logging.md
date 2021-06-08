@@ -50,7 +50,7 @@ This workflow listens for the logger `gcpLogger` and sends it to gcp:
 ```yaml
 id: gcp-logger
 functions:
-- id: sendLog
+- id: send-log
   image: vorteil/gcplog:v2
 start:
   type: event
@@ -62,7 +62,7 @@ states:
 - id: log
   type: action
   action:
-    function: sendLog
+    function: send-log
     secrets: [GCP_SERVICEACCOUNTKEY]
     input: '{
       serviceAccountKey: .secrets.GCP_SERVICEACCOUNTKEY,
@@ -79,7 +79,7 @@ This workflow listens for the logger `awsLogger` and sends it to aws:
 ```yaml
 id: aws-logger
 functions:
-- id: sendLog
+- id: send-log
   image: vorteil/awslog:v2
 start:
   type: event
@@ -91,7 +91,7 @@ states:
 - id: log
   type: action
   action:
-    function: sendLog
+    function: send-log
     secrets: [AWS_KEY, AWS_SECRET]
     input: '{
       key: .secrets.AWS_KEY,

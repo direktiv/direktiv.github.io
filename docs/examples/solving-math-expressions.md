@@ -17,14 +17,14 @@ The example demonstrates the use of an action isolate to solve a number of mathe
 id: solver
 description: "Solves a string array of expressions"
 functions: 
-- id: solve-math-expression-function
+- id: solve-math-expression
   image: vorteil/solve:v2
 states:
 - id: solve
   type: foreach
   array: '.expressions[] | { expression: . }'
   action:
-    function: solve-math-expression-function
+    function: solve-math-expression
     input: '{ x: .expression }'
   transform: '{ solved: .return }'
 ```
@@ -55,4 +55,33 @@ The results of this foreach loop will be a json array of strings that have the s
     "100"
   ]
 }
+```
+
+Note: The array for a foreach state must be passed as an array of objects. This is why to iterate over the `expressions` string array, we must pipe it and construct a new array of objects using `.expressions[] | { expression: . }`.
+
+### jq: `.expressions`
+```json
+[
+  "4+10",
+  "15-14",
+  "100*3",
+  "200/2"
+]
+```
+
+### jq: `.expressions[] | { expression: . }`
+```json
+{
+  "expression": "4+10"
+}
+{
+  "expression": "15-14"
+}
+{
+  "expression": "100*3"
+}
+{
+  "expression": "200/2"
+}
+
 ```
