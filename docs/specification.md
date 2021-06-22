@@ -75,7 +75,6 @@ The default value for "**scale**" is 0 which means the service will be removed a
 | transform  | `jq` command to transform the state's data output.  | string                                | no       |
 | transition | State to transition to next.                        | string                                | no       |
 | log        | `jq` command to generate data for instance-logging. | string                                | no       |
-| retries    | Retry policy.                                       | [RetryDefinition](#retrydefinition)   | no       |
 | catch      | Error handling.                                     | [[]ErrorDefinition](#errordefinition) | no       |
 
 The `id` field must be unique amongst all states in the workflow, and may consist of only alphanumeric characters as well as periods, dashes, and underscores.
@@ -93,17 +92,6 @@ The `transition`, if provided, must be set to the `id` of a state within the wor
 
 The `error` parameter can be a glob pattern to match multiple types of errors. When an error is thrown it will be compared against each ErrorDefinition in order until it finds a match. If no matches are found the workflow will immediately abort and escalate the error to any caller, unless the retry policy is ready to take over.
 
-#### RetryDefinition
-
-| Parameter   | Description                                                               | Type   | Required |
-| ----------- | ------------------------------------------------------------------------- | ------ | -------- |
-| maxAttempts | Maximum number of retry attempts.                                         | int    | yes      |
-| delay       | Time delay between retry attempts (ISO8601).                              | string | no       |
-| multiplier  | Value by which the delay is multiplied after each attempt.                | float  | no       |
-| throw       | Error code to throw if the number of failed attempts exceeds maxAttempts. | string | no       |
-
-If a `retry` strategy is defined the state will be retried on an uncaught failure. If the state fails `maxAttempts` times and `throw` is defined the error catchers will be checked one last time using the error code defined in `throw`, otherwise the workflow will end with a failure.
-
 ### ActionState
 
 | Parameter  | Description                                                                  | Type                                  | Required |
@@ -120,12 +108,24 @@ If a `retry` strategy is defined the state will be retried on an uncaught failur
 
 #### ActionDefinition
 
-| Parameter | Description                                                                                                  | Type     | Required                      |
-| --------- | ------------------------------------------------------------------------------------------------------------ | -------- | ----------------------------- |
-| function  | Name of the referenced function.                                                                             | string   | yes (if workflow not defined) |
-| workflow  | Name of the referenced workflow.                                                                             | string   | yes (if function not defined) |
-| input     | `jq` command to generate the input for the action.                                                           | string   | no                            |
-| secrets   | List of secrets to temporarily add to the state data under `.secrets` before running the input `jq` command. | []string | no                            |
+| Parameter | Description                                                                                                  | Type                                | Required                      |
+| --------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------- | ----------------------------- |
+| function  | Name of the referenced function.                                                                             | string                              | yes (if workflow not defined) |
+| workflow  | Name of the referenced workflow.                                                                             | string                              | yes (if function not defined) |
+| input     | `jq` command to generate the input for the action.                                                           | string                              | no                            |
+| secrets   | List of secrets to temporarily add to the state data under `.secrets` before running the input `jq` command. | []string                            | no                            |
+| retries   | Retry policy.                                                                                                | [RetryDefinition](#retrydefinition) | no                            |
+
+#### RetryDefinition
+
+| Parameter    | Description                                                | Type     | Required |
+| ------------ | ---------------------------------------------------------- | -------- | -------- |
+| max_attempts | Maximum number of retry attempts.                          | int      | yes      |
+| delay        | Time delay between retry attempts (ISO8601).               | string   | no       |
+| multiplier   | Value by which the delay is multiplied after each attempt. | float    | no       |
+| codes        | Regex patterns to specify which error codes to catch.      | []string | yes      |
+
+If a `retry` strategy is defined the action will be retried on an uncaught failure. If the retry fails `max_attempts` times a `direktiv.retries.exceeded` error will be thrown.
 
 ##### An example definition
 

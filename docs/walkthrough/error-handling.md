@@ -33,14 +33,15 @@ states:
   type: action
   action:
     function: select
+    retries:
+      max_attempts: 3
+      delay: PT30S
+      multiplier: 2.0
+      codes: [".*"]
   transform: '.return'
   transition: crunchNumbers
   catch:
   - error: "*"
-    retry:
-      maxAttempts: 3
-      delay: PT30S
-      multiplier: 2.0
 - id: crunchNumbers
   type: action
   action:
@@ -96,13 +97,14 @@ If a workflow fails to complete within its maximum timeout it will not be given 
 
 ## Retries
 
-Error catchers may optionally define a retry strategy. If a retry strategy is defined the catcher's transition won't be used until all retries have failed. A retry strategy might look like the following:
+Action definitions may optionally define a retry strategy. If a retry strategy is defined the catcher's transition won't be used and no error will be escalated for retryable errors until all retries have failed. A retry strategy might look like the following:
 
 ```yaml
     retry:
-      maxAttempts: 3
+      max_attempts: 3
       delay: PT30S
       multiplier: 2.0
+      codes: [".*"]
 ```
 
 In this example you can see that a maximum number of attempts is defined, alongside an initial delay between attempts and a multiplication factor to apply to the delay between subsequent attempts.
