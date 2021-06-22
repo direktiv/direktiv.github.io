@@ -15,7 +15,7 @@ Many workflows require sensitive information such as passwords or authentication
 id: httpget
 functions:
 - id: httprequest
-  image: marketplace.gcr.io/alan/request-custom:v1
+  image: vorteil/request:v5
 states:
 - id: getter 
   type: action

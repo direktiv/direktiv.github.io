@@ -124,7 +124,7 @@ Workflows can generate events for their namespace without relying on an Isolate 
   event:
     type: "my.custom.event"
     source: "direktiv"
-    data: '{ .input }'
+    data: '.'
     datacontenttype: "application/json"
 ```
 

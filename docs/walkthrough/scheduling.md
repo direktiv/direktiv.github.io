@@ -28,16 +28,11 @@ states:
       "url": "https://jsonplaceholder.typicode.com/todos/1",
     }'
   transform: '.return'
-  transition: storer
-- id: storer
-  type: action
-  action:
-    function: httprequest
-    input: '{
-      "method": "POST",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-      "body": .
-    }'
+  transition: logger
+- id: logger
+  type: noop
+  log: '.'
+
 ```
 
 ## Start Types

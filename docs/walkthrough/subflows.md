@@ -81,7 +81,7 @@ states:
   type: action
   action:
     workflow: notifier
-    input: '{ contact: .contact, payload: .input }'
+    input: '{ contact: .contact, payload: .payload }'
 ```
 
 ### Input
@@ -97,13 +97,17 @@ states:
 
 ```json
 {
-	"contact": "1",
+	"contact": "Alan",
 	"payload": "2",
 	"return": {
-		"completed": false,
-		"id": 1,
-		"title": "delectus aut autem",
-		"userId": 1
+		"contact": "Alan",
+		"payload": "2",
+		"return": {
+			"completed": false,
+			"id": 1,
+			"title": "delectus aut autem",
+			"userId": 1
+		}
 	}
 }
 ```
