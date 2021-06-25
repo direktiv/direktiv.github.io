@@ -1,0 +1,236 @@
+---
+layout: default
+title: Create VM and DNS Record
+nav_order: 8
+parent: Examples
+---
+
+# Creating a VM and a DNS Record
+
+There are a number of pre-made 'isolate' containers designed specifically to bootstrap workflow development with direktiv. In this article, the following four isolates will be used:
+
+- vorteil/aws-ec2-create:v3
+  - Creates an instance on Amazon Web Services EC2
+- vorteil/awsgo:v2
+  - Wraps the AWS CLI, enabling the use of any existing AWS CLI command in a workflow
+- vorteil/request:v6
+  - Sends a custom HTTP request
+- vorteil/smtp:v2
+  - Sends an email
+
+To keep everything clean, this workflow will actually be split up in to 1 'main' workflow and 2 'subflows' that the main workflow calls. The following 'secrets' must be configured, in order to authenticate with various services:
+
+- AWS_KEY
+  - AWS access key
+- AWS_SECRET
+  - AWS access key secret
+- GODADDY_KEY
+  - GoDaddy API Key
+- GODADDY_SECRET
+  - GoDaddy API Key Secret
+- SMTP_USER
+  - The 'sender' address, used to authenticate with the SMTP server.
+- SMTP_PASSWORD
+  - Password for the SMTP user.
+
+## Workflow #1 - Main
+
+This workflow creates an AWS EC2 instance, retrieves it's public IP address, and invokes the `add-dns-record` and `send-email` subflows. The first state, `set-input`, is included purely as a matter of convenience, as it allows us to execute the workflow without needing to remember to provide it with an input struct. 
+
+```yaml
+id: create-vm-with-dns
+description: Creates an instance on AWS EC2, add a DNS record to GoDaddy, and posts a CloudEvent on completion.
+
+functions:
+
+  - id: create-vm
+    image: vorteil/aws-ec2-create:v3
+    size: medium
+
+  - id: get-vm
+    image: vorteil/awsgo:v2
+
+states:
+
+  # Set data (skips need for providing an input object on each invocation)
+  - id: set-input
+    type: noop
+    transform: '.ami = "ami-093d266a" | .region = "ap-southeast-2" | .instanceType = "t1.micro" | .recipient = "john.doe@example.com" | .subdomain = "direktiv" | .domain = "mydomain.com"'
+    transition: create-instance
+
+  # Create the AWS EC2 Instance
+  - id: create-instance
+    log: '.'
+    type: action
+    action:
+      function: create-vm
+      secrets: ['AWS_KEY', 'AWS_SECRET']
+      input: 
+        access-key: '{{ .secrets.AWS_KEY }}'
+        access-secret: '{{ .secrets.AWS_SECRET }}'
+        image-id: '{{ .ami }}'
+        region: '{{ .region }}'
+        instance-type: '{{ .instanceType }}'
+    transition: get-instance-ip
+
+  # Query AWS for the public IP address of the instance
+  - id: get-instance-ip
+    log: '.'
+    type: action
+    action:
+      function: get-vm
+      secrets: ['AWS_KEY', 'AWS_SECRET']
+      input:
+        access-key: '{{ .secrets.AWS_KEY }}'
+        access-secret: '{{ .secrets.AWS_SECRET }}'
+        command:
+          - '--region'
+          - '{{ .region }}'
+          - 'ec2'
+          - 'describe-instances'
+          - '--filters'
+          - 'Name=instance-state-name,Values=running'
+          - '{{ "Name=instance-id,Values=" + .return.Instances[0].InstanceId }}'
+          - '--query'
+          - 'Reservations[*].Instances[*].[PublicIpAddress]'
+          - '--output'
+          - 'json'
+    transform: '.address = .return[0][0][0]'
+    transition: add-dns-record
+
+  # Add an 'A' DNS record
+  - id: add-dns-record
+    type: action
+    log: '.'
+    action:
+      workflow: add-dns-record
+      input: 
+        domain: '{{ .domain }}'
+        subdomain: '{{ .subdomain }}'
+        address: '{{ .address }}'
+    transition: send-email
+
+  # Send a 'success' email
+  - id: send-email
+    type: action
+    action:
+      workflow: send-email
+      input:
+        recipient: '{{.recipient}}'
+        domain: '{{.domain}}'
+        subdomain: '{{.subdomain}}'
+        address: '{{.address}}'
+```
+
+## Workflow #2 - Add DNS Record
+
+The `add-dns-record` contains 2 states. The first, `validate`, simply ensures that the provided input matches the expected schema, and will cause the workflow to fail otherwise. The second state, `api-request`, sends a custom HTTP PATCH request to GoDaddy, instructing it to create a new DNS record pointing to the IP address of the newly created VM.
+
+```yaml
+id: add-dns-record
+description: Add an A DNS record to the specified domain on GoDaddy.
+
+functions:
+  
+  - id: req
+    image: vorteil/request:v6
+
+states:
+  
+  # Validate input
+  - id: validate
+    type: validate
+    log: '.'
+    transition: api-request
+    schema:
+      type: object
+      required:
+        - domain
+        - subdomain
+        - address
+      additionalProperties: false
+      properties:
+        domain:
+          type: string
+        subdomain:
+          type: string
+        address:
+          type: string
+  
+  # Send GoDaddy API request
+  - id: api-request
+    type: action
+    action:
+      secrets: ["GODADDY_KEY", "GODADDY_SECRET"]
+      function: req
+      input: 
+        method: "PATCH"
+        url: '{{ "https://api.godaddy.com/v1/domains/" + .domain + "/records" }}'
+        headers:
+          "Content-Type": "application/json"
+          "Authorization": '{{ "sso-key " + .secrets.GODADDY_KEY + ":" + .secrets.GODADDY_SECRET }}'
+        body:
+          - data: '{{ .address }}'
+            name: '{{ .subdomain }}'
+            ttl: 3600
+            type: "A"
+```
+
+## Workflow #3 - Send Email
+
+This workflow is only called once the instance is successfully created and the DNS record is set. It contains only 2 states. The `validate` state operates in the same way as the `validate` state of the `add-dns-record` workflow. The `send-email` state uses the `vorteil/smtp:v2` isolate to generate and send and email to the specified email address.
+
+```yaml
+id: send-email
+description: Sends an email to the specified user informing them of successful VM / DNS setup.
+
+functions:
+  
+  - id: send-email
+    image: vorteil/smtp:v2
+
+states:
+  
+  # Validate input
+  - id: validate
+    type: validate
+    schema:
+      type: object
+      required:
+        - recipient
+        - domain
+        - subdomain
+        - address
+      additionalProperties: false
+      properties:
+        recipient:
+          type: string
+        domain:
+          type: string
+        subdomain:
+          type: string
+        address:
+          type: string
+    transition: send-email
+
+  # Send email
+  - id: send-email
+    type: action
+    action:
+      function: send-email
+      secrets: ["SMTP_USER", "SMTP_PASSWORD"]
+      input: 
+        to: '{{ .recipient }}'
+        subject: 'Success!'
+        message: '{{ "Instance creation successful. Created DNS record pointing " + .subdomain + "." + .domain + " to " + .address + "!" }}'
+        from: '{{ .secrets.SMTP_USER }}'
+        password: '{{ .secrets.SMTP_PASSWORD }}'
+        server: "smtp.gmail.com"
+        port: 587
+```
+
+## Finishing up
+
+Hopefully this article has illustrated how to use pre-existing direktiv isolates to bootstrap workflow development! It should also serve as a reminder that, by making a workflow 'modular' through the use of subflows, a complicated workflow can be made to appear quite straightforward.
+
+If you're interested in seeing what other isolates already exist, check out the [direktiv-apps GitHub page](https://github.com/vorteil/direktiv-apps/). To learn how to write your own custom isolates, click [here](../walkthrough/making-isolates.html)
