@@ -66,11 +66,11 @@ states:
       function: create-vm
       secrets: ['AWS_KEY', 'AWS_SECRET']
       input: 
-        access-key: '{{ .secrets.AWS_KEY }}'
-        access-secret: '{{ .secrets.AWS_SECRET }}'
-        image-id: '{{ .ami }}'
-        region: '{{ .region }}'
-        instance-type: '{{ .instanceType }}'
+        access-key: '{{ "{{" }} .secrets.AWS_KEY }}'
+        access-secret: '{{ "{{" }} .secrets.AWS_SECRET }}'
+        image-id: '{{ "{{" }} .ami }}'
+        region: '{{ "{{" }} .region }}'
+        instance-type: '{{ "{{" }} .instanceType }}'
     transition: get-instance-ip
 
   # Query AWS for the public IP address of the instance
@@ -81,8 +81,8 @@ states:
       function: get-vm
       secrets: ['AWS_KEY', 'AWS_SECRET']
       input:
-        access-key: '{{ .secrets.AWS_KEY }}'
-        access-secret: '{{ .secrets.AWS_SECRET }}'
+        access-key: '{{ "{{" }} .secrets.AWS_KEY }}'
+        access-secret: '{{ "{{" }} .secrets.AWS_SECRET }}'
         command:
           - '--region'
           - '{{ .region }}'
@@ -90,7 +90,7 @@ states:
           - 'describe-instances'
           - '--filters'
           - 'Name=instance-state-name,Values=running'
-          - '{{ "Name=instance-id,Values=" + .return.Instances[0].InstanceId }}'
+          - '{{ "{{" }} "Name=instance-id,Values=" + .return.Instances[0].InstanceId }}'
           - '--query'
           - 'Reservations[*].Instances[*].[PublicIpAddress]'
           - '--output'
@@ -105,9 +105,9 @@ states:
     action:
       workflow: add-dns-record
       input: 
-        domain: '{{ .domain }}'
-        subdomain: '{{ .subdomain }}'
-        address: '{{ .address }}'
+        domain: '{{ "{{" }} .domain }}'
+        subdomain: '{{ "{{" }} .subdomain }}'
+        address: '{{ "{{" }} .address }}'
     transition: send-email
 
   # Send a 'success' email
@@ -116,10 +116,10 @@ states:
     action:
       workflow: send-email
       input:
-        recipient: '{{.recipient}}'
-        domain: '{{.domain}}'
-        subdomain: '{{.subdomain}}'
-        address: '{{.address}}'
+        recipient: '{{ "{{" }}.recipient}}'
+        domain: '{{ "{{" }}.domain}}'
+        subdomain: '{{ "{{" }}.subdomain}}'
+        address: '{{ "{{" }}.address}}'
 ```
 
 ## Workflow #2 - Add DNS Record
@@ -165,13 +165,13 @@ states:
       function: req
       input: 
         method: "PATCH"
-        url: '{{ "https://api.godaddy.com/v1/domains/" + .domain + "/records" }}'
+        url: '{{ "{{" }} "https://api.godaddy.com/v1/domains/" + .domain + "/records" }}'
         headers:
           "Content-Type": "application/json"
-          "Authorization": '{{ "sso-key " + .secrets.GODADDY_KEY + ":" + .secrets.GODADDY_SECRET }}'
+          "Authorization": '{{ "{{" }} "sso-key " + .secrets.GODADDY_KEY + ":" + .secrets.GODADDY_SECRET }}'
         body:
-          - data: '{{ .address }}'
-            name: '{{ .subdomain }}'
+          - data: '{{ "{{" }} .address }}'
+            name: '{{ "{{" }} .subdomain }}'
             ttl: 3600
             type: "A"
 ```
@@ -220,11 +220,11 @@ states:
       function: send-email
       secrets: ["SMTP_USER", "SMTP_PASSWORD"]
       input: 
-        to: '{{ .recipient }}'
+        to: '{{ "{{" }} .recipient }}'
         subject: 'Success!'
-        message: '{{ "Instance creation successful. Created DNS record pointing " + .subdomain + "." + .domain + " to " + .address + "!" }}'
-        from: '{{ .secrets.SMTP_USER }}'
-        password: '{{ .secrets.SMTP_PASSWORD }}'
+        message: '{{ "{{" }} "Instance creation successful. Created DNS record pointing " + .subdomain + "." + .domain + " to " + .address + "!" }}'
+        from: '{{ "{{" }} .secrets.SMTP_USER }}'
+        password: '{{ "{{" }} .secrets.SMTP_PASSWORD }}'
         server: "smtp.gmail.com"
         port: 587
 ```
