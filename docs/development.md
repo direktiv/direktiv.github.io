@@ -6,7 +6,7 @@ nav_order: 65
 
 # Development Environment
 
-To improve isolate and workflows development it is recommended to setup a local development environment. This section explains how to setup the development environment. Detatils about developing custom isolates is described in <a href="walkthrough/making-isolates.html">this section</a>.
+To improve isolate and workflows development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom isolates is described in <a href="walkthrough/making-isolates.html">this section</a>.
 
 ### Running direktiv
 
