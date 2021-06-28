@@ -20,7 +20,7 @@ This example is fairly simple and can be broken up into four steps:
 Below we'll explain each step in more detail. For this example we've chosen `https://docs.direktiv.io` as the target website.
 
 ## Fetch Website Headers
-Here we are calling a HTTP `POST` request on the target website using our `vorteil/request:v5` direktiv app as a function. Since we only care about the `Last-Modified` and `Etag` headers we then extract those values and store them in the `lastModified` and `etag` properties using the transform field in the `fetch-site-headers` state. Now that we have fetched the current header values required, the state will transition to the `get-old-headers` state.
+Here we are performing a HTTP `POST` request on the target website using our `vorteil/request:v5` direktiv app as a function. Since we only care about the `Last-Modified` and `Etag` headers we then extract those values and store them in the `lastModified` and `etag` properties using the transform field in the `fetch-site-headers` state. Now that we have fetched the current header values required, the state will transition to the `get-old-headers` state.
 
 ```yaml
 id: check-website-change
@@ -57,7 +57,7 @@ Direktiv has variables scoped to namespaces, workflows and instance. In this sta
 ```
 
 ## Compare Values
-Now that we both the current and previous header values we can make a comparison and check whether the website has changed using the switch state `check-site`. 
+Now that we have both the current and previous header values we can make a comparison and check whether the website has changed using the switch state `check-site`. 
 
 The switch state below has three possible conditions. The first condition is used for validation and will `transition` to the error state `unsupported-site` if neither `etag` or `lastModified` was fetched from the current headers. The last two are to check if either of the `etag` or `lastModified` values have changed between the previous and current headers. If either one of these headers has changed it means that the website has changed and the property `siteChanged` is set to true. If none of these conditions are satisfied,  the `siteChanged` property is set to false because we can assume that no errors/changes have occurred.
 
@@ -82,7 +82,7 @@ The switch state below has three possible conditions. The first condition is use
 ```
 
 ## Save current values
-Finally we save the current headers to the `lastModified` and `etag` workflow variables, so next time this workflow is executed they can retrived in the `get-old-headers` state.
+Finally we save the current headers to the `lastModified` and `etag` workflow variables, so next time this workflow is executed they can be retrieved in the `get-old-headers` state.
 
 ```yaml
   - id: save-values
@@ -112,7 +112,7 @@ Note: the getter state will place variables into the `var` property. So the `var
 ```
 
 ## Extra - Converting to a Cron Job
-This workflow can currently run as is, and be manually executed. However this example is more than likely to be used as a [cron job](walkthrough/scheduling.html#cron). To convert this workflow all you need to do is add the start block to the top of the workflow. Below is an example that if added to the workflow, will run this workflow every once every two hours.
+This workflow can currently run as is, and be manually executed. However this example is more than likely to be used as a [cron job](walkthrough/scheduling.html#cron). To convert this workflow all you need to do is add the start block to the top of the workflow. Below is an example that, if added to the workflow, will run this workflow every once every two hours.
 
 ```yaml
 start:
