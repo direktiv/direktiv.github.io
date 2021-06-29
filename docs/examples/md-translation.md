@@ -22,15 +22,7 @@ states:
 ```
 
 ## Google Translate
-Next we'll define a state that gets passed an array of strings like the ones below.
-
-```json
-{
-    "langs": ["en", "de"]
-}
-```
-
-Where we pass each element in the string array as an object with the property 'id' so JQ can interpret it.
+Next we'll define a state that gets passed an array of strings. Where we pass each element in the string array as an object with the property 'id' so JQ can interpret it.
 
 ```yaml
 - id: translateMarkdown
