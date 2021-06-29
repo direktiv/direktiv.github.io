@@ -9,7 +9,7 @@ parent: Examples
 
 Today we will be creating a workflow that takes a string of markdown and convert it to Spanish and German. It will showcase how to use a foreach state to run the workflow.
 
-We will need the 'google-translator' to convert what is being passed to a different language.
+First we will need the 'google-translator' container to convert what is being passed to a different language.
 
 ```yaml
 id: translate-md
@@ -22,7 +22,15 @@ states:
 ```
 
 ## Google Translate
-We're going to design it to get passed an array of language codes from 'langs'. Where we pass each string array as an object that contains an 'id'.
+Next we'll define a state that gets passed an array of strings like the ones below.
+
+```json
+{
+    "langs": ["en", "de"]
+}
+```
+
+Where we pass each element in the string array as an object with the property 'id' so JQ can interpret it.
 
 ```yaml
 - id: translateMarkdown
@@ -38,13 +46,15 @@ We're going to design it to get passed an array of language codes from 'langs'. 
 ```
 
 ## Full Example
-Joining every part above we end up with the follow workflow which takes the input as. For a reference to what you can translate check out this [page](https://cloud.google.com/translate/docs/languages)
+Joining every part above we end up with the following workflow which takes the input as below. 
 
 ```json
 {
  "langs": ["es", "de"]
 }
 ```
+
+For a reference to what you can translate check out this [page](https://cloud.google.com/translate/docs/languages)
 
 ```yaml
 id: translate-md

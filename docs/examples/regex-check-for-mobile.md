@@ -6,9 +6,17 @@ parent: Examples
 ---
 
 # Introduction
-We're going to be creating two workflows one to send an email with a mobile number inside. The second workflow will read the email body and use regex grab the mobile number. Which will lead to us sending a text message saying we are out of office using the 'twilio' container.
+We're going to be creating two workflows.
+
+- Send an email and Trigger a cloud event
+- Read the email and use regex to workout the mobile number provided. Which will then send an SMS to the number saying we are out of the office at the moment.
 
 ## Send Email and Trigger Event
+
+To execute this workflow we need to define some functions the following are defined.
+
+- smtp sends an email
+- request send a http request
 
 ```yaml
 id: send-mobile-trigger-event
@@ -24,19 +32,19 @@ states:
 
 
 ### Send Email
-This action state uses the smtp container to send an email.
+This action state uses the smtp container to send an email. For example purposes you will notice that I am sendin the email to myself. 
 
 ```yaml
 - id: sendemail
   type: action
   action:
     function: smtp
-    secrets: ["EMAIL_NAME", "EMAIL_PASSWORD"]
+    secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]
     input:
-      to: "{{.secrets.EMAIL_NAME}}"
+      to: "{{.secrets.EMAIL_ADDRESS}}"
       subject: "Your Review"
-      message: "Hello my name is Trent Hilliam please msg me on +61435545810."
-      from: "{{.secrets.EMAIL_NAME}}"
+      message: "Hello my name is Trent Hilliam please msg me on +61430545789."
+      from: "{{.secrets.EMAIL_ADDRESS}}"
       password: "{{.secrets.EMAIL_PASSWORD}}"
       server: smtp.gmail.com
       port: 587
@@ -75,12 +83,12 @@ states:
   type: action
   action:
     function: smtp
-    secrets: ["EMAIL_NAME", "EMAIL_PASSWORD"]
+    secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]
     input:
-      to: "{{.secrets.EMAIL_NAME}}"
+      to: "{{.secrets.EMAIL_ADDRESS}}"
       subject: "Your Review"
       message: "Hello my name is Trent Hilliam please msg me on +61435545810."
-      from: "{{.secrets.EMAIL_NAME}}"
+      from: "{{.secrets.EMAIL_ADDRESS}}"
       password: "{{.secrets.EMAIL_PASSWORD}}"
       server: smtp.gmail.com
       port: 587
@@ -101,6 +109,12 @@ states:
 
 ## Read Mail and Send SMS
 
+To execute this workflow we need to define some functions the following are defined.
+
+- imap reads the first email message received
+- regex takes a regex string and a string and returns the values the regex matches
+- twilio sends an sms or an email
+
 ```yaml
 id : listen-for-email-mobile
 description: This workflow reads an email when a cloud event is received.
@@ -108,7 +122,7 @@ functions:
 - id: imap
   image: vorteil/imap:v1
 - id: regex
-  image: vorteil/regex:V1
+  image: vorteil/regex:v1
 - id: twilio
   image: vorteil/twilio:v2
 start:
@@ -127,26 +141,26 @@ This takes the first message from your "INBOX" email and reads the body and outp
 - id: read-mail
   type: action
   action:
-    secrets: ["EMAIL_NAME", "EMAIL_PASSWORD"]
+    secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]
     function: imap
     input:
-      email: "{{.secrets.EMAIL_NAME}}"
+      email: "{{.secrets.EMAIL_ADDRESS}}"
       password: "{{.secrets.EMAIL_PASSWORD}}"
       imap-address: "imap.gmail.com:993"
   transition: regex-check
 ```
 
 ### Check Regex
+The following state uses the regex container we're provided the regex of '\+[0-9]{1,2}[0-9]{9}' and it should return the results from the msg being provided.
 
 ```yaml
 - id: regex-check
   type: action
   action:
     function: regex
-    secrets: ["SERVICE_ACCOUNT_KEY"]
     input:
       msg: "{{.return.msg}}"
-      regex: "\+[0-9]{1,2}[0-9]{9}"
+      regex: "\\+[0-9]{1,2}[0-9]{9}"
   transition: send-sms
   transform: |
     {
@@ -161,6 +175,7 @@ This uses a 'twilio' container to send a message to the emailee.
 - id: send-sms
   type: action
   action:
+    secrets: ["TWILIO_SID", "TWILIO_TOKEN", "TWILIO_PROVIDED_NUMBER"]
     function: twilio
     input:
       typeof: sms
@@ -192,10 +207,10 @@ states:
 - id: read-mail
   type: action
   action:
-    secrets: ["EMAIL_NAME", "EMAIL_PASSWORD"]
+    secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]
     function: imap
     input:
-      email: "{{.secrets.EMAIL_NAME}}"
+      email: "{{.secrets.EMAIL_ADDRESS}}"
       password: "{{.secrets.EMAIL_PASSWORD}}"
       imap-address: "imap.gmail.com:993"
   transition: regex-check

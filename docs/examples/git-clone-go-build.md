@@ -77,3 +77,56 @@ A simple amazon upload container that either takes 'filename' as  variable or a 
       key: "{{.secrets.AWS_ACCESS_KEY}}"
       secret: "{{.secrets.AWS_SECRET_KEY}}"
 ```
+
+## Final Workflow
+Below is the final workflow to build a go binary and upload to S3 from a git repository.
+
+```yaml
+id: build-go-binary
+functions:
+- id: go
+  image: vorteil/go:v1
+  files:
+  - key: helloworld
+    scope: instance
+    type: tar.gz
+- id: git
+  image: vorteil/git:v1
+- id: upload
+  image: vorteil/amazon-upload:v3
+  files:
+  - key: helloworldserver
+    scope: instance
+description: "Clones a repository and builds a Go server."
+states:
+- id: clone-repo
+  type: action
+  action:
+    function: git
+    input:
+      cmds: ["clone https://github.com/vorteil/helloworld.git $out/instance/helloworld"]
+  transition: build-server
+- id: build-server
+  type: action
+  action:
+    function: go
+    input:
+      args: ["build", "-o", "helloworldserver"]
+      execution-folder: helloworld
+      variable: helloworldserver
+      variable-type: instance
+  transition: upload-binary
+- id: upload-binary
+  type: action
+  action:
+    function: upload
+    secrets: ["AWS_ACCESS_KEY", "AWS_SECRET_KEY"]
+    input:
+      filename: helloworldserver
+      bucket: direktiv
+      region: us-east-1
+      upload-name: helloworldserver
+      key: "jq(.secrets.AWS_ACCESS_KEY)"
+      secret: "jq(.secrets.AWS_SECRET_KEY)"
+    
+```
