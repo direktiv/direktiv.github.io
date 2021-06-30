@@ -61,19 +61,17 @@ The only secrets required to run with Azure is a subscription_id, client_id, cli
         secrets: ["CLIENT_ID", "TENANT_ID", "SUBSCRIPTION_ID", "CLIENT_SECRET"]
         function: tfrun
         input: 
-            action: "{{.action}}"
+            action: jq(.action)
             args-on-init: ["-backend-config=address=http://localhost:8001/terraform-azure-instance"]
             execution-folder: terraform-examples/azure
             variables:
                 state-name: terraform-azure-instance
-                subscription_id: "{{.secrets.SUBSCRIPTION_ID}}"
-                client_id: "{{.secrets.CLIENT_ID}}"
-                client_secret: "{{.secrets.CLIENT_SECRET}}"
-                tenant_id: "{{.secrets.TENANT_ID}}"
-    transform: |
-      {
-        "ip": .ip
-      }
+                subscription_id: jq(.secrets.SUBSCRIPTION_ID)
+                client_id: jq(.secrets.CLIENT_ID)
+                client_secret: jq(.secrets.CLIENT_SECRET)
+                tenant_id: jq(.secrets.TENANT_ID)
+    transform: 
+      ip: jq(.ip)
     transition: send_message
 ```
 
@@ -89,16 +87,14 @@ The only secrets required to run with Google is a service_account_key and a proj
       function: tfrun
       input:
         execution-folder: terraform-examples/google
-        action: "{{.action}}"
+        action: jq(.action)
         args-on-init: ["-backend-config=address=http://localhost:8001/terraform-gcp-instance"]
         variables:
           state-name: terraform-gcp-instance
-          project_id: "{{.secrets.PROJECT_ID}}"
-          service_account_key: "{{.secrets.SERVICE_ACCOUNT_KEY}}"
-    transform: |
-      {
-          "ip": .ip
-      }
+          project_id: jq(.secrets.PROJECT_ID)
+          service_account_key: jq(.secrets.SERVICE_ACCOUNT_KEY)
+    transform:
+      ip: jq(.ip)
     transition: send_message
 ```
 
@@ -114,18 +110,16 @@ The only secrets required to run with Amazon is an access_key and a secret_key.
       function: tfrun
       input:
         execution-folder: terraform-examples/amazon
-        action: "{{.action}}"
+        action: jq(.action)
         args-on-init: ["-backend-config=address=http://localhost:8001/terraform-amazon-instance"]
         variables:
           region: us-east-2
           state-name: terraform-amazon-instance
-          amazon_key: "{{.secrets.AMAZON_KEY}}"
-          amazon_secret: "{{.secrets.AMAZON_SECRET}}"
+          amazon_key: jq(.secrets.AMAZON_KEY)
+          amazon_secret: jq(.secrets.AMAZON_SECRET)
     transition: send_message
-    transform: |
-      {
-          "ip": .ip
-      }
+    transform: 
+      ip: jq(.ip)
 ```
 
 **NOTE: you will find each terraform state has a transform attribute so I can easily get the IP to send via a Discord Message at the end**
@@ -141,8 +135,8 @@ A simple action that sends a request to a Discord Webhook to post a message.
       function: discordmsg
       input:
         tts: false
-        url: "{{.secrets.WEBHOOK_URL}}"
-        message: "{{(\"The ip address of your  machine is \"+ .ip+\".\")}}"
+        url: jq(.secrets.WEBHOOK_URL)
+        message: The ip address of your machine is jq(.ip).
 ```
 
 ## Full Example
@@ -188,20 +182,18 @@ states:
         secrets: ["CLIENT_ID", "TENANT_ID", "SUBSCRIPTION_ID", "CLIENT_SECRET"]
         function: tfrun
         input: 
-            action: "{{.action}}"
+            action: jq(.action)
             args-on-init: ["-backend-config=address=http://localhost:8001/terraform-azure-instance"]
             execution-folder: terraform-examples/azure
             variables:
                 state-name: terraform-azure-instance
-                subscription_id: "{{.secrets.SUBSCRIPTION_ID}}"
-                client_id: "{{.secrets.CLIENT_ID}}"
-                client_secret: "{{.secrets.CLIENT_SECRET}}"
-                tenant_id: "{{.secrets.TENANT_ID}}"
-    transform: |
-      {
-        "action": .action,
-        "azure_ip": .return.output.ip_address.value
-      }
+                subscription_id: jq(.secrets.SUBSCRIPTION_ID)
+                client_id: jq(.secrets.CLIENT_ID)
+                client_secret: jq(.secrets.CLIENT_SECRET)
+                tenant_id: jq(.secrets.TENANT_ID)
+    transform: 
+      action: jq(.action)
+      azure_ip: jq(.return.output.ip_address.value)
     transition: deploy_gcp
   - id: deploy_gcp
     type: action
@@ -211,18 +203,16 @@ states:
       function: tfrun
       input:
         execution-folder: terraform-examples/google
-        action: "{{.action}}"
+        action: jq(.action)
         args-on-init: ["-backend-config=address=http://localhost:8001/terraform-gcp-instance"]
         variables:
           state-name: terraform-gcp-instance
-          project_id: "{{.secrets.PROJECT_ID}}"
-          service_account_key: "{{.secrets.SERVICE_ACCOUNT_KEY}}"
-    transform: |
-      {
-        "action": .action,
-        "azure_ip": .azure_ip,
-        "google_ip": .return.output.["ip-address"].value
-      }
+          project_id: jq(.secrets.PROJECT_ID)
+          service_account_key: jq(.secrets.SERVICE_ACCOUNT_KEY)
+    transform: 
+      action: jq(.action)
+      azure_ip: jq(.azure_ip)
+      google_ip: jq(.return.output."ip-address".value)
     transition: deploy_amazon
   - id: deploy_amazon
     type: action
@@ -232,25 +222,23 @@ states:
       function: tfrun
       input:
         execution-folder: terraform-examples/amazon
-        action: "{{.action}}"
+        action: jq(.action)
         args-on-init: ["-backend-config=address=http://localhost:8001/terraform-amazon-instance"]
         variables:
           region: us-east-2
           state-name: terraform-amazon-instance
-          amazon_key: "{{.secrets.AMAZON_KEY}}"
-          amazon_secret: "{{.secrets.AMAZON_SECRET}}"
-    transform: |
-      {
-        "action": .action,
-        "azure_ip": .azure_ip,
-        "google_ip": .google_ip, 
-        "amazon_ip": .return.output.["ip-address"].value
-      }
+          amazon_key: jq(.secrets.AMAZON_KEY)
+          amazon_secret: jq(.secrets.AMAZON_SECRET)
+    transform: 
+      action: jq(.action)
+      azure_ip: jq(.azure_ip)
+      google_ip: jq(.google_ip)
+      amazon_ip: jq(.return.output."ip-address".value)
     transition: check_apply_or_destroy
   - id: check_apply_or_destroy
     type: switch
     conditions:
-    - condition: ".action === apply"
+    - condition: jq(.action == "apply")
       transition: send_message
   - id: send_message
     type: action
@@ -260,6 +248,6 @@ states:
       function: discordmsg
       input:
         tts: false
-        url: "{{.secrets.WEBHOOK_URL}}"
-        message: "{{(\"The ip address of your Azure machine is \"+ .azure_ip+\". The ip address of your Google machine is \"+.google_ip+\". The ip address of your Amazon machine is \"+ .amazon_ip+ \".\")}}"
+        url: jq(.secrets.WEBHOOK_URL)
+        message: The ip address of your Azure machine is jq(.azure_ip). The ip address of your Google machine is jq(.google_ip). The ip address of your Amazon machine is jq(.amazon_ip).
 ```
