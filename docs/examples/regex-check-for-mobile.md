@@ -41,31 +41,25 @@ This action state uses the smtp container to send an email. For example purposes
     function: smtp
     secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]
     input:
-      to: "{{.secrets.EMAIL_ADDRESS}}"
+      to: jq(.secrets.EMAIL_ADDRESS)
       subject: "Your Review"
       message: "Hello my name is Trent Hilliam please msg me on +61430545789."
-      from: "{{.secrets.EMAIL_ADDRESS}}"
-      password: "{{.secrets.EMAIL_PASSWORD}}"
+      from: jq(.secrets.EMAIL_ADDRESS)
+      password: jq(.secrets.EMAIL_PASSWORD)
       server: smtp.gmail.com
       port: 587
   transition: sendcloudevent
 ```
 
 ### Trigger Event
-This action state uses the request container to send a cloud event back to Direktiv.
+This generateEvent state sends a cloud event to a namespace.
 
 ```yaml
 - id: sendcloudevent
-  type: action
-  action: 
-    function: request
-    input:
-      method: "POST"
-      url: "http://192.168.1.30/api/namespaces/direktiv/event"
-      body: 
-        id: "read-email-message"
-        specversion: "1.0"
-        type: "smtp-mobile"
+  type: generateEvent
+  event:
+    source: direktiv
+    type: smtp-mobile
 ```
 
 ### Workflow Send Email Full Example
@@ -75,8 +69,6 @@ id: send-mobile-trigger-event
 functions:
 - id: smtp
   image: vorteil/smtp:v3
-- id: request
-  image: vorteil/request:v5
 description: This workflow sends an email and triggers an event.
 states:
 - id: sendemail
@@ -85,25 +77,19 @@ states:
     function: smtp
     secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]
     input:
-      to: "{{.secrets.EMAIL_ADDRESS}}"
+      to: jq(.secrets.EMAIL_ADDRESS)
       subject: "Your Review"
-      message: "Hello my name is Trent Hilliam please msg me on +61435545810."
-      from: "{{.secrets.EMAIL_ADDRESS}}"
-      password: "{{.secrets.EMAIL_PASSWORD}}"
+      message: "Hello my name is Trent Hilliam please msg me on +61430545789."
+      from: jq(.secrets.EMAIL_ADDRESS)
+      password: jq(.secrets.EMAIL_PASSWORD)
       server: smtp.gmail.com
       port: 587
   transition: sendcloudevent
 - id: sendcloudevent
-  type: action
-  action: 
-    function: request
-    input:
-      method: "POST"
-      url: "http://192.168.1.30/api/namespaces/direktiv/event"
-      body: 
-        id: "read-email-message"
-        specversion: "1.0"
-        type: "smtp-mobile"
+  type: generateEvent
+  event:
+    source: direktiv
+    type: smtp-mobile
 ```
 
 
@@ -127,7 +113,7 @@ functions:
   image: vorteil/twilio:v2
 start:
   type: event
-  state: check-email
+  state: read-mail
   event:
     type: smtp-mobile
 states:
@@ -144,8 +130,8 @@ This takes the first message from your "INBOX" email and reads the body and outp
     secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]
     function: imap
     input:
-      email: "{{.secrets.EMAIL_ADDRESS}}"
-      password: "{{.secrets.EMAIL_PASSWORD}}"
+      email: jq(.secrets.EMAIL_ADDRESS)
+      password: jq(.secrets.EMAIL_PASSWORD)
       imap-address: "imap.gmail.com:993"
   transition: regex-check
 ```
@@ -159,13 +145,11 @@ The following state uses the regex container we're provided the regex of '\+[0-9
   action:
     function: regex
     input:
-      msg: "{{.return.msg}}"
+      msg: jq(.return.msg)
       regex: "\\+[0-9]{1,2}[0-9]{9}"
   transition: send-sms
-  transform: |
-    {
-        "number": .return.results[0]
-    }
+  transform: 
+    number: jq(.return.results[0])
 ```
 
 ### Send SMS
@@ -179,11 +163,11 @@ This uses a 'twilio' container to send a message to the emailee.
     function: twilio
     input:
       typeof: sms
-      sid: "{{.secrets.TWILIO_SID}}"
-      token: "{{.secrets.TWILIO_TOKEN}}"
+      sid: jq(.secrets.TWILIO_SID)
+      token: jq(.secrets.TWILIO_TOKEN)
       message: "Hey you just emailed but I am currently out of office."
-      from: "{{.secrets.TWILIO_PROVIDED_NUMBER}}"
-      to: "{{.number}}"
+      from: jq(.secrets.TWILIO_PROVIDED_NUMBER)
+      to: jq(.number)
 ```
 
 ## Workflow Read Email and Send SMS
@@ -210,23 +194,20 @@ states:
     secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]
     function: imap
     input:
-      email: "{{.secrets.EMAIL_ADDRESS}}"
-      password: "{{.secrets.EMAIL_PASSWORD}}"
+      email: jq(.secrets.EMAIL_ADDRESS)
+      password: jq(.secrets.EMAIL_PASSWORD)
       imap-address: "imap.gmail.com:993"
   transition: regex-check
 - id: regex-check
   type: action
   action:
     function: regex
-    secrets: ["SERVICE_ACCOUNT_KEY"]
     input:
-      msg: "{{.return.msg}}"
+      msg: jq(.return.msg)
       regex: "\\+[0-9]{1,2}[0-9]{9}"
   transition: send-sms
-  transform: |
-    {
-        "number": .return.results[0]
-    }
+  transform: 
+    number: jq(.return.results[0])
 - id: send-sms
   type: action
   action:
@@ -234,9 +215,9 @@ states:
     function: twilio
     input:
       typeof: sms
-      sid: "{{.secrets.TWILIO_SID}}"
-      token: "{{.secrets.TWILIO_TOKEN}}"
+      sid: jq(.secrets.TWILIO_SID)
+      token: jq(.secrets.TWILIO_TOKEN)
       message: "Hey you just emailed but I am currently out of office."
-      from: "{{.secrets.TWILIO_PROVIDED_NUMBER}}"
-      to: "{{.number}}"
+      from: jq(.secrets.TWILIO_PROVIDED_NUMBER)
+      to: jq(.number)
 ```

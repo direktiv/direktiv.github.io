@@ -27,13 +27,13 @@ Next we'll define a state that gets passed an array of strings. Where we pass ea
 ```yaml
 - id: translateMarkdown
   type: foreach
-  array: .langs[] | {id: .}
+  array: "jq(.langs[] | {id: .})"
   action: 
     secrets: ["SERVICE_ACCOUNT_KEY"]
     function: translate
     input:
-      serviceAccountKey: "{{.secrets.SERVICE_ACCOUNT_KEY}}"
-      target-language: "{{.id}}"
+      serviceAccountKey: jq(.secrets.SERVICE_ACCOUNT_KEY)
+      target-language: jq(.id)
       message: "# Hello\n\n ## World! \n\n This is a test message that will get converted to a different language."
 ```
 
@@ -57,12 +57,12 @@ functions:
 states:
 - id: translateMarkdown
   type: foreach
-  array: ".langs[] | {id: .}"
+  array: "jq(.langs[] | {id: .})"
   action: 
     secrets: ["SERVICE_ACCOUNT_KEY"]
     function: translate
     input:
-      serviceAccountKey: "{{.secrets.SERVICE_ACCOUNT_KEY}}"
-      target-language: "{{.id}}"
+      serviceAccountKey: jq(.secrets.SERVICE_ACCOUNT_KEY)
+      target-language: jq(.id)
       message: "# Hello\n\n ## World! \n\n This is a test message that will get converted to a different language."
 ```
