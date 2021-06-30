@@ -29,10 +29,11 @@ states:
   # continued in the next code block
 ```
 
-The 'git' container will clone the entire repository and save it as an instance variable called 'helloworld'. Which gets referenced from the 'go' container as you can see via the 'files' inclusion. The 'go' container then uses that variable to build the binary from the repository and upload to the helloworldserver variable. Then the 'upload' container will then upload to S3 on Amazon.
+The git function will clone the entire repository and save it as an instance-scope variable called helloworld, which is then referenced by the go function (note that the go function definition references the helloworld variable in its files section). The upload function takes the output from the go function and uploads it to Amazon S3.
 
 ## Git Clone
-I created a simple repository that serves hello-world which can be found [here](https://github.com/vorteil/helloworld). We will be cloning this into an instance variable for the later containers to access.
+For the purposes of this demonstration, I've created a [git repository](https://github.com/vorteil/helloworld) that provides the code required to build the Go binary. The contents of the repository will be saved to an instance variable, to be accessed by subsequent functions/states.
+
 
 ```yaml
 - id: clone-repo
@@ -45,7 +46,7 @@ I created a simple repository that serves hello-world which can be found [here](
 ```
 
 ## Go Build
-This container contains 'go' which you can run several commands from. Right now it currently only supports 'build' but more will be added in the future. 
+This state runs the go isolate, which is currently only capable of running go build commands. Additionally functionality may be added to this isolate in the future.
 
 ```yaml
 - id: build-server
@@ -61,7 +62,7 @@ This container contains 'go' which you can run several commands from. Right now 
 ```
 
 ## Upload to S3
-A simple amazon upload container that either takes 'filename' as  variable or a base64 encoded string as 'data'. We're going with the variable approach to simply upload the binary to the bucket on S3.
+This container reads the contents of the helloworldserver instance-scope variable and uploads it to Amazon S3.
 
 ```yaml
 - id: upload-binary
@@ -74,12 +75,12 @@ A simple amazon upload container that either takes 'filename' as  variable or a 
       bucket: direktiv
       region: us-east-1
       upload-name: helloworldserver
-      key: "{{.secrets.AWS_ACCESS_KEY}}"
-      secret: "{{.secrets.AWS_SECRET_KEY}}"
+      key: jq(.secrets.AWS_ACCESS_KEY)
+      secret: jq(.secrets.AWS_SECRET_KEY)
 ```
 
 ## Final Workflow
-Below is the final workflow to build a go binary and upload to S3 from a git repository.
+Putting all of the pieces together; this workflow clones a git repository, builds a go binary, and uploads the results to Amazon S3:
 
 ```yaml
 id: build-go-binary
