@@ -20,33 +20,29 @@ states:
 - id: ifelse
   type: switch
   conditions:
-  - condition: '.names'
+  - condition: jq(.names)
     transition: poster
 - id: poster
   type: action
   action:
     function: httprequest
-    input: '{
-      "method": "POST",
-      "url": "https://jsonplaceholder.typicode.com/posts",
-      "body": {
-        "name": .names[0]
-      }
-    }'
-  transform: 'del(.names[0])'
+    input:
+      method: "POST"
+      url: "https://jsonplaceholder.typicode.com/posts"
+      body:
+        name: jq(.names[0])
+  transform: jq(del(.names[0]))
   transition: ifelse
 ```
 
 ### Input
 
-```json
-{
-  "names": [
-    "Alan",
-    "Jon",
-    "Trent"
-  ]
-}
+```yaml
+input:
+  names: 
+    - "Alan"
+    - "Jon"
+    - "Trent"
 ```
 
 ### Output
@@ -126,10 +122,10 @@ The Switch State can make decisions about where to transition to next based on t
 - id: ifelse
   type: switch
   conditions:
-  - condition: '.person.age > 18'
+  - condition: jq(.person.age > 18)
     transition: accept
     #transform:
-  - condition: '.person.age != nil'
+  - condition: jq(.person.age != nil)
     transition: reject
     #transform:
   defaultTransition: failure
@@ -160,17 +156,15 @@ functions:
 states:
 - id: poster
   type: foreach
-  array: '.names[] | { name: . }'
+  array: 'jq(.names[] | { name: . })'
   action:
     function: httprequest
-    input: '{
-      "method": "POST",
-      "url": "https://jsonplaceholder.typicode.com/posts",
-      "body": {
-        "name": .
-      }
-    }'
-  transform: 'del(.names) | .names = []'
+    input: 
+      method: "POST"
+      url: "https://jsonplaceholder.typicode.com/posts"
+      body:
+        name: jq(.)
+  transform: 'jq(del(.names) | .names = [])'
 ```
 
 ### Retries

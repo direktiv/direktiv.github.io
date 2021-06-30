@@ -17,16 +17,10 @@ id: helloworld
 states:
 - id: hello
   type: noop
-  transform: '{ msg: "Hello, world!" }'
+  transform: 'jq({ msg: "Hello, world!" })'
 ```
 
 Run this workflow. Leave the Workflow Input empty for now. You should see something like the following:
-
-### Input:
-
-```json
-{}
-```
 
 ### Output:
 
@@ -75,7 +69,7 @@ There are many types of state that do all sorts of different things. We'll go ov
 ### Transform Command
 
 ```yaml
-  transform: '{ msg: "Hello, world!" }'
+  transform: 'jq({ msg: "Hello, world!" })'
 ```
 
 Any state may optionally define a "transform", and it's used here to generate the classic "Hello, World!" message. Transform applies a `jq` command to the instance data and replaces the instance data with the results. We'll go into more detail about transforms later.

@@ -23,15 +23,14 @@ states:
   type: action
   action:
     function: httprequest
-    input: '{
-      "method": "GET",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-    }'
-  transform: '.return'
+    input: 
+      method: "GET"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
+  transform: jq(.return)
   transition: logger
 - id: logger
   type: noop
-  log: '.'
+  log: jg(.)
 
 ```
 

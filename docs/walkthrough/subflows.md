@@ -39,23 +39,22 @@ states:
   type: action
   action:
     function: httprequest
-    input: '{
-      "method": "GET",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-      "body": .input
-    }'
+    input:
+      method: "GET"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
+      body: jq(.input)
   transition: checkResults
 - id: checkResults
   type: switch
   conditions:
-  - condition: '.warnings'
+  - condition: jq(.warnings)
     transition: throw
 - id: throw
   type: error
   error: notification.lint
   message: 'lint errors: %s'
   args:
-  - '.warnings'
+  - jq(.warnings)
 ```
 
 ### 2nd Workflow Definition
@@ -70,27 +69,25 @@ states:
   type: action
   action:
     function: httprequest
-    input: '{
-      "method": "GET",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-      "body": .input
-    }'
+    input:
+      method: "GET"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
+      body: jq(.input)
   transition: notify
-  transform: 'del(.return) | .contact = "Alan"'
+  transform: 'jq(del(.return) | .contact = "Alan")'
 - id: notify
   type: action
   action:
     workflow: notifier
-    input: '{ contact: .contact, payload: .payload }'
+    input: 'jq({ contact: .contact, payload: .payload })'
 ```
 
 ### Input
 
-```json
-{
-	"contact": "1",
-	"payload": "2"
-}
+```yaml
+input:
+	contact: "1"
+	payload: "2"
 ```
 
 ### Output
@@ -131,10 +128,9 @@ states:
   type: action
   action:
     workflow: myworkflow
-    input: '{
-      "method": "GET",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-    }'
+    input:
+      method: "  GET"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
 ```
 
 Nothing special needs to be done when writing a workflow definition that's intended for use as a subflow. Input is treated exactly the same way as if the workflow was directly invoked with the API, and output is merged into the caller's instance data exactly the same way as if the subflow was an Isolate.
@@ -194,7 +190,7 @@ Speaking of errors, there's another new state in this demo example: the Error St
   error: notification.lint
   message: 'lint errors: %s'
   args:
-  - '.warnings'
+  - jq(.warnings)
 ```
 
 If an instance executes an Error State it will store the custom-defined error and mark the instance as failed after the instance terminates.

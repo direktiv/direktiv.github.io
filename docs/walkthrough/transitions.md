@@ -16,30 +16,24 @@ id: transitioner
 states:
 - id: a
   type: noop
-  transform: '{
+  transform: 'jq({
     "number": 2,
     "objects": [{
       "k1": "v1"
     }]
-  }'
+  })'
   transition: b
 - id: b
   type: noop
-  transform: '.multiplier = 10'
+  transform: jq(.multiplier = 10)
   transition: c
 - id: c
   type: noop
-  transform: '.result = .multiplier * .number | del(.multiplier, .number)'
+  transform: jq(.result = .multiplier * .number | del(.multiplier, .number))
   transition: d
 - id: d
   type: noop
-  transform: '.objects[0]'
-```
-
-### Input
-
-```json
-{}
+  transform: jq(.objects[0])
 ```
 
 ### Output
@@ -107,12 +101,12 @@ More than one state can be defined in a workflow definition. Each begins under t
 ```yaml
 - id: a
   type: noop
-  transform: '{
+  transform: 'jq({
     "number": 2,
     "objects": [{
       "k1": "v1"
     }]
-  }'
+  })'
   transition: b
 ```
 
@@ -121,7 +115,7 @@ More than one state can be defined in a workflow definition. Each begins under t
 ```yaml
 - id: b
   type: noop
-  transform: '.multiplier = 10'
+  transform: jq(.multiplier = 10)
   transition: c
 ```
 
@@ -130,7 +124,7 @@ More than one state can be defined in a workflow definition. Each begins under t
 ```yaml
 - id: c
   type: noop
-  transform: '.result = .multiplier * .number | del(.multiplier, .number)'
+  transform: jq(.result = .multiplier * .number | del(.multiplier, .number))
   transition: d
 ```
 
@@ -139,7 +133,7 @@ More than one state can be defined in a workflow definition. Each begins under t
 ```yaml
 - id: d
   type: noop
-  transform: '.objects[0]'
+  transform: jq(.objects[0])
 ```
 
 We've only got Noop States here, but most state types may optionally have a `transition` field, with a reference to the identifier for a state in the workflow definition. After a state finishes running Direktiv uses this field to figure out whether the instance has reached its end or not. If a transition to another state is defined the instance will continue on to that state.
@@ -154,12 +148,6 @@ The `transform` field can contain a valid `jq` command, which will be applied to
 
 Because the Noop State logs its instance data before applying its `transform` & `transition` we can follow the results of these transforms throughout the demo.
 
-### Input
-
-```json
-{}
-```
-
 ### First Transform
 
 The first transform defines a completely new JSON object.
@@ -167,12 +155,12 @@ The first transform defines a completely new JSON object.
 **Command**
 
 ```yaml
-  transform: '{
+  transform: 'jq({
     "number": 2,
     "objects": [{
       "k1": "v1"
     }]
-  }'
+  })'
 ```
 
 **Resulting Instance Data**
@@ -195,7 +183,7 @@ The second transform enriches the existing instance data by adding a new field t
 **Command**
 
 ```yaml
-  transform: '.multiplier = 10'
+  transform: jq(.multiplier = 10)
 ```
 
 **Resulting Instance Data**
@@ -219,7 +207,7 @@ The third transform multiplies two fields to produce a new field, then pipes the
 **Command**
 
 ```yaml
-  transform: '.result = .multiplier * .number | del(.multiplier, .number)'
+  transform: jq(.result = .multiplier * .number | del(.multiplier, .number))
 ```
 
 **Resulting Instance Data**
@@ -242,7 +230,7 @@ The fourth transform selects a child object nested within the instance data and 
 **Command**
 
 ```yaml
-  transform: '.objects[0]'
+  transform: jq(.objects[0])
 ```
 
 **Resulting Instance Data**

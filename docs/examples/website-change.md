@@ -31,15 +31,13 @@ functions:
 states:
   - id: fetch-site-headers
     type: action
-    transform: "{lastModified: .return.headers.[\"Last-Modified\"][0], etag: .return.headers.[\"Etag\"][0]}"
+    transform: "jq({lastModified: .return.headers.[\"Last-Modified\"][0], etag: .return.headers.[\"Etag\"][0]})"
     transition: get-old-headers
     action:
       function: get
-      input: |
-        {
-          "method": "HEAD",
-          "url": "https://docs.direktiv.io",
-        }
+      input:
+        method: "HEAD"
+        url: "https://docs.direktiv.io"
 ```
 
 ## Get Old Headers
@@ -65,16 +63,16 @@ The switch state below has three possible conditions. The first condition is use
   - id: check-site
     type: switch
     defaultTransition: save-values
-    defaultTransform: ". += {siteChanged: false}"
+    defaultTransform: "jq(. += {siteChanged: false})"
     conditions:
-      - condition: ".etag == null and .lastModified == null"
+      - condition: "jq(.etag == null and .lastModified == null)"
         transition: unsupported-site
-      - condition: ".etag != .var.etag"
+      - condition: "jq(.etag != .var.etag)"
         transition: save-values
-        transform: ". += {siteChanged: true}"
-      - condition: ".lastModified != .var.lastModified"
+        transform: "jq(. += {siteChanged: true})"
+      - condition: "jq(.lastModified != .var.lastModified)"
         transition: save-values
-        transform: ". += {siteChanged: true}"
+        transform: "jq(. += {siteChanged: true})"
   - id: unsupported-site
     type: error
     error: unsupported.site
@@ -90,10 +88,10 @@ Finally we save the current headers to the `lastModified` and `etag` workflow va
     variables:
       - key: lastModified
         scope: workflow
-        value: .lastModified
+        value: jq(.lastModified)
       - key: etag
         scope: workflow
-        value: .etag
+        value: jq(.etag)
 ```
 
 ## Sample Output
@@ -130,15 +128,13 @@ functions:
 states:
   - id: fetch-site-headers
     type: action
-    transform: "{lastModified: .return.headers.[\"Last-Modified\"][0], etag: .return.headers.[\"Etag\"][0]}"
+    transform: "jq({lastModified: .return.headers.[\"Last-Modified\"][0], etag: .return.headers.[\"Etag\"][0]})"
     transition: get-old-headers
     action:
       function: get
-      input: |
-        {
-          "method": "HEAD",
-          "url": "https://docs.direktiv.io",
-        }
+      input: 
+        method: "HEAD"
+        url: "https://docs.direktiv.io"
   - id: get-old-headers
     type: getter
     transition: check-site
@@ -150,16 +146,16 @@ states:
   - id: check-site
     type: switch
     defaultTransition: save-values
-    defaultTransform: ". += {siteChanged: false}"
+    defaultTransform: "jq(. += {siteChanged: false})"
     conditions:
-      - condition: ".etag == null and .lastModified == null"
+      - condition: "jq(.etag == null and .lastModified == null)"
         transition: unsupported-site
-      - condition: ".etag != .var.etag"
+      - condition: "jq(.etag != .var.etag)"
         transition: save-values
-        transform: ". += {siteChanged: true}"
-      - condition: ".lastModified != .var.lastModified"
+        transform: "jq(. += {siteChanged: true})"
+      - condition: "jq(.lastModified != .var.lastModified)"
         transition: save-values
-        transform: ". += {siteChanged: true}"
+        transform: "jq(. += {siteChanged: true})"
   - id: unsupported-site
     type: error
     error: unsupported.site
@@ -169,8 +165,8 @@ states:
     variables:
       - key: lastModified
         scope: workflow
-        value: .lastModified
+        value: jq(.lastModified)
       - key: etag
         scope: workflow
-        value: .etag
+        value: jq(.etag)
 ```
