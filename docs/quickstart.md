@@ -45,7 +45,8 @@ id: helloworld
 states:
 - id: hello
   type: noop
-  transform: 'jq({ msg: ("Hello, " + .name + "!") })'
+  transform: 
+    msg: "Hello jq(.name)!"
 ```
 
 

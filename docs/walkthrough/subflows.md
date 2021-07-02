@@ -86,8 +86,8 @@ states:
 
 ```yaml
 input:
-	contact: "1"
-	payload: "2"
+  contact: "1"
+  payload: "2"
 ```
 
 ### Output

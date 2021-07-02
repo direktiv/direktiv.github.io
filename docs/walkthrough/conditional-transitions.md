@@ -26,11 +26,13 @@ states:
   type: action
   action:
     function: httprequest
-    input:
-      method: "POST"
-      url: "https://jsonplaceholder.typicode.com/posts"
-      body:
-        name: jq(.names[0])
+    input: '{
+      "method": "POST",
+      "url": "https://jsonplaceholder.typicode.com/posts",
+      "body": {
+        "name": .names[0]
+      }
+    }'
   transform: jq(del(.names[0]))
   transition: ifelse
 ```
