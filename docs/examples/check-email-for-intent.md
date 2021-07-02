@@ -136,8 +136,8 @@ This state takes the first message from the email 'INBOX', reads & outputs the c
   transition: check-feeling
 ```
 
-### Check Feeling
-If the feeling of the text written in the email is negative send an automatic response back to the sender.
+### Check Intent
+If the message 'intent' is determined to be negative, send an automated response to the sender.
 
 ```yaml
 - id: check-feeling
@@ -148,7 +148,7 @@ If the feeling of the text written in the email is negative send an automatic re
 ```
 
 ### Reply to Email
-This uses the smtp server to send a response to the person that sent you the email in the first place.
+This state uses the vorteil/smtp:v2 isolate to send an email to the sender of the negative email.
 
 ```yaml
 - id: send-response
@@ -166,7 +166,7 @@ This uses the smtp server to send a response to the person that sent you the ema
       port: 587
 ```
 
-### Workflow Read Email
+### Workflow Listen For Email
 
 ```yaml
 id: listen-for-email
@@ -223,4 +223,4 @@ states:
       port: 587
 ```
 
-This seems like very plain example. But we could extend it to run a 'imap' listener that sends a cloud event instantly to trigger the sentiment checker on Direktiv. Then based on the sentiment check we could either delete the message move to a certain inbox or respond directly back to the sender.
+Although this particular example is quite simple, the logic used could be modified for something far more 'in-depth'. For example, it could be extended to run an 'IMAP' listener that generates a cloud event, triggering the 'intent' checker on Direktiv. Depending on the determined intent of each email received, actions such as email deletion could be performed.

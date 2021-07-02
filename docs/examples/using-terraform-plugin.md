@@ -6,7 +6,8 @@ parent: Examples
 ---
 
 # Introduction
-This example will go through how to spawn a virtual machine using Terraform with Direktiv. We will use a publicly accessible [git](https://github.com/vorteil/terraform-examples). Then proceed to message a Discord webhook to let everyone know the instance is alive.
+This example will detail how to user Direktiv with Terraform to create a virtual machine. To do this, we will use examples listed on the public [git repository](https://github.com/vorteil/terraform-examples). After creating the virtual machine, a message will be sent to a Discord webhook, resulting in the message being posted to a Discord server text channel.
+
 
 ```yaml
 id: spawn-instance
@@ -26,7 +27,7 @@ states:
   # continued in next code block
 ```
 
-**NOTE: The files attribute is empty and will be filled in via the git state.**
+**NOTE: The files attribute is empty and will be populated using the git state.**
 
 ## Git
 The following state fetches the repository and clones it into an instance variable to be used in the terraform container.
@@ -43,14 +44,19 @@ The following state fetches the repository and clones it into an instance variab
 ```
 
 ## Terraform
-The terraform files are provided from the git repository. We just need to add in the secret variables to spawn the machines.
+The files terraform need are provided from the `git` clone state that happened before which saves the variable as `tar.gz` file.
 
-The execution-folder directs the Terraform container to tell it where to execute from as all the terraform files are stored in different directories on this repository.
+When it is imported into the `terraform` container it ends up being a folder on the temp directory. The `execution-folder` in the input directs terraform to where the `apply` will be executed from. 
 
 **NOTE: Terraform container has its own http backend located at 'http://localhost:8001/{state-name}'. If provided args-on-init and state-name we will write the tfstate to a workflow variable.**
 
 ### Azure
-The only secrets required to run with Azure is a subscription_id, client_id, client_secret and a tenant_id.
+The only secrets required to run this workflow with Azure are:
+
+- subscription_id
+- client_id
+- client_secret
+- tenant_id
 
 
 ```yaml
@@ -76,7 +82,11 @@ The only secrets required to run with Azure is a subscription_id, client_id, cli
 ```
 
 ### Google Cloud Platform
-The only secrets required to run with Google is a service_account_key and a project_id.
+The only secrets required to run this workflow with Google Cloud Platform are:
+
+- service_account_key (plain contents of a service account key)
+- project_id
+
 
 ```yaml
   - id: deploy_gcp
@@ -99,7 +109,10 @@ The only secrets required to run with Google is a service_account_key and a proj
 ```
 
 ### Amazon Web Services
-The only secrets required to run with Amazon is an access_key and a secret_key.
+The only secrets required to run this workflow with Amazon Web Services are:
+
+- access_key
+- secret_key
 
 ```yaml
   - id: deploy_amazon
@@ -122,7 +135,7 @@ The only secrets required to run with Amazon is an access_key and a secret_key.
       ip: jq(.ip)
 ```
 
-**NOTE: you will find each terraform state has a transform attribute so I can easily get the IP to send via a Discord Message at the end**
+**NOTE: Each terraform state uses the transform field to pluck the IP address of the created virtual machine, to be sent to the Discord webhook.**
 
 ## Discord Message
 A simple action that sends a request to a Discord Webhook to post a message.
@@ -140,9 +153,9 @@ A simple action that sends a request to a Discord Webhook to post a message.
 ```
 
 ## Full Example
-This is joining every state to deploy a machine to every cloud in one workflow. Also allows for an easy copy paste for you to try out and gives a better example of what the complete workflow looks like.
+Let's bring all of the states together to create a workflow that creates a virtual machine on Google Cloud Platform, Amazon Web Services, and Azure.
 
-The following input is required..
+The following input is required:
 
 ```json
 {
@@ -150,7 +163,7 @@ The following input is required..
 }
 ```
 
-We have also added in an extra switch state to provide the option of not sending a discord message at all when we are removing the machines.
+We've also included a new switch state to facilitate not sending anything to the Discord webhook on destroy actions.
 
 ```yaml
 id: spawn-instance
