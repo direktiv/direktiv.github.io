@@ -43,7 +43,7 @@ This action state uses the smtp container to send an email. For example purposes
     input:
       to: jq(.secrets.EMAIL_ADDRESS)
       subject: "Your Review"
-      message: "Hello my name is Trent Hilliam please msg me on +61430545789."
+      message: "Hello my name is Trent Hilliam please msg me on +INSERT_MOBILE_NUMBER."
       from: jq(.secrets.EMAIL_ADDRESS)
       password: jq(.secrets.EMAIL_PASSWORD)
       server: smtp.gmail.com
