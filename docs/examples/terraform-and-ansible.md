@@ -15,14 +15,12 @@ This article seeks to explain how to structure potentially 'complex' workflows i
 
 This workflow consists of only 2 states. The first state runs the `terraform` isolate, and requires access to a variable that contains the contents of a `main.tf` file. This `main.tf` file includes all of the configuration and authorisation details required to create a new virtual machine on Google Cloud Platform. The state is configured to assign the public IP address of the resulting virtual machine as `.addr`
 
-The second state uses the `ubuntu-shell` isolate, and requires access to three different variables:
+The second state uses the `ansible` isolate, and requires access to two different variables:
 
 - `playbook.yml`
   - Ansible playbook that will be executed to connect to the remote machine and print a 'Hello, world!' message.
 - `pk.pem`
   - Private key included in the `main.tf` variable of the previous state, used by Ansible to securely connect to the remote virtual machine.
-- `ansible.sh`
-  - This is the script that the `ubuntu-shell` isolate executes. It installs Ansible, and executes an `ansible-playbook` command.
 
 Examples of each variable are included at the end of this article.
 
@@ -45,14 +43,12 @@ functions:
 
   # Runs ansible
   - id: ansible
-    image: vorteil/ubuntu-shell:v1
+    image: vorteil/ansible:v1
     files:
       - key: playbook.yml
         scope: workflow
         type: plain
       - key: pk.pem
-        scope: workflow
-      - key: ansible.sh
         scope: workflow
 
 states:
@@ -79,9 +75,11 @@ states:
     action:
       function: ansible
       input:
-        script: ansible.sh
-        args: 
-          - jq(.addr)
+        playbook: playbook.yml
+        privateKey: pk.pem
+        args:
+          - "-i"
+          - "jq(.addr),"
         
 ```
 
@@ -181,15 +179,5 @@ This is an incredibly basic Ansible playbook. After connecting to the remote mac
 
 ### pk.pem
 
-This is a PEM formatted private key file, provided to both the created virtual machine (via `main.tf`) and the `ubuntu-shell` isolate. It provides a way for the `ubuntu-shell` isolate to securely connect to the virtual machine via SSH.
+This is a PEM formatted private key file, provided to both the created virtual machine (via `main.tf`) and the `ansible` isolate. It provides a way for the `ansible` isolate to securely connect to the virtual machine via SSH.
 
-### ansible.sh
-
-The `ubuntu-shell` isolate executes this script, which performs the core logic of installing and executing ansible. The `ansible-playbook` command is executed with the `-vvvv` flag to ensure the maximum amount of debug logs. Removing this flag should have no impact on performance, but it useful when developing workflows such as this.
-
-```sh
-#!/bin/bash
-apt-get install -y ansible || true
-chmod 600 $Direktiv_TempDir/pk.pem || true
-ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i $1, --private-key $Direktiv_TempDir/pk.pem $Direktiv_TempDir/playbook.yml -vvvv || true
-```
