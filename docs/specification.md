@@ -134,7 +134,8 @@ If a `retry` strategy is defined the action will be retried on an uncaught failu
   type: action
   action:
     function: insert-into-database-function
-    input: '{ customer: .customer }'
+    input: 
+      customer: jq(.customer)
 ```
 
 
@@ -176,10 +177,10 @@ If `async` is `true`, the workflow will not wait for it to return before transit
     type: guestbooking
     context:
       source: 'bookings.*'
-      customerId: '{{ .customerId }}'
+      customerId: jq(.customerId)
       venue: Sydney
   timeout: PT1H
-  transform: '.customer'
+  transform: jq(.customer)
   transition: add-booking-to-database
 ```
 
@@ -238,7 +239,7 @@ The Delay State pauses execution of the workflow for a predefined length of time
   error: validation.outOfDate
   message: "food item %s is out of date"
   args:
-  - '.item.name'
+  - jq(.item.name)
 ```
 
 
@@ -273,17 +274,17 @@ An error consists of two parts: an error code, and an error message. The code sh
         type: purchasePaid
         context:
           source: 'purchase.*'
-          customerId: '{{ .customerId }}'
+          customerId: jq(.customerId)
           country: Australia
     - event:
         type: purchaseSent
         context:
           source: 'purchase.*'
-          customerId: '{{ .customerId }}'
+          customerId: jq(.customerId)
           country:  Australia
 ```
 
-When a workflow reaches an EventAnd State it will halt its execution until it receives a matching event for every event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with {{ "`{{`  and ends with " }} it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
+When a workflow reaches an EventAnd State it will halt its execution until it receives a matching event for every event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated ass a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
 
 If the `timeout` is reached without receiving matches for all required events a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 
@@ -320,18 +321,18 @@ The event payloads will stored in variables with the same names as each event's 
         type: reservationAccept
         context:
           source: "reservation.*"
-          guestName: '{{ .guestName }}'
+          guestName: jq(.guestName)
           venue: "Compu Global HMN"
     - transition: "reservation-decline"
       event:
         type: reservationDecline
         context:
           source: "reservation.*"
-          guestName: '{{ .guestName }}'
+          guestName: jq(.guestName)
           venue: "Compu Global HMN"
 ```
 
-When a workflow reaches an EventXor State it will halt its execution until it receives any matching event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with{{ "`{{`  and ends with " }} it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
+When a workflow reaches an EventXor State it will halt its execution until it receives any matching event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated ass a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
 
 If the `timeout` is reached without receiving matches for any required event a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 
@@ -420,7 +421,8 @@ The getter state is used to retrieve persistent data.
 ```yaml
 - id: hello
   type: noop
-  transform: '{ message: "Hello" }'
+  transform:
+    message: "Hello"
   transition: world
 ```
 
@@ -496,12 +498,12 @@ The setter state is used to store persistent data.
 - id: decision
   type: switch
   conditions:
-  - condition: '.patient.contactInfo.mobile'
+  - condition: jq(.patient.contactInfo.mobile)
     transition: sms
-    transform: '. + { phone: .contact.mobile }'
-  - condition: '.patient.contactInfo.landline'
+    transform: 'jq(. + { phone: .contact.mobile)'
+  - condition: jq(.patient.contactInfo.landline)
     transition: call
-    transform: '. + { phone: .contact.landline }'
+    transform: 'jq(. + { phone: .contact.landline })'
   defaultTransition: email
 ```
 
