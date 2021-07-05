@@ -21,10 +21,9 @@ states:
   type: action
   action:
     function: httprequest
-    input: '{
-      "method": "GET",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-    }'
+    input:
+      method: "GET"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
 ```
 
 This workflow will use the Docker container at https://hub.docker.com/r/vorteil/request to perform a GET request and return the results to the instance data.
@@ -75,10 +74,9 @@ To use an Isolate it must first be defined at the top of the workflow definition
   type: action
   action:
     function: httprequest
-    input: '{
-      "method": "GET",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-    }'
+    input:
+      method: "GET"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
 ```
 
 Like all other states, the Action State requires an `id` and `type` field identifying it as such. But the great thing about the Action State is its ability to run user-made logic in the form of "Isolates".

@@ -38,7 +38,7 @@ states:
       delay: PT30S
       multiplier: 2.0
       codes: [".*"]
-  transform: '.return'
+  transform: jq(.return)
   transition: crunchNumbers
   catch:
   - error: "*"
@@ -46,13 +46,13 @@ states:
   type: action
   action:
     function: cruncher
-  transform: '.return'
+  transform: jq(.return)
   transition: storeSomeResults
 - id: storeSomeResults
   type: action
   action:
     function: insert
-    input: '.someResults'
+    input: jq(.someResults)
   transition: storeOtherResults
   catch:
   - error: "*"
@@ -61,7 +61,7 @@ states:
   type: action
   action:
     function: insert
-    input: '.otherResults'
+    input: jq(.otherResults)
   catch:
   - error: "*"
     transition: revertStoreSomeResults
@@ -69,7 +69,7 @@ states:
   type: action
   action:
     function: delete
-    input: '.someResults'
+    input: jq(.someResults)
   transition: reportFailure
 - id: reportFailure
   type: action

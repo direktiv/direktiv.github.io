@@ -19,14 +19,14 @@ states:
   variables:
   - key: x
     scope: workflow
-  transform: '.var.x += 1'
+  transform: 'jq(.var.x += 1)'
   transition: b
 - id: b
   type: setter
   variables:
   - key: x
     scope: workflow
-    value: '.var.x'
+    value: 'jq(.var.x)'
 ```
 
 This demo increments a counter each time the workflow is executed.
@@ -51,7 +51,7 @@ The Setter State can be used to store any number of variables. Each variable mus
   variables:
   - key: MyVar
     scope: namespace
-    value: '.x'
+    value: 'jq(.x)'
 ```
 
 The only way to delete a stored value is to set it to `null`.

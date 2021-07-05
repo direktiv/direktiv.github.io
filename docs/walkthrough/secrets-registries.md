@@ -22,14 +22,12 @@ states:
   action:
     secrets: ["secretToken"]
     function: httprequest
-    input: '{
-      "method": "GET",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-      "headers": {
-        "Content-type": "application/json; charset=UTF-8",
-	"Authorization": ("bearer " + .secrets.secretToken),
-      },
-    }'
+    input:
+      method: "GET"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
+      headers:
+        "Content-type": "application/json; charset=UTF-8"
+        "Authorization": "bearer jq(.secrets.secretToken)"
 ```
 
 This workflow will use a private Docker container marketplace.gcr.io to perform a GET request and return the results to the instance data. 

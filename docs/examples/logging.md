@@ -24,7 +24,7 @@ id: helloworld
 states:
 - id: hello
   type: noop
-  transform: '{ result: "Hello World!" }'
+  transform: 'jq({ result: "Hello World!" })'
   log: '"Hello, logger!"'
 ```
 
@@ -64,12 +64,11 @@ states:
   action:
     function: send-log
     secrets: [GCP_SERVICEACCOUNTKEY]
-    input: '{
-      serviceAccountKey: .secrets.GCP_SERVICEACCOUNTKEY,
-      "project-id": "direktiv",
-      "log-name": "direktiv-log",
-      message: ."direktiv.instanceLog"
-    }'
+    input: 
+      serviceAccountKey: jq(.secrets.GCP_SERVICEACCOUNTKEY)
+      "project-id": "direktiv"
+      "log-name": "direktiv-log"
+      message: jq(."direktiv.instanceLog")
 ```
 
 ## AWS Cloudwatch Example
@@ -93,14 +92,13 @@ states:
   action:
     function: send-log
     secrets: [AWS_KEY, AWS_SECRET]
-    input: '{
-      key: .secrets.AWS_KEY,
-      secret: .secrets.AWS_SECRET,
-      region: "us-east-2",
-      "log-group": "vorteil",
-      "log-stream": "direktiv",
-      message: ."direktiv.instanceLog"
-    }'
+    input:
+      key: jq(.secrets.AWS_KEY)
+      secret: jq(.secrets.AWS_SECRET)
+      region: "us-east-2"
+      "log-group": "vorteil"
+      "log-stream": "direktiv"
+      message: jq(."direktiv.instanceLog")
 ```
 
 ## Azure Log Analytics Example
@@ -124,12 +122,11 @@ states:
   action:
     function: send-log
     secrets: [AZURE_WORKSPACE_ID, AZURE_WORKSPACE_KEY]
-    input: '{
-      "workspace-id": .secrets.AZURE_WORKSPACE_ID,
-      key: .secrets.AZURE_WORKSPACE_KEY,
-      type: "direktiv-log",
-      message: ."direktiv.instanceLog"
-    }'
+    input:
+      "workspace-id": jq(.secrets.AZURE_WORKSPACE_ID)
+      key: jq(.secrets.AZURE_WORKSPACE_KEY)
+      type: "direktiv-log"
+      message: jq(."direktiv.instanceLog")
 ```
 
 ## Other Providers

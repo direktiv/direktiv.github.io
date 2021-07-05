@@ -26,11 +26,10 @@ states:
   type: action
   action:
     function: httprequest
-    input: '{
-      "method": "POST",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-      "body": ."com.github.pull.create"
-    }'
+    input:
+      method: "POST"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
+      body: jq(."com.github.pull.create")
 ```
 
 ## CloudEvents
@@ -96,9 +95,9 @@ Triggering workflows is not the only thing you can do with events. Workflows can
     type: com.github.pull.create
     context:
       source: "https://github.com/cloudevents/spec/pull"
-      repository: '{{ .repo }}'
+      repository: jq(.repo)
   timeout: PT5M
-  transform: '."com.github.pull.create"'
+  transform: jq(."com.github.pull.create")
   transition: next-state
 ```
 
@@ -124,7 +123,7 @@ Workflows can generate events for their namespace without relying on an Isolate 
   event:
     type: "my.custom.event"
     source: "direktiv"
-    data: '.'
+    data: jq(.)
     datacontenttype: "application/json"
 ```
 

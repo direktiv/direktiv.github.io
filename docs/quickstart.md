@@ -45,7 +45,8 @@ id: helloworld
 states:
 - id: hello
   type: noop
-  transform: '{ msg: ("Hello, " + .name + "!") }'
+  transform: 
+    msg: "Hello jq(.name)!"
 ```
 
 
@@ -62,7 +63,7 @@ id: helloworld
 states:
 - id: hello
   type: noop
-  transform: '{ msg: ("Hello, " + .name + "!") }'
+  transform: 'jq({ msg: ("Hello, " + .name + "!") })'
 EOF
 $ direkcli workflows create demo helloworld.yml
 Created workflow 'helloworld'

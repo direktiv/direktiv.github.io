@@ -58,6 +58,6 @@ start:
 states:
   - id: helloworld
     type: noop
-    transform: '{ result: . }'
+    transform: 'jq({ result: . })'
 ```
 
