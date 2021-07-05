@@ -55,59 +55,60 @@ states:
   # Set data (skips need for providing an input object on each invocation)
   - id: set-input
     type: noop
-    transform: '.ami = "ami-093d266a" | .region = "ap-southeast-2" | .instanceType = "t1.micro" | .recipient = "john.doe@example.com" | .subdomain = "direktiv" | .domain = "mydomain.com"'
+    transform: jq(.ami = "ami-093d266a" | .region = "ap-southeast-2" | .instanceType = "t1.micro" | .recipient = "john.doe@example.com" | .subdomain = "direktiv" | .domain = "mydomain.com")
     transition: create-instance
 
   # Create the AWS EC2 Instance
   - id: create-instance
-    log: '.'
+    log: jq(.)
     type: action
     action:
       function: create-vm
       secrets: ['AWS_KEY', 'AWS_SECRET']
       input: 
-        access-key: '{{ "{{" }} .secrets.AWS_KEY }}'
-        access-secret: '{{ "{{" }} .secrets.AWS_SECRET }}'
-        image-id: '{{ "{{" }} .ami }}'
-        region: '{{ "{{" }} .region }}'
-        instance-type: '{{ "{{" }} .instanceType }}'
+        access-key: 'jq( .secrets.AWS_KEY )'
+        access-secret: 'jq( .secrets.AWS_SECRET )'
+        image-id: 'jq( .ami )'
+        region: 'jq( .region )'
+        instance-type: 'jq( .instanceType )'
     transition: get-instance-ip
+    transform: jq(.)
 
   # Query AWS for the public IP address of the instance
   - id: get-instance-ip
-    log: '.'
+    log: jq(.)
     type: action
     action:
       function: get-vm
       secrets: ['AWS_KEY', 'AWS_SECRET']
       input:
-        access-key: '{{ "{{" }} .secrets.AWS_KEY }}'
-        access-secret: '{{ "{{" }} .secrets.AWS_SECRET }}'
+        access-key: jq( .secrets.AWS_KEY )
+        access-secret: jq( .secrets.AWS_SECRET )
         command:
           - '--region'
-          - '{{ .region }}'
+          - jq( .region )
           - 'ec2'
           - 'describe-instances'
           - '--filters'
           - 'Name=instance-state-name,Values=running'
-          - '{{ "{{" }} "Name=instance-id,Values=" + .return.Instances[0].InstanceId }}'
+          - jq( "Name=instance-id,Values=" + .return.Instances[0].InstanceId )
           - '--query'
           - 'Reservations[*].Instances[*].[PublicIpAddress]'
           - '--output'
           - 'json'
-    transform: '.address = .return[0][0][0]'
+    transform: jq(.address = .return[0][0][0])
     transition: add-dns-record
 
   # Add an 'A' DNS record
   - id: add-dns-record
     type: action
-    log: '.'
+    log: jq(.)
     action:
       workflow: add-dns-record
       input: 
-        domain: '{{ "{{" }} .domain }}'
-        subdomain: '{{ "{{" }} .subdomain }}'
-        address: '{{ "{{" }} .address }}'
+        domain: jq(.domain)
+        subdomain: jq(.subdomain)
+        address: jq(.address)
     transition: send-email
 
   # Send a 'success' email
@@ -116,10 +117,10 @@ states:
     action:
       workflow: send-email
       input:
-        recipient: '{{ "{{" }}.recipient}}'
-        domain: '{{ "{{" }}.domain}}'
-        subdomain: '{{ "{{" }}.subdomain}}'
-        address: '{{ "{{" }}.address}}'
+        recipient: jq(.recipient)
+        domain: jq(.domain)
+        subdomain: jq(.subdomain)
+        address: jq(.address)
 ```
 
 ## Workflow #2 - Add DNS Record
@@ -158,20 +159,20 @@ states:
           type: string
   
   # Send GoDaddy API request
-  - id: api-request
+  - id: api-request 
     type: action
     action:
       secrets: ["GODADDY_KEY", "GODADDY_SECRET"]
       function: req
       input: 
         method: "PATCH"
-        url: '{{ "{{" }} "https://api.godaddy.com/v1/domains/" + .domain + "/records" }}'
+        url: jq( "https://api.godaddy.com/v1/domains/" + .domain + "/records" )
         headers:
           "Content-Type": "application/json"
-          "Authorization": '{{ "{{" }} "sso-key " + .secrets.GODADDY_KEY + ":" + .secrets.GODADDY_SECRET }}'
+          "Authorization": jq( "sso-key " + .secrets.GODADDY_KEY + ":" + .secrets.GODADDY_SECRET )
         body:
-          - data: '{{ "{{" }} .address }}'
-            name: '{{ "{{" }} .subdomain }}'
+          - data: jq( .address )
+            name: jq( .subdomain )
             ttl: 3600
             type: "A"
 ```
@@ -220,11 +221,11 @@ states:
       function: send-email
       secrets: ["SMTP_USER", "SMTP_PASSWORD"]
       input: 
-        to: '{{ "{{" }} .recipient }}'
+        to: jq( .recipient )
         subject: 'Success!'
-        message: '{{ "{{" }} "Instance creation successful. Created DNS record pointing " + .subdomain + "." + .domain + " to " + .address + "!" }}'
-        from: '{{ "{{" }} .secrets.SMTP_USER }}'
-        password: '{{ "{{" }} .secrets.SMTP_PASSWORD }}'
+        message: jq( "Instance creation successful. Created DNS record pointing " + .subdomain + "." + .domain + " to " + .address + "!" )
+        from: jq( .secrets.SMTP_USER )
+        password: jq( .secrets.SMTP_PASSWORD )
         server: "smtp.gmail.com"
         port: 587
 ```
