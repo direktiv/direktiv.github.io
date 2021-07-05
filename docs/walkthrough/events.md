@@ -111,7 +111,7 @@ The `timeout` field is not required, but Direktiv caps the maximum timeout wheth
 
 Similar to how the event-based start types have a `filters` field, event-consuming states have a `context` field. Like filters, the context field can restrict which events are considered matches by requiring an exact match on a CloudEvent context field.
 
-Unlike filters, context values can be determined dynamically based on instance data. If a context value begins with "`{{`" and ends with "`}}`" everything inbetween will be evaluated as a `jq` command based on the instance data.
+Unlike filters, context values can be determined dynamically based on instance data.
 
 ## GenerateEvent State
 
