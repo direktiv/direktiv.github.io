@@ -186,7 +186,7 @@ If `async` is `true`, the workflow will not wait for it to return before transit
 
 The ConsumeEvent State is the simplest state you can use to listen for CloudEvents in the middle of a workflow (for triggering a workflow when receiving an event, see [Start](#start)). More complex event consumers include the [Callback State](#callbackstate), the [EventXor State](#eventxorstate), and the [EventAnd State](#eventandstate).
 
-When a workflow reaches a ConsumeEvent State it will halt its execution until it receives a matching event, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated ass a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
+When a workflow reaches a ConsumeEvent State it will halt its execution until it receives a matching event, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated as a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
 
 If the `timeout` is reached without receiving a matching event a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 
@@ -284,7 +284,7 @@ An error consists of two parts: an error code, and an error message. The code sh
           country:  Australia
 ```
 
-When a workflow reaches an EventAnd State it will halt its execution until it receives a matching event for every event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated ass a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
+When a workflow reaches an EventAnd State it will halt its execution until it receives a matching event for every event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated as a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
 
 If the `timeout` is reached without receiving matches for all required events a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 
@@ -332,7 +332,7 @@ The event payloads will stored in variables with the same names as each event's 
           venue: "Compu Global HMN"
 ```
 
-When a workflow reaches an EventXor State it will halt its execution until it receives any matching event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated ass a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
+When a workflow reaches an EventXor State it will halt its execution until it receives any matching event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated as a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
 
 If the `timeout` is reached without receiving matches for any required event a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 
