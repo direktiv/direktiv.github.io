@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Spawn a virtual machine on each Cloud using Terraform!
+title: Running Terraform scripts
 nav_order: 10
 parent: Examples
 ---
