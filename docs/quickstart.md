@@ -14,6 +14,11 @@ Getting a local playground environment can be easily done with Docker. The follo
 docker run --privileged -p 8080:80 -p 31212:31212 -ti -v vorteil/direktiv-kube
 ```
 
+For proxy usage:
+
+```sh
+docker run --privileged -p 8080:80 -p 31212:31212 --env HTTPS_PROXY="http://<proxy-address>:443" --env NO_PROXY="*.default,10.0.0.0/8,172.0.0.0/8,localhost" vorteil/direktiv-kube
+```
 
 ***Testing Direktiv***:
 
