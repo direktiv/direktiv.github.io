@@ -31,6 +31,14 @@ Using the instructions detailed so far, the included database is deleted each ti
 docker run --privileged -p 8080:80 -p 31212:31212 --env PERSIST=true  -ti -v /tmp/pg:/tmp/pg vorteil/direktiv-kube
 ```
 
+### Running with proxy
+
+Running direktiv with a proxy configuration, the following settings can be passed as environmental variables:
+
+```sh
+docker run --privileged -p 8080:80 -p 31212:31212 --env HTTPS_PROXY="http://<proxy-address>:443" --env NO_PROXY="*.default,10.0.0.0/8,172.0.0.0/8,localhost" -ti -v /tmp/pg:/tmp/pg vorteil/direktiv-kube
+```
+
 ### Docker registry
 
 Direktiv pulls containers from a registry and runs them as isolates. For development purposes the direktiv docker container comes with a registry installed. It is accessible on localhost:31212.
