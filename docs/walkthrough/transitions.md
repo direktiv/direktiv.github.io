@@ -148,6 +148,8 @@ The `transform` field can contain a valid `jq` command, which will be applied to
 
 Because the Noop State logs its instance data before applying its `transform` & `transition` we can follow the results of these transforms throughout the demo.
 
+Transforms can be wrapped in `'jq()'` or `jq()`. The difference between the two is that one instructs YAML more explicitly what's in the string. This can be important if you use `jq` commands containing braces, for example: `jq({a: 1})`. Because if this is not explicitly quoted, YAML interprets it incorrectly and throws errors. The quoted form is always valid and generally safer.
+
 ### First Transform
 
 The first transform defines a completely new JSON object.
