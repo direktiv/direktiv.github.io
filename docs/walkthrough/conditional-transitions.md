@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Conditional Transitions
-nav_order: 4
+nav_order: 3
 parent: Getting Started
 ---
 
