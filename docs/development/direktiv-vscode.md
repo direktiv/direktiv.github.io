@@ -16,7 +16,7 @@ The direktiv extension is published on the marketplace and a simple search for '
 The direktiv extension is available on the Visual Studio Code extension marketplace. Simply searching for 'direktiv' should return the correct result. After clicking on 'Install' the extension is ready for use.
 
 <p align=center>
-<img src="../assets/vscode/extension1.png" />
+<img src="../../assets/vscode/extension1.png" />
 </p>
 
 ## Adding workspace
@@ -24,13 +24,13 @@ The direktiv extension is available on the Visual Studio Code extension marketpl
 To connect a local folder in your workspace to direktiv, right click a folder and click the 'Download Workflows' button in the context menu. When prompted, enter `http://localhost:8080` as the Connection URL and `test` as a namespace.
 
 <p align=center>
-<img src="../assets/vscode/extension2.png" />
+<img src="../../assets/vscode/extension2.png" />
 </p>
 
 The selected folder should now contain the workflow created previously.
 
 <p align=center>
-<img src="../assets/vscode/extension3.png" />
+<img src="../../assets/vscode/extension3.png" />
 </p>
 
 ## Running workflows
@@ -46,5 +46,5 @@ For example, pressing Ctrl-Alt-X will save the local copy of the workflow, updat
 To view instance output, right-click on one of the listed instances and select `Get Instance Output` from the context menu.
 
 <p align=center>
-<img src="../assets/vscode/extension5.png" />
+<img src="../../assets/vscode/extension5.png" />
 </p>
