@@ -95,9 +95,13 @@ Input Path Map captures the EventBridge event so we can easily filter into a clo
 
 ```json
 {
-    "source": "$.source",
-    "type": "$.source",
-    "data": "$.detail"
+   "data":"$",
+   "id":"$.id",
+   "source":"$.source",
+   "state":"$.detail.state",
+   "subject":"$.source",
+   "time":"$.time",
+   "type":"$.detail-type"
 }
 ```
 
@@ -107,14 +111,63 @@ The Input Template allows you to spec out what you want the JSON to look like pa
 
 ```json
 {
-  "type": <type>,
-  "source": <source>,
-  "data":  <data>,
-  "specversion": "1.0"
+   "specversion":"1.0",
+   "id":"<id>",
+   "source":"<source>",
+   "type":"<type>",
+   "subject":"<subject>",
+   "time":"<time>",
+   "data":"<data>"
 }
 ```
 
-So now when you change the state of an instance on EC2 a workflow will be triggered on Direktiv if it is listening to 'aws.ec2'.
+So now when you change the state of an instance on EC2 a workflow will be triggered on Direktiv if it is listening to 'aws.ec2'. For reference, when an AWS event is generated, the default event structure (for an EC2 status change as an example) is shown below:
+
+```json
+{
+  "version": "0",
+  "id": "a0bca05d-2cd7-2044-04a6-ce94a6271d10",
+  "detail-type": "EC2 Instance State-change Notification",
+  "source": "aws.ec2",
+  "account": "338328518639",
+  "time": "2021-08-04T04:17:23Z",
+  "region": "ap-southeast-2",
+  "resources": [],
+  "detail": {
+    "instance-id": "i-07dc0a80689d48dab",
+    "state": "running"
+  }
+}
+```
+
+The CloudEvent received by Direktiv after the transformation is shown below:
+
+```json
+{
+  "specversion": "1.0",
+  "id": "3156cfde-9e3d-570f-b1f6-ca4358472fe0",
+  "source": "aws.ec2",
+  "type": "EC2 Instance State-change Notification",
+  "subject": "aws.ec2",
+  "time": "2021-08-04T04:17:23Z",
+  "data": {
+    "version": "0",
+    "id": "3156cfde-9e3d-570f-b1f6-ca4358472fe0",
+    "detail-type": "EC2 Instance State-change Notification",
+    "source": "aws.ec2",
+    "account": "338328518639",
+    "time": "2021-08-04T04:17:23Z",
+    "region": "ap-southeast-2",
+    "resources": [],
+    "detail": {
+      "instance-id": "i-07dc0a80689d48dab",
+      "state": "running"
+    }
+  }
+}
+```
+
+
 
 ## Testing
 
@@ -127,7 +180,7 @@ start:
   type: event
   state: helloworld
   event:
-    type: aws.ec2
+    type: "EC2 Instance State-change Notification"
 states:
   - id: helloworld
     type: noop
