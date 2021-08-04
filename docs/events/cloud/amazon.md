@@ -15,7 +15,7 @@ Note: the below tutorial assumes that the user has already created the IAM role 
 From the Role create above - keep the Role Arn details as it is needed in the final step. A screenshot is shown below:
 
 <p align=center>
-<img src="../../assets/aws/aws-iam-role-eventbridge.png" />
+<img src="../../../assets/aws/aws-iam-role-eventbridge.png" />
 </p>
 
 
