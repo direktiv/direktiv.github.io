@@ -3,7 +3,7 @@ layout: default
 title: Amazon EventBridge
 parent: Cloud
 grand_parent: Events
-nav_order: 3
+nav_order: 2
 ---
 
 # Amazon EventBridge
