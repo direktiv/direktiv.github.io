@@ -30,7 +30,7 @@ The following output should appear (make sure you hold onto the ARN as it is use
 
 ```json
 {
-    "RuleArn": <RULE_ARN> 
+    "RuleArn": "<RULE_ARN>"
 }
 ```
 
@@ -39,17 +39,17 @@ The following output should appear (make sure you hold onto the ARN as it is use
 After creating an Authorization token from the Direktiv interface, create the connection using the token as follow:
 
 ```sh
-aws events create-connection --name direktiv-connection --authorization-type API_KEY --auth-parameters "{\"ApiKeyAuthParameters\": {\"ApiKeyName\":\"Authorization\", \"ApiKeyValue\":\"Bearer <DIREKTIV_ACCESS_TOKEN>\""}}
+aws events create-connection --name direktiv-connection --authorization-type API_KEY --auth-parameters "{\"ApiKeyAuthParameters\": {\"ApiKeyName\":\"Authorization\", \"ApiKeyValue\":\"Bearer <DIREKTIV_TOKEN>\"}}"
 ```
 
 Upon creating the connection the following output from the CLI should appear.
 
 ```json
 {
-    "ConnectionArn": <CONNECTION_ARN>,
+    "ConnectionArn": "<CONNECTION_ARN>",
     "ConnectionState": "AUTHORIZED",
-    "CreationTime": "2021-08-04T03:25:49+00:00",
-    "LastModifiedTime": "2021-08-04T03:25:49+00:00"
+    "CreationTime": "2021-08-04T05:28:24+00:00",
+    "LastModifiedTime": "2021-08-04T05:28:24+00:00"
 }
 ```
 
@@ -58,17 +58,17 @@ We will need to use the connection arn in the next command.
 ## Create an Api-Destination
 
 ```sh
-aws events create-api-destination --name direktiv-api --connection-arn <CONNECTION_ARN> --invocation-endpoint https://<DIREKTIV_URL>/api/namespaces/<NAMESPACE>/event --http-method POST
+aws events create-api-destination --name direktiv-api --connection-arn "<CONNECTION_ARN>" --invocation-endpoint https://run.direktiv.io/api/namespaces/complex-workflows/event --http-method POST
 ```
 
 The output should resemble this:
 
 ```json
 {
-    "ApiDestinationArn": <API_ARN>,
+    "ApiDestinationArn": "<API_ARN>",
     "ApiDestinationState": "ACTIVE",
-    "CreationTime": "2021-08-04T03:26:18+00:00",
-    "LastModifiedTime": "2021-08-04T03:26:18+00:00"
+    "CreationTime": "2021-08-04T05:30:50+00:00",
+    "LastModifiedTime": "2021-08-04T05:30:50+00:00"
 }
 ```
 
@@ -77,7 +77,7 @@ The output should resemble this:
 Adding the targets to the EventBridge rule also requires us to define an Input Path and Input Template.
 
 ```sh
-aws events put-targets --rule direktiv-rule --targets '[ { "Id": "direktiv-api", "RoleArn": <ROLE_ARN>, "Arn": <API_ARN>, "InputTransformer": { "InputPathsMap": { "source": "$.source", "type": "$.source", "data": "$.detail" },  "InputTemplate": "{ \"source\": \"<source>\", \"type\": \"<type>\", \"data\": \"<data>\", \"specversion\": \"1.0\" }" } } ]'
+aws events put-targets --rule direktiv-rule --targets '[ { "Id": "direktiv-api", "RoleArn": "<ROLE_ARN>", "Arn": "<API_ARN>", "InputTransformer": { "InputPathsMap": { "data":"$", "id":"$.id", "source":"$.source", "state":"$.detail.state", "subject":"$.source", "time":"$.time", "type":"$.detail-type" }, "InputTemplate": " {\"specversion\":\"1.0\", \"id\":<id>, \"source\":<source>, \"type\":<type>, \"subject\":<subject>, \"time\":<time>, \"data\":<data>}" } } ]'
 ```
 
 The output (if successful) below:
@@ -112,12 +112,12 @@ The Input Template allows you to spec out what you want the JSON to look like pa
 ```json
 {
    "specversion":"1.0",
-   "id":"<id>",
-   "source":"<source>",
-   "type":"<type>",
-   "subject":"<subject>",
-   "time":"<time>",
-   "data":"<data>"
+   "id":<id>,
+   "source":<source>,
+   "type":<type>,
+   "subject":<subject>,
+   "time":<time>,
+   "data":<data>
 }
 ```
 
