@@ -28,6 +28,7 @@ description: "A simple workflow that fetches current headers from a website and 
 functions:
   - id: get
     image: vorteil/request:v5
+    type: reusable
 states:
   - id: fetch-site-headers
     type: action
@@ -125,6 +126,7 @@ description: A simple 'action' state that sends a get request"
 functions:
   - id: get
     image: vorteil/request:v5
+    type: reusable
 states:
   - id: fetch-site-headers
     type: action

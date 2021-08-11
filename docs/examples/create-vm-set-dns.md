@@ -45,10 +45,12 @@ functions:
 
   - id: create-vm
     image: vorteil/aws-ec2-create:v3
+    type: reusable
     size: medium
 
   - id: get-vm
     image: vorteil/awsgo:v2
+    type: reusable
 
 states:
 
@@ -135,6 +137,7 @@ functions:
   
   - id: req
     image: vorteil/request:v6
+    type: reusable
 
 states:
   
@@ -189,6 +192,7 @@ functions:
   
   - id: send-email
     image: vorteil/smtp:v2
+    type: reusable
 
 states:
   

@@ -58,6 +58,11 @@ start:
 functions:
   - id: query-fresh-service-cmdb
     image: vorteil/request:v2
+    type: reusable
+    
+  - id: send-email
+    type: subflow
+    workflow: send-email
 
 states:
 
@@ -91,7 +96,7 @@ states:
     log: jq(.)
     type: action
     action:
-      workflow: send-email
+      function: send-email
       input:
         recipient: jq(."example.vm.created".recipient)
         domain: jq(."example.vm.created".domain)

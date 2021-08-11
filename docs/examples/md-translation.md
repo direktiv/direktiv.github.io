@@ -17,6 +17,7 @@ description: Translates a string into different languages
 functions:
 - id: translate
   image: vorteil/google-translator:v2
+  type: reusable
 states:
  # continued in next code block
 ```
@@ -54,8 +55,9 @@ description: Translates a string into different languages
 functions:
 - id: translate
   image: vorteil/google-translator:v2
+  type: reusable
 states:
-- id: translateMarkdown
+- id: translate-markdown
   type: foreach
   array: "jq(.langs[] | {id: .})"
   action: 

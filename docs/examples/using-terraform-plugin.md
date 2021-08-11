@@ -14,10 +14,13 @@ id: spawn-instance
 functions:
 - id: git
   image: vorteil/git:v1
+  type: reusable
 - id: discordmsg
   image: vorteil/discordmsg:v2
+  type: reusable
 - id: tfrun
   image: vorteil/terraform:v1
+  type: reusable
   files:
   - key: terraform-examples
     scope: instance
@@ -170,10 +173,13 @@ id: spawn-instance
 functions:
 - id: git
   image: vorteil/git:v1
+  type: reusable
 - id: discordmsg
   image: vorteil/discordmsg:v2
+  type: reusable
 - id: tfrun
   image: vorteil/terraform:v1
+  type: reusable
   files:
   - key: terraform-examples
     scope: instance

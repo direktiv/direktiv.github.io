@@ -52,6 +52,7 @@ id: gcp-logger
 functions:
 - id: send-log
   image: vorteil/gcplog:v2
+  type: reusable
 start:
   type: event
   event:
@@ -80,6 +81,7 @@ id: aws-logger
 functions:
 - id: send-log
   image: vorteil/awslog:v2
+  type: reusable
 start:
   type: event
   event:
@@ -110,6 +112,7 @@ id: azure-logger
 functions:
 - id: send-log
   image: vorteil/azlog:v2
+  type: reusable
 start:
   type: event
   event:

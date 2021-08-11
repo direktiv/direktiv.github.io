@@ -19,6 +19,7 @@ description: "Solves a string array of expressions"
 functions: 
 - id: solve-math-expression
   image: vorteil/solve:v2
+  type: reusable
 states:
 - id: solve
   type: foreach
