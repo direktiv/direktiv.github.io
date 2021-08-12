@@ -32,7 +32,7 @@ functions:
 states:
   - id: fetch-site-headers
     type: action
-    transform: "jq({lastModified: .return.headers.[\"Last-Modified\"][0], etag: .return.headers.[\"Etag\"][0]})"
+    transform: 'jq({lastModified: .return.headers.["Last-Modified"][0], etag: .return.headers.["Etag"][0]})'
     transition: get-old-headers
     action:
       function: get
@@ -64,16 +64,16 @@ The switch state below has three possible conditions. The first condition is use
   - id: check-site
     type: switch
     defaultTransition: save-values
-    defaultTransform: "jq(. += {siteChanged: false})"
+    defaultTransform: 'jq(. += {siteChanged: false})'
     conditions:
-      - condition: "jq(.etag == null and .lastModified == null)"
+      - condition: 'jq(.etag == null and .lastModified == null)'
         transition: unsupported-site
-      - condition: "jq(.etag != .var.etag)"
+      - condition: 'jq(.etag != .var.etag)'
         transition: save-values
-        transform: "jq(. += {siteChanged: true})"
-      - condition: "jq(.lastModified != .var.lastModified)"
+        transform: 'jq(. += {siteChanged: true})'
+      - condition: 'jq(.lastModified != .var.lastModified)'
         transition: save-values
-        transform: "jq(. += {siteChanged: true})"
+        transform: 'jq(. += {siteChanged: true})'
   - id: unsupported-site
     type: error
     error: unsupported.site
@@ -89,10 +89,10 @@ Finally we save the current headers to the `lastModified` and `etag` workflow va
     variables:
       - key: lastModified
         scope: workflow
-        value: jq(.lastModified)
+        value: 'jq(.lastModified)'
       - key: etag
         scope: workflow
-        value: jq(.etag)
+        value: 'jq(.etag)'
 ```
 
 ## Sample Output
@@ -130,7 +130,7 @@ functions:
 states:
   - id: fetch-site-headers
     type: action
-    transform: "jq({lastModified: .return.headers.[\"Last-Modified\"][0], etag: .return.headers.[\"Etag\"][0]})"
+    transform: 'jq({lastModified: .return.headers.["Last-Modified"][0], etag: .return.headers.["Etag"][0]})'
     transition: get-old-headers
     action:
       function: get
@@ -148,16 +148,16 @@ states:
   - id: check-site
     type: switch
     defaultTransition: save-values
-    defaultTransform: "jq(. += {siteChanged: false})"
+    defaultTransform: 'jq(. += {siteChanged: false})'
     conditions:
-      - condition: "jq(.etag == null and .lastModified == null)"
+      - condition: 'jq(.etag == null and .lastModified == null)'
         transition: unsupported-site
-      - condition: "jq(.etag != .var.etag)"
+      - condition: 'jq(.etag != .var.etag)'
         transition: save-values
-        transform: "jq(. += {siteChanged: true})"
-      - condition: "jq(.lastModified != .var.lastModified)"
+        transform: 'jq(. += {siteChanged: true})'
+      - condition: 'jq(.lastModified != .var.lastModified)'
         transition: save-values
-        transform: "jq(. += {siteChanged: true})"
+        transform: 'jq(. += {siteChanged: true})'
   - id: unsupported-site
     type: error
     error: unsupported.site
@@ -167,8 +167,8 @@ states:
     variables:
       - key: lastModified
         scope: workflow
-        value: jq(.lastModified)
+        value: 'jq(.lastModified)'
       - key: etag
         scope: workflow
-        value: jq(.etag)
+        value: 'jq(.etag)'
 ```

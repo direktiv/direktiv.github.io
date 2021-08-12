@@ -20,14 +20,19 @@ start:
 functions:
 - id: select
   image: vorteil/select:v2
+  type: reusable
 - id: insert
   image: vorteil/insert:v2
+  type: reusable
 - id: delete
   image: vorteil/delete:v2
+  type: reusable
 - id: cruncher
   image: vorteil/cruncher:v2
+  type: reusable
 - id: notify
   image: vorteil/notifier:v2
+  type: reusable
 states:
 - id: selectRows
   type: action
@@ -38,7 +43,7 @@ states:
       delay: PT30S
       multiplier: 2.0
       codes: [".*"]
-  transform: jq(.return)
+  transform: 'jq(.return)'
   transition: crunchNumbers
   catch:
   - error: "*"
@@ -46,13 +51,13 @@ states:
   type: action
   action:
     function: cruncher
-  transform: jq(.return)
+  transform: 'jq(.return)'
   transition: storeSomeResults
 - id: storeSomeResults
   type: action
   action:
     function: insert
-    input: jq(.someResults)
+    input: 'jq(.someResults)'
   transition: storeOtherResults
   catch:
   - error: "*"
@@ -61,7 +66,7 @@ states:
   type: action
   action:
     function: insert
-    input: jq(.otherResults)
+    input: 'jq(.otherResults)'
   catch:
   - error: "*"
     transition: revertStoreSomeResults
@@ -69,7 +74,7 @@ states:
   type: action
   action:
     function: delete
-    input: jq(.someResults)
+    input: 'jq(.someResults)'
   transition: reportFailure
 - id: reportFailure
   type: action

@@ -18,6 +18,7 @@ start:
 functions:
 - id: httprequest
   image: vorteil/request:v2
+  type: reusable
 states:
 - id: getter
   type: action
@@ -26,11 +27,11 @@ states:
     input: 
       method: "GET"
       url: "https://jsonplaceholder.typicode.com/todos/1"
-  transform: jq(.return)
+  transform: 'jq(.return)'
   transition: logger
 - id: logger
   type: noop
-  log: jg(.)
+  log: 'jg(.)'
 
 ```
 

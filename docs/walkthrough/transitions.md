@@ -25,15 +25,15 @@ states:
   transition: b
 - id: b
   type: noop
-  transform: jq(.multiplier = 10)
+  transform: 'jq(.multiplier = 10)'
   transition: c
 - id: c
   type: noop
-  transform: jq(.result = .multiplier * .number | del(.multiplier, .number))
+  transform: 'jq(.result = .multiplier * .number | del(.multiplier, .number))'
   transition: d
 - id: d
   type: noop
-  transform: jq(.objects[0])
+  transform: 'jq(.objects[0])'
 ```
 
 ### Output
@@ -115,7 +115,7 @@ More than one state can be defined in a workflow definition. Each begins under t
 ```yaml
 - id: b
   type: noop
-  transform: jq(.multiplier = 10)
+  transform: 'jq(.multiplier = 10)'
   transition: c
 ```
 
@@ -124,7 +124,7 @@ More than one state can be defined in a workflow definition. Each begins under t
 ```yaml
 - id: c
   type: noop
-  transform: jq(.result = .multiplier * .number | del(.multiplier, .number))
+  transform: 'jq(.result = .multiplier * .number | del(.multiplier, .number))'
   transition: d
 ```
 
@@ -133,7 +133,7 @@ More than one state can be defined in a workflow definition. Each begins under t
 ```yaml
 - id: d
   type: noop
-  transform: jq(.objects[0])
+  transform: 'jq(.objects[0])'
 ```
 
 We've only got Noop States here, but most state types may optionally have a `transition` field, with a reference to the identifier for a state in the workflow definition. After a state finishes running Direktiv uses this field to figure out whether the instance has reached its end or not. If a transition to another state is defined the instance will continue on to that state.

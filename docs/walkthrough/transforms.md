@@ -50,7 +50,7 @@ The second transform enriches the existing instance data by adding a new field t
 **Command**
 
 ```yaml
-  transform: jq(.multiplier = 10)
+  transform: 'jq(.multiplier = 10)'
 ```
 
 **Resulting Instance Data**
@@ -74,7 +74,7 @@ The third transform multiplies two fields to produce a new field, then pipes the
 **Command**
 
 ```yaml
-  transform: jq(.result = .multiplier * .number | del(.multiplier, .number))
+  transform: 'jq(.result = .multiplier * .number | del(.multiplier, .number))'
 ```
 
 **Resulting Instance Data**
@@ -97,7 +97,7 @@ The fourth transform selects a child object nested within the instance data and 
 **Command**
 
 ```yaml
-  transform: jq(.objects[0])
+  transform: 'jq(.objects[0])'
 ```
 
 **Resulting Instance Data**
