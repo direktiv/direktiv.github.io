@@ -14,16 +14,6 @@ Fetch a list of workflows from the namespace
 
 **Method**: `GET`
 
-**Input**
-Provide the parameter namespace and the following input body to request the first result.
-
-```json
-{
-    "limit": 1,
-    "offset": 0
-}
-```
-
 ## Success Response
 **Code**: `200 OK`
 

@@ -18,12 +18,13 @@ Create a workflow from providing a YAML specification.
 Provide the namespace parameter and the following input.
 
 ```yaml
-id: test10
+id: hworld
 description: A simple 'no-op' state that returns 'Hello world!'
 states:
-  - id: helloworld132321sd4fsd56f5sd4fsd5f4sdf
+  - id: helloworld
     type: noop
-    transform: '{ result: "Hello world!" }'
+    transform:
+      result: "Hello World!"
 ```
 
 ## Success Response
@@ -33,7 +34,7 @@ states:
 
 ```json
 {
-  "id": "test10",
+  "id": "hworld",
   "revision": 0,
   "active": true,
   "createdAt": {
