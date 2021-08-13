@@ -7,7 +7,9 @@ parent: Configuration
 
 # Overview
 
-Direktiv is a solution with multiple components. All components shown in the following diagram can be secured with TLS to provide encryption on all these levels.
+Although SSL termination is a normal configuration for an installtion of Direktiv all components can be secured with TLS.
+Additionally the GRPC servers can be enabled to use mTLS. The following diagram shows all components and their communication
+paths.
 
 <p align="center">
   <img src="../../assets/ssl.png" alt="direktiv ssl">
@@ -15,8 +17,7 @@ Direktiv is a solution with multiple components. All components shown in the fol
 
 **Proxy:**
 
-The default LoadBalancer for direktiv is [Contour](https://github.com/projectcontour/contour). To use TLS here the ingress object needs a certificate and a hostname
-during helm installation. The certificate has to be in the same namespace direktiv is running in.
+The default LoadBalancer for direktiv is [Contour](https://github.com/projectcontour/contour). To use TLS here the ingress object needs a certificate and a hostname during helm installation. The certificate has to reference a valid TLS secret in the kubernetes namespace of direktiv.
 
 *Example:*
 ```yaml
@@ -25,34 +26,56 @@ ingress:
   host: myhost.mydomain
 ```
 
-**Proxy -> API/UI**
+**Proxy - API/UI**
 
-To encrypt traffic between the proxy and UI/API services the following helm variable needs to be set:
+To encrypt traffic between the proxy and UI/API services the following helm variables need to be configured.
 
 ```yaml
-uiapiCertificate: direktiv-uiapi
+api:
+  certificate: api-cert
+ui:
+  certificate: ui-cert
 ```
 
-**API -> Ingress / Knative -> Ingress**:
+**API - Engine - Controller**:
 
-Both communication channels using GRPC. The first channel is used to execute API requests within direktiv.
-The second channel reports the result of an isolate exectuion back to the flow component of direktiv.
+The communication channel between API, direktiv and isolates is using GRPC. In consists of three communication channels in total. The first channel is between API and direktiv's engine which runs usually on port 6666. The second channel is for communicating between the engine and an function controller (port 5555), which is responsible for starting pods created during workflow/service runs. The last GRPC channel is for communicating back results from workflow pods to the engine (port 7777).
 
-To apply this certificate to the flow component (default port 7777) and the ingress component (default port 6666) the
-value *'flow.certificate'* needs to be set during helm installation. The value is the name of the secret.
-It makes the certificate available to the container at */etc/certs/direktiv*.
-
-*Example:*
+*Engine Certificates:*
 ```yaml
 flow:
-  certificate: direktiv-grpc
+  certificates:
+    # securing engine port 7777
+    flow: myFlowCertSecret
+    mtlsFlow: none
+    # securing engine port 6666
+    ingress: myIngressCertSecret
+    mtlsIngress: none
 ```
 
-**Ingress -> Knative**:
+*Controller Certificates:*
+```yaml
+isolates:
+  certificate: direktiv-cert-fn
+  mtls: none
+```
 
-Workflows can execute containers during execution. Direktiv is using knative to execute those services. To initiate a container the flow component is
-executing a HTTP POST request. This call is internally routed via Contour. To use TLS on that layer a certificate has to be assigned to the internal
-Contour.
+if mTLS is required the mtls values of the services have to change from none to the same secret used for TLS, e.g.
+
+```yaml
+flow:
+  certificates:
+    # securing engine port 7777
+    flow: myFlowCertSecret
+    mtlsFlow: myFlowCertSecret
+```
+
+If TLS or mTLS is turned on on the flow component it is important to create a secret in the service namespace (default: direktiv-services-direktiv) with the same name.
+
+
+**Direktiv - Knative**:
+
+Workflows can execute containers during execution. Direktiv is using knative to execute those services. To initiate a container the flow component is executing a HTTP POST request. This call is internally routed via Contour. To use TLS on that layer a certificate has to be assigned to the internal Contour.
 
 ```yaml
 apiVersion: projectcontour.io/v1
@@ -62,7 +85,7 @@ metadata:
   namespace: contour-internal
 spec:
   delegations:
-    - secretName: direktiv-certificate
+    - secretName: direktiv-cert-knative
       targetNamespaces:
       - "*"
 ```
@@ -70,21 +93,40 @@ spec:
 Update the Knative Contour plugin to start using the certificate as a fallback when auto-TLS is disabled:
 
 ```sh
-kubectl patch cm config-contour -n knative-serving \
-  -p '{"data":{"default-tls-secret":"contour-internal/direktiv-knative"}}'
+kubectl patch cm config-contour -n knative-serving-knative \
+  -p '{"data":{"default-tls-secret":"contour-internal/direktiv-cert-knative"}}'
+```
+
+This TLS secret need to be with Contour's internal namespace.
+
+**Direktiv - Pods**:
+
+It is importan to know that both service types, knative and pod-based, need to either use TLS or plain text communication.
+It is not possible to run only one backend with TLS. To enable TLS on service pods the secrets needs to be configured:
+
+```yaml
+functions:
+  initPodCertificate: direktiv-cert-flow
+```
+
+This certicate needs the same certifcate authority used under the flow configuration:
+
+```yaml
+flow:
+  functionsProtocol: "https"
+  functionsCA: "direktiv-cert-knative"
 ```
 
 # **Simple example using cert-manager:**
 
-This example enables TLS for all components and mTLS for the direktiv GRPC requests. Depending on the security requirements of the installation individual parts can be omitted.
-Cert-Manager is used to create self-signed certificates as an example and uses the default namespace.
+This example enables TLS for all components and mTLS for the direktiv GRPC requests. Depending on the security requirements of the installation individual parts can be omitted. Cert-Manager is used to create self-signed certificates as an example and uses the default namespace.
 
 ## Install cert-manager
 
 If [cert-manager](https://cert-manager.io/docs/installation/kubernetes/) is not installed in the cluster it can easily done:
 
 ```sh
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.3.1/cert-manager.yaml
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/latest/download/cert-manager.yaml
 ```
 
 ## Create an issuer
@@ -96,6 +138,7 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: selfsigned-issuer
+  namespace: cert-manager
 spec:
   selfSigned: {}
 ---
@@ -103,7 +146,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: direktiv-ca
-  namespace: default
+  namespace: cert-manager
 spec:
   isCA: true
   commonName: direktiv-system
@@ -114,10 +157,10 @@ spec:
     group: cert-manager.io
 ---
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: direktiv-ca
-  namespace: default
+  namespace: cert-manager
 spec:
   ca:
     secretName: direktiv-ca
@@ -129,92 +172,18 @@ After applying this YAML file, the instalation can be checked with *kubectl get 
 kubectl get ClusterIssuers
 
 NAME                READY   AGE
-selfsigned-issuer   True    12s
+selfsigned-issuer   True    12m
+direktiv-ca         True    12m
 ```
 
-## Securing GRPC services (TLS)
+## Create certificates and Helm configuration
 
-The first step is to create a certificate for the grps services.
+The following certifcates and configurations will provide a basic mTLS/TLS configuration:
 
-```yaml
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: direktiv-grpc
-  namespace: default
-spec:
-  secretName: direktiv-grpc
-  dnsNames:
-  - "*.default.svc.cluster.local"
-  - "*.default"
-  issuerRef:
-    name: selfsigned-issuer
-    kind: ClusterIssuer
-```
+**Loadbalancer**
 
-This command creates the certificate to use. After applying this yaml successfully it can be referenced in *'flow.certificate'* for helm deployments.
-
-## Securing knative services
-
-First a certificate needs to be created with cert-manager for the contour-internal namespace.
-
-```yaml
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: direktiv-knative
-  namespace: contour-internal
-spec:
-  secretName: direktiv-knative
-  dnsNames:
-  - "*.default.svc.cluster.local"
-  - "*.default"
-  issuerRef:
-    name: selfsigned-issuer
-    kind: ClusterIssuer
-```
-
-After applying the file  if it was successful:
-
-```sh
-kc -n contour-internal get certificate
-
-NAME               READY   SECRET             AGE
-direktiv-knative   True    direktiv-knative   26s
-```
-
-After this step follow the instructions on the [knative website](https://knative.dev/docs/serving/using-a-tls-cert/):
-
-* Apply certificate
-
-```yaml
-apiVersion: projectcontour.io/v1
-kind: TLSCertificateDelegation
-metadata:
-  name: default-delegation
-  namespace: contour-internal
-spec:
-  delegations:
-    - secretName: direktiv-knative
-      targetNamespaces:
-      - "*"
-```
-
-* Patch contour
-
-```sh
-kubectl patch cm config-contour -n knative-serving \
-  -p '{"data":{"default-tls-secret":"contour-internal/direktiv-knative"}}'
-```
-
-To enable the flow engine to use HTTPS it needs the helm variable *'flow.protocol'* set to 'https'.
-
-## Securing Proxy / Loadbalancer
-
-Create or provide a certificate for the Loadbalancer. To do so this certificate will be added to the ingress configuration in direktiv's namespace.
-This certificate has to be created in the namespace of the ingress, in this case 'default'. It is also important to change the dnsNames.
-
-```yaml
+Certifcate:
+```YAML
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -230,56 +199,164 @@ spec:
     kind: ClusterIssuer
 ```
 
-This certificate needs to be referenced during helm installation like this:
-
-```yaml
+Helm Configuration:
+```YAML
 ingress:
   certificate: direktiv-lb
   host: myhost.mydomain
 ```
 
-## Securing API / UI
+**UI/API**
 
-To secure th API/UI there is another certificate needed.
+Certifcate:
+```YAML
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: direktiv-cert
+  namespace: default
+spec:
+  secretName: direktiv-cert
+  dnsNames:
+  - '*.default.svc.cluster.local'
+  - '*.default'
+  issuerRef:
+    name: direktiv-ca
+    kind: ClusterIssuer
+```
 
+Helm Configuration:
+```YAML
+ui:
+  certificate: direktiv-cert
+
+api:
+  certificate: direktiv-cert
+```
+
+**GRPC Services**
+
+Certifcates:
 ```yaml
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: direktiv-uiapi
+  name: direktiv-cert-fn
   namespace: default
 spec:
-  secretName: direktiv-uiapi
+  secretName: direktiv-cert-fn
   dnsNames:
+  - "direktiv-functions-hl.default.svc.cluster.local"
+  - "direktiv-functions-hl.default"
+  - "direktiv-functions-hl"
   - "*.default.svc.cluster.local"
   - "*.default"
   issuerRef:
-    name: selfsigned-issuer
+    name: direktiv-ca
+    kind: ClusterIssuer
+  usages:
+    - server auth
+    - client auth
+---
+  apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    name: direktiv-cert-flow
+    namespace: default
+  spec:
+    secretName: direktiv-cert-flow
+    dnsNames:
+    - "direktiv-flow-hl.default.svc.cluster.local"
+    - "direktiv-flow-hl.default"
+    - "direktiv-flow-hl"
+    - "*.default.svc.cluster.local"
+    - "*.default"
+    issuerRef:
+      name: direktiv-ca
+      kind: ClusterIssuer
+    usages:
+      - server auth
+      - client auth
+---
+  apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    name: direktiv-cert-ingress
+    namespace: default
+  spec:
+    secretName: direktiv-cert-ingress
+    dnsNames:
+    - "direktiv-ingress-hl.default.svc.cluster.local"
+    - "direktiv-ingress-hl.default"
+    - "direktiv-ingress-hl"
+    - "*.default.svc.cluster.local"
+    - "*.default"
+    issuerRef:
+      name: direktiv-ca
+      kind: ClusterIssuer
+    usages:
+      - server auth
+      - client auth
+```
+
+Helm Configuration:
+```YAML
+functions:
+  certificate: direktiv-cert-fn
+  mtls: direktiv-cert-fn
+
+flow:
+  certificates:
+    flow: direktiv-cert-flow
+    mtlsFlow: direktiv-cert-flow
+    ingress: direktiv-cert-ingress
+    mtlsIngress: direktiv-cert-ingress
+```
+
+**Knative**
+
+Certifcate:
+```yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: direktiv-cert-knative
+  namespace: contour-internal
+spec:
+  secretName: direktiv-cert-knative
+  dnsNames:
+  - "*.direktiv-services-direktiv"
+  issuerRef:
+    name: direktiv-ca
     kind: ClusterIssuer
 ```
 
-After creating this the helm variable *'uiapiCertificate'* enables TLS for the UI and API.
+**Pod**
 
-```yaml
-uiapiCertificate: direktiv-uiapi
+Certifcate:
+```YAML
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: direktiv-cert-flow
+  namespace: direktiv-services-direktiv
+spec:
+  secretName: direktiv-cert-flow
+  dnsNames:
+  - "direktiv-flow-hl.default.svc.cluster.local"
+  - "direktiv-flow-hl.default"
+  - "direktiv-flow-hl"
+  issuerRef:
+    name: direktiv-ca
+    kind: ClusterIssuer
+  usages:
+    - server auth
+    - client auth
 ```
 
-## GRPC mTLS
-
-TODO
-
-## Example helm yaml
-
-TLS related values only.
-
-```yaml
+Helm Configuration:
+```YAML
 flow:
-  protocol: "https"
-  certificate: direktiv-grpc
-
-ingress:
- certificate: direktiv-lb
- host: myhost.mydomain
-
-uiapiCertificate: direktiv-uiapi
+  functionsProtocol: "https"
+  functionsCA: "direktiv-cert-knative"
 ```

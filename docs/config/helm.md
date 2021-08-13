@@ -7,80 +7,156 @@ parent: Configuration
 
 To install direktiv via helm, several settings can be changed. The following snippet shows the configuration options in helm's '*values.yaml*'.
 
-**General:**
+```yaml
+# Default values for direktiv.
+replicaCount: 1
 
-```toml
-# installs postgres as a pod
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+registry: "docker.io"
+pullPolicy: Always
+imagePullSecrets: []
+
+# if using proxy the user needs to be a valid IAM user with access to the database
+# e.g. roles/cloudsql.editor. Additionally the service account needs to be mapped
+# to to google with:
+# ccount:
+#   annotations:
+#      iam.gke.io/gcp-service-account: IAM_USER@GCP_PROJECT.iam.gserviceaccount.com
+serviceAccount:
+  annotations: {}
+  name: ""
+  create: true
+
+# proxy settings
+http_proxy: ""
+https_proxy: ""
+no_proxy: ""
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# support services
 withSupport: true
-# installs flow/engine component
 withFlow: true
-# installs the UI
 withUI: true
-# install the API
 withAPI: true
 
-# enable debug logging
+supportPersist: false
+
+# enable debug
 debug: false
-```
 
-**Flow Config:**
+# enables/disables network policies
+useNetworkPolicies: false
 
-```toml
+ingress:
+  host: ""
+  certificate: none
+  class: "contour-external"
+
+# flow config
 flow:
-  # image and tag to use for flow
   image: "vorteil/flow"
   tag: "latest"
-  # simple exchange key for flow/knative communication
-  exchange: "checkMe"
-  # sidecar to use for knative services
-  sidecar: "vorteil/sidecar"
-```
+  db: ""
+  functionsProtocol: "http"
+  functionsCA: "none"
+  certificates:
+    flow: none
+    mtlsFlow: none
+    ingress: none
+    mtlsIngress: none
+  extraContainers: []
+  extraVolumeMounts:
+    # - name: service-template
+    #   mountPath: /etc/config
+  extraVolumes:
+    # - name: service-template
+    #   configMap:
+    #     name: service-template
 
-**Ingress Config:**
-
-```toml
-ingress:
-  # host can be empty for HTTP
-  host: ""
-  # name of tls secret
-  certificate: none
-  # ingress class
-  class: "contour-external"
-```
-
-**Secrets Config:**
-
-```toml
 secrets:
-  # image and tag to use
   image: "vorteil/secrets"
   tag: "latest"
-  # secret backend, defaults to database
-  backend: "db"
-  # db connection string for secrets if backend is database
   db: ""
-  # encryption key for secrets in database
   key: "01234567890123456789012345678912"
-```
+  extraVolumeMounts: []
 
-**UI & API Config:**
-
-User interface and API configuration is image and tag plus certificate:
-
-```toml
+# ui config
 ui:
   image: "vorteil/direktiv-ui"
   tag: "latest"
+  certificate: none
 
 api:
   image: vorteil/api
   tag: "latest"
-  # apiKey for Authorization [Optional]
-  key: "aGVsbG8gdGhlcmU="
+  key: ""
+  certificate: none
 
-# name of tls secret to use for TLS on API/UI level
-uiapiCertificate: mysecret
+# Set Send and Recv limits for all grpc clients and servers
+grpc:
+  server:
+    maxSendSize: "4194304"
+    maxRecvSize: "4194304"
+  client:
+    maxSendSize: "4194304"
+    maxRecvSize: "4194304"
+
+functions:
+  # namespace to run functions in
+  namespace: direktiv-services-direktiv
+
+  # images for functions controller, knative sidecar and init-pod
+  image: "vorteil/functions"
+  tag: "latest"
+  certificate: none
+  mtls: none
+
+  sidecar: "vorteil/sidecar"
+
+  initPodImage:  "vorteil/direktiv-init-pod"
+
+  initPodCertificate: none
+
+  # number of controller replicas
+  replicaCount: 1
+
+  # allowed network traffic if supported
+  netShape: "10M"
+
+  # database connection, required for pub/sub with flow
+  db: ""
+
+  # run pod cleaner for kubernetes < 1.20
+  podCleaner: true
+
+  # runtime to use, e.g. gvisor
+  runtime: "default"
+
+  # extra container for controller pod
+  # e.g. database containers for google cloud or logging
+  extraContainersPod: []
+  extraContainers:
+    []
+    # - name: cloud-sql-proxy
+    #   image: gcr.io/cloudsql-docker/gce-proxy:1.17
+    #   command:
+    #     - "/cloud_sql_proxy"
+    #     - "-instances=mygcpdb=tcp:5432"
+    #     - "-ip_address_types=PRIVATE"
+    #   securityContext:
+    #     runAsNonRoot: true
+    #   resources:
+    #     requests:
+    #       memory: "2Gi"
+    #       cpu:    "1"
+
 ```
-
-The api.key value when set will enable apiKey authorization on the api server and will require you set the header `Authorization: apiKey {api.key}`
-when making any requests to the api server. If unset or the incorrect apiKey is set, the response to the request will return 401.
