@@ -20,18 +20,19 @@ This example is fairly simple and can be broken up into four steps:
 Below we'll explain each step in more detail. For this example we've chosen `https://docs.direktiv.io` as the target website.
 
 ## Fetch Website Headers
-Here we are performing a HTTP `POST` request on the target website using our `vorteil/request:v5` direktiv app as a function. Since we only care about the `Last-Modified` and `Etag` headers we then extract those values and store them in the `lastModified` and `etag` properties using the transform field in the `fetch-site-headers` state. Now that we have fetched the current header values required, the state will transition to the `get-old-headers` state.
+Here we are performing a HTTP `POST` request on the target website using our `vorteil/request:v10` direktiv app as a function. Since we only care about the `Last-Modified` and `Etag` headers we then extract those values and store them in the `lastModified` and `etag` properties using the transform field in the `fetch-site-headers` state. Now that we have fetched the current header values required, the state will transition to the `get-old-headers` state.
 
 ```yaml
 id: check-website-change
 description: "A simple workflow that fetches current headers from a website and compares them to the previously stored headers to determine if it has changed."
 functions:
   - id: get
-    image: vorteil/request:v5
+    image: vorteil/request:v10
+    type: reusable
 states:
   - id: fetch-site-headers
     type: action
-    transform: "jq({lastModified: .return.headers.[\"Last-Modified\"][0], etag: .return.headers.[\"Etag\"][0]})"
+    transform: 'jq({lastModified: .return.headers.["Last-Modified"][0], etag: .return.headers.["Etag"][0]})'
     transition: get-old-headers
     action:
       function: get
@@ -63,16 +64,16 @@ The switch state below has three possible conditions. The first condition is use
   - id: check-site
     type: switch
     defaultTransition: save-values
-    defaultTransform: "jq(. += {siteChanged: false})"
+    defaultTransform: 'jq(. += {siteChanged: false})'
     conditions:
-      - condition: "jq(.etag == null and .lastModified == null)"
+      - condition: 'jq(.etag == null and .lastModified == null)'
         transition: unsupported-site
-      - condition: "jq(.etag != .var.etag)"
+      - condition: 'jq(.etag != .var.etag)'
         transition: save-values
-        transform: "jq(. += {siteChanged: true})"
-      - condition: "jq(.lastModified != .var.lastModified)"
+        transform: 'jq(. += {siteChanged: true})'
+      - condition: 'jq(.lastModified != .var.lastModified)'
         transition: save-values
-        transform: "jq(. += {siteChanged: true})"
+        transform: 'jq(. += {siteChanged: true})'
   - id: unsupported-site
     type: error
     error: unsupported.site
@@ -88,10 +89,10 @@ Finally we save the current headers to the `lastModified` and `etag` workflow va
     variables:
       - key: lastModified
         scope: workflow
-        value: jq(.lastModified)
+        value: 'jq(.lastModified)'
       - key: etag
         scope: workflow
-        value: jq(.etag)
+        value: 'jq(.etag)'
 ```
 
 ## Sample Output
@@ -124,11 +125,12 @@ id: a-cron-example
 description: A simple 'action' state that sends a get request"
 functions:
   - id: get
-    image: vorteil/request:v5
+    image: vorteil/request:v10
+    type: reusable
 states:
   - id: fetch-site-headers
     type: action
-    transform: "jq({lastModified: .return.headers.[\"Last-Modified\"][0], etag: .return.headers.[\"Etag\"][0]})"
+    transform: 'jq({lastModified: .return.headers.["Last-Modified"][0], etag: .return.headers.["Etag"][0]})'
     transition: get-old-headers
     action:
       function: get
@@ -146,16 +148,16 @@ states:
   - id: check-site
     type: switch
     defaultTransition: save-values
-    defaultTransform: "jq(. += {siteChanged: false})"
+    defaultTransform: 'jq(. += {siteChanged: false})'
     conditions:
-      - condition: "jq(.etag == null and .lastModified == null)"
+      - condition: 'jq(.etag == null and .lastModified == null)'
         transition: unsupported-site
-      - condition: "jq(.etag != .var.etag)"
+      - condition: 'jq(.etag != .var.etag)'
         transition: save-values
-        transform: "jq(. += {siteChanged: true})"
-      - condition: "jq(.lastModified != .var.lastModified)"
+        transform: 'jq(. += {siteChanged: true})'
+      - condition: 'jq(.lastModified != .var.lastModified)'
         transition: save-values
-        transform: "jq(. += {siteChanged: true})"
+        transform: 'jq(. += {siteChanged: true})'
   - id: unsupported-site
     type: error
     error: unsupported.site
@@ -165,8 +167,8 @@ states:
     variables:
       - key: lastModified
         scope: workflow
-        value: jq(.lastModified)
+        value: 'jq(.lastModified)'
       - key: etag
         scope: workflow
-        value: jq(.etag)
+        value: 'jq(.etag)'
 ```

@@ -15,6 +15,7 @@ id: send-email-trigger-event
 functions:
 - id: smtp
   image: vorteil/smtp:v3
+  type: reusable
 description: This workflow sends an email and triggers an event.
 states:
   # continued in next code block
@@ -58,6 +59,7 @@ id: send-email-trigger-event
 functions:
 - id: smtp
   image: vorteil/smtp:v3
+  type: reusable
 description: This workflow sends an email and triggers an event.
 states:
 - id: sendemail
@@ -90,10 +92,13 @@ description: This workflow reads an email when a cloud event is received.
 functions:
 - id: imap
   image: vorteil/imap:v1
+  type: reusable
 - id: smtp
   image: vorteil/smtp:v3
+  type: reusable
 - id: sentiment
   image: vorteil/google-sentiment-check:v2
+  type: reusable
 start:
   type: event
   state: read-email
@@ -110,7 +115,7 @@ states:
 This state takes the first message from the email 'INBOX', reads & outputs the contents of the message, and transitions to the sentiment-check state.
 
 ```yaml
-- id: read-mail
+- id: read-email
   type: action
   action:
     secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]
@@ -174,17 +179,20 @@ description: This workflow reads an email when a cloud event is received.
 functions:
 - id: imap
   image: vorteil/imap:v1
+  type: reusable
 - id: smtp
   image: vorteil/smtp:v3
+  type: reusable
 - id: sentiment
   image: vorteil/google-sentiment-check:v2
+  type: reusable
 start:
   type: event
   state: read-email
   event:
     type: smtp
 states:
-- id: read-mail
+- id: read-email
   type: action
   action:
     secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]

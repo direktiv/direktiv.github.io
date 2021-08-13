@@ -16,6 +16,7 @@ id: multiposter
 functions:
 - id: httprequest
   image: vorteil/request:v2
+  type: reusable
 states:
 - id: ifelse
   type: switch
@@ -124,10 +125,10 @@ The Switch State can make decisions about where to transition to next based on t
 - id: ifelse
   type: switch
   conditions:
-  - condition: jq(.person.age > 18)
+  - condition: 'jq(.person.age > 18)'
     transition: accept
     #transform:
-  - condition: jq(.person.age != nil)
+  - condition: 'jq(.person.age != nil)'
     transition: reject
     #transform:
   defaultTransition: failure
@@ -155,6 +156,7 @@ id: multiposter
 functions:
 - id: httprequest
   image: vorteil/request:v2
+  type: reusable
 states:
 - id: poster
   type: foreach
@@ -165,7 +167,7 @@ states:
       method: "POST"
       url: "https://jsonplaceholder.typicode.com/posts"
       body:
-        name: jq(.)
+        name: 'jq(.)'
   transform: 'jq(del(.names) | .names = [])'
 ```
 
@@ -175,4 +177,4 @@ One obvious use for loops is to retry some logic if an error occurs, but there's
 
 ### Isolates
 
-For large data sets or logic that could needs to loop many times it's generally better to custom-write an Isolate function that performs all of the computation. Writing custom Isolates is discussed in another article.
+For large data sets or logic that could needs to loop many times it's generally better to custom-write an Isolate function that performs all of the computation. Writing custom functions is discussed in another article.

@@ -13,14 +13,17 @@ id: build-go-binary
 functions:
 - id: go
   image: vorteil/go:v1
+  type: reusable
   files:
   - key: helloworld
     scope: instance
     type: tar.gz
 - id: git
   image: vorteil/git:v1
+  type: reusable
 - id: upload
   image: vorteil/amazon-upload:v3
+  type: reusable
   files:
   - key: helloworldserver
     scope: instance
@@ -87,14 +90,17 @@ id: build-go-binary
 functions:
 - id: go
   image: vorteil/go:v1
+  type: reusable
   files:
   - key: helloworld
     scope: instance
     type: tar.gz
 - id: git
   image: vorteil/git:v1
+  type: reusable
 - id: upload
   image: vorteil/amazon-upload:v3
+  type: reusable
   files:
   - key: helloworldserver
     scope: instance

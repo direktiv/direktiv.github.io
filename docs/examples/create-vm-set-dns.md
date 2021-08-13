@@ -13,7 +13,7 @@ There are a number of pre-made 'isolate' containers designed specifically to boo
   - Creates an instance on Amazon Web Services EC2
 - vorteil/awsgo:v2
   - Wraps the AWS CLI, enabling the use of any existing AWS CLI command in a workflow
-- vorteil/request:v6
+- vorteil/request:v10
   - Sends a custom HTTP request
 - vorteil/smtp:v2
   - Sends an email
@@ -45,10 +45,12 @@ functions:
 
   - id: create-vm
     image: vorteil/aws-ec2-create:v3
+    type: reusable
     size: medium
 
   - id: get-vm
     image: vorteil/awsgo:v2
+    type: reusable
 
 states:
 
@@ -134,7 +136,8 @@ description: Add an A DNS record to the specified domain on GoDaddy.
 functions:
   
   - id: req
-    image: vorteil/request:v6
+    image: vorteil/request:v10
+    type: reusable
 
 states:
   
@@ -189,6 +192,7 @@ functions:
   
   - id: send-email
     image: vorteil/smtp:v2
+    type: reusable
 
 states:
   

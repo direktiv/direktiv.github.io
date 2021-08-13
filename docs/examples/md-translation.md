@@ -17,6 +17,7 @@ description: Translates a string into different languages
 functions:
 - id: translate
   image: vorteil/google-translator:v2
+  type: reusable
 states:
  # continued in next code block
 ```
@@ -25,7 +26,7 @@ states:
 Next we'll define a state that gets passed an array of strings. Where we pass each element in the string array as an object with the property 'id' so JQ can interpret it.
 
 ```yaml
-- id: translateMarkdown
+- id: translate-markdown
   type: foreach
   array: "jq(.langs[] | {id: .})"
   action: 
@@ -54,8 +55,9 @@ description: Translates a string into different languages
 functions:
 - id: translate
   image: vorteil/google-translator:v2
+  type: reusable
 states:
-- id: translateMarkdown
+- id: translate-markdown
   type: foreach
   array: "jq(.langs[] | {id: .})"
   action: 

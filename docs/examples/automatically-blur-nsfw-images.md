@@ -19,10 +19,13 @@ id: check-image
 functions:
 - id: check
   image: vorteil/imagerecognition:v2
+  type: reusable
 - id: blur
   image: vorteil/blur:v1
+  type: reusable
 - id: request
-  image: vorteil/request:v5
+  image: vorteil/request:v10
+  type: reusable
 description: "Evaluates an image using Google Vision API"
 states:
   # continued in next code block
@@ -106,10 +109,13 @@ id: check-image
 functions:
 - id: check
   image: vorteil/imagerecognition:v2
+  type: reusable
 - id: blur
   image: vorteil/blur:v1
+  type: reusable
 - id: request
-  image: vorteil/request:v5
+  image: vorteil/request:v10
+  type: reusable
 description: "Evaluates an image using Google Vision API"
 states:
 - id: check_image

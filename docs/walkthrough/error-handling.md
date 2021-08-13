@@ -20,16 +20,21 @@ start:
 functions:
 - id: select
   image: vorteil/select:v2
+  type: reusable
 - id: insert
   image: vorteil/insert:v2
+  type: reusable
 - id: delete
   image: vorteil/delete:v2
+  type: reusable
 - id: cruncher
   image: vorteil/cruncher:v2
+  type: reusable
 - id: notify
   image: vorteil/notifier:v2
+  type: reusable
 states:
-- id: selectRows
+- id: select-rows
   type: action
   action:
     function: select
@@ -38,40 +43,40 @@ states:
       delay: PT30S
       multiplier: 2.0
       codes: [".*"]
-  transform: jq(.return)
-  transition: crunchNumbers
+  transform: 'jq(.return)'
+  transition: crunch-numbers
   catch:
   - error: "*"
-- id: crunchNumbers
+- id: crunch-numbers
   type: action
   action:
     function: cruncher
-  transform: jq(.return)
-  transition: storeSomeResults
-- id: storeSomeResults
+  transform: 'jq(.return)'
+  transition: store-some-results
+- id: store-some-results
   type: action
   action:
     function: insert
-    input: jq(.someResults)
-  transition: storeOtherResults
+    input: 'jq(.someResults)'
+  transition: store-other-results
   catch:
   - error: "*"
-    transition: reportFailure
-- id: storeOtherResults
+    transition: report-failure
+- id: store-other-results
   type: action
   action:
     function: insert
-    input: jq(.otherResults)
+    input: 'jq(.otherResults)'
   catch:
   - error: "*"
-    transition: revertStoreSomeResults
-- id: revertStoreSomeResults
+    transition: revert-store-some-results
+- id: revert-store-some-results
   type: action
   action:
     function: delete
-    input: jq(.someResults)
-  transition: reportFailure
-- id: reportFailure
+    input: 'jq(.someResults)'
+  transition: report-failure
+- id: report-failure
   type: action
   action:
     function: notifier

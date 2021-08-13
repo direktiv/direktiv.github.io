@@ -19,9 +19,10 @@ For a subflow demonstration we need to define multiple workflows.
 id: notifier
 functions:
 - id: httprequest
-  image: vorteil/request:v2
+  image: vorteil/request:v6
+  type: reusable
 states:
-- id: validateInput
+- id: validate-input
   type: validate
   schema:
     type: object
@@ -42,19 +43,19 @@ states:
     input:
       method: "GET"
       url: "https://jsonplaceholder.typicode.com/todos/1"
-      body: jq(.input)
-  transition: checkResults
-- id: checkResults
+      body: 'jq(.input)'
+  transition: check-results
+- id: check-results
   type: switch
   conditions:
-  - condition: jq(.warnings)
+  - condition: 'jq(.warnings)'
     transition: throw
 - id: throw
   type: error
   error: notification.lint
   message: 'lint errors: %s'
   args:
-  - jq(.warnings)
+  - 'jq(.warnings)'
 ```
 
 ### 2nd Workflow Definition
@@ -63,7 +64,8 @@ states:
 id: worker
 functions:
 - id: httprequest
-  image: vorteil/request:v2
+  image: vorteil/request:v6
+  type: reusable
 states:
 - id: do
   type: action
@@ -72,7 +74,7 @@ states:
     input:
       method: "GET"
       url: "https://jsonplaceholder.typicode.com/todos/1"
-      body: jq(.input)
+      body: 'jq(.input)'
   transition: notify
   transform: 'jq(del(.return) | .contact = "Alan")'
 - id: notify
@@ -129,7 +131,7 @@ states:
   action:
     workflow: myworkflow
     input:
-      method: "  GET"
+      method: "GET"
       url: "https://jsonplaceholder.typicode.com/todos/1"
 ```
 

@@ -18,6 +18,7 @@ id: eventbased-greeting
 functions:
 - id: greeter
   image: vorteil/greeting:v2
+  type: reusable
 start:
   type: event
   state: greeter

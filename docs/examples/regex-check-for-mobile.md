@@ -23,8 +23,10 @@ id: send-mobile-trigger-event
 functions:
 - id: smtp
   image: vorteil/smtp:v3
+  type: reusable
 - id: request
-  image: vorteil/request:v5
+  image: vorteil/request:v10
+  type: reusable
 description: This workflow sends an email and triggers an event.
 states:
   # continued in next code block
@@ -69,6 +71,7 @@ id: send-mobile-trigger-event
 functions:
 - id: smtp
   image: vorteil/smtp:v3
+  type: reusable
 description: This workflow sends an email and triggers an event.
 states:
 - id: sendemail
@@ -107,10 +110,13 @@ description: This workflow reads an email when a cloud event is received.
 functions:
 - id: imap
   image: vorteil/imap:v1
+  type: reusable
 - id: regex
   image: vorteil/regex:v1
+  type: reusable
 - id: twilio
   image: vorteil/twilio:v2
+  type: reusable
 start:
   type: event
   state: read-mail
@@ -178,10 +184,13 @@ description: This workflow reads an email when a cloud event is received.
 functions:
 - id: imap
   image: vorteil/imap:v1
+  type: reusable
 - id: regex
   image: vorteil/regex:v1
+  type: reusable
 - id: twilio
   image: vorteil/twilio:v2
+  type: reusable
 start:
   type: event
   state: read-mail

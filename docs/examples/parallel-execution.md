@@ -33,7 +33,7 @@ Replace `{OS}` with `windows`, `mac`, and `linux`, to create the 3 subflows refe
 ```yaml
 id: wait-for-{OS}
 states:
-- id: waitForEvent
+- id: wait-for-event
   type: consumeEvent
   event:
     type: gen-event-{OS}

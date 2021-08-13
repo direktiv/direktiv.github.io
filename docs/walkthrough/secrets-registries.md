@@ -15,7 +15,8 @@ Many workflows require sensitive information such as passwords or authentication
 id: httpget
 functions:
 - id: httprequest
-  image: vorteil/request:v5
+  image: vorteil/request:v6
+  type: reusable
 states:
 - id: getter 
   type: action
