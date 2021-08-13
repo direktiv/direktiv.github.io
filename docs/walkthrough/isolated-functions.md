@@ -7,7 +7,7 @@ parent: Getting Started
 
 ### Isolated Functions
 
-An isolated function is written for a specific purpose. It requires an input, presents an output, and is capable of returning error information in the event that anything goes worong - not unlike regular isolates. An isolated function is booted up, performs its task, and then immediately terminates. Compared to other function types this is a simple and straight-forward design, but it comes at a cost to performance and latency.
+An isolated function is written for a specific purpose. It requires an input, presents an output, and is capable of returning error information in the event that anything goes worong - not unlike regular functions. An isolated function is booted up, performs its task, and then immediately terminates. Compared to other function types this is a simple and straight-forward design, but it comes at a cost to performance and latency.
 
 Because an isolated function is not a server, it does not receive or return input data via web requests. Instead, specific filepaths are used for input, output, errors, and to tell Direktiv that the function has completed.
 
