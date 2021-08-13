@@ -19,11 +19,40 @@ This article demonstrates how each of the available function types is used withi
 
 ### subflow
 
-A `subflow` function allows a workflow to execute another workflow. View [this article](/docs/walkthrough/subflows.html) for more detailed information.
+A `subflow` function allows a workflow to execute another workflow. 
+Assuming that 2 workflows exist, `parent` and `child`, the `parent` workflow could use the `child` workflow as a'subflow' function.
+
+```yml
+id: parent
+functions:
+  - id: my-subflow
+    type: subflow
+    workflow: child
+states:
+  - id: invoke-subflow
+    type: action
+    action:
+      function: my-subflow
+```
+
+View [this article](/docs/walkthrough/subflows.html) for more detailed information.
 
 ### isolated
 
-An 'isolated' function is similar to `reusable`, `knative-namespace`, and `knative-global` functions, but with some key differences in terms of implementation that are detailed [here](/docs/walkthrough/isolated-functions.html).
+Isolated functions are less performant than other types, but can be useful if you need greater isolation or just want to write your own function and prefer the simpler design pattern of interacting with the file-system instead of implementing a server that adheres to our reusable function spec. For more information about isolated functions, click [here](/docs/walkthrough/isolated-functions.html).
+
+```yml
+id: my-workflow
+functions:
+  - id: my-isolated-function
+    type: isolated
+    image: example/isolated-function
+states:
+  - id: invoke-isolated-function
+    type: action
+    action:
+      function: my-isolated-function
+```
 
 ### reusable
 

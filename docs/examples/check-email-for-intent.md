@@ -115,7 +115,7 @@ states:
 This state takes the first message from the email 'INBOX', reads & outputs the contents of the message, and transitions to the sentiment-check state.
 
 ```yaml
-- id: read-mail
+- id: read-email
   type: action
   action:
     secrets: ["EMAIL_ADDRESS", "EMAIL_PASSWORD"]

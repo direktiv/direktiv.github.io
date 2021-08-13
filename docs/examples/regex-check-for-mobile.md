@@ -25,7 +25,7 @@ functions:
   image: vorteil/smtp:v3
   type: reusable
 - id: request
-  image: vorteil/request:v5
+  image: vorteil/request:v10
   type: reusable
 description: This workflow sends an email and triggers an event.
 states:

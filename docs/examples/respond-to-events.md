@@ -57,7 +57,7 @@ start:
 
 functions:
   - id: query-fresh-service-cmdb
-    image: vorteil/request:v2
+    image: vorteil/request:v10
     type: reusable
     
   - id: send-email

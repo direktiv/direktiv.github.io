@@ -34,7 +34,7 @@ functions:
   image: vorteil/notifier:v2
   type: reusable
 states:
-- id: selectRows
+- id: select-rows
   type: action
   action:
     function: select
@@ -44,39 +44,39 @@ states:
       multiplier: 2.0
       codes: [".*"]
   transform: 'jq(.return)'
-  transition: crunchNumbers
+  transition: crunch-numbers
   catch:
   - error: "*"
-- id: crunchNumbers
+- id: crunch-numbers
   type: action
   action:
     function: cruncher
   transform: 'jq(.return)'
-  transition: storeSomeResults
-- id: storeSomeResults
+  transition: store-some-results
+- id: store-some-results
   type: action
   action:
     function: insert
     input: 'jq(.someResults)'
-  transition: storeOtherResults
+  transition: store-other-results
   catch:
   - error: "*"
-    transition: reportFailure
-- id: storeOtherResults
+    transition: report-failure
+- id: store-other-results
   type: action
   action:
     function: insert
     input: 'jq(.otherResults)'
   catch:
   - error: "*"
-    transition: revertStoreSomeResults
-- id: revertStoreSomeResults
+    transition: revert-store-some-results
+- id: revert-store-some-results
   type: action
   action:
     function: delete
     input: 'jq(.someResults)'
-  transition: reportFailure
-- id: reportFailure
+  transition: report-failure
+- id: report-failure
   type: action
   action:
     function: notifier

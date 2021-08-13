@@ -24,7 +24,7 @@ functions:
   image: vorteil/blur:v1
   type: reusable
 - id: request
-  image: vorteil/request:v5
+  image: vorteil/request:v10
   type: reusable
 description: "Evaluates an image using Google Vision API"
 states:
@@ -114,7 +114,7 @@ functions:
   image: vorteil/blur:v1
   type: reusable
 - id: request
-  image: vorteil/request:v5
+  image: vorteil/request:v10
   type: reusable
 description: "Evaluates an image using Google Vision API"
 states:

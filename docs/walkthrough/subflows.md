@@ -22,7 +22,7 @@ functions:
   image: vorteil/request:v6
   type: reusable
 states:
-- id: validateInput
+- id: validate-input
   type: validate
   schema:
     type: object
@@ -44,8 +44,8 @@ states:
       method: "GET"
       url: "https://jsonplaceholder.typicode.com/todos/1"
       body: 'jq(.input)'
-  transition: checkResults
-- id: checkResults
+  transition: check-results
+- id: check-results
   type: switch
   conditions:
   - condition: 'jq(.warnings)'
