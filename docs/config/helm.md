@@ -53,8 +53,11 @@ supportPersist: false
 # enable debug
 debug: false
 
-# enables/disables network policies
-useNetworkPolicies: false
+networkPolicies:
+  enabled: true
+  db: 192.168.0.0/16
+  serviceCidr: 10.43.0.0/16
+  podCidr: 10.42.0.0/16
 
 ingress:
   host: ""
@@ -67,7 +70,7 @@ flow:
   tag: "latest"
   db: ""
   functionsProtocol: "http"
-  functionsCA: "none"
+  functionsCA: "none" # change function pod secret too
   certificates:
     flow: none
     mtlsFlow: none
@@ -93,6 +96,7 @@ secrets:
 ui:
   image: "vorteil/direktiv-ui"
   tag: "latest"
+  # certificate: direktiv-cert
   certificate: none
 
 api:
@@ -123,13 +127,11 @@ functions:
   sidecar: "vorteil/sidecar"
 
   initPodImage:  "vorteil/direktiv-init-pod"
-
   initPodCertificate: none
 
   # number of controller replicas
   replicaCount: 1
 
-  # allowed network traffic if supported
   netShape: "10M"
 
   # database connection, required for pub/sub with flow
