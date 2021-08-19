@@ -27,7 +27,8 @@ Provide the parameter namespace and workflow. You can also optionally provide an
 |   Query Parameter |   |
 |---|---|
 | wait   | If set, waits for the workflow to finish and returns result instead of instance id. Instance. Instance id value is returned in header 'direktiv-instanceid'.   |
-| field   | If set (jq format), the value of the field is returned directly and base64 decoded if necessary. Requires 'wait' to be set. |
+| field   | If set (jq format), the value of the field is returned directly as JSON. If it is string value it is assumed it is base64 encoded and will be decoded if necessary. Requires 'wait' to be set. |
+| *other query parameters* | On GET requests additional query parameters will be used as workflow input. Multiple parameters with the same name will be passed in as an array, e.g. *&value=1&value=2* will be *{ value: ["1", "2"] }* in the workflow input |
 
 
 
