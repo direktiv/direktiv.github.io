@@ -20,7 +20,8 @@ start:
       source: "https://github.com/cloudevents/spec/pull"
 functions:
 - id: httprequest
-  image: vorteil/request:v2
+  image: vorteil/request:v10
+  type: reusable
 states:
 - id: notify
   type: action
