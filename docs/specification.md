@@ -30,16 +30,80 @@ has_toc: true
 
 ## FunctionDefinition
 
-| Parameter | Description                            | Type                     | Required |
-| --------- | -------------------------------------- | ------------------------ | -------- |
-| id        | Function definition unique identifier. | string                   | yes      |
-| image     | Image URI                              | string                   | yes      |
-| cmd       | Command to run in container            | string                   | no       |
-| size      | Size of virtual machine                | enum                     | no       |
-| scale     | minimum number of instances            | int                      | no       |
-| files     | Workflow file definition.              | []FunctionFileDefinition | no       |
+| Parameter | Description                              | Type                     | Required      |
+| --------- | ---------------------------------------- | ------------------------ | ------------- |
+| id        | Function definition unique identifier.   | string                   | yes           |
+| type      | Type of function ("knative-global").     | enum                     | yes           |
+| image     | Image URI                                | string                   | yes (if `type` is `reusable` or `isolated`) |
+| service   | The service being referenced.            | string                   | yes (if `type` is `knative-global` or `knative-namespace`) |
+| workflow  | The workflow being invoked as a subflow. | string                   | yes (if `type` is `subflow`) |
+| cmd       | Command to run in container              | string                   | no            |
+| size      | Size of virtual machine                  | enum                     | no            |
+| scale     | Minimum number of instances              | int                      | no            |
+| files     | Workflow file definition.                | []FunctionFileDefinition | no            |
 
-A function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
+
+### GlobalFunctionDefinition
+
+| Parameter | Description                              | Type                     | Required |
+| --------- | ---------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier.   | string                   | yes      |
+| type      | Type of function ("knative-global").     | string                   | yes      |
+| service   | The service being referenced.            | string                   | yes      |
+| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+
+### NamespacedFunctionDefinition
+
+| Parameter | Description                              | Type                     | Required |
+| --------- | ---------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier.   | string                   | yes      |
+| type      | Type of function ("knative-namespace").  | string                   | yes      |
+| service   | The service being referenced.            | string                   | yes      |
+| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+
+### ReusableFunctionDefinition
+
+| Parameter | Description                              | Type                     | Required |
+| --------- | ---------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier.   | string                   | yes      |
+| type      | Type of function ("reusable").           | string                   | yes      |
+| image     | Image URI.                               | string                   | yes      |
+| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+| cmd       | Command to run in container              | string                   | no            |
+| size      | Size of virtual machine                  | enum                     | no            |
+| scale     | Minimum number of instances              | int                      | no            |
+
+A reusable function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
+
+The default value for "**scale**" is 0 which means the service will be removed after a ceratin amount of time. It defines the minimum number of containers to run for this services if it is greater than 0. 
+
+| Size   | CPU | Memory  | Storage |
+| ------ | --- | ------- | ------- |
+| small  | 1   | 256 MB  | +64 MB  |
+| medium | 1   | 512 MB  | +64 MB  |
+| large  | 2   | 1024 MB | +64 MB  |
+
+### SubflowFunctionDefinition
+
+| Parameter | Description                               | Type                     | Required |
+| --------- | ----------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier.    | string                   | yes      |
+| type      | Type of function ("subflow").             | enum                     | yes      |
+| workflow  | ID of workflow within the same namespace. | string                   | yes      |
+
+### IsolatedFunctionDefinition
+
+| Parameter | Description                              | Type                     | Required |
+| --------- | ---------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier.   | string                   | yes      |
+| type      | Type of function ("isolated").           | string                   | yes      |
+| image     | Image URI.                               | string                   | yes      |
+| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+| cmd       | Command to run in container              | string                   | no            |
+| size      | Size of virtual machine                  | enum                     | no            |
+| scale     | Minimum number of instances              | int                      | no            |
+
+An isolated function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
 
 The default value for "**scale**" is 0 which means the service will be removed after a ceratin amount of time. It defines the minimum number of containers to run for this services if it is greater than 0. 
 
@@ -110,8 +174,7 @@ The `error` parameter can be a glob pattern to match multiple types of errors. W
 
 | Parameter | Description                                                                                                  | Type                                | Required                      |
 | --------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------- | ----------------------------- |
-| function  | Name of the referenced function.                                                                             | string                              | yes (if workflow not defined) |
-| workflow  | Name of the referenced workflow.                                                                             | string                              | yes (if function not defined) |
+| function  | Name of the referenced function.                                                                             | string                              | yes |
 | input     | `jq` command to generate the input for the action.                                                           | string                              | no                            |
 | secrets   | List of secrets to temporarily add to the state data under `.secrets` before running the input `jq` command. | []string                            | no                            |
 | retries   | Retry policy.                                                                                                | [RetryDefinition](#retrydefinition) | no                            |
