@@ -9,6 +9,7 @@ To install direktiv via helm, several settings can be changed. The following sni
 
 ```yaml
 # Default values for direktiv.
+# Default values for direktiv.
 replicaCount: 1
 
 nodeSelector: {}
@@ -54,10 +55,11 @@ supportPersist: false
 debug: false
 
 networkPolicies:
-  enabled: true
-  db: 192.168.0.0/16
-  serviceCidr: 10.43.0.0/16
-  podCidr: 10.42.0.0/16
+  enabled: false
+  # cidr for communication
+  db: 0.0.0.0/0
+  serviceCidr: 0.0.0.0/0
+  podCidr: 0.0.0.0/0
 
 ingress:
   host: ""
@@ -67,7 +69,7 @@ ingress:
 # flow config
 flow:
   image: "vorteil/flow"
-  tag: "latest"
+  tag: ""
   db: ""
   functionsProtocol: "http"
   functionsCA: "none" # change function pod secret too
@@ -87,7 +89,7 @@ flow:
 
 secrets:
   image: "vorteil/secrets"
-  tag: "latest"
+  tag: ""
   db: ""
   key: "01234567890123456789012345678912"
   extraVolumeMounts: []
@@ -95,15 +97,16 @@ secrets:
 # ui config
 ui:
   image: "vorteil/direktiv-ui"
-  tag: "latest"
-  # certificate: direktiv-cert
+  tag: ""
   certificate: none
+  extraContainers: []
 
 api:
   image: vorteil/api
-  tag: "latest"
+  tag: ""
   key: ""
   certificate: none
+  extraContainers: []
 
 # Set Send and Recv limits for all grpc clients and servers
 grpc:
@@ -120,7 +123,7 @@ functions:
 
   # images for functions controller, knative sidecar and init-pod
   image: "vorteil/functions"
-  tag: "latest"
+  tag: ""
   certificate: none
   mtls: none
 
@@ -160,5 +163,21 @@ functions:
     #     requests:
     #       memory: "2Gi"
     #       cpu:    "1"
+
+fluentbit:
+  host:          ""
+  port:          5432
+  user:          ""
+  password:      ""
+  database:      ""
+  sslmode:       prefer
+  extraConfig: ""
+  # append extra output to fluentbit.
+  # there are two logs application, functions
+  # these can be matched to new outputs, e.g.:
+  # extraConfig: |
+  #   [OUTPUT]
+  #           name stdout
+  #           match application
 
 ```
