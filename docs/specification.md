@@ -30,19 +30,6 @@ has_toc: true
 
 ## FunctionDefinition
 
-| Parameter | Description                              | Type                     | Required      |
-| --------- | ---------------------------------------- | ------------------------ | ------------- |
-| id        | Function definition unique identifier.   | string                   | yes           |
-| type      | Type of function ("knative-global").     | enum                     | yes           |
-| image     | Image URI                                | string                   | yes (if `type` is `reusable` or `isolated`) |
-| service   | The service being referenced.            | string                   | yes (if `type` is `knative-global` or `knative-namespace`) |
-| workflow  | The workflow being invoked as a subflow. | string                   | yes (if `type` is `subflow`) |
-| cmd       | Command to run in container              | string                   | no            |
-| size      | Size of virtual machine                  | enum                     | no            |
-| scale     | Minimum number of instances              | int                      | no            |
-| files     | Workflow file definition.                | []FunctionFileDefinition | no            |
-
-
 ### GlobalFunctionDefinition
 
 | Parameter | Description                              | Type                     | Required |
