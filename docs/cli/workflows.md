@@ -31,7 +31,7 @@ description: ""
 states:
 - id: hello
   type: noop
-  transform: '{ result: "Hello World!" }'
+  transform: 'jq({ result: "Hello World!" })'
 ```
 
 ## Execute
@@ -66,7 +66,7 @@ description: ""
 states:
 - id: hello
   type: noop
-  transform: '{ result: "Hello World!" }'
+  transform: 'jq({ result: "Hello World!" })'
 ```
 
 ## Delete

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Persistent Data
-nav_order: 11
+nav_order: 12
 parent: Getting Started
 ---
 
@@ -19,14 +19,14 @@ states:
   variables:
   - key: x
     scope: workflow
-  transform: '.var.x += 1'
+  transform: 'jq(.var.x += 1)'
   transition: b
 - id: b
   type: setter
   variables:
   - key: x
     scope: workflow
-    value: '.var.x'
+    value: 'jq(.var.x)'
 ```
 
 This demo increments a counter each time the workflow is executed.
@@ -51,7 +51,7 @@ The Setter State can be used to store any number of variables. Each variable mus
   variables:
   - key: MyVar
     scope: namespace
-    value: '.x'
+    value: 'jq(.x)'
 ```
 
 The only way to delete a stored value is to set it to `null`.
@@ -74,14 +74,14 @@ A key doesn't need to exist in storage to return successfully, but the value ret
 
 Direktiv makes no effort to guarantee any thread-safety on persistent data. Multiple instances that interact with the same variable may have inconsistent results.
 
-## Getting & Setting from Isolates
+## Getting & Setting from Functions
 
 ### Getting
 
-Accessing persistent data from within an isolate is a fairly straightforward process. The request that the custom isolate receives from Direktiv contains a header 'Direktiv-TempDir', which contains all of the variables specified in the isolate function definition. The `as`, `key`, `scope`, and `type` fields can all play a role in the placement and naming of files within this directory:
+Accessing persistent data from within a function is a fairly straightforward process. The request that the custom function receives from Direktiv contains a header 'Direktiv-TempDir', which contains all of the variables specified in the function definition. The `as`, `key`, `scope`, and `type` fields can all play a role in the placement and naming of files within this directory:
 
 - `key`
-  - The key used to select a variable from within the workflow definition. If no `as` field is provided, the file on a custom isolate will correspond to the value of `key`.
+  - The key used to select a variable from within the workflow definition. If no `as` field is provided, the file on a custom function will correspond to the value of `key`.
 - `scope`
   - Which scope to get the variable from: `instance`, `workflow`, or `namespace`. Defaults to `instance` if omitted.
 - `as`

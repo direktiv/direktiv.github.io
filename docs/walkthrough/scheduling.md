@@ -2,7 +2,7 @@
 layout: default
 title: Scheduling
 parent: Getting Started
-nav_order: 6
+nav_order: 7
 ---
 # Scheduling
 
@@ -18,20 +18,20 @@ start:
 functions:
 - id: httprequest
   image: vorteil/request:v2
+  type: reusable
 states:
 - id: getter
   type: action
   action:
     function: httprequest
-    input: '{
-      "method": "GET",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-    }'
-  transform: '.return'
+    input: 
+      method: "GET"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
+  transform: 'jq(.return)'
   transition: logger
 - id: logger
   type: noop
-  log: '.'
+  log: 'jg(.)'
 
 ```
 

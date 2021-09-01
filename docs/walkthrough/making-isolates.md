@@ -1,12 +1,12 @@
 ---
 layout: default
-title: Making Custom Isolates
-nav_order: 10
+title: Making Custom Functions
+nav_order: 11
 parent: Getting Started
 ---
-# Making Custom Isolates
+# Making Custom Functions
 
-Need to do something more than what's supported by Direktiv? You can do just about anything by making your own custom functions to run as Isolates. To make things easier Direktiv makes its Isolates automatically from Docker images, but you can't just run any Docker image. In this article you'll learn how to make a Direktiv-compatible Docker image.
+Need to do something more than what's supported by Direktiv? You can do just about anything by making your own custom functions to run as Functions. To make things easier Direktiv makes its Functions automatically from Docker images, but you can't just run any Docker image. In this article you'll learn how to make a Direktiv-compatible Docker image.
 
 ## Functions
 
@@ -35,7 +35,9 @@ Here are sample error headers:
 
 ## Example
 
-Have a look at the source code for one of the functions we've used a lot in these articles: https://github.com/vorteil/direktiv-apps/blob/master/request/main.go.
+Have a look at the source code for one of the functions we've used a lot in these articles:
+
+[https://github.com/vorteil/direktiv-apps/blob/master/request/main.go](https://github.com/vorteil/direktiv-apps/blob/master/request/main.go)
 
 ## FAQs & Other Information
 
@@ -52,4 +54,4 @@ If POST is used the body of the request is getting logged for GET requests add a
 
 ### Networking
 
-Direktiv configures the network so that isolates can reach out to the internet and receive responses. In general isolates have no externally routable IP address. Internal networking policies will be implemented in the next releases.
+Direktiv configures the network so that functions can reach out to the internet and receive responses. In general functions have no externally routable IP address. Internal networking policies will be implemented in the next releases.

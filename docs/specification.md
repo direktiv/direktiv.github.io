@@ -30,16 +30,67 @@ has_toc: true
 
 ## FunctionDefinition
 
-| Parameter | Description                            | Type                     | Required |
-| --------- | -------------------------------------- | ------------------------ | -------- |
-| id        | Function definition unique identifier. | string                   | yes      |
-| image     | Image URI                              | string                   | yes      |
-| cmd       | Command to run in container            | string                   | no       |
-| size      | Size of virtual machine                | enum                     | no       |
-| scale     | minimum number of instances            | int                      | no       |
-| files     | Workflow file definition.              | []FunctionFileDefinition | no       |
+### GlobalFunctionDefinition
 
-A function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
+| Parameter | Description                              | Type                     | Required |
+| --------- | ---------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier.   | string                   | yes      |
+| type      | Type of function ("knative-global").     | string                   | yes      |
+| service   | The service being referenced.            | string                   | yes      |
+| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+
+### NamespacedFunctionDefinition
+
+| Parameter | Description                              | Type                     | Required |
+| --------- | ---------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier.   | string                   | yes      |
+| type      | Type of function ("knative-namespace").  | string                   | yes      |
+| service   | The service being referenced.            | string                   | yes      |
+| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+
+### ReusableFunctionDefinition
+
+| Parameter | Description                              | Type                     | Required |
+| --------- | ---------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier.   | string                   | yes      |
+| type      | Type of function ("reusable").           | string                   | yes      |
+| image     | Image URI.                               | string                   | yes      |
+| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+| cmd       | Command to run in container              | string                   | no            |
+| size      | Size of virtual machine                  | enum                     | no            |
+| scale     | Minimum number of instances              | int                      | no            |
+
+A reusable function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
+
+The default value for "**scale**" is 0 which means the service will be removed after a ceratin amount of time. It defines the minimum number of containers to run for this services if it is greater than 0. 
+
+| Size   | CPU | Memory  | Storage |
+| ------ | --- | ------- | ------- |
+| small  | 1   | 256 MB  | +64 MB  |
+| medium | 1   | 512 MB  | +64 MB  |
+| large  | 2   | 1024 MB | +64 MB  |
+
+### SubflowFunctionDefinition
+
+| Parameter | Description                               | Type                     | Required |
+| --------- | ----------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier.    | string                   | yes      |
+| type      | Type of function ("subflow").             | enum                     | yes      |
+| workflow  | ID of workflow within the same namespace. | string                   | yes      |
+
+### IsolatedFunctionDefinition
+
+| Parameter | Description                              | Type                     | Required |
+| --------- | ---------------------------------------- | ------------------------ | -------- |
+| id        | Function definition unique identifier.   | string                   | yes      |
+| type      | Type of function ("isolated").           | string                   | yes      |
+| image     | Image URI.                               | string                   | yes      |
+| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+| cmd       | Command to run in container              | string                   | no            |
+| size      | Size of virtual machine                  | enum                     | no            |
+| scale     | Minimum number of instances              | int                      | no            |
+
+An isolated function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
 
 The default value for "**scale**" is 0 which means the service will be removed after a ceratin amount of time. It defines the minimum number of containers to run for this services if it is greater than 0. 
 
@@ -110,8 +161,7 @@ The `error` parameter can be a glob pattern to match multiple types of errors. W
 
 | Parameter | Description                                                                                                  | Type                                | Required                      |
 | --------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------- | ----------------------------- |
-| function  | Name of the referenced function.                                                                             | string                              | yes (if workflow not defined) |
-| workflow  | Name of the referenced workflow.                                                                             | string                              | yes (if function not defined) |
+| function  | Name of the referenced function.                                                                             | string                              | yes |
 | input     | `jq` command to generate the input for the action.                                                           | string                              | no                            |
 | secrets   | List of secrets to temporarily add to the state data under `.secrets` before running the input `jq` command. | []string                            | no                            |
 | retries   | Retry policy.                                                                                                | [RetryDefinition](#retrydefinition) | no                            |
@@ -134,7 +184,8 @@ If a `retry` strategy is defined the action will be retried on an uncaught failu
   type: action
   action:
     function: insert-into-database-function
-    input: '{ customer: .customer }'
+    input: 
+      customer: jq(.customer)
 ```
 
 
@@ -176,16 +227,16 @@ If `async` is `true`, the workflow will not wait for it to return before transit
     type: guestbooking
     context:
       source: 'bookings.*'
-      customerId: '{{ .customerId }}'
+      customerId: jq(.customerId)
       venue: Sydney
   timeout: PT1H
-  transform: '.customer'
+  transform: jq(.customer)
   transition: add-booking-to-database
 ```
 
 The ConsumeEvent State is the simplest state you can use to listen for CloudEvents in the middle of a workflow (for triggering a workflow when receiving an event, see [Start](#start)). More complex event consumers include [EventXor State](#eventxorstate) and the [EventAnd State](#eventandstate).
 
-When a workflow reaches a ConsumeEvent State it will halt its execution until it receives a matching event, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with {{ "`{{`  and ends with " }} it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
+When a workflow reaches a ConsumeEvent State it will halt its execution until it receives a matching event, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated as a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
 
 If the `timeout` is reached without receiving a matching event a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 
@@ -238,7 +289,7 @@ The Delay State pauses execution of the workflow for a predefined length of time
   error: validation.outOfDate
   message: "food item %s is out of date"
   args:
-  - '.item.name'
+  - jq(.item.name)
 ```
 
 
@@ -273,17 +324,17 @@ An error consists of two parts: an error code, and an error message. The code sh
         type: purchasePaid
         context:
           source: 'purchase.*'
-          customerId: '{{ .customerId }}'
+          customerId: jq(.customerId)
           country: Australia
     - event:
         type: purchaseSent
         context:
           source: 'purchase.*'
-          customerId: '{{ .customerId }}'
+          customerId: jq(.customerId)
           country:  Australia
 ```
 
-When a workflow reaches an EventAnd State it will halt its execution until it receives a matching event for every event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with {{ "`{{`  and ends with " }} it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
+When a workflow reaches an EventAnd State it will halt its execution until it receives a matching event for every event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated as a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
 
 If the `timeout` is reached without receiving matches for all required events a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 
@@ -320,18 +371,18 @@ The event payloads will stored in variables with the same names as each event's 
         type: reservationAccept
         context:
           source: "reservation.*"
-          guestName: '{{ .guestName }}'
+          guestName: jq(.guestName)
           venue: "Compu Global HMN"
     - transition: "reservation-decline"
       event:
         type: reservationDecline
         context:
           source: "reservation.*"
-          guestName: '{{ .guestName }}'
+          guestName: jq(.guestName)
           venue: "Compu Global HMN"
 ```
 
-When a workflow reaches an EventXor State it will halt its execution until it receives any matching event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with{{ "`{{`  and ends with " }} it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
+When a workflow reaches an EventXor State it will halt its execution until it receives any matching event in its `events` list, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default, any context value will be treated as a standard Javascript Regex pattern, but `jq` queries can be performed within a string literal with the `jq()` funciton. For example: `"Hello jq(.name)!"`
 
 If the `timeout` is reached without receiving matches for any required event a `direktiv.stateTimeout` error will be thrown, which may be caught and handled via `catch`.
 
@@ -420,7 +471,8 @@ The getter state is used to retrieve persistent data.
 ```yaml
 - id: hello
   type: noop
-  transform: '{ message: "Hello" }'
+  transform:
+    message: "Hello"
   transition: world
 ```
 
@@ -496,12 +548,12 @@ The setter state is used to store persistent data.
 - id: decision
   type: switch
   conditions:
-  - condition: '.patient.contactInfo.mobile'
+  - condition: jq(.patient.contactInfo.mobile)
     transition: sms
-    transform: '. + { phone: .contact.mobile }'
-  - condition: '.patient.contactInfo.landline'
+    transform: 'jq(. + { phone: .contact.mobile)'
+  - condition: jq(.patient.contactInfo.landline)
     transition: call
-    transform: '. + { phone: .contact.landline }'
+    transform: 'jq(. + { phone: .contact.landline })'
   defaultTransition: email
 ```
 

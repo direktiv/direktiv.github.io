@@ -21,15 +21,15 @@ states:
 - id: check-credit
   type: switch
   conditions:
-  - condition: '.checkcredit.value > 500'
+  - condition: jq(.checkcredit.value > 500)
     transition: approve-loan
   defaultTransition: reject-loan
 - id: reject-loan
   type: noop
-  transform: '{ "msg": "You have been rejected for this loan" }'
+  transform: 'jq({ "msg": "You have been rejected for this loan" })'
 - id: approve-loan
   type: noop
-  transform: '{ "msg": "You have been approved for this loan" }'
+  transform: 'jq({ "msg": "You have been approved for this loan" })'
 ```
 
 ## gen-credit Workflow YAML
@@ -42,7 +42,6 @@ states:
   event:
     type: checkcredit
     source: Direktiv
-    data: '{
-      "value": 501
-    }'
+    data:
+      value: 501
 ```

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Events
-nav_order: 7
+nav_order: 8
 parent: Getting Started
 ---
 # Events
@@ -20,17 +20,17 @@ start:
       source: "https://github.com/cloudevents/spec/pull"
 functions:
 - id: httprequest
-  image: vorteil/request:v2
+  image: vorteil/request:v10
+  type: reusable
 states:
 - id: notify
   type: action
   action:
     function: httprequest
-    input: '{
-      "method": "POST",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-      "body": ."com.github.pull.create"
-    }'
+    input:
+      method: "POST"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
+      body: 'jq(."com.github.pull.create")'
 ```
 
 ## CloudEvents
@@ -96,9 +96,9 @@ Triggering workflows is not the only thing you can do with events. Workflows can
     type: com.github.pull.create
     context:
       source: "https://github.com/cloudevents/spec/pull"
-      repository: '{{ .repo }}'
+      repository: 'jq(.repo)'
   timeout: PT5M
-  transform: '."com.github.pull.create"'
+  transform: 'jq(."com.github.pull.create")'
   transition: next-state
 ```
 
@@ -112,7 +112,7 @@ The `timeout` field is not required, but Direktiv caps the maximum timeout wheth
 
 Similar to how the event-based start types have a `filters` field, event-consuming states have a `context` field. Like filters, the context field can restrict which events are considered matches by requiring an exact match on a CloudEvent context field.
 
-Unlike filters, context values can be determined dynamically based on instance data. If a context value begins with "`{{`" and ends with "`}}`" everything inbetween will be evaluated as a `jq` command based on the instance data.
+Unlike filters, context values can be determined dynamically based on instance data.
 
 ## GenerateEvent State
 
@@ -124,7 +124,7 @@ Workflows can generate events for their namespace without relying on an Isolate 
   event:
     type: "my.custom.event"
     source: "direktiv"
-    data: '.'
+    data: 'jq(.)'
     datacontenttype: "application/json"
 ```
 

@@ -3,7 +3,7 @@ layout: default
 title: Azure EventGrid
 parent: Cloud
 grand_parent: Events
-nav_order: 2
+nav_order: 3
 ---
 
 # Azure EventGrid
@@ -58,6 +58,6 @@ start:
 states:
   - id: helloworld
     type: noop
-    transform: '{ result: . }'
+    transform: 'jq({ result: . })'
 ```
 

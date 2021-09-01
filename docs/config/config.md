@@ -5,4 +5,4 @@ nav_order: 45
 has_children: true
 ---
 
-# Config
+# Configuration

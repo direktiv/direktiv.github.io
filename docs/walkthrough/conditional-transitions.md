@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Conditional Transitions
-nav_order: 4
+nav_order: 3
 parent: Getting Started
 ---
 
@@ -16,11 +16,12 @@ id: multiposter
 functions:
 - id: httprequest
   image: vorteil/request:v2
+  type: reusable
 states:
 - id: ifelse
   type: switch
   conditions:
-  - condition: '.names'
+  - condition: jq(.names)
     transition: poster
 - id: poster
   type: action
@@ -33,20 +34,18 @@ states:
         "name": .names[0]
       }
     }'
-  transform: 'del(.names[0])'
+  transform: jq(del(.names[0]))
   transition: ifelse
 ```
 
 ### Input
 
-```json
-{
-  "names": [
-    "Alan",
-    "Jon",
-    "Trent"
-  ]
-}
+```yaml
+input:
+  names: 
+    - "Alan"
+    - "Jon"
+    - "Trent"
 ```
 
 ### Output
@@ -126,10 +125,10 @@ The Switch State can make decisions about where to transition to next based on t
 - id: ifelse
   type: switch
   conditions:
-  - condition: '.person.age > 18'
+  - condition: 'jq(.person.age > 18)'
     transition: accept
     #transform:
-  - condition: '.person.age != nil'
+  - condition: 'jq(.person.age != nil)'
     transition: reject
     #transform:
   defaultTransition: failure
@@ -157,20 +156,19 @@ id: multiposter
 functions:
 - id: httprequest
   image: vorteil/request:v2
+  type: reusable
 states:
 - id: poster
   type: foreach
-  array: '.names[] | { name: . }'
+  array: 'jq(.names[] | { name: . })'
   action:
     function: httprequest
-    input: '{
-      "method": "POST",
-      "url": "https://jsonplaceholder.typicode.com/posts",
-      "body": {
-        "name": .
-      }
-    }'
-  transform: 'del(.names) | .names = []'
+    input: 
+      method: "POST"
+      url: "https://jsonplaceholder.typicode.com/posts"
+      body:
+        name: 'jq(.)'
+  transform: 'jq(del(.names) | .names = [])'
 ```
 
 ### Retries
@@ -179,4 +177,4 @@ One obvious use for loops is to retry some logic if an error occurs, but there's
 
 ### Isolates
 
-For large data sets or logic that could needs to loop many times it's generally better to custom-write an Isolate function that performs all of the computation. Writing custom Isolates is discussed in another article.
+For large data sets or logic that could needs to loop many times it's generally better to custom-write an Isolate function that performs all of the computation. Writing custom functions is discussed in another article.

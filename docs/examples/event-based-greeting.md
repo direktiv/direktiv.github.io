@@ -18,6 +18,7 @@ id: eventbased-greeting
 functions:
 - id: greeter
   image: vorteil/greeting:v2
+  type: reusable
 start:
   type: event
   state: greeter
@@ -29,8 +30,8 @@ states:
   type: action
   action: 
     function: greeter
-    input: '.greetingcloudevent'
-  transform: '{ "greeting": .return.greeting }'
+    input: jq(.greetingcloudevent)
+  transform: 'jq({ "greeting": .return.greeting })'
 ```
 
 ## GenerateGreeting Workflow YAML
@@ -43,7 +44,6 @@ states:
   event:
     type: greetingcloudevent
     source: Direktiv
-    data: '{
-      "name": "Trent"
-    }'
+    data:
+      name: "Trent"
 ```

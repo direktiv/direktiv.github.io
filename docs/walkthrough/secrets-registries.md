@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Secrets & Registries
-nav_order: 9
+nav_order: 10
 parent: Getting Started
 ---
 
@@ -15,21 +15,20 @@ Many workflows require sensitive information such as passwords or authentication
 id: httpget
 functions:
 - id: httprequest
-  image: vorteil/request:v5
+  image: vorteil/request:v6
+  type: reusable
 states:
 - id: getter 
   type: action
   action:
     secrets: ["secretToken"]
     function: httprequest
-    input: '{
-      "method": "GET",
-      "url": "https://jsonplaceholder.typicode.com/todos/1",
-      "headers": {
-        "Content-type": "application/json; charset=UTF-8",
-	"Authorization": ("bearer " + .secrets.secretToken),
-      },
-    }'
+    input:
+      method: "GET"
+      url: "https://jsonplaceholder.typicode.com/todos/1"
+      headers:
+        "Content-type": "application/json; charset=UTF-8"
+        "Authorization": "bearer jq(.secrets.secretToken)"
 ```
 
 This workflow will use a private Docker container marketplace.gcr.io to perform a GET request and return the results to the instance data. 

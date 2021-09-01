@@ -8,9 +8,9 @@ nav_exclude: true
 
 ## What is Direktiv?
 
-Direktiv is a specification for a serverless computing workflow language that aims to be simple and powerful above all else.
+Direktiv is a event-driven serverless orchestration engine that aims to be simple and powerful above all else.
 
-Direktiv defines a selection of intentionally primitive states, which can be strung together to create workflows as simple or complex as the author requires. The powerful `jq` JSON processor allows authors to implement sophisticated control flow logic, and when combined with the ability to run containers as part of Direktiv workflows just about any logic can be implemented.
+Direktiv defines a selection of intentionally primitive states, which can be strung together to create orchestration workflows as simple or complex as the author requires. The powerful `jq` JSON processor allows authors to implement sophisticated control flow logic, and when combined with the ability to run containers as part of Direktiv workflows just about any logic can be implemented.
 
 Workflows can be triggered by CloudEvents for event-based solutions, can use cron scheduling to handle periodic tasks, and can be scripted using the APIs for everything else.
 

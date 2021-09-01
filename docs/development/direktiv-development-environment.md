@@ -1,0 +1,90 @@
+---
+layout: default
+title: Direktiv Standalone environment
+nav_order: 10
+parent: Development Environment
+---
+
+# Development Standalone environment
+
+To improve isolate and workflows development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom isolates is described in <a href="walkthrough/making-isolates.html">this section</a>.
+
+## Running direktiv
+
+Setting up a development direktiv instance on a local machine is pretty simple. Assuming docker is installed, run the folowing command:
+
+
+```sh
+docker run --privileged -p 8080:80 -p 31212:31212 -d --name direktiv vorteil/direktiv-kube
+```
+
+This command starts direktiv as container 'direktiv'. The initial boot-time will take a few minutes. The progress can be followed with:
+
+```sh
+docker logs direktiv -f
+```
+
+Once all pods reach 'running' status, direktiv is ready and the URL `http://localhost:8080/api/namespaces/` is accessible.
+
+Using the instructions detailed so far, the included database is deleted each time the container is restarted. In some scenarios, it may be desirable to retain data such as workflows, secrets, and variables between restarts. The direktiv container stores database data in */tmp/pg*. This directory can be mapped to a local directory, which is demonstrated in the following command. Persistent storage is enabled by setting the value of the `PERSIST` environment variable to `true`.
+
+```sh
+docker run --privileged -p 8080:80 -p 31212:31212 --env PERSIST=true  -ti -v /tmp/pg:/tmp/pg vorteil/direktiv-kube
+```
+
+## Running with proxy
+
+Running direktiv with a proxy configuration, the following settings can be passed as environmental variables:
+
+```sh
+docker run --privileged -p 8080:80 -p 31212:31212 --env HTTPS_PROXY="http://<proxy-address>:443" --env NO_PROXY=".default,10.0.0.0/8,172.0.0.0/8,localhost" --env PERSIST=true -ti -v /tmp/pg:/tmp/pg vorteil/direktiv-kube
+```
+
+## Docker registry
+
+Direktiv pulls containers from a registry and runs them as isolates. For development purposes the direktiv docker container comes with a registry installed. It is accessible on localhost:31212.
+
+To test the local repository the golang example from direktiv-apps can be used:
+
+```sh
+git clone https://github.com/vorteil/direktiv-apps.git
+
+docker build direktiv-apps/examples/golang/ -t localhost:31212/myapp
+
+docker push localhost:31212/myapp
+
+# confirm upload
+curl http://localhost:31212/v2/_catalog
+
+```
+
+To use it we need to create a namespace and a workflow.
+
+```sh
+# create namespace 'test'
+curl -X POST http://localhost:8080/api/namespaces/test
+
+# create the workflow file
+cat > helloworld.yml <<- EOF
+id: action
+description: A simple 'action' state that sends a get request"
+functions:
+- id: get
+  image: localhost:31212/myapp
+states:
+- id: getter
+  type: action
+  action:
+    function: get
+    input:
+      name: John
+EOF
+
+# upload workflow
+curl -X POST -H "Content-Type: text/yaml" --data-binary @helloworld.yml http://localhost:8080/api/namespaces/test/workflows
+
+# execute workflow (initial call will be slightly slower than subsequent calls)
+curl http://localhost:8080//api/namespaces/test/workflows/action/execute?wait=true
+
+```
+

@@ -9,12 +9,12 @@ grand_parent: API
 
 Fetch logs of an instance
 
-**URL**: `/api/instances/{namespace}/{workflow}/{id}`
+**URL**: `/api/instances/{namespace}/{workflow}/{id}/logs`
 
 **Method** `GET`
 
 **Input**
-Provide the parameters namespace, workflow and id. Optionally you can paginate the results with offset and limit.
+Provide the parameters namespace, workflow and id. Optionally you can paginate the results with offset and limit via query parameters.
 
 ```json
 {

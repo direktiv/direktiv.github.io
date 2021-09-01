@@ -19,14 +19,15 @@ description: "Solves a string array of expressions"
 functions: 
 - id: solve-math-expression
   image: vorteil/solve:v2
+  type: reusable
 states:
 - id: solve
   type: foreach
-  array: '.expressions[] | { expression: . }'
+  array: 'jq(.expressions[] | { expression: . })'
   action:
     function: solve-math-expression
-    input: '{ x: .expression }'
-  transform: '{ solved: .return }'
+    input: 'jq({ x: .expression })'
+  transform: 'jq({ solved: .return })'
 ```
 
 ## Input

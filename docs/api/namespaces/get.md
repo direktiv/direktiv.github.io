@@ -15,16 +15,6 @@ Fetch a list of namespaces
 
 **Method**: `GET`
 
-**Input**
-Fetch the first namespace
-
-```json
-{
-    "offset": 0,
-    "limit": 1
-}
-```
-
 ## Success Response
 **Code**: `200 OK`
 

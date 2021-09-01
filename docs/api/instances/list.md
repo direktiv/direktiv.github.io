@@ -14,14 +14,8 @@ Fetch a list of instances that have run in the namespace
 **Method**: `GET`
 
 **Input**
-Provide the parameter namespace. Optionally you can paginate the list provided with offset and limit.
+Provide the parameter namespace, optionally as query parameters you can provide limit and offset for pagination.
 
-```json
-{
-    "offset": 0,
-    "limit": 10
-}
-```
 
 ## Success Response
 **Code**: `200 OK`

@@ -16,14 +16,15 @@ id: greeting
 functions:
 - id: greeter
   image: vorteil/greeting:v2
+  type: reusable
 description: "A simple action that greets you" 
 states:
 - id: greeter
   type: action
   action: 
     function: greeter
-    input: '.'
-  transform: '{ "greeting": .return.greeting }'
+    input: jq(.)
+  transform: 'jq({ "greeting": .return.greeting })'
 ```
 
 ## Input
