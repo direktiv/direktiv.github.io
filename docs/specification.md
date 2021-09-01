@@ -183,7 +183,7 @@ If `async` is `true`, the workflow will not wait for it to return before transit
   transition: add-booking-to-database
 ```
 
-The ConsumeEvent State is the simplest state you can use to listen for CloudEvents in the middle of a workflow (for triggering a workflow when receiving an event, see [Start](#start)). More complex event consumers include the [Callback State](#callbackstate), the [EventXor State](#eventxorstate), and the [EventAnd State](#eventandstate).
+The ConsumeEvent State is the simplest state you can use to listen for CloudEvents in the middle of a workflow (for triggering a workflow when receiving an event, see [Start](#start)). More complex event consumers include [EventXor State](#eventxorstate) and the [EventAnd State](#eventandstate).
 
 When a workflow reaches a ConsumeEvent State it will halt its execution until it receives a matching event, where matches are determined according to the `type` and `context` parameters. While `type` is a required string constant, `context` can include any number of key-value pairs that will be used to filter for a match. The keys for this context field will be checked within the CloudEvent's Context metadata fields for matches. By default any context value will be treated as a standard JavaScript Regex pattern, but if the value begins with {{ "`{{`  and ends with " }} it will instead be treated as a `jq` command to generate a JavaScript Regex pattern.
 
