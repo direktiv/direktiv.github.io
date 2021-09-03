@@ -75,15 +75,7 @@ The `eventsXor` registers an interest in multiple events and will trigger a new 
 
 ## Event Payloads
 
-Whenever an event is received its payload will be added to the instance data under a field with the same name as the event "type". This allows for a uniform approach to accepting events that supports single events, eventsXor, and eventsAnd.
-
-Like direct input, the payload will be treated as nested JSON if possible, but will be base64 encoded if it's some other content type. So, for the example workflow and event above, the instance data before running the first state would be the following:
-
-```json
-{
-  "com.github.pull.create": "PG11Y2ggd293PSJ4bWwiLz4="
-}
-```
+Whenever an event is received its payload will be added to the instance data under a field with the same name as the event "type". This allows for a uniform approach to accepting events that supports single events, eventsXor, and eventsAnd. The payload itself consists of the full cloudevent including attributes, extension context attributes and data.
 
 ## Instances Waiting for Events
 

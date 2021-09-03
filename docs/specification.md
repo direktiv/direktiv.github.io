@@ -62,7 +62,7 @@ has_toc: true
 
 A reusable function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
 
-The default value for "**scale**" is 0 which means the service will be removed after a ceratin amount of time. It defines the minimum number of containers to run for this services if it is greater than 0. 
+The default value for "**scale**" is 0 which means the service will be removed after a ceratin amount of time. It defines the minimum number of containers to run for this services if it is greater than 0.
 
 | Size   | CPU | Memory  | Storage |
 | ------ | --- | ------- | ------- |
@@ -92,7 +92,7 @@ The default value for "**scale**" is 0 which means the service will be removed a
 
 An isolated function can be defined in three different sizes: "**small**"(default), "**medium**", and "**large**". These sizes control how much cpu, memory and storage a virtual machine is given for a function when their virtual machine is created.
 
-The default value for "**scale**" is 0 which means the service will be removed after a ceratin amount of time. It defines the minimum number of containers to run for this services if it is greater than 0. 
+The default value for "**scale**" is 0 which means the service will be removed after a ceratin amount of time. It defines the minimum number of containers to run for this services if it is greater than 0.
 
 | Size   | CPU | Memory  | Storage |
 | ------ | --- | ------- | ------- |
@@ -100,7 +100,7 @@ The default value for "**scale**" is 0 which means the service will be removed a
 | medium | 1   | 512 MB  | +64 MB  |
 | large  | 2   | 1024 MB | +64 MB  |
 
-## FunctionFileDefinition 
+## FunctionFileDefinition
 
 | Parameter | Description                                                                                  | Type   | Required |
 | --------- | -------------------------------------------------------------------------------------------- | ------ | -------- |
@@ -184,7 +184,7 @@ If a `retry` strategy is defined the action will be retried on an uncaught failu
   type: action
   action:
     function: insert-into-database-function
-    input: 
+    input:
       customer: jq(.customer)
 ```
 
@@ -416,6 +416,7 @@ The return values of each action will be included in an array stored at `.return
 | type       | State type ("generateEvent").                      | string                                              | yes      |
 | event      | Event to generate.                                 | [GenerateEventDefinition](#generateeventdefinition) | yes      |
 | transform  | `jq` command to transform the state's data output. | string                                              | no       |
+| delay      | Duration to wait before publishing event (ISO8601).| string                                              | no       |
 | transition | State to transition to next.                       | string                                              | no       |
 | retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)                 | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)               | no       |
@@ -446,7 +447,7 @@ If the optional `datacontenttype` is defined and set to something other than `ap
 | retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)                     | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)                   | no       |
 
-#### VariableGetterDefinition 
+#### VariableGetterDefinition
 
 | Parameter | Description                                              | Type   | Required |
 | --------- | -------------------------------------------------------- | ------ | -------- |
@@ -512,7 +513,7 @@ If the `timeout` is reached before the state can transition a `direktiv.stateTim
 | retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)                     | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)                   | no       |
 
-#### VariableSetterDefinition 
+#### VariableSetterDefinition
 
 | Parameter | Description                                              | Type   | Required |
 | --------- | -------------------------------------------------------- | ------ | -------- |
