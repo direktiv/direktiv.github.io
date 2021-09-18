@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Logging
-nav_order: 15
-parent: Configuration
+title: Configuration
+nav_order: 35
+parent: fff
 ---
 
 Direktiv uses [fluentbit](https://fluentbit.io/) to handle application and function logging. Fluentbit runs as a sidecar in direktiv's components and comes with a basic configuration which can not be changed but additional outputs can be added through helm configuration:
