@@ -23,6 +23,12 @@ The following diagram shows a high-level architecture of Direktiv and the requir
 <img src="overview.png" alt="Direktiv overview"/>
 </p>
 
-Although a simple helm command will install a working Direktiv instance there can be other requirements, e.g. TLS/mTLS between nodes with Linkerd.In this case additional installation steps are required.
+Although a few simple helm command will install a working Direktiv instance there can be other requirements the following list will explain how to install and configure the individual components. It is possible to deploy them in an order of choice it is recommended to follow the suggested order listed below. 
 
-The following list will explain how to install and configure the individual components. Although it is possible to deploy them in an order of choice it is recommended to follow the suggested order listed below.
+There is also a [quick installation guide](summary) and a docker image for testing:
+
+#### Run docker image
+```console
+docker run --privileged -p 8080:80 -ti vorteil/direktiv-kube
+```
+
