@@ -13,54 +13,87 @@ The following documentation explains how to install a HA PostgreSQL in a Kuberne
 
 ## PostgreSQL Installation
 
-Bitnami provides high quality charts for Postgres servers. There helm charts for HA and non-HA installations:  
-
-- [Postgres Helm](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
-- [Postgres HA Helm](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha)
-
-The installation is very simple and all configuration options are exampled on the Github page of those charts.
+In this example CrunchyData's postgres operator is used. To install the operator Direktiv provides a helm chart based on [this source](https://github.com/CrunchyData/postgres-operator-examples/) helm chart.
 
 ```console
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install -f mydb.yaml my-release bitnami/postgresql-ha
+helm repo add direktiv https://charts.direktiv.io
+helm install -n postgres --create-namespace --set singleNamespace=true postgres direktiv/pgo
 ```
 
-It is important to set passwords for the users required. The following snippet is an example used in the [Direktiv test docker container](install#run-docker-image).
+After installing the operator the PostgreSQL cluster can be created with Kubernetes YAML as custom resource definition:
 
-*HA mydb.yaml example*
+```yaml
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: direktiv
+  namespace: postgres
+spec:
+  users:
+    - name: direktiv
+      databases:
+        - direktiv
+  image: >-
+    registry.developers.crunchydata.com/crunchydata/crunchy-postgres-ha:centos8-13.4-0
+  postgresVersion: 13
+  instances:
+    - name: instance1
+      dataVolumeClaimSpec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 4Gi
+  backups:
+    pgbackrest:
+      image: >-
+        registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.33-2
+      repoHost:
+        dedicated: {}
+      repos:
+        - name: repo1
+          volume:
+            volumeClaimSpec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 4Gi
+  proxy:
+    pgBouncer:
+      image: >-
+        registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-2
+```
+
+The above example can be installed with the following command:
+
 ```console
-postgresql:
-  username: direktiv
-  password: direktivdirektiv
-  database: direktiv
-  postgresPassword: postgres
-  repmgrPassword: password
-  syncReplication: true
-  resources:
-      requests:
-        memory: "512Mi"
-        cpu: "500m"
-      limits:
-        memory: "1Gi"
-        cpu: "1"
-
-pgpool:
-  resources:
-      requests:
-        memory: "512Mi"
-        cpu: "500m"
-      limits:
-        memory: "1Gi"
-        cpu: "1"
-  adminPassword: "password"
+kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/kubernetes/install/db/pg.yaml
 ```
 
-In this example configuration is no certificate defined and the communication would be without encryption. It is recommended to either install a certificate and set sslmode for postgres to 'required' in Direktiv's Helm chart or use Linkerd to secure the connection.
+The details of this PostgreSQL cluster are stored in a sercets in the 'postgres' namespace called *direktiv-pguser-direktiv*.
 
+- pgbouncer-host
+- pgbouncer-uri
+- uri
+- port
+- user
+- verifier
+- dbname
+- host
+- password
+- pgbouncer-port
+
+*Retrieve secret*
 ```console
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install --create-namespace -n postgres postgres -f mydb.yaml bitnami/postgresql-ha
+kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode
 ```
+
+
+
+
+
+
 
 > &#x2757; Please be aware that the persistent volume claims are not getting deleted and need to be deleted manually on uninstall.
 

@@ -20,6 +20,15 @@ helm install knative direktiv/knative
 
 For more configuration options click [here](https://github.com/vorteil/direktiv/tree/main/kubernetes/charts/knative).
 
+For high availability both Kong ingress controlles, for internal and external services, need to be scaled up. The Helm chart values would be:
+
+```yaml
+kong-external:
+  replicaCount: 2
+kong-internal:
+  replicaCount: 2
+```
+
 ## Direktiv
 
 ```shell
