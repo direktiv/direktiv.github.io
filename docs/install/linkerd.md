@@ -26,6 +26,9 @@ docker run -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c "$exe"; \
 echo $tmpDir);
 ```
 
+> &#x2757; The directory where the certificates are located is stored in $certDir.
+
+
 ## Install with Helm
 
 After creating the certificates the certificate folder should be stored in $certDir. The expiry date provided during installation has to be the same as the value for the certificates, in this case one year. The following script installs Linkerd with the previously generate certificate:
