@@ -7,7 +7,7 @@ parent: Installation
 
 # Direktiv
 
-Installing direktiv is a two-step process. The first part is to install [Knative](https://knative.dev) the platform to execute Direktiv's functions serverless. The second part is installing and configuring Direktiv itself. If Linkerd is required it needs to be [installed first](linkerd.md) before installing Knative and Direktiv.
+Installing direktiv is a two-step process. The first part is to install [Knative](https://knative.dev), the platform to execute Direktiv's serverless functions. The second part is installing and configuring Direktiv itself. If Linkerd is required it needs to be [installed first](linkerd.md) before installing Knative and Direktiv.
 
 ## Knative
 
@@ -15,12 +15,12 @@ Knative is an essential part of Direktiv. Although Knative provides YAML files f
 
 ```console
 helm repo add direktiv https://charts.direktiv.io
-helm install knative direktiv/knative
+helm install -n knative-serving --create-namespace knative direktiv/knative
 ```
 
 For more configuration options click [here](https://github.com/vorteil/direktiv/tree/main/kubernetes/charts/knative).
 
-For high availability both Kong ingress controlles, for internal and external services, need to be scaled up. The Helm chart values would be:
+For high availability both Kong ingress controllers, for internal and external services, need to be scaled up. The Helm chart values would be:
 
 ```yaml
 kong-external:
@@ -32,15 +32,16 @@ kong-internal:
 ## Direktiv
 
 ```shell
+kubectl create namespace direktiv-services-direktiv
 helm install -f direktiv.yaml direktiv direktiv/direktiv
 ```
 
-For more configuration options click [here](https://github.com/vorteil/direktiv/tree/main/kubernetes/charts/direktiv) but the most important configuration avlues are the database settings which need to identical with settings used for the database setup.
+For more configuration options click [here](https://github.com/vorteil/direktiv/tree/main/kubernetes/charts/direktiv) but the most important configuration values are the database settings which need to be identical to settings used during [database](database) setup.
 
 ```yaml
 database:
   # -- database host
-  host: "postgres-postgresql-ha-pgpool.postgres"
+  host: "direktiv-ha.postgres.svc"
   # -- database port
   port: 5432
   # -- database user
@@ -50,5 +51,5 @@ database:
   # -- database name, auto created if it does not exist
   name: "direktiv"
   # -- sslmode for database
-  sslmode: disable
+  sslmode: require
 ```

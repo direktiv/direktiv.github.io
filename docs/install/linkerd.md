@@ -7,9 +7,9 @@ parent: Installation
 
 # Linkerd (Optional)
 
-[Linkerd](https://linkerd.io/) is a lightweight service mesh for Kubernetes and can be used in Direktiv as mechanism to secure communication between the components. Linkerd can enable mTLS between the core Direktiv pods as well as the containers running in a flow. Installation of Linkerd is optional.
+[Linkerd](https://linkerd.io/) is a lightweight service mesh for Kubernetes and can be used in Direktiv as a mechanism to secure communication between the components. Linkerd can enable mTLS between the core Direktiv pods as well as the containers running in a flow. Installation of Linkerd is optional.
 
-The easies way to install Linkerd is via [Helm](https://linkerd.io/2.10/tasks/install-helm/). The following describes how Linkerd is installed in [Direktiv test docker container](install#run-docker-image).
+The easiest way to install Linkerd is via [Helm](https://linkerd.io/2.10/tasks/install-helm/). The following describes how Linkerd is installed in the [Direktiv test docker container](install#run-docker-image).
 
 ## Creating Certificates
 
@@ -26,9 +26,12 @@ docker run -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c "$exe"; \
 echo $tmpDir);
 ```
 
+> &#x2757; The directory where the certificates are located is stored in $certDir.
+
+
 ## Install with Helm
 
-After creating the certificates the certificate folder should be stored in $certDir. The expiry date provided during installation has to be the same as the value for the certificates, in this case one year. The following script installs Linkerd with the previously generate certificate:
+After creating the certificates the certificate folder should be located at $certDir. The expiry date provided during installation has to be the same as the value for the certificates (in this case: one year). The following script installs Linkerd with the previously generated certificates:
 
 ```console
 helm repo add linkerd https://helm.linkerd.io/stable; \
@@ -43,7 +46,7 @@ helm install linkerd2 \
 
 ## Annotate Namespaces
 
-To use the service mesh and in particular the mTLS communication between  pods within a Direktiv cluster the namespaces need to be annotated for Linkerd to inject its proxy. The default namespaces to annotate are:
+To use the service mesh (and, in particular, the mTLS communication) between pods within a Direktiv cluster the namespaces need to be annotated for Linkerd to inject its proxy. The default namespaces to annotate are:
 
 - direktiv
 - postgres

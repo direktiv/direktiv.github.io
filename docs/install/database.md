@@ -59,10 +59,6 @@ spec:
               resources:
                 requests:
                   storage: 4Gi
-  proxy:
-    pgBouncer:
-      image: >-
-        registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-2
 ```
 
 The above example can be installed with the following command:
@@ -71,10 +67,8 @@ The above example can be installed with the following command:
 kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/kubernetes/install/db/pg.yaml
 ```
 
-The details of this PostgreSQL cluster are stored in a sercets in the 'postgres' namespace called *direktiv-pguser-direktiv*.
+The details of this PostgreSQL cluster are stored as secrets in the 'postgres' namespace called *direktiv-pguser-direktiv*.
 
-- pgbouncer-host
-- pgbouncer-uri
 - uri
 - port
 - user
@@ -82,34 +76,29 @@ The details of this PostgreSQL cluster are stored in a sercets in the 'postgres'
 - dbname
 - host
 - password
-- pgbouncer-port
 
-*Retrieve secret*
+
+*Retrieve the database password secret*
+
 ```console
+{% raw %}
 kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode
+{% endraw %}
 ```
 
-
-
-
-
-
-
-> &#x2757; Please be aware that the persistent volume claims are not getting deleted and need to be deleted manually on uninstall.
+> &#x2757; Please be aware that persistent volume claims are not deleted and must be manually deleted when uninstalling.
 
 ## Backup
 
-Direktiv is trying to store all relevant data in the database so it can be recreated on a new Kubernetes without any additional backup and restore of Kubernetes components.
+Direktiv stores all relevant data in the database so that it can be recreated on a new Kubernetes environment without any additional backup or restore of Kubernetes components. CrunchyData's postgres operator comes with 'pgBackRest' as an automated backup solution. Alternatively, a simple cron job can export Direktiv's data as a plain SQL text file.
 
-A backup can be created with the following Kubernetes cron job:
+A simple backup can be created with the following Kubernetes cron job:
 
 ```yaml
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: backupdb
-  annotations:
-    linkerd.io/inject: disabled
 spec:
   schedule: '* 0 * * *' # change to different interval if needed
   jobTemplate:
@@ -125,7 +114,9 @@ spec:
               imagePullPolicy: IfNotPresent
               env:
                 - name: PGPASSWORD
-                  value: direktivdirektiv # change pwd here and add additional commands. the example is bad btw but works :)
+                  # change password
+                  value: direktivdirektiv
+              # here and add additional commands. the example is bad btw but works :)
               command:
                 - /bin/sh
                 - '-c'

@@ -35,44 +35,32 @@ helm install linkerd2 \
   linkerd/linkerd2 --wait
 ```
 
+### Annotate the Namespaces
+
+```console
+for ns in "default" "knative-serving" "direktiv-services-direktiv"
+do
+  kubectl create namespace $ns || true
+  kubectl annotate ns --overwrite=true $ns linkerd.io/inject=enabled
+done;
+```
+
 ## Database
 
 ```console
-cat <<EOF >> /tmp/postgres.yaml
-postgresql:
-  username: direktiv
-  password: $pwd
-  database: direktiv
-  postgresPassword: postgres
-  repmgrPassword: $pwdRepmgr
-  syncReplication: true
-  resources:
-      requests:
-        memory: "512Mi"
-        cpu: "500m"
-      limits:
-        memory: "1Gi"
-        cpu: "1"
+helm repo add direktiv https://charts.direktiv.io
+helm install -n postgres --create-namespace --set singleNamespace=true postgres direktiv/pgo
+```
 
-pgpool:
-  resources:
-      requests:
-        memory: "512Mi"
-        cpu: "500m"
-      limits:
-        memory: "1Gi"
-        cpu: "1"
-  adminPassword: "password"
-EOF
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install -n postgres postgres -f $tmpDir/postgres.yaml bitnami/postgresql-ha
+```console
+kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/kubernetes/install/db/pg.yaml
 ```
 
 ## Knative
 
 ```console
 helm repo add direktiv https://charts.direktiv.io
-helm install knative direktiv/knative
+helm install -n knative-serving --create-namespace knative direktiv/knative
 ```
 
 ## Direktiv
