@@ -7,7 +7,9 @@ parent: Installation
 
 # Kubernetes
 
-Direktiv works with Kubernetes offerings from all major cloud providers and the requirements for on-premise or local installations is Kubernetes 1.19+. The following documentation describes a small installation with [k3s](https://k3s.io/) and [MetalLB](https://metallb.universe.tf/) as a setup example. <ALL IN ONE FOR TESTING> reference
+Direktiv works with Kubernetes offerings from all major cloud providers and the requirements for on-premise or local installations is Kubernetes 1.19+. The following documentation describes a small installation with [k3s](https://k3s.io/).
+
+<!-- and [MetalLB](https://metallb.universe.tf/) as a setup example. -->
 
 ## K3s
 
@@ -21,20 +23,6 @@ Direktiv is using [k3s](https://k3s.io/) as one of the recommended certified Kub
 ### Server configuration
 
 Direktiv supports Kubernetes setups with seperate server and agents nodes as well as small setups with nodes acting as server and agent in one node. The small setup can use the internal etcd instance whereas seperated installation might use external database. Both installation types achieve high availability.
-
-<figure>
-  <img
-  src="small.png"
-  alt="Combined Setup" style="width: 50%; height: 50%">
-  <figcaption>Small Setup</figcaption>
-</figure>
-
-<figure>
-  <img
-  src="big.png"
-  alt="Seperated Setup" style="width: 50%; height: 50%">
-  <figcaption>Large Setup</figcaption>
-</figure>
 
 The nodes communicate with each other on different ports and protocols. The following table shows the ports required to be accessible (incoming) for the nodes to enable this. On some Linux distributions firewall changes have to be applied. Please see [k3s](https://rancher.com/docs/k3s/latest/en/installation/) installation guide for detailed installation instructions.
 

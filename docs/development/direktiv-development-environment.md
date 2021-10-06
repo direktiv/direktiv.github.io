@@ -24,13 +24,10 @@ This command starts direktiv as container 'direktiv'. The initial boot-time will
 docker logs direktiv -f
 ```
 
-Once all pods reach 'running' status, direktiv is ready and the URL `http://localhost:8080/api/namespaces/` is accessible.
+Once all pods reach 'running' status, direktiv is ready and the URL `http://localhost:8080/api/namespaces` is accessible.
 
-Using the instructions detailed so far, the included database is deleted each time the container is restarted. In some scenarios, it may be desirable to retain data such as workflows, secrets, and variables between restarts. The direktiv container stores database data in */tmp/pg*. This directory can be mapped to a local directory, which is demonstrated in the following command. Persistent storage is enabled by setting the value of the `PERSIST` environment variable to `true`.
+The database uses a persitent volume so the data stored should survive restarts with *'docker stop/start'*.
 
-```sh
-docker run --privileged -p 8080:80 -p 31212:31212 --env PERSIST=true  -ti -v /tmp/pg:/tmp/pg vorteil/direktiv-kube
-```
 
 ## Running with proxy
 
@@ -62,14 +59,14 @@ To use it we need to create a namespace and a workflow.
 
 ```sh
 # create namespace 'test'
-curl -X POST http://localhost:8080/api/namespaces/test
+curl -X PUT http://localhost:8080/api/namespaces/test
 
 # create the workflow file
 cat > helloworld.yml <<- EOF
-id: action
 description: A simple 'action' state that sends a get request"
 functions:
 - id: get
+  type: reusable
   image: localhost:31212/myapp
 states:
 - id: getter
@@ -81,10 +78,9 @@ states:
 EOF
 
 # upload workflow
-curl -X POST -H "Content-Type: text/yaml" --data-binary @helloworld.yml http://localhost:8080/api/namespaces/test/workflows
+curl -X PUT  --data-binary @helloworld.yml "http://localhost:8080/api/namespaces/test/tree/test?op=create-workflow"
 
 # execute workflow (initial call will be slightly slower than subsequent calls)
-curl http://localhost:8080//api/namespaces/test/workflows/action/execute?wait=true
+curl "http://localhost:8080/api/namespaces/test/tree/test?op=wait"
 
 ```
-
