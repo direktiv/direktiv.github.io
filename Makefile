@@ -10,8 +10,7 @@ update-api:
 
 .PHONY: install-deps
 install-deps:
-	sudo apt install gnupg ca-certificates
-	sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61
-	echo "deb https://dl.bintray.com/go-swagger/goswagger-debian ubuntu main" | sudo tee /etc/apt/sources.list.d/goswagger.list
-	sudo apt update 
-	sudo apt install swagger
+	dir=$(mktemp -d) 
+	git clone https://github.com/go-swagger/go-swagger "$dir" 
+	cd "$dir"
+	go install ./cmd/swagger
