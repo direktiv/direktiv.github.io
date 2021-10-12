@@ -4,6 +4,8 @@ title: API
 nav_order: 60
 ---
 
+
+
 # Direktiv API.
 Direktiv Open API Specification
 Direktiv Documentation can be found at https://docs.direktiv.io/
@@ -523,6 +525,9 @@ PUT /api/namespaces/{namespace}/secrets/{secret}
 
 Create a namespace secret.
 
+
+#### Consumes
+  * text/plain
 
 #### Parameters
 

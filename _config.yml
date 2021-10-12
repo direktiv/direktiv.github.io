@@ -51,6 +51,7 @@ exclude:
     - Makefile
     - build
     - .gitignore
+    - install-swagger.sh
 #   - .sass-cache/
 #   - .jekyll-cache/
 #   - gemfiles/
