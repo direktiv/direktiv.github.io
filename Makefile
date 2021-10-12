@@ -7,7 +7,6 @@ update-api:
 	cd build/api; git clone https://github.com/vorteil/direktiv.git;
 	cd build/api/direktiv; make api-docs
 	cat build/api/header.yml build/api/direktiv/scripts/api/api.md > docs/api/api.md
-	cat docs/api/api.md
 
 .PHONY: install-deps
 install-deps:
