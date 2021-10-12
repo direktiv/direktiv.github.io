@@ -10,4 +10,4 @@ update-api:
 
 .PHONY: install-deps
 install-deps:
-	install-swagger.sh
+	./install-swagger.sh
