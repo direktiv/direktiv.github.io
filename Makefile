@@ -8,7 +8,7 @@ update-api:
 	cd build/api/direktiv; make api-docs
 	cat build/api/header.yml build/api/direktiv/scripts/api/api.md > docs/api/api.md
 
-.PHONY: install-deps:
+.PHONY: install-deps
 install-deps:
 	apt install gnupg ca-certificates
 	apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61
