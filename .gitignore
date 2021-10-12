@@ -5,3 +5,7 @@ _site
 vendor
 docs/cli/ 
 docs/enterprise/
+
+
+build/api/direktiv
+build/api/api.md

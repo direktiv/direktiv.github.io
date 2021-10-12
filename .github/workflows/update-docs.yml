@@ -1,0 +1,15 @@
+name: Update Docs
+on:
+  workflow_dispatch:
+    inputs:
+      container:
+        description: 'release tag'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: run generate-docs
+      run: |
+        make install-deps
+        make update-api

@@ -47,6 +47,10 @@ remote_theme: pmarsceill/just-the-docs
 exclude:
     - docs/cli
     - docs/enterprise
+    - .github
+    - Makefile
+    - build
+    - .gitignore
 #   - .sass-cache/
 #   - .jekyll-cache/
 #   - gemfiles/
