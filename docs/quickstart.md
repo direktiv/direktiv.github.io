@@ -61,30 +61,36 @@ states:
 The following script does everything required to run the first workflow. This includes creating a namespace & workflow and running the workflow the first time.  
 
 ```bash
-$ direkcli namespaces create demo
-Created namespace: demo
+$ curl -X PUT "http://localhost:8080/api/namespaces/demo"
+{
+  "namespace": {
+    "createdAt": "2021-10-06T00:03:22.444884147Z",
+    "updatedAt": "2021-10-06T00:03:22.444884447Z",
+    "name": "demo",
+    "oid": ""
+  }
+}
 $ cat > helloworld.yml <<- EOF
-id: helloworld
 states:
 - id: hello
   type: noop
-  transform: 'jq({ msg: ("Hello, " + .name + "!") })'
+  transform: 
+    msg: "Hello, jq(.name)!"
 EOF
-$ direkcli workflows create demo helloworld.yml
-Created workflow 'helloworld'
+$ curl -vv -X PUT --data-binary "@helloworld.yml" "http://localhost:8080/api/namespaces/demo/tree/helloworld?op=create-workflow"
+{
+  "namespace": "demo",
+  "node": {...},
+  "revision": {...}
+}
 $ cat > input.json <<- EOF
 {
   "name": "Alan"
 }
 EOF
-$ direkcli workflows execute demo helloworld --input=input.json
-Successfully invoked, Instance ID: demo/helloworld/aqMeFX <---CHANGE_THIS_TO_YOUR_VALUE
-$ direkcli instances get demo/helloworld/aqMeFX
-ID: demo/helloworld/aqMeFX
-Input: {
-  "name": "Alan"
-}
-Output: {"msg":"Hello, Alan!"}
+$ curl -vv -X POST --data-binary "@input.json" "http://localhost:8080/api/namespaces/demo/tree/helloworld?op=wait"
+{"msg":"Hello, Alan!"}
+
 ```
 
 ### Next steps
