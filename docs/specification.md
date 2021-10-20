@@ -11,7 +11,13 @@ has_toc: true
 * auto-gen TOC:
 {:toc}
 
+# Workflow Overview Diagram
 
+The diagram below captures the workflow definition specification. This is to be used as a reference only, the full specification is described in detail in the sections below.
+
+<p align=center>
+<img src="../assets/direktiv-specification-nontransparent.png" />
+</p>
 
 # Workflow Definition
 
