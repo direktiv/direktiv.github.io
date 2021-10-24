@@ -156,7 +156,7 @@ default   http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default
 
 ### Kafka Source
 
-The basic Knative and Kafak setup is finished and it is time to create the sources and sinks to integrate the components.
+The basic Knative and Kafka setup is finished and now the sources and sinks to integrate the components are the last components missing.
 
 *Install Kafka Source Implementation*
 ```console
@@ -229,21 +229,46 @@ After running the pod add JSON into the command prompt, e.g. *{}*. This sendd th
 <img src="../../../assets/eventin.png"/>
 </p>
 
+### Direktiv Source
 
+To connect Direktiv back to Knative again we need to install *[direktiv-knative-source](https://github.com/vorteil/direktiv-knative-source)*. This source listens to events generated in Direktiv and pushes them to Knative. In this case the message is getting sent back to the broker. The requrd argument for this source is the direktiv URI within the cluster, e.g. direktiv-flow.default:3333.
 
+*Direktiv Source*
 
-
-
-## Direktiv Source
-
-
+```yaml
+cat <<-EOF | kubectl apply -f -
+---
+apiVersion: sources.knative.dev/v1
+kind: ContainerSource
+metadata:
+  name: direktiv-source
+spec:
+  template:
+    spec:
+      containers:
+        - image: vorteil/direktiv-knative-source
+          name: direktiv-source
+          args:
+            - --direktiv=direktiv-flow.default:3333
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      name: default
+EOF
+```
 
 ### Kafka Sink
 
+The last task left is installing a Kafka sink and trigger, so events coming from Direktiv to the broker are executing the trigger and eventually sending the event to Kafka.
+
+*Installing Kafka Sink Implementation*
+```console
 kubectl apply -f https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/v0.26.0/eventing-kafka-sink.yaml
-
-
 ```
+
+*Creating Kafka Sink*
+```yaml
 cat <<-EOF | kubectl apply -f -
 ---
 apiVersion: eventing.knative.dev/v1alpha1
@@ -258,7 +283,10 @@ spec:
 EOF
 ```
 
-```
+The following yaml configures the trigger for Kafka. It is important to add a filter for this trigger. In this case the trigger fires if the type of the cloudevent is *myevent*.
+
+*Creating Kafka Trigger*
+```yaml
 cat <<-EOF | kubectl apply -f -
 ---
 apiVersion: eventing.knative.dev/v1
@@ -270,7 +298,7 @@ spec:
   broker: default
   filter:
     attributes:
-      type: solveexpressioncloudevent
+      type: myevent
   subscriber:
     ref:
       apiVersion: eventing.knative.dev/v1alpha1
@@ -280,6 +308,8 @@ EOF
 ```
 
 ### Workflow
+
+After all these components are installed and connected we need to create a workflow in the *direktiv* namespace. To see the full configuration we will create w orkflow which listens to Knative events, extracts the data and sends it back to Knative and eventually Kafka.
 
 ```yaml
 start:
@@ -291,22 +321,14 @@ states:
 - id: tellme
   type: generateEvent
   event:
-    type: solveexpressioncloudevent
+    type: myevent
     source: Direktiv
     data:
       x: jq(."dev.knative.kafka.event".data)
 ```
 
+To see the event coming from Direktiv a secone receiver pod is needed. It listens to topic *receiver-topic* which was created at the beginning of the tutorial. If data is getting put on the *knative-direktiv-topic* it will appear in the receiver topic.
 
-## Testing events
-
-Creating events
-
-kubectl -n kafka run kafka-producer -ti --image=quay.io/strimzi/kafka:0.26.0-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list my-cluster-kafka-bootstrap.kafka:9092 --topic knative-direktiv-topic
-
-
+```console
 kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.26.0-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic receiver-topic --from-beginning
-
-
-
-{"specversion":"0.3","id":"c6ccfb80-be2d-48de-9223-73206e015aa4","source":"Direktiv","type":"solveexpressioncloudevent","datacontenttype":"application/json","time":"2021-10-23T15:36:46.164048986Z","data":{"x":{}}}
+```
