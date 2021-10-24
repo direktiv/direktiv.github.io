@@ -43,7 +43,7 @@ The diagram below captures the workflow definition specification. This is to be 
 | id        | Function definition unique identifier.   | string                   | yes      |
 | type      | Type of function ("knative-global").     | string                   | yes      |
 | service   | The service being referenced.            | string                   | yes      |
-| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+| files     | Workflow file definition.                | [[]FunctionFileDefinition](#functionfiledefinition) | no       |
 
 ### NamespacedFunctionDefinition
 
@@ -52,7 +52,7 @@ The diagram below captures the workflow definition specification. This is to be 
 | id        | Function definition unique identifier.   | string                   | yes      |
 | type      | Type of function ("knative-namespace").  | string                   | yes      |
 | service   | The service being referenced.            | string                   | yes      |
-| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+| files     | Workflow file definition.                | [[]FunctionFileDefinition](#functionfiledefinition) | no       |
 
 ### ReusableFunctionDefinition
 
@@ -61,7 +61,7 @@ The diagram below captures the workflow definition specification. This is to be 
 | id        | Function definition unique identifier.   | string                   | yes      |
 | type      | Type of function ("reusable").           | string                   | yes      |
 | image     | Image URI.                               | string                   | yes      |
-| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+| files     | Workflow file definition.                | [[]FunctionFileDefinition](#functionfiledefinition) | no       |
 | cmd       | Command to run in container              | string                   | no            |
 | size      | Size of virtual machine                  | enum                     | no            |
 | scale     | Minimum number of instances              | int                      | no            |
@@ -91,7 +91,7 @@ The default value for "**scale**" is 0 which means the service will be removed a
 | id        | Function definition unique identifier.   | string                   | yes      |
 | type      | Type of function ("isolated").           | string                   | yes      |
 | image     | Image URI.                               | string                   | yes      |
-| files     | Workflow file definition.                | []FunctionFileDefinition | no       |
+| files     | Workflow file definition.                | [[]FunctionFileDefinition](#functionfiledefinition) | no       |
 | cmd       | Command to run in container              | string                   | no            |
 | size      | Size of virtual machine                  | enum                     | no            |
 | scale     | Minimum number of instances              | int                      | no            |
@@ -427,7 +427,7 @@ The return values of each action will be included in an array stored at `.return
 | retries    | Retry policy.                                      | [RetryDefinition](#retrydefinition)                 | no       |
 | catch      | Error handling.                                    | [[]ErrorDefinition](#errordefinition)               | no       |
 
-### GenerateEventDefinition
+#### GenerateEventDefinition
 
 | Parameter       | Description                                                           | Type   | Required |
 | --------------- | --------------------------------------------------------------------- | ------ | -------- |
