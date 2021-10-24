@@ -6,15 +6,15 @@ nav_order: 1
 has_children: false
 ---
 
-Direktiv provides a sink and a source for integration in [Knative Eventing](https://knative.dev). The [Kafka example](example.html) provides an example configuration
+Direktiv provides a sink and a source for integration into [Knative Eventing](https://knative.dev). This [Kafka example](example.html) provides a test configuration
 with Knative Eventing, Kafka and Direktiv.
 
 ## Sink
 
-If eventing is enabled in Direktiv's helm chart an additional service is available in the namespace Direktiv is installed in called *direktiv-eventing*.
-Knative triggers can be used to subscribe to events from configured [Knative sources](https://knative.dev/docs/developer/eventing/sources/).
-Triggers can target namespaces with the *uri* parameter in the YAML configuration. It is possible to send to all namespaces if the *uri* is not set.
-Sending events to all namespaces is a costly operation and should not be used if necessary.
+If eventing is enabled in Direktiv's helm chart an additional service is available in the namespace called *direktiv-eventing*.
+Knative triggers can be used to subscribe to events from configured [Knative sources](https://knative.dev/docs/developer/eventing/sources/) and executes flows in Direktiv.
+Triggers can target namespaces with the *uri* parameter in the YAML configuration. It is also possible to send to all namespaces if the *uri* is set to '/'.
+Sending events to all namespaces is a costly operation and should not be used if not absolutely necessary.
 
 *Knative trigger for namespace*
 ```yaml
