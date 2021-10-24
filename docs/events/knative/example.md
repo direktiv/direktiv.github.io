@@ -6,7 +6,7 @@ nav_order: 2
 has_children: false
 ---
 
-## Kafka, Knative and Dir ektiv
+## Kafka, Knative and Direktiv
 
 In this example we will generate an event in Kafka, consume it in Direktiv via Knative and publish a new event back to Knative.
 
@@ -196,7 +196,7 @@ NAME                    TOPICS                       BOOTSTRAPSERVERS           
 direktiv-kafka-source   ["knative-direktiv-topic"]   ["my-cluster-kafka-bootstrap.kafka:9092"]   True             10s
 ```
 
-With this source Knative can receive events but it requires a trigger to have another system consume the event. The setup of source, broker and trigger decouples the systems involved in this architecture. The folllwing yaml creates such a trigger. Because there is no [trigger filter](https://knative.dev/docs/eventing/broker/triggers/) defined this trigger consumes all events and forwards it to Direktiv's *direktiv-eventing* service. The *uri* value specifies the target namespace in Direktiv.
+With this source Knative can receive events but it requires a trigger to have another system consume the event. The setup of source, broker and trigger decouples the systems involved in this architecture. The folllwing yaml creates such a trigger. Because there is a [trigger filter](https://knative.dev/docs/eventing/broker/triggers/) defined this trigger consumes all events of type *dev.knative.kafka.event* and forwards it to Direktiv's *direktiv-eventing* service. The *uri* value specifies the target namespace in Direktiv.
 
 ```yaml
 cat <<-EOF | kubectl apply -f -
@@ -208,6 +208,9 @@ metadata:
   namespace: default
 spec:
   broker: default
+  filter:
+    attributes:
+      type: dev.knative.kafka.event
   subscriber:
     ref:
       apiVersion: v1
