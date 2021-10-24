@@ -74,7 +74,7 @@ $ cat > helloworld.yml <<- EOF
 states:
 - id: hello
   type: noop
-  transform: 
+  transform:
     msg: "Hello, jq(.name)!"
 EOF
 $ curl -vv -X PUT --data-binary "@helloworld.yml" "http://localhost:8080/api/namespaces/demo/tree/helloworld?op=create-workflow"

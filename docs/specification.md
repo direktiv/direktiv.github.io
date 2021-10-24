@@ -175,7 +175,7 @@ The `error` parameter can be a glob pattern to match multiple types of errors. W
 | multiplier   | Value by which the delay is multiplied after each attempt. | float    | no       |
 | codes        | Regex patterns to specify which error codes to catch.      | []string | yes      |
 
-If a `retry` strategy is defined the action will be retried on an uncaught failure. If the retry fails `max_attempts` times a `direktiv.retries.exceeded` error will be thrown.
+If a `retry` strategy is defined, the action will be retried on any failures that statify any of the regex `codes`. If the retry fails `max_attempts` times a `direktiv.retries.exceeded` error will be thrown.
 
 ##### An example definition
 
@@ -490,7 +490,6 @@ The No-op State exists for when nothing more than generic state functionality is
 | timeout    | Duration to wait for all actions to complete (ISO8601).                     | string                                  | no       |
 | transform  | `jq` command to transform the state's data output.                          | string                                  | no       |
 | transition | State to transition to next.                                                | string                                  | no       |
-| retries    | Retry policy.                                                               | [RetryDefinition](#retrydefinition)     | no       |
 | catch      | Error handling.                                                             | [[]ErrorDefinition](#errordefinition)   | no       |
 
 The Parallel State is an expansion on the [Action State](#actionstate), used for running multiple actions in parallel.
