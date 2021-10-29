@@ -9,13 +9,13 @@ parent: Examples
 
 There are a number of pre-made 'isolate' containers designed specifically to bootstrap workflow development with direktiv. In this article, the following four isolates will be used:
 
-- vorteil/aws-ec2-create:v3
+- direktiv/aws-ec2-create:v1
   - Creates an instance on Amazon Web Services EC2
-- vorteil/awsgo:v2
+- direktiv/awsgo:v1
   - Wraps the AWS CLI, enabling the use of any existing AWS CLI command in a workflow
-- vorteil/request:v10
+- direktiv/request:v1
   - Sends a custom HTTP request
-- vorteil/smtp:v2
+- direktiv/smtp:v1
   - Sends an email
 
 To keep everything clean, this workflow will actually be split up in to 1 'main' workflow and 2 'subflows' that the main workflow calls. The following 'secrets' must be configured, in order to authenticate with various services:
@@ -44,12 +44,12 @@ description: Creates an instance on AWS EC2, add a DNS record to GoDaddy, and po
 functions:
 
   - id: create-vm
-    image: vorteil/aws-ec2-create:v3
+    image: direktiv/aws-ec2-create:v1
     type: reusable
     size: medium
 
   - id: get-vm
-    image: vorteil/awsgo:v2
+    image: direktiv/awsgo:v1
     type: reusable
 
 states:
@@ -136,7 +136,7 @@ description: Add an A DNS record to the specified domain on GoDaddy.
 functions:
   
   - id: req
-    image: vorteil/request:v10
+    image: direktiv/request:v1
     type: reusable
 
 states:
@@ -182,7 +182,7 @@ states:
 
 ## Workflow #3 - Send Email
 
-This workflow is only called once the instance is successfully created and the DNS record is set. It contains only 2 states. The `validate` state operates in the same way as the `validate` state of the `add-dns-record` workflow. The `send-email` state uses the `vorteil/smtp:v2` isolate to generate and send and email to the specified email address.
+This workflow is only called once the instance is successfully created and the DNS record is set. It contains only 2 states. The `validate` state operates in the same way as the `validate` state of the `add-dns-record` workflow. The `send-email` state uses the `direktiv/smtp:v1` isolate to generate and send and email to the specified email address.
 
 ```yaml
 id: send-email
@@ -191,7 +191,7 @@ description: Sends an email to the specified user informing them of successful V
 functions:
   
   - id: send-email
-    image: vorteil/smtp:v2
+    image: direktiv/smtp:v1
     type: reusable
 
 states:
@@ -238,4 +238,4 @@ states:
 
 Hopefully this article has illustrated how to use pre-existing direktiv isolates to bootstrap workflow development! It should also serve as a reminder that, by making a workflow 'modular' through the use of subflows, a complicated workflow can be made to appear quite straightforward.
 
-If you're interested in seeing what other isolates already exist, check out the [direktiv-apps GitHub page](https://github.com/vorteil/direktiv-apps/). To learn how to write your own custom isolates, click [here](../walkthrough/making-isolates.html)
+If you're interested in seeing what other isolates already exist, check out the [direktiv-apps GitHub page](https://github.com/direktiv/direktiv-apps/). To learn how to write your own custom isolates, click [here](../walkthrough/making-isolates.html)

@@ -17,7 +17,7 @@ start:
   cron: "0 */2 * * *"
 functions:
 - id: httprequest
-  image: vorteil/request:v2
+  image: direktiv/request:v1
   type: reusable
 states:
 - id: getter

@@ -12,17 +12,17 @@ This article seeks to demonstrate how Direktiv workflows can be used to clone a 
 id: build-go-binary
 functions:
 - id: go
-  image: vorteil/go:v1
+  image: direktiv/go:v1
   type: reusable
   files:
   - key: helloworld
     scope: instance
     type: tar.gz
 - id: git
-  image: vorteil/git:v1
+  image: direktiv/git:v1
   type: reusable
 - id: upload
-  image: vorteil/amazon-upload:v3
+  image: direktiv/amazon-upload:v1
   type: reusable
   files:
   - key: helloworldserver
@@ -35,7 +35,7 @@ states:
 The git function will clone the entire repository and save it as an instance-scope variable called helloworld, which is then referenced by the go function (note that the go function definition references the helloworld variable in its files section). The upload function takes the output from the go function and uploads it to Amazon S3.
 
 ## Git Clone
-For the purposes of this demonstration, I've created a [git repository](https://github.com/vorteil/helloworld) that provides the code required to build the Go binary. The contents of the repository will be saved to an instance variable, to be accessed by subsequent functions/states.
+For the purposes of this demonstration, I've created a [git repository](https://github.com/direktiv/helloworld) that provides the code required to build the Go binary. The contents of the repository will be saved to an instance variable, to be accessed by subsequent functions/states.
 
 
 ```yaml
@@ -44,7 +44,7 @@ For the purposes of this demonstration, I've created a [git repository](https://
   action:
     function: git
     input:
-      cmds: ["clone https://github.com/vorteil/helloworld.git $out/instance/helloworld"]
+      cmds: ["clone https://github.com/direktiv/helloworld.git $out/instance/helloworld"]
   transition: build-server
 ```
 
@@ -89,17 +89,17 @@ Putting all of the pieces together; this workflow clones a git repository, build
 id: build-go-binary
 functions:
 - id: go
-  image: vorteil/go:v1
+  image: direktiv/go:v1
   type: reusable
   files:
   - key: helloworld
     scope: instance
     type: tar.gz
 - id: git
-  image: vorteil/git:v1
+  image: direktiv/git:v1
   type: reusable
 - id: upload
-  image: vorteil/amazon-upload:v3
+  image: direktiv/amazon-upload:v1
   type: reusable
   files:
   - key: helloworldserver
@@ -111,7 +111,7 @@ states:
   action:
     function: git
     input:
-      cmds: ["clone https://github.com/vorteil/helloworld.git $out/instance/helloworld"]
+      cmds: ["clone https://github.com/direktiv/helloworld.git $out/instance/helloworld"]
   transition: build-server
 - id: build-server
   type: action

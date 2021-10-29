@@ -18,7 +18,7 @@ id: solver
 description: "Solves a string array of expressions"
 functions: 
 - id: solve-math-expression
-  image: vorteil/solve:v2
+  image: direktiv/solve:v1
   type: reusable
 states:
 - id: solve

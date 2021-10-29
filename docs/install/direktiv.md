@@ -18,7 +18,7 @@ helm repo add direktiv https://charts.direktiv.io
 helm install -n knative-serving --create-namespace knative direktiv/knative
 ```
 
-For more configuration options click [here](https://github.com/vorteil/direktiv/tree/main/kubernetes/charts/knative).
+For more configuration options click [here](https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/knative).
 
 For high availability both Kong ingress controllers, for internal and external services, need to be scaled up. The Helm chart values would be:
 
@@ -36,7 +36,7 @@ kubectl create namespace direktiv-services-direktiv
 helm install -f direktiv.yaml direktiv direktiv/direktiv
 ```
 
-For more configuration options click [here](https://github.com/vorteil/direktiv/tree/main/kubernetes/charts/direktiv) but the most important configuration values are the database settings which need to be identical to settings used during [database](database) setup.
+For more configuration options click [here](https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv) but the most important configuration values are the database settings which need to be identical to settings used during [database](database) setup.
 
 ```yaml
 database:

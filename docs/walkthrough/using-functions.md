@@ -63,7 +63,7 @@ id: my-workflow
 functions:
   - id: my-function
     type: reusable
-    image: vorteil/request:v6
+    image: direktiv/request:v1
 ```
 
 ## knative-namespace

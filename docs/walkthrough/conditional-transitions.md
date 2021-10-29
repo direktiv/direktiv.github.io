@@ -15,7 +15,7 @@ Oftentimes a workflow needs to be a little bit smarter than an immutable sequenc
 id: multiposter
 functions:
 - id: httprequest
-  image: vorteil/request:v2
+  image: direktiv/request:v1
   type: reusable
 states:
 - id: ifelse
@@ -155,7 +155,7 @@ For range loops like the one in this demo there's another state called a Foreach
 id: multiposter
 functions:
 - id: httprequest
-  image: vorteil/request:v2
+  image: direktiv/request:v1
   type: reusable
 states:
 - id: poster

@@ -16,7 +16,7 @@ id: translate-md
 description: Translates a string into different languages
 functions:
 - id: translate
-  image: vorteil/google-translator:v2
+  image: direktiv/google-translator:v1
   type: reusable
 states:
  # continued in next code block
@@ -54,7 +54,7 @@ id: translate-md
 description: Translates a string into different languages
 functions:
 - id: translate
-  image: vorteil/google-translator:v2
+  image: direktiv/google-translator:v1
   type: reusable
 states:
 - id: translate-markdown

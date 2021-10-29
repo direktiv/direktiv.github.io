@@ -40,5 +40,5 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 ## See Also
 
 * The [direktiv.io](https://direktiv.io/) website.
-* The [vorteil.io](https://github.com/vorteil/vorteil/) repository.
-* The [Godoc](https://godoc.org/github.com/vorteil/direktiv) library documentation.
+* The [direktiv.io](https://github.com/direktiv/direktiv/) repository.
+* The [Godoc](https://godoc.org/github.com/direktiv/direktiv) library documentation.

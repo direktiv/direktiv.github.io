@@ -64,7 +64,7 @@ spec:
 The above example can be installed with the following command:
 
 ```console
-kubectl apply -f https://raw.githubusercontent.com/vorteil/direktiv/main/kubernetes/install/db/pg.yaml
+kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/pg.yaml
 ```
 
 The details of this PostgreSQL cluster are stored as secrets in the 'postgres' namespace called *direktiv-pguser-direktiv*.

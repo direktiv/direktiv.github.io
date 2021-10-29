@@ -37,7 +37,7 @@ Here are sample error headers:
 
 Have a look at the source code for one of the functions we've used a lot in these articles:
 
-[https://github.com/vorteil/direktiv-apps/blob/master/request/main.go](https://github.com/vorteil/direktiv-apps/blob/master/request/main.go)
+[https://github.com/direktiv/direktiv-apps/blob/master/request/main.go](https://github.com/direktiv/direktiv-apps/blob/master/request/main.go)
 
 ## FAQs & Other Information
 

@@ -100,7 +100,7 @@ For example, given the following state definition, a directory named 'myFiles' s
 
 ```yaml
   - id: get
-    image: localhost:5000/iv-getter:v4
+    image: localhost:5000/iv-getter:v1
     files:
     - key: "myFiles"
       scope: instance
