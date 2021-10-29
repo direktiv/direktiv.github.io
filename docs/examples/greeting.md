@@ -7,7 +7,7 @@ parent: Examples
 
 # Greeting Example
 
-This simple example workflow uses a single `action` state to call the `vorteil/greeting` action, which 'greets' the user specified in the `"name"` field of the input provided to the workflow.
+This simple example workflow uses a single `action` state to call the `direktiv/greeting` action, which 'greets' the user specified in the `"name"` field of the input provided to the workflow.
 
 ## Workflow YAML
 
@@ -15,7 +15,7 @@ This simple example workflow uses a single `action` state to call the `vorteil/g
 id: greeting
 functions:
 - id: greeter
-  image: vorteil/greeting:v2
+  image: direktiv/greeting:v1
   type: reusable
 description: "A simple action that greets you" 
 states:

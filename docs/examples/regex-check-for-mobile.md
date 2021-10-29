@@ -22,10 +22,10 @@ To execute this workflow we need to define some functions the following are defi
 id: send-mobile-trigger-event
 functions:
 - id: smtp
-  image: vorteil/smtp:v3
+  image: direktiv/smtp:v1
   type: reusable
 - id: request
-  image: vorteil/request:v10
+  image: direktiv/request:v1
   type: reusable
 description: This workflow sends an email and triggers an event.
 states:
@@ -70,7 +70,7 @@ This generateEvent state sends a cloud event to a namespace.
 id: send-mobile-trigger-event
 functions:
 - id: smtp
-  image: vorteil/smtp:v3
+  image: direktiv/smtp:v1
   type: reusable
 description: This workflow sends an email and triggers an event.
 states:
@@ -109,13 +109,13 @@ id : listen-for-email-mobile
 description: This workflow reads an email when a cloud event is received.
 functions:
 - id: imap
-  image: vorteil/imap:v1
+  image: direktiv/imap:v1
   type: reusable
 - id: regex
-  image: vorteil/regex:v1
+  image: direktiv/regex:v1
   type: reusable
 - id: twilio
-  image: vorteil/twilio:v2
+  image: direktiv/twilio:v1
   type: reusable
 start:
   type: event
@@ -183,13 +183,13 @@ id : listen-for-email-mobile
 description: This workflow reads an email when a cloud event is received.
 functions:
 - id: imap
-  image: vorteil/imap:v1
+  image: direktiv/imap:v1
   type: reusable
 - id: regex
-  image: vorteil/regex:v1
+  image: direktiv/regex:v1
   type: reusable
 - id: twilio
-  image: vorteil/twilio:v2
+  image: direktiv/twilio:v1
   type: reusable
 start:
   type: event

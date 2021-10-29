@@ -51,7 +51,7 @@ This workflow listens for the logger `gcpLogger` and sends it to gcp:
 id: gcp-logger
 functions:
 - id: send-log
-  image: vorteil/gcplog:v2
+  image: direktiv/gcplog:v1
   type: reusable
 start:
   type: event
@@ -80,7 +80,7 @@ This workflow listens for the logger `awsLogger` and sends it to aws:
 id: aws-logger
 functions:
 - id: send-log
-  image: vorteil/awslog:v2
+  image: direktiv/awslog:v1
   type: reusable
 start:
   type: event
@@ -98,7 +98,7 @@ states:
       key: jq(.secrets.AWS_KEY)
       secret: jq(.secrets.AWS_SECRET)
       region: "us-east-2"
-      "log-group": "vorteil"
+      "log-group": "direktiv"
       "log-stream": "direktiv"
       message: jq(."direktiv.instanceLog")
 ```
@@ -111,7 +111,7 @@ This workflow listens for the logger `azureLogger` and sends it to azure:
 id: azure-logger
 functions:
 - id: send-log
-  image: vorteil/azlog:v2
+  image: direktiv/azlog:v1
   type: reusable
 start:
   type: event

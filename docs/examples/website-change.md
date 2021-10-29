@@ -20,14 +20,14 @@ This example is fairly simple and can be broken up into four steps:
 Below we'll explain each step in more detail. For this example we've chosen `https://docs.direktiv.io` as the target website.
 
 ## Fetch Website Headers
-Here we are performing a HTTP `POST` request on the target website using our `vorteil/request:v10` direktiv app as a function. Since we only care about the `Last-Modified` and `Etag` headers we then extract those values and store them in the `lastModified` and `etag` properties using the transform field in the `fetch-site-headers` state. Now that we have fetched the current header values required, the state will transition to the `get-old-headers` state.
+Here we are performing a HTTP `POST` request on the target website using our `direktiv/request:v1` direktiv app as a function. Since we only care about the `Last-Modified` and `Etag` headers we then extract those values and store them in the `lastModified` and `etag` properties using the transform field in the `fetch-site-headers` state. Now that we have fetched the current header values required, the state will transition to the `get-old-headers` state.
 
 ```yaml
 id: check-website-change
 description: "A simple workflow that fetches current headers from a website and compares them to the previously stored headers to determine if it has changed."
 functions:
   - id: get
-    image: vorteil/request:v10
+    image: direktiv/request:v1
     type: reusable
 states:
   - id: fetch-site-headers
@@ -125,7 +125,7 @@ id: a-cron-example
 description: A simple 'action' state that sends a get request"
 functions:
   - id: get
-    image: vorteil/request:v10
+    image: direktiv/request:v1
     type: reusable
 states:
   - id: fetch-site-headers

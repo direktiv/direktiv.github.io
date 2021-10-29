@@ -30,5 +30,5 @@ There is also a [quick installation guide](summary) and a docker image for testi
 
 #### Run docker image
 ```console
-docker run --privileged -p 8080:80 -ti vorteil/direktiv-kube
+docker run --privileged -p 8080:80 -ti direktiv/direktiv-kube
 ```

@@ -15,7 +15,7 @@ Setting up a development direktiv instance on a local machine is pretty simple. 
 
 
 ```sh
-docker run --privileged -p 8080:80 -p 31212:31212 -d --name direktiv vorteil/direktiv-kube
+docker run --privileged -p 8080:80 -p 31212:31212 -d --name direktiv direktiv/direktiv-kube
 ```
 
 This command starts direktiv as container 'direktiv'. The initial boot-time will take a few minutes. The progress can be followed with:
@@ -34,7 +34,7 @@ The database uses a persitent volume so the data stored should survive restarts 
 Running direktiv with a proxy configuration, the following settings can be passed as environmental variables:
 
 ```sh
-docker run --privileged -p 8080:80 -p 31212:31212 --env HTTPS_PROXY="http://<proxy-address>:443" --env NO_PROXY=".default,10.0.0.0/8,172.0.0.0/8,localhost" --env PERSIST=true -ti -v /tmp/pg:/tmp/pg vorteil/direktiv-kube
+docker run --privileged -p 8080:80 -p 31212:31212 --env HTTPS_PROXY="http://<proxy-address>:443" --env NO_PROXY=".default,10.0.0.0/8,172.0.0.0/8,localhost" --env PERSIST=true -ti -v /tmp/pg:/tmp/pg direktiv/direktiv-kube
 ```
 
 ## Docker registry
@@ -44,7 +44,7 @@ Direktiv pulls containers from a registry and runs them as isolates. For develop
 To test the local repository the golang example from direktiv-apps can be used:
 
 ```sh
-git clone https://github.com/vorteil/direktiv-apps.git
+git clone https://github.com/direktiv/direktiv-apps.git
 
 docker build direktiv-apps/examples/golang/ -t localhost:31212/myapp
 

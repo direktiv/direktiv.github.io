@@ -15,7 +15,7 @@ Workflows wouldn't be very powerful if they were limited to just the predefined 
 id: httpget
 functions:
 - id: httprequest
-  image: vorteil/request:v10
+  image: direktiv/request:v1
   type: reusable
 states:
 - id: getter
@@ -27,7 +27,7 @@ states:
       url: "https://jsonplaceholder.typicode.com/todos/1"
 ```
 
-This workflow will use the Docker container at https://hub.docker.com/r/vorteil/request to perform a GET request and return the results to the instance data.
+This workflow will use the Docker container at https://hub.docker.com/r/direktiv/request to perform a GET request and return the results to the instance data.
 
 Not just any Docker container will work as a function, but it isn't difficult to make one compatible. We'll discuss that later.
 
@@ -63,7 +63,7 @@ The JSON structure under `"return"` is the object returned by the GET request.
 ```yaml
 functions:
 - id: httprequest
-  image: vorteil/request:v10
+  image: direktiv/request:v1
   type: reusable
 ```
 
@@ -83,6 +83,6 @@ To use a Function it must first be defined at the top of the workflow definition
 
 Like all other states, the Action State requires an `id` and `type` field identifying it as such. But the great thing about the Action State is its ability to run user-made logic in the form of "Functions".
 
-The `function` field must reference one of the `functions` defined in the workflow definition. In this example we're using `vorteil/request`, which is a simple container that performs a HTTP request and returns the results. We use a `jq` command specified in the `input` field to generate the input for the Function.
+The `function` field must reference one of the `functions` defined in the workflow definition. In this example we're using `direktiv/request`, which is a simple container that performs a HTTP request and returns the results. We use a `jq` command specified in the `input` field to generate the input for the Function.
 
 Once the Function has completed its task in the Action State the results are stored in the instance data under the `"return"` field.

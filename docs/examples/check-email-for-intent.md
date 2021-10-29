@@ -14,7 +14,7 @@ In this example, we will create two workflows; one will send and email and gener
 id: send-email-trigger-event
 functions:
 - id: smtp
-  image: vorteil/smtp:v3
+  image: direktiv/smtp:v1
   type: reusable
 description: This workflow sends an email and triggers an event.
 states:
@@ -22,7 +22,7 @@ states:
 ```
 
 ### Send Email
-This state uses the vorteil/smtp:v3 container to send an email.
+This state uses the direktiv/smtp:v1 container to send an email.
 
 ```yaml
 - id: sendemail
@@ -58,7 +58,7 @@ This generateEvent state sends a cloud event to a namespace.
 id: send-email-trigger-event
 functions:
 - id: smtp
-  image: vorteil/smtp:v3
+  image: direktiv/smtp:v1
   type: reusable
 description: This workflow sends an email and triggers an event.
 states:
@@ -91,13 +91,13 @@ id: listen-for-email
 description: This workflow reads an email when a cloud event is received.
 functions:
 - id: imap
-  image: vorteil/imap:v1
+  image: direktiv/imap:v1
   type: reusable
 - id: smtp
-  image: vorteil/smtp:v3
+  image: direktiv/smtp:v1
   type: reusable
 - id: sentiment
-  image: vorteil/google-sentiment-check:v2
+  image: direktiv/google-sentiment-check:v1
   type: reusable
 start:
   type: event
@@ -153,7 +153,7 @@ If the message 'intent' is determined to be negative, send an automated response
 ```
 
 ### Reply to Email
-This state uses the vorteil/smtp:v2 isolate to send an email to the sender of the negative email.
+This state uses the direktiv/smtp:v2 isolate to send an email to the sender of the negative email.
 
 ```yaml
 - id: send-response
@@ -178,13 +178,13 @@ id: listen-for-email
 description: This workflow reads an email when a cloud event is received.
 functions:
 - id: imap
-  image: vorteil/imap:v1
+  image: direktiv/imap:v1
   type: reusable
 - id: smtp
-  image: vorteil/smtp:v3
+  image: direktiv/smtp:v1
   type: reusable
 - id: sentiment
-  image: vorteil/google-sentiment-check:v2
+  image: direktiv/google-sentiment-check:v1
   type: reusable
 start:
   type: event

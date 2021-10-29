@@ -18,13 +18,13 @@ This workflow requires three functions:
 id: check-image
 functions:
 - id: check
-  image: vorteil/imagerecognition:v2
+  image: direktiv/imagerecognition:v1
   type: reusable
 - id: blur
-  image: vorteil/blur:v1
+  image: direktiv/blur:v1
   type: reusable
 - id: request
-  image: vorteil/request:v10
+  image: direktiv/request:v1
   type: reusable
 description: "Evaluates an image using Google Vision API"
 states:
@@ -108,13 +108,13 @@ http://localhost/api/namespaces/{NAMESPACE}/workflows/{WORKFLOW_NAME}/execute?wa
 id: check-image
 functions:
 - id: check
-  image: vorteil/imagerecognition:v2
+  image: direktiv/imagerecognition:v1
   type: reusable
 - id: blur
-  image: vorteil/blur:v1
+  image: direktiv/blur:v1
   type: reusable
 - id: request
-  image: vorteil/request:v10
+  image: direktiv/request:v1
   type: reusable
 description: "Evaluates an image using Google Vision API"
 states:

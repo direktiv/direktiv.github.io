@@ -35,7 +35,7 @@ functions:
   # Calls the standard 'terraform' isolate, providing
   # the `main.tf` file from an existing workflow variable.
   - id: terraform
-    image: vorteil/terraform:v1
+    image: direktiv/terraform:v1
     files:
       - key: main.tf
         scope: workflow
@@ -43,7 +43,7 @@ functions:
 
   # Runs ansible
   - id: ansible
-    image: vorteil/ansible:v1
+    image: direktiv/ansible:v1
     files:
       - key: playbook.yml
         scope: workflow
@@ -104,7 +104,7 @@ resource "google_compute_instance" "default" {
   machine_type = "n1-standard-1"
   zone         = "australia-southeast1-a"
 
-  tags = ["direktiv", "vorteil"]
+  tags = ["direktiv", "direktiv"]
 
   boot_disk {
     initialize_params {

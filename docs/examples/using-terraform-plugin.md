@@ -6,20 +6,20 @@ parent: Examples
 ---
 
 # Introduction
-This example will detail how to user Direktiv with Terraform to create a virtual machine. To do this, we will use examples listed on the public [git repository](https://github.com/vorteil/terraform-examples). After creating the virtual machine, a message will be sent to a Discord webhook, resulting in the message being posted to a Discord server text channel.
+This example will detail how to user Direktiv with Terraform to create a virtual machine. To do this, we will use examples listed on the public [git repository](https://github.com/direktiv/terraform-examples). After creating the virtual machine, a message will be sent to a Discord webhook, resulting in the message being posted to a Discord server text channel.
 
 
 ```yaml
 id: spawn-instance
 functions:
 - id: git
-  image: vorteil/git:v1
+  image: direktiv/git:v1
   type: reusable
 - id: discordmsg
-  image: vorteil/discordmsg:v2
+  image: direktiv/discordmsg:v1
   type: reusable
 - id: tfrun
-  image: vorteil/terraform:v1
+  image: direktiv/terraform:v1
   type: reusable
   files:
   - key: terraform-examples
@@ -41,7 +41,7 @@ The following state fetches the repository and clones it into an instance variab
     action:
       function: git
       input: 
-        cmds: ["clone https://github.com/vorteil/terraform-examples.git $out/instance/terraform-examples"]
+        cmds: ["clone https://github.com/direktiv/terraform-examples.git $out/instance/terraform-examples"]
     transition: deploy_{CLOUD}
     log: .
 ```
@@ -172,13 +172,13 @@ We've also included a new switch state to facilitate not sending anything to the
 id: spawn-instance
 functions:
 - id: git
-  image: vorteil/git:v1
+  image: direktiv/git:v1
   type: reusable
 - id: discordmsg
-  image: vorteil/discordmsg:v2
+  image: direktiv/discordmsg:v1
   type: reusable
 - id: tfrun
-  image: vorteil/terraform:v1
+  image: direktiv/terraform:v1
   type: reusable
   files:
   - key: terraform-examples
@@ -191,7 +191,7 @@ states:
     action:
       function: git
       input: 
-        cmds: ["clone https://github.com/vorteil/terraform-examples.git $out/instance/terraform-examples"]
+        cmds: ["clone https://github.com/direktiv/terraform-examples.git $out/instance/terraform-examples"]
     transition: deploy_azure
     log: .
   - id: deploy_azure
