@@ -26,7 +26,7 @@ states:
          world
 ```
 
-### Variable StringVar Value
+### Variable - StringVar Value
 ```
 "hello\nworld\n"
 ```
@@ -46,7 +46,7 @@ states:
          hello
          world
 ```
-### Variable StringVar Value
+### Variable - StringVar Value
 ```
 hello
 world
@@ -67,7 +67,7 @@ states:
         value: 'aGVsbG8gZnJvbSBkaXJla3Rpdg=='
         mimeType: 'application/octet-stream'
 ```
-### Variable MessageVar Value
+### Variable - MessageVar Value
 ```
 hello from direktiv
 ```
