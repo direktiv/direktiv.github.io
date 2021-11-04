@@ -28,7 +28,7 @@ states:
 
 ### Variable - StringVar Value
 ```
-"hello\nworld\n"
+"hello\nworld"
 ```
 
 There are certain scenarios where you would not want to store the variable with its quotes. To do this all need to do is simply set the mimeType to `text/plain` or `text/plain; charset=utf-8`. This will store the variable as a raw string without quotes. 
