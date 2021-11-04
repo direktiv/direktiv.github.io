@@ -11,13 +11,13 @@ nav_order: 10
 Getting a local playground environment can be easily done with Docker. The following command starts a docker container with kubernetes. *On startup it can take a few minutes to download all images.* When the installation is done all pods should show "Running" or "Completed".
 
 ```
-docker run --privileged -p 8080:80 -p 31212:31212 -ti direktiv/direktiv-kube
+docker run --privileged -p 8080:80 -ti -v direktiv/direktiv-kube
 ```
 
 For proxy usage:
 
 ```sh
-docker run --privileged -p 8080:80 -p 31212:31212 --env HTTPS_PROXY="http://<proxy-address>:443" --env NO_PROXY=".default,10.0.0.0/8,172.0.0.0/8,localhost" direktiv/direktiv-kube
+docker run --privileged -p 8080:80 --env HTTPS_PROXY="http://<proxy-address>:443" --env NO_PROXY=".default,10.0.0.0/8,172.0.0.0/8,localhost" direktiv/direktiv-kube
 ```
 
 ***Testing Direktiv***:
@@ -74,7 +74,7 @@ $ cat > helloworld.yml <<- EOF
 states:
 - id: hello
   type: noop
-  transform: 
+  transform:
     msg: "Hello, jq(.name)!"
 EOF
 $ curl -vv -X PUT --data-binary "@helloworld.yml" "http://localhost:8080/api/namespaces/demo/tree/helloworld?op=create-workflow"
@@ -90,7 +90,6 @@ $ cat > input.json <<- EOF
 EOF
 $ curl -vv -X POST --data-binary "@input.json" "http://localhost:8080/api/namespaces/demo/tree/helloworld?op=wait"
 {"msg":"Hello, Alan!"}
-
 ```
 
 ### Next steps
