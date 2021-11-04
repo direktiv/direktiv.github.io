@@ -21,12 +21,14 @@ states:
     variables:
       - key: StringVar
         scope: workflow 
-        value: 'helloworld'
+        value: |
+         hello
+         world
 ```
 
-### Variable Value
+### Variable StringVar Value
 ```
-Variable StringVar = "helloworld"
+"hello\nworld\n"
 ```
 
 There are certain scenarios where you would not want to store the variable with its quotes. To do this all need to do is simply set the mimeType to `text/plain` or `text/plain; charset=utf-8`. This will store the variable as a raw string without quotes. 
@@ -39,12 +41,15 @@ states:
     variables:
       - key: StringVar
         scope: workflow 
-        value: 'helloworld'
         mimeType: 'text/plain'
+        value: |
+         hello
+         world
 ```
-### Variable Value
+### Variable StringVar Value
 ```
-Variable StringVar = helloworld
+hello
+world
 ```
 
 ## Example 2: Auto Decoding Base64 string
@@ -62,9 +67,9 @@ states:
         value: 'aGVsbG8gZnJvbSBkaXJla3Rpdg=='
         mimeType: 'application/octet-stream'
 ```
-### Variable Value
+### Variable MessageVar Value
 ```
-Variable MessageVar = hello from direktiv
+hello from direktiv
 ```
 
 These are the only two mime types with special behaviour. Any other `mimeType` will be treated internally by the default `JSON` behaviour. The default value for mimeType is `application/json`
