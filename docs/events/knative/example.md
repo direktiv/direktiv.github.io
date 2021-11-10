@@ -11,7 +11,7 @@ has_children: false
 In this example we will generate an event in Kafka, consume it in Direktiv via Knative and publish a new event back to Knative.
 
 <p align="center">
-<img src="../../../assets/kafka.png"/>
+<img src="../../../assets/kafka.png" alt="kafka-diagram"/>
 </p>
 
 ### Install Knative
@@ -229,7 +229,7 @@ kubectl -n kafka run kafka-producer -ti --image=quay.io/strimzi/kafka:0.26.0-kaf
 After running the pod add JSON into the command prompt, e.g. *{}*. This sends the JSON object to Kafka. Knative's broker will pick it up and executes the trigger for direktiv. The event will appear on the *direktiv* namespace dashboard.
 
 <p align="center">
-<img src="../../../assets/eventin.png"/>
+<img src="../../../assets/eventin.png" alt="event-ui-log"/>
 </p>
 
 ### Direktiv Source

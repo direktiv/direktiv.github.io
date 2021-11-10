@@ -238,4 +238,4 @@ states:
 
 Hopefully this article has illustrated how to use pre-existing direktiv isolates to bootstrap workflow development! It should also serve as a reminder that, by making a workflow 'modular' through the use of subflows, a complicated workflow can be made to appear quite straightforward.
 
-If you're interested in seeing what other isolates already exist, check out the [direktiv-apps GitHub page](https://github.com/direktiv/direktiv-apps/). To learn how to write your own custom isolates, click [here](../walkthrough/making-isolates.html)
+If you're interested in seeing what other isolates already exist, check out the [direktiv-apps GitHub page](https://github.com/direktiv/direktiv-apps/). To learn how to write your own custom isolates, click [here](/docs/walkthrough/making-functions.html)

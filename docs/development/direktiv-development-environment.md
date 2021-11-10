@@ -7,7 +7,7 @@ parent: Development Environment
 
 # Development Standalone environment
 
-To improve isolate and workflows development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom isolates is described in <a href="walkthrough/making-isolates.html">this section</a>.
+To improve function and workflows development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom functions is described in <a href="/docs/walkthrough/making-functions.html">this section</a>.
 
 ## Running direktiv
 
@@ -39,7 +39,7 @@ docker run --privileged -p 8080:80 -p 31212:31212 --env HTTPS_PROXY="http://<pro
 
 ## Docker registry
 
-Direktiv pulls containers from a registry and runs them as isolates. For development purposes the direktiv docker container comes with a registry installed. It is accessible on localhost:31212.
+Direktiv pulls containers from a registry and runs them as functions. For development purposes the direktiv docker container comes with a registry installed. It is accessible on localhost:31212.
 
 To test the local repository the golang example from direktiv-apps can be used:
 
