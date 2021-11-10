@@ -52,6 +52,14 @@ functions:
     image: direktiv/awsgo:v1
     type: reusable
 
+  - id: add-dns-record
+    type: subflow
+    workflow: add-dns-record
+
+  - id: send-email
+    type: subflow
+    workflow: send-email
+
 states:
 
   # Set data (skips need for providing an input object on each invocation)
@@ -106,7 +114,7 @@ states:
     type: action
     log: jq(.)
     action:
-      workflow: add-dns-record
+      function: add-dns-record
       input: 
         domain: jq(.domain)
         subdomain: jq(.subdomain)
@@ -117,7 +125,7 @@ states:
   - id: send-email
     type: action
     action:
-      workflow: send-email
+      function: send-email
       input:
         recipient: jq(.recipient)
         domain: jq(.domain)

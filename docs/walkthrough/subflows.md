@@ -66,6 +66,9 @@ functions:
 - id: httprequest
   image: direktiv/request:v1
   type: reusable
+- id: notifier
+  type: subflow
+  workflow: notifier
 states:
 - id: do
   type: action
@@ -80,7 +83,7 @@ states:
 - id: notify
   type: action
   action:
-    workflow: notifier
+    function: notifier
     input: 'jq({ contact: .contact, payload: .payload })'
 ```
 
@@ -125,11 +128,15 @@ Anywhere an "Action" appears in a workflow definition either an Isolate or a Sub
 
 ```yaml
 id: httpget
+functions:
+- id: myworkflow
+  type: subflow
+  workflow: myworkflow
 states:
 - id: getter
   type: action
   action:
-    workflow: myworkflow
+    function: myworkflow
     input:
       method: "GET"
       url: "https://jsonplaceholder.typicode.com/todos/1"

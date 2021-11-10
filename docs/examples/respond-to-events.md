@@ -20,7 +20,7 @@ To demonstrate this, let's modify the 'main' workflow from [this article](/docs/
     type: action
     log: jq(.)
     action:
-      workflow: add-dns-record
+      function: add-dns-record
       input: 
         domain: jq(.domain)
         subdomain: jq(.subdomain)
