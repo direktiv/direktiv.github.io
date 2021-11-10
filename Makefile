@@ -11,3 +11,10 @@ update-api:
 .PHONY: install-deps
 install-deps:
 	./install-swagger.sh
+
+# Validate jekyll files
+.PHONY: validate-api
+validate-api:
+	bundle exec jekyll build --drafts
+	bundle exec htmlproofer ./_site --url-ignore "/#/"
+
