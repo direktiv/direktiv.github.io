@@ -6,7 +6,7 @@ nav_order: 60
 
 
 
-# Direktiv API.
+# Direktiv API
 Direktiv Open API Specification
 Direktiv Documentation can be found at https://docs.direktiv.io/
   
@@ -165,8 +165,15 @@ Direktiv Documentation can be found at https://docs.direktiv.io/
 
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|
-| POST | /api/namespaces/{namespace}/registries | [delete registry](#delete-registry) | Delete a Namespace Container Registry |
-| GET | /api/namespaces/{namespace}/registries | [get registries](#get-registries) | Get List of Namespace Registries |
+| POST | /api/functions/registries/private | [create global private registry](#create-global-private-registry) | Create a Global Container Registry |
+| POST | /api/functions/registries/global | [create global registry](#create-global-registry) | Create a Global Container Registry |
+| POST | /api/functions/registries/namespaces/{namespace} | [create registry](#create-registry) | Create a Namespace Container Registry |
+| DELETE | /api/functions/registries/private | [delete global private registry](#delete-global-private-registry) | Delete a Global Container Registry |
+| DELETE | /api/functions/registries/global | [delete global registry](#delete-global-registry) | Delete a global Container Registry |
+| DELETE | /api/functions/registries/namespaces/{namespace} | [delete registry](#delete-registry) | Delete a Namespace Container Registry |
+| GET | /api/functions/registries/private | [get global private registries](#get-global-private-registries) | Get List of Global Private Registries |
+| GET | /api/functions/registries/global | [get global registries](#get-global-registries) | Get List of Global Registries |
+| GET | /api/functions/registries/namespaces/{namespace} | [get registries](#get-registries) | Get List of Namespace Registries |
   
 
 
@@ -407,6 +414,108 @@ an error has occurred
 
 [ErrorResponse](#error-response)
 
+### <span id="create-global-private-registry"></span> Create a Global Container Registry (*createGlobalPrivateRegistry*)
+
+```
+POST /api/functions/registries/private
+```
+
+Create a global container registry.
+ Global Private registries are only available to global services.
+This can be used to connect your workflows to private container registries that require tokens.
+The data property in the body is made up from the registry user and token. It follows the pattern :
+data=USER:TOKEN
+
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| Registry Payload | `body` | [CreateGlobalPrivateRegistryBody](#create-global-private-registry-body) | `CreateGlobalPrivateRegistryBody` | | ✓ | | Payload that contains registry data |
+
+#### All responses
+
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#create-global-private-registry-200) | OK | successfully created global private registry |  | [schema](#create-global-private-registry-200-schema) |
+
+#### Responses
+
+
+##### <span id="create-global-private-registry-200"></span> 200 - successfully created global private registry
+Status: OK
+
+###### <span id="create-global-private-registry-200-schema"></span> Schema
+
+###### Inlined models
+
+**<span id="create-global-private-registry-body"></span> CreateGlobalPrivateRegistryBody**
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| data | string| `string` | ✓ | | Target registry connection data containing the user and token. |  |
+| reg | string| `string` | ✓ | | Target registry URL |  |
+
+
+
+### <span id="create-global-registry"></span> Create a Global Container Registry (*createGlobalRegistry*)
+
+```
+POST /api/functions/registries/global
+```
+
+Create a global container registry.
+Global registries are available to all services.
+This can be used to connect your workflows to private container registries that require tokens.
+The data property in the body is made up from the registry user and token. It follows the pattern :
+data=USER:TOKEN
+
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| Registry Payload | `body` | [CreateGlobalRegistryBody](#create-global-registry-body) | `CreateGlobalRegistryBody` | | ✓ | | Payload that contains registry data |
+
+#### All responses
+
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#create-global-registry-200) | OK | successfully created global registry |  | [schema](#create-global-registry-200-schema) |
+
+#### Responses
+
+
+##### <span id="create-global-registry-200"></span> 200 - successfully created global registry
+Status: OK
+
+###### <span id="create-global-registry-200-schema"></span> Schema
+
+###### Inlined models
+
+**<span id="create-global-registry-body"></span> CreateGlobalRegistryBody**
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| data | string| `string` | ✓ | | Target registry connection data containing the user and token. |  |
+| reg | string| `string` | ✓ | | Target registry URL |  |
+
+
+
 ### <span id="create-global-service"></span> Create Global Service (*createGlobalService*)
 
 ```
@@ -557,6 +666,57 @@ Status: OK
 
 
 
+### <span id="create-registry"></span> Create a Namespace Container Registry (*createRegistry*)
+
+```
+POST /api/functions/registries/namespaces/{namespace}
+```
+
+Create a namespace container registry.
+This can be used to connect your workflows to private container registries that require tokens.
+The data property in the body is made up from the registry user and token. It follows the pattern :
+data=USER:TOKEN
+
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| namespace | `path` | string | `string` |  | ✓ |  | target namespace |
+| Registry Payload | `body` | [CreateRegistryBody](#create-registry-body) | `CreateRegistryBody` | | ✓ | | Payload that contains registry data |
+
+#### All responses
+
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#create-registry-200) | OK | successfully created namespace registry |  | [schema](#create-registry-200-schema) |
+
+#### Responses
+
+
+##### <span id="create-registry-200"></span> 200 - successfully created namespace registry
+Status: OK
+
+###### <span id="create-registry-200-schema"></span> Schema
+
+###### Inlined models
+
+**<span id="create-registry-body"></span> CreateRegistryBody**
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| data | string| `string` | ✓ | | Target registry connection data containing the user and token. |  |
+| reg | string| `string` | ✓ | | Target registry URL |  |
+
+
+
 ### <span id="create-secret"></span> Create a Namespace Secret (*createSecret*)
 
 ```
@@ -654,6 +814,100 @@ an error has occurred
   
 
 [ErrorResponse](#error-response)
+
+### <span id="delete-global-private-registry"></span> Delete a Global Container Registry (*deleteGlobalPrivateRegistry*)
+
+```
+DELETE /api/functions/registries/private
+```
+
+Delete a global container registry.
+ Global Private registries are only available to global services.
+
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| Registry Payload | `body` | [DeleteGlobalPrivateRegistryBody](#delete-global-private-registry-body) | `DeleteGlobalPrivateRegistryBody` | | ✓ | | Payload that contains registry data |
+
+#### All responses
+
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#delete-global-private-registry-200) | OK | successfully delete global private registry |  | [schema](#delete-global-private-registry-200-schema) |
+
+#### Responses
+
+
+##### <span id="delete-global-private-registry-200"></span> 200 - successfully delete global private registry
+Status: OK
+
+###### <span id="delete-global-private-registry-200-schema"></span> Schema
+
+###### Inlined models
+
+**<span id="delete-global-private-registry-body"></span> DeleteGlobalPrivateRegistryBody**
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| reg | string| `string` | ✓ | | Target registry URL |  |
+
+
+
+### <span id="delete-global-registry"></span> Delete a global Container Registry (*deleteGlobalRegistry*)
+
+```
+DELETE /api/functions/registries/global
+```
+
+Delete a Global container registry
+Global registries are available to all services.
+
+
+#### Parameters
+
+| Name | Source | Type | Go type | Separator | Required | Default | Description |
+|------|--------|------|---------|-----------| :------: |---------|-------------|
+| Registry Payload | `body` | [DeleteGlobalRegistryBody](#delete-global-registry-body) | `DeleteGlobalRegistryBody` | | ✓ | | Payload that contains registry data |
+
+#### All responses
+
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#delete-global-registry-200) | OK | successfully delete global registry |  | [schema](#delete-global-registry-200-schema) |
+
+#### Responses
+
+
+##### <span id="delete-global-registry-200"></span> 200 - successfully delete global registry
+Status: OK
+
+###### <span id="delete-global-registry-200-schema"></span> Schema
+
+###### Inlined models
+
+**<span id="delete-global-registry-body"></span> DeleteGlobalRegistryBody**
+
+
+  
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| reg | string| `string` | ✓ | | Target registry URL |  |
+
+
 
 ### <span id="delete-global-revision"></span> Delete Global Service Revision (*deleteGlobalRevision*)
 
@@ -755,6 +1009,8 @@ DELETE /api/namespaces/{namespace}
 ```
 
 Delete a namespace.
+A namespace will not delete by default if it has any child resources (workflows, etc...).
+Deleting the namespace with all its children can be done using the `recursive` query parameter.
 
 
 #### Parameters
@@ -762,6 +1018,7 @@ Delete a namespace.
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
 | namespace | `path` | string | `string` |  | ✓ |  | target namespace to delete |
+| recursive | `query` | boolean | `bool` |  |  |  | recursively deletes all child resources |
 
 #### All responses
 
@@ -933,7 +1190,7 @@ an error has occurred
 ### <span id="delete-registry"></span> Delete a Namespace Container Registry (*deleteRegistry*)
 
 ```
-POST /api/namespaces/{namespace}/registries
+DELETE /api/functions/registries/namespaces/{namespace}
 ```
 
 Delete a namespace container registry
@@ -1097,6 +1354,54 @@ an error has occurred
   
 
 [ErrorResponse](#error-response)
+
+### <span id="get-global-private-registries"></span> Get List of Global Private Registries (*getGlobalPrivateRegistries*)
+
+```
+GET /api/functions/registries/private
+```
+
+Gets the list of global private registries.
+ Global Private registries are only available to global services.
+
+
+#### All responses
+
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-global-private-registries-200) | OK | successfully got global private registries |  | [schema](#get-global-private-registries-200-schema) |
+
+#### Responses
+
+
+##### <span id="get-global-private-registries-200"></span> 200 - successfully got global private registries
+Status: OK
+
+###### <span id="get-global-private-registries-200-schema"></span> Schema
+
+### <span id="get-global-registries"></span> Get List of Global Registries (*getGlobalRegistries*)
+
+```
+GET /api/functions/registries/global
+```
+
+Gets the list of global registries.
+Global registries are available to all services.
+
+
+#### All responses
+
+| Code | Status | Description | Has headers | Schema |
+|------|--------|-------------|:-----------:|--------|
+| [200](#get-global-registries-200) | OK | successfully got global registries |  | [schema](#get-global-registries-200-schema) |
+
+#### Responses
+
+
+##### <span id="get-global-registries-200"></span> 200 - successfully got global registries
+Status: OK
+
+###### <span id="get-global-registries-200-schema"></span> Schema
 
 ### <span id="get-global-service"></span> Get Global Service Details (*getGlobalService*)
 
@@ -1561,7 +1866,7 @@ an error has occurred
 ### <span id="get-registries"></span> Get List of Namespace Registries (*getRegistries*)
 
 ```
-GET /api/namespaces/{namespace}/registries
+GET /api/functions/registries/namespaces/{namespace}
 ```
 
 Gets the list of namespace registries.
@@ -3053,10 +3358,58 @@ Status: OK
 
 ## Models
 
+### <span id="create-global-private-registry-body"></span> CreateGlobalPrivateRegistryBody
+
+
+> CreateGlobalPrivateRegistryBody create global private registry body
+
+**Example**
+```
+{"data":"admin:8QwFLg%D$qg*","reg":"https://prod.customreg.io"}
+```
+  
+
+
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| Data | string| `string` | ✓ | | Target registry connection data containing the user and token. |  |
+| Reg | string| `string` | ✓ | | Target registry URL |  |
+
+
+
+### <span id="create-global-registry-body"></span> CreateGlobalRegistryBody
+
+
+> CreateGlobalRegistryBody create global registry body
+
+**Example**
+```
+{"data":"admin:8QwFLg%D$qg*","reg":"https://prod.customreg.io"}
+```
+  
+
+
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| Data | string| `string` | ✓ | | Target registry connection data containing the user and token. |  |
+| Reg | string| `string` | ✓ | | Target registry URL |  |
+
+
+
 ### <span id="create-global-service-body"></span> CreateGlobalServiceBody
 
 
-> CreateGlobalServiceBody CreateGlobalServiceBody create global service body
+> CreateGlobalServiceBody create global service body
 
 **Example**
 ```
@@ -3083,7 +3436,7 @@ Status: OK
 ### <span id="create-namespace-service-body"></span> CreateNamespaceServiceBody
 
 
-> CreateNamespaceServiceBody CreateNamespaceServiceBody create namespace service body
+> CreateNamespaceServiceBody create namespace service body
 
 **Example**
 ```
@@ -3107,10 +3460,80 @@ Status: OK
 
 
 
+### <span id="create-registry-body"></span> CreateRegistryBody
+
+
+> CreateRegistryBody create registry body
+
+**Example**
+```
+{"data":"admin:8QwFLg%D$qg*","reg":"https://prod.customreg.io"}
+```
+  
+
+
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| Data | string| `string` | ✓ | | Target registry connection data containing the user and token. |  |
+| Reg | string| `string` | ✓ | | Target registry URL |  |
+
+
+
+### <span id="delete-global-private-registry-body"></span> DeleteGlobalPrivateRegistryBody
+
+
+> DeleteGlobalPrivateRegistryBody delete global private registry body
+
+**Example**
+```
+{"data":"admin:8QwFLg%D$qg*","reg":"https://prod.customreg.io"}
+```
+  
+
+
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| Reg | string| `string` | ✓ | | Target registry URL |  |
+
+
+
+### <span id="delete-global-registry-body"></span> DeleteGlobalRegistryBody
+
+
+> DeleteGlobalRegistryBody delete global registry body
+
+**Example**
+```
+{"data":"admin:8QwFLg%D$qg*","reg":"https://prod.customreg.io"}
+```
+  
+
+
+
+
+
+**Properties**
+
+| Name | Type | Go type | Required | Default | Description | Example |
+|------|------|---------|:--------:| ------- |-------------|---------|
+| Reg | string| `string` | ✓ | | Target registry URL |  |
+
+
+
 ### <span id="delete-registry-body"></span> DeleteRegistryBody
 
 
-> DeleteRegistryBody DeleteRegistryBody DeleteRegistryBody DeleteRegistryBody DeleteRegistryBody DeleteRegistryBody delete registry body
+> DeleteRegistryBody delete registry body
 
 **Example**
 ```
@@ -3149,7 +3572,7 @@ Status: OK
 ### <span id="jq-playground-body"></span> JqPlaygroundBody
 
 
-> JqPlaygroundBody JqPlaygroundBody JqPlaygroundBody jq playground body
+> JqPlaygroundBody jq playground body
 
 **Example**
 ```
@@ -3173,7 +3596,7 @@ Status: OK
 ### <span id="ok-body"></span> OkBody
 
 
-> OkBody is an arbitrary placeholder response that represents an ok response body
+> OkBody OkBody is an arbitrary placeholder response that represents an ok response body
   
 
 
@@ -3206,7 +3629,7 @@ Status: OK
 ### <span id="set-workflow-cloud-event-logs-body"></span> SetWorkflowCloudEventLogsBody
 
 
-> SetWorkflowCloudEventLogsBody SetWorkflowCloudEventLogsBody set workflow cloud event logs body
+> SetWorkflowCloudEventLogsBody set workflow cloud event logs body
 
 **Example**
 ```
@@ -3229,7 +3652,7 @@ Status: OK
 ### <span id="toggle-workflow-body"></span> ToggleWorkflowBody
 
 
-> ToggleWorkflowBody ToggleWorkflowBody toggle workflow body
+> ToggleWorkflowBody toggle workflow body
 
 **Example**
 ```
@@ -3252,7 +3675,7 @@ Status: OK
 ### <span id="update-global-service-body"></span> UpdateGlobalServiceBody
 
 
-> UpdateGlobalServiceBody UpdateGlobalServiceBody update global service body
+> UpdateGlobalServiceBody update global service body
 
 **Example**
 ```
@@ -3279,7 +3702,7 @@ Status: OK
 ### <span id="update-global-service-traffic-body"></span> UpdateGlobalServiceTrafficBody
 
 
-> UpdateGlobalServiceTrafficBody UpdateGlobalServiceTrafficBody update global service traffic body
+> UpdateGlobalServiceTrafficBody update global service traffic body
 
 **Example**
 ```
@@ -3302,7 +3725,7 @@ Status: OK
 ### <span id="update-global-service-traffic-params-body-values-items0"></span> UpdateGlobalServiceTrafficParamsBodyValuesItems0
 
 
-> UpdateGlobalServiceTrafficParamsBodyValuesItems0 UpdateGlobalServiceTrafficParamsBodyValuesItems0 update global service traffic params body values items0
+> UpdateGlobalServiceTrafficParamsBodyValuesItems0 update global service traffic params body values items0
   
 
 
@@ -3348,7 +3771,7 @@ Status: OK
 ### <span id="update-namespace-service-traffic-body"></span> UpdateNamespaceServiceTrafficBody
 
 
-> UpdateNamespaceServiceTrafficBody UpdateNamespaceServiceTrafficBody UpdateNamespaceServiceTrafficBody UpdateNamespaceServiceTrafficBody UpdateNamespaceServiceTrafficBody update namespace service traffic body
+> UpdateNamespaceServiceTrafficBody update namespace service traffic body
 
 **Example**
 ```
@@ -3371,7 +3794,7 @@ Status: OK
 ### <span id="update-namespace-service-traffic-params-body-values-items0"></span> UpdateNamespaceServiceTrafficParamsBodyValuesItems0
 
 
-> UpdateNamespaceServiceTrafficParamsBodyValuesItems0 UpdateNamespaceServiceTrafficParamsBodyValuesItems0 UpdateNamespaceServiceTrafficParamsBodyValuesItems0 update namespace service traffic params body values items0
+> UpdateNamespaceServiceTrafficParamsBodyValuesItems0 update namespace service traffic params body values items0
   
 
 
