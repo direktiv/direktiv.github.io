@@ -1,6 +1,6 @@
 
 
-Direktiv provides a sink and a source for integration into [Knative Eventing](https://knative.dev). This [Kafka example](example.html) provides a test configuration
+Direktiv provides a sink and a source for integration into [Knative Eventing](https://knative.dev). This [Kafka example](../example) provides a test configuration
 with Knative Eventing, Kafka and Direktiv.
 
 # Sink

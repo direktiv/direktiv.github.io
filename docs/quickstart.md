@@ -33,11 +33,11 @@ $ direkcli namespaces list
 
 ### Kubernetes installation
 
-For instructions on how to install in a pre-existing Kubernetes environment, following the [installation instructions](install/install.html).
+For instructions on how to install in a pre-existing Kubernetes environment, following the [installation instructions](../installation).
 
 ### Workflow specification
 
-The below example is the minimal configuration needed for a workflow, following the [workflow language specification](specification.html):
+The below example is the minimal configuration needed for a workflow, following the [workflow language specification](../specification):
 
 ```yaml
 id: helloworld
@@ -88,7 +88,7 @@ $ curl -vv -X POST --data-binary "@input.json" "http://localhost:8080/api/namesp
 
 ### Next steps
 
-For more complex examples review the [Getting Started](walkthrough/walkthrough.html) seciton of the documentation.
+For more complex examples review the [Getting Started](../getting_started/helloworld) section of the documentation.
 
 ## See Also
 

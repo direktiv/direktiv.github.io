@@ -17,7 +17,7 @@ states:
 
 Run this workflow. Leave the Workflow Input empty for now. You should see something like the following:
 
-### Output:
+### Output
 
 ```json
 {

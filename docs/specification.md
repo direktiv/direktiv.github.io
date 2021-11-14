@@ -520,7 +520,7 @@ The setter state is used to store persistent data. A mimeType type can be provid
 * application/json - Default behaviour, value is treated as a json object.
 * text/plain - Value is treated as a plaintext string, no json marshalling is done.
 * application/octet-stream - Value is expected to be a base64 string and is stored as its decoded binary value.
-Read more about mimeTyps in the [Examples](examples/variable-mime-types.html).
+Read more about mimeTyps in the [Examples](../examples/variable-mime-types/).
 
 ### SwitchState
 
