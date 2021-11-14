@@ -5,7 +5,8 @@ site_url: https://docs.direktiv.io
 site_description: Direktiv Documentation
 repo_url: https://github.com/direktiv/direktiv
 
-
+plugins:
+- search
 theme:
   name: material
   logo: assets/logo.png
