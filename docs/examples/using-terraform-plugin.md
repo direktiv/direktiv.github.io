@@ -1,9 +1,3 @@
----
-layout: default
-title: Running Terraform scripts
-nav_order: 10
-parent: Examples
----
 
 # Introduction
 This example will detail how to user Direktiv with Terraform to create a virtual machine. To do this, we will use examples listed on the public [git repository](https://github.com/direktiv/terraform-examples). After creating the virtual machine, a message will be sent to a Discord webhook, resulting in the message being posted to a Discord server text channel.

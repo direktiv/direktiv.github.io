@@ -1,9 +1,4 @@
----
-layout: default
-title: Check Credit Score (consumeEvent)
-nav_order: 5
-parent: Examples
----
+
 
 # Check Credit Score
 

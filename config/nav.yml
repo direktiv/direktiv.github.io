@@ -1,0 +1,64 @@
+INHERIT: redirects.yml
+
+nav:
+  - Quickstart: quickstart.md
+  - Getting Started: 
+    - Helloworld: getting_started/helloworld.md
+    - Transitions: getting_started/transitions.md
+    - Conditional Transitions: getting_started/conditional-transitions.md
+    - Transforms & JQ: getting_started/transforms.md
+    - Introduction to Functions: getting_started/functions-intro.md
+    - Scheduling: getting_started/scheduling.md
+    - Subflows: getting_started/subflows.md
+    - Events: getting_started/events.md
+    - Error Handling: getting_started/error-handling.md
+    - Secrets & Registries: getting_started/secrets-registries.md
+    - Making Custom Functions: getting_started/making-functions.md
+    - Persistent Data: getting_started/persistent-data.md
+    - Using Functions: getting_started/using-functions.md
+    - Isolated Functions: getting_started/isolated-functions.md
+  - Installation:
+    - Install: installation/index.md
+    - Kubernetes: installation/kubernetes.md
+    - Linkerd: installation/linkerd.md
+    - Database: installation/database.md
+    - Direktiv: installation/direktiv.md
+    - Quick Install: installation/summary.md
+  - Specification: specification.md
+  - API: api.md
+  - Development:
+    - Standalone Environment: environment/direktiv-development-environment.md
+    - VSCode Extension: environment/direktiv-vscode.md
+  - Examples:
+    - Greeting (ActionState): examples/greeting.md
+    - Event-based Greeting (StartEvent): examples/event-based-greeting.md
+    - Solving Math Expressions (Foreach): examples/solving-math-expressions.md
+    - Parallel Execution (Parallel): examples/parallel-execution.md
+    - Check Credit Score (ConsumeEvent): examples/event-based-transition.md
+    - Handling Non-JSON Input: examples/non-json-input.md
+    - Logging: examples/logging.md
+    - Create VM and DNS Record: examples/create-vm-set-dns.md
+    - Reacting to Consuming Cloud Events: examples/respond-to-events.md
+    - Check for Website Change: examples/website-change.md
+    - Terraform or Ansible: examples/terraform-and-ansible.md
+    - Running Terraform Scripts: examples/using-terraform-plugin.md
+    - Convert Markdown to Multiple Languages: examples/md-translation.md
+    - Check Email for Intent: examples/check-email-for-intent.md
+    - Blur a NSFW Image: examples/automatically-blur-nsfw-images.md
+    - Check Email for Mobile Number: examples/regex-check-for-mobile.md
+    - Git Clone and Go Build: examples/git-clone-go-build.md
+    - Scheduling (ScheduledStartType): examples/scheduled-example.md
+    - Event Listener (EventStartType): examples/start-example.md
+    - EventAnd Listener (EventAndStartType): examples/start-event-and-example.md
+    - EventXor Listener (EventXorStartType): examples/start-event-xor-example.md
+    - Variable Mimetypes: examples/variable-mime-types.md
+  - Events:
+    - General: events/index.md
+    - Cloud:
+      - General: events/cloud/index.md
+      - Amazon: events/cloud/amazon.md
+      - Azure: events/cloud/azure.md
+      - Google Cloud Platform: events/cloud/gcp.md
+    - Knative:
+      - Eventing: events/knative/knative.md
+      - Kafka Example: events/knative/example.md

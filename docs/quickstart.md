@@ -1,9 +1,3 @@
----
-layout: default
-title: Quickstart
-nav_order: 10
----
-
 ## Quickstart
 
 ### Starting the Server

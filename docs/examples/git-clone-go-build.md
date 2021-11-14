@@ -1,9 +1,3 @@
----
-layout: default
-title: Git Clone and Go Build
-nav_order: 14
-parent: Examples
----
 
 # Introduction
 This article seeks to demonstrate how Direktiv workflows can be used to clone a git repository, build a binary from the code contained within the repository, and upload it to Amazon S3. The following snippet is the start of the workflow definition, and details each of the functions that will be required within the workflow.

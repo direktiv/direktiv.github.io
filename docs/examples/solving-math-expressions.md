@@ -1,9 +1,4 @@
----
-layout: default
-title: Solving Math Expressions (Foreach)
-nav_order: 3
-parent: Examples
----
+
 
 # Solving Math Expressions Example
 

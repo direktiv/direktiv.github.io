@@ -1,9 +1,3 @@
----
-layout: default
-title: Check email for Intent
-nav_order: 12
-parent: Examples
----
 
 # Introduction
 In this example, we will create two workflows; one will send and email and generate a cloud event, and the other will trigger upon receiving the cloud event, check the contents of an email, use AI to discern the 'intent' of the message, and respond if the intent is deemed to be negative.

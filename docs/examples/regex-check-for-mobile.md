@@ -1,9 +1,4 @@
----
-layout: default
-title: Check email for Mobile Number
-nav_order: 13
-parent: Examples
----
+
 
 # Introduction
 We're going to be creating two workflows.

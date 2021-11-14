@@ -1,9 +1,4 @@
----
-layout: default
-title: Variable MimeTypes
-nav_order: 19
-parent: Examples
----
+
 
 # Variable Mime Type Example
 

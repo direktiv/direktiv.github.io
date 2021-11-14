@@ -1,9 +1,3 @@
----
-layout: default
-title: Event Start
-nav_order: 16
-parent: Examples
----
 
 # Start Event Workflow
 

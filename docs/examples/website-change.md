@@ -1,9 +1,4 @@
----
-layout: default
-title: Check for Website Change
-nav_order: 9
-parent: Examples
----
+
 
 # Check if Website has changed Example
 

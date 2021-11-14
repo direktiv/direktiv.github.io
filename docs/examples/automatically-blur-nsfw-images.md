@@ -1,9 +1,4 @@
----
-layout: default
-title: Blur a NSFW image
-nav_order: 13
-parent: Examples
----
+
 
 # Introduction
 We're going to be creating a workflow that takes an image via a URL and checks if it is safe for work using Googles Vision api. The response of this workflow will either be the image unaltered or blurred (if the contents are explicit).

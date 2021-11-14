@@ -1,17 +1,6 @@
----
-layout: default
-title: Specification
-nav_order: 50
-has_toc: true
----
+# Specification
 
-# Contents
-{:.no_toc}
-
-* auto-gen TOC:
-{:toc}
-
-# Workflow Overview Diagram
+## Workflow Overview Diagram
 
 The diagram below captures the workflow definition specification. This is to be used as a reference only, the full specification is described in detail in the sections below.
 
@@ -19,7 +8,7 @@ The diagram below captures the workflow definition specification. This is to be 
 <img src="../assets/direktiv-specification-nontransparent.png" alt="direktiv-specification"/>
 </p>
 
-# Workflow Definition
+## Workflow Definition
 
 | Parameter   | Description                                                             | Type                                        | Required |
 | ----------- | ----------------------------------------------------------------------- | ------------------------------------------- | -------- |

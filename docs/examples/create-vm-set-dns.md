@@ -1,9 +1,4 @@
----
-layout: default
-title: Create VM and DNS Record
-nav_order: 8
-parent: Examples
----
+
 
 # Creating a VM and a DNS Record
 

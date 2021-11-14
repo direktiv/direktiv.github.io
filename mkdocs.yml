@@ -1,0 +1,30 @@
+INHERIT: config/nav.yml
+
+site_name: Direktiv
+site_url: https://docs.direktiv.io
+site_description: Direktiv Documentation
+extra_css:
+  - stylesheets/extra.css
+
+repo_url: https://github.com/direktiv/direktiv
+
+
+theme:
+  name: material
+  logo: assets/logo.png
+  favicon: assets/favicon.ico
+  palette:
+    scheme: default
+    primary: blue
+    accent: white
+  # custom_dir: overrides
+  features:
+    - navigation.tabs
+    - navigation.tracking
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.indexes
+
+extra:
+  version:
+    provider: mike
