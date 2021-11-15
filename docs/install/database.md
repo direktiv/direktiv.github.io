@@ -81,9 +81,7 @@ The details of this PostgreSQL cluster are stored as secrets in the 'postgres' n
 *Retrieve the database password secret*
 
 ```console
-{% raw %}
 kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode
-{% endraw %}
 ```
 
 > &#x2757; Please be aware that persistent volume claims are not deleted and must be manually deleted when uninstalling.
