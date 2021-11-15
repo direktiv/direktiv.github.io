@@ -22,7 +22,7 @@ exe='cd /certs && step certificate create root.linkerd.cluster.local ca.crt ca.k
 && step certificate create identity.linkerd.cluster.local issuer.crt issuer.key \
 --profile intermediate-ca --not-after 8760h --no-password --insecure \
 --ca ca.crt --ca-key ca.key'; \
-docker run -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c "$exe"; \
+docker run --user root -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c "$exe"; \
 echo $tmpDir);
 ```
 
