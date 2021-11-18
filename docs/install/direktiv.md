@@ -48,7 +48,7 @@ database:
   sslmode: require
 ```
 
-Using this `direktiv.yaml` configuration, deploy the direktiv helm chart:
+Using this ```direktiv.yaml``` configuration, deploy the direktiv helm chart:
 
 ```shell
 kubectl create namespace direktiv-services-direktiv
