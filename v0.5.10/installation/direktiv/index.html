@@ -1565,7 +1565,7 @@
   <span class="nt">replicaCount</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
 </code></pre></div>
 <h2 id="direktiv_1">Direktiv</h2>
-<p>Firstly, create a <code>direktiv.yaml</code> file which contains all of the database connectivity and secret information created in the <a href="database.html">database</a> setup:</p>
+<p>Firstly, create a <code>direktiv.yaml</code> file which contains all of the database connectivity and secret information created in the <a href="/installation/database">database</a> setup:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">database</span><span class="p">:</span>
   <span class="c1"># -- database host</span>
   <span class="nt">host</span><span class="p">:</span> <span class="s">&quot;direktiv-ha.postgres.svc&quot;</span>
@@ -1584,7 +1584,7 @@
 <div class="highlight"><pre><span></span><code>kubectl create namespace direktiv-services-direktiv
 helm install -f direktiv.yaml direktiv direktiv/direktiv
 </code></pre></div>
-<p>For more configuration options click <a href="https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv">here</a> but the most important configuration values are the database settings which need to be identical to settings used during <a href="database.html">database</a> setup.</p>
+<p>For more configuration options click <a href="https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv">here</a> but the most important configuration values are the database settings which need to be identical to settings used during <a href="/installation/database">database</a> setup.</p>
                 
               
               
