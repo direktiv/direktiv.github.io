@@ -24,12 +24,7 @@ kong-internal:
 
 ## Direktiv
 
-```shell
-kubectl create namespace direktiv-services-direktiv
-helm install -f direktiv.yaml direktiv direktiv/direktiv
-```
-
-For more configuration options click [here](https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv) but the most important configuration values are the database settings which need to be identical to settings used during [database](database) setup.
+Firstly, create a `direktiv.yaml` file which contains all of the database connectivity and secret information created in the [database](database.html) setup:
 
 ```yaml
 database:
@@ -46,3 +41,12 @@ database:
   # -- sslmode for database
   sslmode: require
 ```
+
+Using this `direktiv.yaml` configuration, deploy the direktiv helm chart:
+
+```shell
+kubectl create namespace direktiv-services-direktiv
+helm install -f direktiv.yaml direktiv direktiv/direktiv
+```
+
+For more configuration options click [here](https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv) but the most important configuration values are the database settings which need to be identical to settings used during [database](database.html) setup.
