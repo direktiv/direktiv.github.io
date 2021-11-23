@@ -9,3 +9,4 @@ docs/enterprise/
 ./site
 build/api/direktiv
 build/api/api.md
+site/
