@@ -19,5 +19,6 @@ mkdocs serve
 
 ## Deploy Docs Live
 ```sh
-mkdocs gh-deploy
+mike deploy --push --update-aliases VERSION_TAG
+# Example: mike deploy --push --update-aliases v0.5.10
 ```

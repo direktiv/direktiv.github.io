@@ -24,7 +24,7 @@ kong-internal:
 
 ## Direktiv
 
-Firstly, create a `direktiv.yaml` file which contains all of the database connectivity and secret information created in the [database](database.html) setup:
+Firstly, create a `direktiv.yaml` file which contains all of the database connectivity and secret information created in the [database](/installation/database) setup:
 
 ```yaml
 database:
@@ -49,4 +49,4 @@ kubectl create namespace direktiv-services-direktiv
 helm install -f direktiv.yaml direktiv direktiv/direktiv
 ```
 
-For more configuration options click [here](https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv) but the most important configuration values are the database settings which need to be identical to settings used during [database](database.html) setup.
+For more configuration options click [here](https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv) but the most important configuration values are the database settings which need to be identical to settings used during [database](/installation/database) setup.
