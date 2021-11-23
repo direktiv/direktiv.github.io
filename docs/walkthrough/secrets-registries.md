@@ -35,19 +35,39 @@ This workflow will use a private Docker container marketplace.gcr.io to perform 
 
 ## Registries
 
-Direktiv can store authentication information for a Docker repository on a namespace-by-namespace basis. If you have access to the Direktiv server via a command-line interface see [here](/docs/cli/registries.html), otherwise if there's a web interface look for their way to define registries. 
+Direktiv can store authentication information for a Docker repository on a namespace-by-namespace basis. Creating secrets can be done via the [Direktiv API](/docs/api/api.html) or web interface in the settings page. 
 
-With the relevant registry defined, functions referencing containers on that registry become accessible. For example, if a registry was created via the cli with the following command
+With the relevant registry defined, functions referencing containers on that registry become accessible. For example, if a registry was created via the api with the following curl command:
 
 ```sh
-direkcli registries create mynamespace URL alan:f53c8242-e71d-451e-9bb7-ee85742a6ed8
+curl -X 'POST' \
+  'URL/api/functions/registries/namespaces/NAMESPACE' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "data": "admin:8QwFLg%D$qg*",
+  "reg": "https://index.docker.io"
+}'
 ```
 
 This registry would be used automatically by Direktiv when running the workflow in the demo.
 
+### Registry Types
+
+There are 3 types of registries that encompass different function scopes:
+#### Namespace Registries
+Namespace registries are applied to all services and functions created in the same namespace.
+
+#### Global Registries
+Global registries are applied to all services and functions irrelevant to the namespace. These registries are also used by global services.
+
+#### Global Private Registries
+Global private registries are only used by global services.
+
+*Note: If a registry is created after a service, the service will need to be recreated to use the latest registry.*
 ## Secrets 
 
-Similar to how registry tokens are stored, arbitrary secrets can also be stored. That includes passwords, API tokens, certificates, or anything else. Secrets are stored on a namespace-by-namespace basis as key-value pairs. If you have access to a Direktiv server via command-line interface see [here](/docs/cli/secrets.html), otherwise if there's a web interface look for their way to define secrets.
+Similar to how registry tokens are stored, arbitrary secrets can also be stored. That includes passwords, API tokens, certificates, or anything else. Secrets are stored on a namespace-by-namespace basis as key-value pairs. Secreats can be defined with the [Direktiv API](/docs/api/api.html) or web interface.
 
 Wherever actions appear in workflow definitions there's always an optional `secrets` field. For every secret named in this field, Direktiv will find and decrypt the relevant secret from your namespace and add it to the data from which the action input is generated just before running the `jq` command that generates that logic. This means your `jq` commands can reference your secret and place it wherever it needs to be. 
 

@@ -52,6 +52,14 @@ functions:
     image: direktiv/awsgo:v1
     type: reusable
 
+  - id: add-dns-record
+    type: subflow
+    workflow: add-dns-record
+
+  - id: send-email
+    type: subflow
+    workflow: send-email
+
 states:
 
   # Set data (skips need for providing an input object on each invocation)
@@ -106,7 +114,7 @@ states:
     type: action
     log: jq(.)
     action:
-      workflow: add-dns-record
+      function: add-dns-record
       input: 
         domain: jq(.domain)
         subdomain: jq(.subdomain)
@@ -117,7 +125,7 @@ states:
   - id: send-email
     type: action
     action:
-      workflow: send-email
+      function: send-email
       input:
         recipient: jq(.recipient)
         domain: jq(.domain)
@@ -238,4 +246,4 @@ states:
 
 Hopefully this article has illustrated how to use pre-existing direktiv isolates to bootstrap workflow development! It should also serve as a reminder that, by making a workflow 'modular' through the use of subflows, a complicated workflow can be made to appear quite straightforward.
 
-If you're interested in seeing what other isolates already exist, check out the [direktiv-apps GitHub page](https://github.com/direktiv/direktiv-apps/). To learn how to write your own custom isolates, click [here](../walkthrough/making-isolates.html)
+If you're interested in seeing what other isolates already exist, check out the [direktiv-apps GitHub page](https://github.com/direktiv/direktiv-apps/). To learn how to write your own custom isolates, click [here](/docs/walkthrough/making-functions.html)

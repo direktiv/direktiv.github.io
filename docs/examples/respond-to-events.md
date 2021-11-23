@@ -9,7 +9,7 @@ parent: Examples
 
 Workflows can be triggered in a number of ways; by default they must be manually triggered, but with the correct configuration a workflow will start each time a cloud event reaches the parent namespace that satisfies the constraints detailed in the workflow definition.
 
-To demonstrate this, let's modify the 'main' workflow from [this article](../create-vm-set-dns.html), removing the `send-email` state and replacing it with a state that will generate an event.
+To demonstrate this, let's modify the 'main' workflow from [this article](/docs/examples/create-vm-set-dns.html), removing the `send-email` state and replacing it with a state that will generate an event.
 
 
 ```yaml
@@ -20,7 +20,7 @@ To demonstrate this, let's modify the 'main' workflow from [this article](../cre
     type: action
     log: jq(.)
     action:
-      workflow: add-dns-record
+      function: add-dns-record
       input: 
         domain: jq(.domain)
         subdomain: jq(.subdomain)

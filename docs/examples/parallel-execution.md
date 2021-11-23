@@ -16,13 +16,23 @@ A hypothetical scenario where this approach may be used could involve a CI/CD pr
 
 ```yaml
 id: waiting
+functions:
+- id: wait-for-windows
+  type: subflow
+  workflow: wait-for-windows
+- id: wait-for-linux
+  type: subflow
+  workflow: wait-for-linux
+- id: wait-for-mac
+  type: subflow
+  workflow: wait-for-mac
 states:
 - id: run
   type: parallel
   actions:
-  - workflow: wait-for-windows
-  - workflow: wait-for-linux
-  - workflow: wait-for-mac
+  - function: wait-for-windows
+  - function: wait-for-linux
+  - function: wait-for-mac
   mode: and
 ```
 

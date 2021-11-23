@@ -16,7 +16,7 @@ has_toc: true
 The diagram below captures the workflow definition specification. This is to be used as a reference only, the full specification is described in detail in the sections below.
 
 <p align=center>
-<img src="../assets/direktiv-specification-nontransparent.png" />
+<img src="../assets/direktiv-specification-nontransparent.png" alt="direktiv-specification"/>
 </p>
 
 # Workflow Definition
@@ -525,8 +525,13 @@ If the `timeout` is reached before the state can transition a `direktiv.stateTim
 | key       | Variable name.                                           | string | yes      |
 | scope     | Variable scope ("instance", "workflow", or "namespace"). | string | yes      |
 | value     | `jq` command to generate variable value.                 | string | yes      |
+| mimeType  | MimeType to store variable value as.                     | string | no       |
 
-The setter state is used to store persistent data.
+The setter state is used to store persistent data. A mimeType type can be provided to specify the type of content a variable is. If mimeType is not provided it will default to `application/json`. There are three mimeType's that are specifcically handled:
+* application/json - Default behaviour, value is treated as a json object.
+* text/plain - Value is treated as a plaintext string, no json marshalling is done.
+* application/octet-stream - Value is expected to be a base64 string and is stored as its decoded binary value.
+Read more about mimeTyps in the [Examples](examples/variable-mime-types.html).
 
 ### SwitchState
 
