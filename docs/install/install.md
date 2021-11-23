@@ -32,3 +32,17 @@ There is also a [quick installation guide](summary) and a docker image for testi
 ```console
 docker run --privileged -p 8080:80 -ti direktiv/direktiv-kube
 ```
+
+The docker images has addtional environment variables which can add additional functionality:
+
+- APIKEY: Set an API key for the application
+- HTTPS_PROXY: Sets the HTTPS_PROXY environment variable
+- HTTP_PROXY: Sets the HTTP_PROXY environment variable
+- NO_PROXY: Sets the NO_PROXY environment variable
+- EVENTING: Enables Knative eventing
+- DEBUG: Prints k3s output to stdout
+
+*Example*
+```console
+docker run -e APIKEY=123 --privileged -p 8080:80 -ti direktiv/direktiv-kube
+```
