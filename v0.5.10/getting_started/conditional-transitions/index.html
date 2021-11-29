@@ -1837,7 +1837,7 @@
 <h2 id="loops">Loops</h2>
 <p>By transitioning to a state that has already happened it's possible to create loops in workflow instances. In this demo we've got a type of range loop, iterating over the contents of an array. Direktiv sets limits for the number of transitions an instance can make in order to protect itself from infinitely-looping workflows. Consider some of the following alternatives if you want to have a loop:</p>
 <h3 id="foreach-state">Foreach State</h3>
-<p>For range loops like the one in this demo there's another state called a Foreach State that simplifies the logic and splits up a data set to run many actions in parallel without doing lots of transitions. A fuller explanation of the Foreach State will be discussed in <a href="/docs/examples/solving-math-expressions.html">another article</a>, but here's an equivalent workflow definition to the demo if you're curious:</p>
+<p>For range loops like the one in this demo there's another state called a Foreach State that simplifies the logic and splits up a data set to run many actions in parallel without doing lots of transitions. A fuller explanation of the Foreach State will be discussed in <a href="/examples/solving-math-expressions">another article</a>, but here's an equivalent workflow definition to the demo if you're curious:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">multiposter</span>
 <span class="nt">functions</span><span class="p">:</span>
 <span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">httprequest</span>

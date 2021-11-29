@@ -1491,7 +1491,7 @@
                 
                 <h1 id="reacting-to-consuming-cloud-events">Reacting to ("consuming") Cloud Events</h1>
 <p>Workflows can be triggered in a number of ways; by default they must be manually triggered, but with the correct configuration a workflow will start each time a cloud event reaches the parent namespace that satisfies the constraints detailed in the workflow definition.</p>
-<p>To demonstrate this, let's modify the 'main' workflow from <a href="/docs/examples/create-vm-set-dns.html">this article</a>, removing the <code>send-email</code> state and replacing it with a state that will generate an event.</p>
+<p>To demonstrate this, let's modify the 'main' workflow from <a href="/examples/create-vm-set-dns">this article</a>, removing the <code>send-email</code> state and replacing it with a state that will generate an event.</p>
 <div class="highlight"><pre><span></span><code>  <span class="l l-Scalar l-Scalar-Plain">...</span>
 
   <span class="l l-Scalar l-Scalar-Plain"># Add an &#39;A&#39; DNS record</span>
