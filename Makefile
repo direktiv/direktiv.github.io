@@ -17,4 +17,3 @@ install-deps:
 validate-api:
 	bundle exec jekyll build --drafts
 	bundle exec htmlproofer ./_site --url-ignore "/#/"
-

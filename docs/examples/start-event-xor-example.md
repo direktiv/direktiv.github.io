@@ -1,9 +1,4 @@
----
-layout: default
-title: EventXor Start
-nav_order: 18
-parent: Examples
----
+
 
 # Start EventXor Workflow
 

@@ -1,9 +1,4 @@
----
-layout: default
-title: Check for Website Change
-nav_order: 9
-parent: Examples
----
+
 
 # Check if Website has changed Example
 
@@ -111,7 +106,7 @@ Note: the getter state will place variables into the `var` property. So the `var
 ```
 
 ## Extra - Converting to a Cron Job
-This workflow can currently run as is, and be manually executed. However this example is more than likely to be used as a [cron job](walkthrough/scheduling.html#cron). To convert this workflow all you need to do is add the start block to the top of the workflow. Below is an example that, if added to the workflow, will run this workflow every once every two hours.
+This workflow can currently run as is, and be manually executed. However this example is more than likely to be used as a [cron job](../../getting_started/scheduling#cron). To convert this workflow all you need to do is add the start block to the top of the workflow. Below is an example that, if added to the workflow, will run this workflow every once every two hours.
 
 ```yaml
 start:

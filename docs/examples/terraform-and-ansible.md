@@ -1,9 +1,4 @@
----
-layout: default
-title: Terraform/Ansible Workflows
-nav_order: 10
-parent: Examples
----
+
 
 # Using Terraform & Ansible in a Workflow
 

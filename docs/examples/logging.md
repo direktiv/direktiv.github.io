@@ -1,9 +1,4 @@
----
-layout: default
-title: Logging
-nav_order: 7
-parent: Examples
----
+
 
 # Logging
 

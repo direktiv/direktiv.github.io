@@ -1,9 +1,4 @@
----
-layout: default
-title: Greeting (Action State)
-nav_order: 1
-parent: Examples
----
+
 
 # Greeting Example
 

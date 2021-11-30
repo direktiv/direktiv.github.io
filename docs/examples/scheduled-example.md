@@ -1,9 +1,4 @@
----
-layout: default
-title: Scheduled Start
-nav_order: 15
-parent: Examples
----
+
 
 # Scheduled Cronjob Workflow
 

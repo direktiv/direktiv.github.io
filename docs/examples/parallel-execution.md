@@ -1,9 +1,3 @@
----
-layout: default
-title: Parallel Execution (Parallel)
-nav_order: 4
-parent: Examples
----
 
 # Parallel Execution and Wait Example
 

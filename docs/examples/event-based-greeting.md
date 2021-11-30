@@ -1,9 +1,4 @@
----
-layout: default
-title: Event-based Greeting (StartEvent)
-nav_order: 2
-parent: Examples
----
+
 
 # Event-based Greeting Example
 

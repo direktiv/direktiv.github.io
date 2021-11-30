@@ -1,0 +1,46 @@
+INHERIT: config/nav.yml
+
+site_name: Direktiv
+site_url: https://docs.direktiv.io
+site_description: Direktiv Documentation
+repo_url: https://github.com/direktiv/direktiv
+
+plugins:
+- search
+theme:
+  name: material
+  logo: assets/logo.png
+  favicon: assets/favicon.ico
+  # custom_dir: overrides
+  palette:
+    scheme: default
+    primary: blue
+    accent: white
+  features:
+    - navigation.tabs
+    - navigation.tracking
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.indexes
+
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/direktiv_io
+    - icon: fontawesome/brands/github
+      link: https://github.com/direktiv/direktiv
+      name: Direktiv on Github
+    - icon: fontawesome/brands/slack
+      link: https://direktivio.slack.com/
+      name: Slack
+
+
+copyright: "Copyright © 2021 direktiv.io"
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets

@@ -1,9 +1,4 @@
----
-layout: default
-title: Handling non-JSON input data
-nav_order: 6
-parent: Examples
----
+
 
 # Handling non-JSON input data
 

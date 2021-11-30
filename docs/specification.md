@@ -1,17 +1,6 @@
----
-layout: default
-title: Specification
-nav_order: 50
-has_toc: true
----
+# Specification
 
-# Contents
-{:.no_toc}
-
-* auto-gen TOC:
-{:toc}
-
-# Workflow Overview Diagram
+## Workflow Overview Diagram
 
 The diagram below captures the workflow definition specification. This is to be used as a reference only, the full specification is described in detail in the sections below.
 
@@ -19,7 +8,7 @@ The diagram below captures the workflow definition specification. This is to be 
 <img src="../assets/direktiv-specification-nontransparent.png" alt="direktiv-specification"/>
 </p>
 
-# Workflow Definition
+## Workflow Definition
 
 | Parameter   | Description                                                             | Type                                        | Required |
 | ----------- | ----------------------------------------------------------------------- | ------------------------------------------- | -------- |
@@ -29,7 +18,6 @@ The diagram below captures the workflow definition specification. This is to be 
 | version     | Version information.                                                    | string                                      | no       |
 | singular    | Attempts to invoke this workflow will fail when an instance is running. | no                                          | bool     |
 | functions   | Workflow function definitions.                                          | [[]FunctionDefinition](#functiondefinition) | no       |
-| schemas     | Workflow schema definitions.                                            | [[]SchemaDefinition](#schemadefinition)     | no       |
 | states      | Workflow states.                                                        | [[]StateDefinition](#states)                | no       |
 | timeouts    | Workflow global timeouts.                                               | [TimeoutDefinition](#timeoutdefinition)     | no       |
 | start       | Workflow start configuration.                                           | [Start](#start)                             | no       |
@@ -114,13 +102,6 @@ The default value for "**scale**" is 0 which means the service will be removed a
 | scope     | Scope used to select variable. Defaults to 'instance', but can be 'workflow' or 'namespace'. | string | no       |
 | as        | Set the filename of the file. The default is the same as the key.                            | string | no       |
 | type      | How to treat the file. Options include 'plain', 'base64', 'tar', 'tar.gz'.                   | string | no       |
-
-## SchemaDefinition
-
-| Parameter | Description                          | Type   | Required |
-| --------- | ------------------------------------ | ------ | -------- |
-| id        | Schema definition unique identifier. | string | yes      |
-| schema    | Schema (based on JSON Schema).       | object | yes      |
 
 ## States
 
@@ -531,7 +512,7 @@ The setter state is used to store persistent data. A mimeType type can be provid
 * application/json - Default behaviour, value is treated as a json object.
 * text/plain - Value is treated as a plaintext string, no json marshalling is done.
 * application/octet-stream - Value is expected to be a base64 string and is stored as its decoded binary value.
-Read more about mimeTyps in the [Examples](examples/variable-mime-types.html).
+Read more about mimeTyps in the [Examples](../examples/variable-mime-types/).
 
 ### SwitchState
 

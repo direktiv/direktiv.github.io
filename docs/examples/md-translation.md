@@ -1,9 +1,4 @@
----
-layout: default
-title: Convert a Markdown Document to multiple Languages
-nav_order: 11
-parent: Examples
----
+
 
 # Introduction
 

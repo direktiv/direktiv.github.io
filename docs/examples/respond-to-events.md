@@ -1,9 +1,4 @@
----
-layout: default
-title: Reacting to (“consuming”) Cloud Events
-nav_order: 8
-parent: Examples
----
+
 
 # Reacting to ("consuming") Cloud Events
 

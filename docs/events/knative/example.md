@@ -1,12 +1,5 @@
----
-layout: default
-title: Kafka/Knative Example
-parent: Events
-nav_order: 2
-has_children: false
----
 
-## Kafka, Knative and Direktiv
+# Kafka, Knative and Direktiv
 
 In this example we will generate an event in Kafka, consume it in Direktiv via Knative and publish a new event back to Knative.
 

@@ -1,15 +1,9 @@
----
-layout: default
-title: Knative Eventing
-parent: Events
-nav_order: 1
-has_children: false
----
 
-Direktiv provides a sink and a source for integration into [Knative Eventing](https://knative.dev). This [Kafka example](example.html) provides a test configuration
+
+Direktiv provides a sink and a source for integration into [Knative Eventing](https://knative.dev). This [Kafka example](../example) provides a test configuration
 with Knative Eventing, Kafka and Direktiv.
 
-## Sink
+# Sink
 
 If eventing is enabled in Direktiv's helm chart an additional service is available in the namespace called *direktiv-eventing*.
 Knative triggers can be used to subscribe to events from configured [Knative sources](https://knative.dev/docs/developer/eventing/sources/) and executes flows in Direktiv.
@@ -33,7 +27,7 @@ spec:
     uri: /mynamespace
 ```
 
-## Source
+# Source
 
 Direktiv provides a source for integrating Direktiv events into Knative as well. To use the source eventing needs to be enabled via helm.
 

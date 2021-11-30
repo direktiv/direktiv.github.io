@@ -1,9 +1,4 @@
----
-layout: default
-title: EventAnd Start
-nav_order: 17
-parent: Examples
----
+
 
 # Start EventAnd Workflow
 
