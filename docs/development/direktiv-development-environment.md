@@ -26,7 +26,7 @@ docker logs direktiv -f
 
 Once all pods reach 'running' status, direktiv is ready and the URL `http://localhost:8080/api/namespaces` is accessible.
 
-The database uses a persitent volume so the data stored should survive restarts with *'docker stop/start'*.
+The database uses a persistent volume so the data stored should survive restarts with *'docker stop/start'*.
 
 
 ## Running with proxy
@@ -34,7 +34,7 @@ The database uses a persitent volume so the data stored should survive restarts 
 Running direktiv with a proxy configuration, the following settings can be passed as environmental variables:
 
 ```sh
-docker run --privileged -p 8080:80 -p 31212:31212 --env HTTPS_PROXY="http://<proxy-address>:443" --env NO_PROXY=".default,10.0.0.0/8,172.0.0.0/8,localhost" --env PERSIST=true -ti -v /tmp/pg:/tmp/pg direktiv/direktiv-kube
+docker run --privileged -p 8080:80 -p 31212:31212 --env HTTPS_PROXY="http://<proxy-address>:443" --env NO_PROXY=".default,10.0.0.0/8,172.0.0.0/8,localhost" -ti direktiv/direktiv-kube
 ```
 
 ## Docker registry
