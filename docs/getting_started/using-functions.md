@@ -14,7 +14,7 @@ This article demonstrates how each of the available function types is used withi
 
 ## subflow
 
-A `subflow` function allows a workflow to execute another workflow. 
+A `subflow` function allows a workflow to execute another workflow.
 Assuming that 2 workflows exist, `parent` and `child`, the `parent` workflow could use the `child` workflow as a'subflow' function.
 
 ```yml
@@ -30,11 +30,11 @@ states:
       function: my-subflow
 ```
 
-View [this article](/docs/walkthrough/subflows.html) for more detailed information.
+View [this article](../../getting_started/subflows) for more detailed information.
 
 ## isolated
 
-Isolated functions are less performant than other types, but can be useful if you need greater isolation or just want to write your own function and prefer the simpler design pattern of interacting with the file-system instead of implementing a server that adheres to our reusable function spec. For more information about isolated functions, click [here](/docs/walkthrough/isolated-functions.html).
+Isolated functions are less performant than other types, but can be useful if you need greater isolation or just want to write your own function and prefer the simpler design pattern of interacting with the file-system instead of implementing a server that adheres to our reusable function spec. For more information about isolated functions, click [here](../isolated-functions).
 
 ```yml
 id: my-workflow

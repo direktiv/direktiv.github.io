@@ -17,6 +17,11 @@ pip install mkdocs-material
 mkdocs serve
 ```
 
+## Test Broken Links
+```sh
+make test-links
+```
+
 ## Deploy Docs Live
 ```sh
 mike deploy --push --update-aliases VERSION_TAG

@@ -1,3 +1,5 @@
+MKDIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 # clones direktiv and builds api docs
 .PHONY: update-api
 update-api:
@@ -17,3 +19,8 @@ install-deps:
 validate-api:
 	bundle exec jekyll build --drafts
 	bundle exec htmlproofer ./_site --url-ignore "/#/"
+
+.PHONY: test-links
+test-links:
+	docker build -t linkcheck ${MKDIR}/test/linkcheck
+	docker run --rm -v ${MKDIR}:/testsite linkcheck

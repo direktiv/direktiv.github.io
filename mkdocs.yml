@@ -4,6 +4,7 @@ site_name: Direktiv
 site_url: https://docs.direktiv.io
 site_description: Direktiv Documentation
 repo_url: https://github.com/direktiv/direktiv
+strict: true
 
 plugins:
 - search

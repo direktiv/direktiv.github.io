@@ -30,7 +30,7 @@ To keep everything clean, this workflow will actually be split up in to 1 'main'
 
 ## Workflow #1 - Main
 
-This workflow creates an AWS EC2 instance, retrieves it's public IP address, and invokes the `add-dns-record` and `send-email` subflows. The first state, `set-input`, is included purely as a matter of convenience, as it allows us to execute the workflow without needing to remember to provide it with an input struct. 
+This workflow creates an AWS EC2 instance, retrieves it's public IP address, and invokes the `add-dns-record` and `send-email` subflows. The first state, `set-input`, is included purely as a matter of convenience, as it allows us to execute the workflow without needing to remember to provide it with an input struct.
 
 ```yaml
 id: create-vm-with-dns
@@ -70,7 +70,7 @@ states:
     action:
       function: create-vm
       secrets: ['AWS_KEY', 'AWS_SECRET']
-      input: 
+      input:
         access-key: 'jq( .secrets.AWS_KEY )'
         access-secret: 'jq( .secrets.AWS_SECRET )'
         image-id: 'jq( .ami )'
@@ -110,7 +110,7 @@ states:
     log: jq(.)
     action:
       function: add-dns-record
-      input: 
+      input:
         domain: jq(.domain)
         subdomain: jq(.subdomain)
         address: jq(.address)
@@ -137,13 +137,13 @@ id: add-dns-record
 description: Add an A DNS record to the specified domain on GoDaddy.
 
 functions:
-  
+
   - id: req
     image: direktiv/request:v1
     type: reusable
 
 states:
-  
+
   # Validate input
   - id: validate
     type: validate
@@ -163,14 +163,14 @@ states:
           type: string
         address:
           type: string
-  
+
   # Send GoDaddy API request
-  - id: api-request 
+  - id: api-request
     type: action
     action:
       secrets: ["GODADDY_KEY", "GODADDY_SECRET"]
       function: req
-      input: 
+      input:
         method: "PATCH"
         url: jq( "https://api.godaddy.com/v1/domains/" + .domain + "/records" )
         headers:
@@ -192,13 +192,13 @@ id: send-email
 description: Sends an email to the specified user informing them of successful VM / DNS setup.
 
 functions:
-  
+
   - id: send-email
     image: direktiv/smtp:v1
     type: reusable
 
 states:
-  
+
   # Validate input
   - id: validate
     type: validate
@@ -227,7 +227,7 @@ states:
     action:
       function: send-email
       secrets: ["SMTP_USER", "SMTP_PASSWORD"]
-      input: 
+      input:
         to: jq( .recipient )
         subject: 'Success!'
         message: jq( "Instance creation successful. Created DNS record pointing " + .subdomain + "." + .domain + " to " + .address + "!" )
@@ -241,4 +241,4 @@ states:
 
 Hopefully this article has illustrated how to use pre-existing direktiv isolates to bootstrap workflow development! It should also serve as a reminder that, by making a workflow 'modular' through the use of subflows, a complicated workflow can be made to appear quite straightforward.
 
-If you're interested in seeing what other isolates already exist, check out the [direktiv-apps GitHub page](https://github.com/direktiv/direktiv-apps/). To learn how to write your own custom isolates, click [here](/docs/walkthrough/making-functions.html)
+If you're interested in seeing what other isolates already exist, check out the [direktiv-apps GitHub page](https://github.com/direktiv/direktiv-apps/). To learn how to write your own custom isolates, click [here](../../getting_started/making-functions/)

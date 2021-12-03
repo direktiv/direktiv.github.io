@@ -12,14 +12,16 @@ Goes through the process of setting up a storage account that listens for events
 
 # Setup
 
-To follow along you will need access to the resource group you wish to setup in.
+To follow along you will need access to the resource group you wish to setup in. This example includes the creation of a storage account but an existing one can be used.
 
 ## Create a Storage Account & Container
+
+
 
 Create a storage account under a resource group
 
 ```sh
-az storage account create --name direktivstoragetest --resource-group trentis-direktiv-apps-test 
+az storage account create --name direktivstoragetest --resource-group trentis-direktiv-apps-test
 ```
 
 Create a container under that storage account. You can get the --account-key by doing the following
@@ -33,6 +35,8 @@ az storage container create  --name direktiv-container --account-name direktivst
 ```
 
 ## Create an Event Subscription
+
+webhook-request-callback sends option request
 
 Create an event subscription attached to the storage account.
 
@@ -60,4 +64,3 @@ states:
     type: noop
     transform: 'jq({ result: . })'
 ```
-

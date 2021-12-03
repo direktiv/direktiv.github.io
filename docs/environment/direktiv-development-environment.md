@@ -2,7 +2,7 @@
 
 # Development Standalone environment
 
-To improve function and workflows development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom functions is described in <a href="/docs/walkthrough/making-functions.html">this section</a>.
+To improve function and workflows development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom functions is described in <a href="../../getting_started/making-functions">this section</a>.
 
 ## Running direktiv
 
