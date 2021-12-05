@@ -1565,7 +1565,7 @@
                 
                 
                 <h1 id="development-standalone-environment">Development Standalone environment</h1>
-<p>To improve function and workflows development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom functions is described in <a href="/getting_started/making-functions">this section</a>.</p>
+<p>To improve function and workflows development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom functions is described in <a href="../../getting_started/making-functions">this section</a>.</p>
 <h2 id="running-direktiv">Running direktiv</h2>
 <p>Setting up a development direktiv instance on a local machine is pretty simple. Assuming docker is installed, run the folowing command:</p>
 <div class="highlight"><pre><span></span><code>docker run --privileged -p <span class="m">8080</span>:80 -p <span class="m">31212</span>:31212 -d --name direktiv direktiv/direktiv-kube
@@ -1574,10 +1574,10 @@
 <div class="highlight"><pre><span></span><code>docker logs direktiv -f
 </code></pre></div>
 <p>Once all pods reach 'running' status, direktiv is ready and the URL <code>http://localhost:8080/api/namespaces</code> is accessible.</p>
-<p>The database uses a persitent volume so the data stored should survive restarts with <em>'docker stop/start'</em>.</p>
+<p>The database uses a persistent volume so the data stored should survive restarts with <em>'docker stop/start'</em>.</p>
 <h2 id="running-with-proxy">Running with proxy</h2>
 <p>Running direktiv with a proxy configuration, the following settings can be passed as environmental variables:</p>
-<div class="highlight"><pre><span></span><code>docker run --privileged -p <span class="m">8080</span>:80 -p <span class="m">31212</span>:31212 --env <span class="nv">HTTPS_PROXY</span><span class="o">=</span><span class="s2">&quot;http://&lt;proxy-address&gt;:443&quot;</span> --env <span class="nv">NO_PROXY</span><span class="o">=</span><span class="s2">&quot;.default,10.0.0.0/8,172.0.0.0/8,localhost&quot;</span> --env <span class="nv">PERSIST</span><span class="o">=</span><span class="nb">true</span> -ti -v /tmp/pg:/tmp/pg direktiv/direktiv-kube
+<div class="highlight"><pre><span></span><code>docker run --privileged -p <span class="m">8080</span>:80 -p <span class="m">31212</span>:31212 --env <span class="nv">HTTPS_PROXY</span><span class="o">=</span><span class="s2">&quot;http://&lt;proxy-address&gt;:443&quot;</span> --env <span class="nv">NO_PROXY</span><span class="o">=</span><span class="s2">&quot;.default,10.0.0.0/8,172.0.0.0/8,localhost&quot;</span> -ti direktiv/direktiv-kube
 </code></pre></div>
 <h2 id="docker-registry">Docker registry</h2>
 <p>Direktiv pulls containers from a registry and runs them as functions. For development purposes the direktiv docker container comes with a registry installed. It is accessible on localhost:31212.</p>

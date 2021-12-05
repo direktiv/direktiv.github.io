@@ -1494,10 +1494,10 @@
                 <h1 id="azure-eventgrid">Azure EventGrid</h1>
 <p>Goes through the process of setting up a storage account that listens for events on upload. Being that Azure uses native cloud events we won't need to run anything apart from the initial setup.</p>
 <h1 id="setup">Setup</h1>
-<p>To follow along you will need access to the resource group you wish to setup in.</p>
+<p>To follow along you will need access to the resource group you wish to setup in. This example includes the creation of a storage account but an existing one can be used.</p>
 <h2 id="create-a-storage-account-container">Create a Storage Account &amp; Container</h2>
 <p>Create a storage account under a resource group</p>
-<div class="highlight"><pre><span></span><code>az storage account create --name direktivstoragetest --resource-group trentis-direktiv-apps-test 
+<div class="highlight"><pre><span></span><code>az storage account create --name direktivstoragetest --resource-group trentis-direktiv-apps-test
 </code></pre></div>
 <p>Create a container under that storage account. You can get the --account-key by doing the following</p>
 <div class="highlight"><pre><span></span><code>az storage account keys list --account-name direktivstoragetest
@@ -1505,6 +1505,7 @@
 <div class="highlight"><pre><span></span><code>az storage container create  --name direktiv-container --account-name direktivstorage100  --account-key ACCOUNT-KEY
 </code></pre></div>
 <h2 id="create-an-event-subscription">Create an Event Subscription</h2>
+<p>webhook-request-callback sends option request</p>
 <p>Create an event subscription attached to the storage account.</p>
 <div class="highlight"><pre><span></span><code>az eventgrid event-subscription create <span class="se">\</span>
 --name direktiv-event <span class="se">\</span>

@@ -1551,7 +1551,7 @@
                 
                 
                 <h1 id="direktiv">Direktiv</h1>
-<p>Installing direktiv is a two-step process. The first part is to install <a href="https://knative.dev">Knative</a>, the platform to execute Direktiv's serverless functions. The second part is installing and configuring Direktiv itself. If Linkerd is required it needs to be <a href="../linkerd/">installed first</a> before installing Knative and Direktiv.</p>
+<p>Installing direktiv is a two-step process. The first part is to install <a href="https://knative.dev">Knative</a>, the platform to execute Direktiv's serverless functions. The second part is installing and configuring Direktiv itself. If Linkerd is required it needs to be <a href="../linkerd">installed first</a> before installing Knative and Direktiv.</p>
 <h2 id="knative">Knative</h2>
 <p>Knative is an essential part of Direktiv. Although Knative provides YAML files for installation it is recommended to use the helm installation with Direktiv's Helm charts. It uses the correct Knative (&gt; 0.25.0) version and comes pre-configured to work seamlessly with Direktiv.</p>
 <div class="highlight"><pre><span></span><code><span class="go">helm repo add direktiv https://charts.direktiv.io</span>
@@ -1565,7 +1565,7 @@
   <span class="nt">replicaCount</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
 </code></pre></div>
 <h2 id="direktiv_1">Direktiv</h2>
-<p>Firstly, create a <code>direktiv.yaml</code> file which contains all of the database connectivity and secret information created in the <a href="/installation/database">database</a> setup:</p>
+<p>Firstly, create a <code>direktiv.yaml</code> file which contains all of the database connectivity and secret information created in the <a href="../../installation/database">database</a> setup:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">database</span><span class="p">:</span>
   <span class="c1"># -- database host</span>
   <span class="nt">host</span><span class="p">:</span> <span class="s">&quot;direktiv-ha.postgres.svc&quot;</span>
@@ -1584,7 +1584,7 @@
 <div class="highlight"><pre><span></span><code>kubectl create namespace direktiv-services-direktiv
 helm install -f direktiv.yaml direktiv direktiv/direktiv
 </code></pre></div>
-<p>For more configuration options click <a href="https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv">here</a> but the most important configuration values are the database settings which need to be identical to settings used during <a href="/installation/database">database</a> setup.</p>
+<p>For more configuration options click <a href="https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv">here</a> but the most important configuration values are the database settings which need to be identical to settings used during <a href="../../installation/database">database</a> setup.</p>
                 
               
               

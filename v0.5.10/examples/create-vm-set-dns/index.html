@@ -1606,7 +1606,7 @@
 <li>Password for the SMTP user.</li>
 </ul>
 <h2 id="workflow-1-main">Workflow #1 - Main</h2>
-<p>This workflow creates an AWS EC2 instance, retrieves it's public IP address, and invokes the <code>add-dns-record</code> and <code>send-email</code> subflows. The first state, <code>set-input</code>, is included purely as a matter of convenience, as it allows us to execute the workflow without needing to remember to provide it with an input struct. </p>
+<p>This workflow creates an AWS EC2 instance, retrieves it's public IP address, and invokes the <code>add-dns-record</code> and <code>send-email</code> subflows. The first state, <code>set-input</code>, is included purely as a matter of convenience, as it allows us to execute the workflow without needing to remember to provide it with an input struct.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create-vm-with-dns</span>
 <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Creates an instance on AWS EC2, add a DNS record to GoDaddy, and posts a CloudEvent on completion.</span>
 
@@ -1644,7 +1644,7 @@
     <span class="nt">action</span><span class="p">:</span>
       <span class="nt">function</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create-vm</span>
       <span class="nt">secrets</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&#39;AWS_KEY&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;AWS_SECRET&#39;</span><span class="p p-Indicator">]</span>
-      <span class="nt">input</span><span class="p">:</span> 
+      <span class="nt">input</span><span class="p">:</span>
         <span class="nt">access-key</span><span class="p">:</span> <span class="s">&#39;jq(</span><span class="nv"> </span><span class="s">.secrets.AWS_KEY</span><span class="nv"> </span><span class="s">)&#39;</span>
         <span class="nt">access-secret</span><span class="p">:</span> <span class="s">&#39;jq(</span><span class="nv"> </span><span class="s">.secrets.AWS_SECRET</span><span class="nv"> </span><span class="s">)&#39;</span>
         <span class="nt">image-id</span><span class="p">:</span> <span class="s">&#39;jq(</span><span class="nv"> </span><span class="s">.ami</span><span class="nv"> </span><span class="s">)&#39;</span>
@@ -1684,7 +1684,7 @@
     <span class="nt">log</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.)</span>
     <span class="nt">action</span><span class="p">:</span>
       <span class="nt">function</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add-dns-record</span>
-      <span class="nt">input</span><span class="p">:</span> 
+      <span class="nt">input</span><span class="p">:</span>
         <span class="nt">domain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.domain)</span>
         <span class="nt">subdomain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.subdomain)</span>
         <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.address)</span>
@@ -1735,12 +1735,12 @@
           <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
 
   <span class="c1"># Send GoDaddy API request</span>
-  <span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">api-request</span> 
+  <span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">api-request</span>
     <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">action</span>
     <span class="nt">action</span><span class="p">:</span>
       <span class="nt">secrets</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;GODADDY_KEY&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;GODADDY_SECRET&quot;</span><span class="p p-Indicator">]</span>
       <span class="nt">function</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">req</span>
-      <span class="nt">input</span><span class="p">:</span> 
+      <span class="nt">input</span><span class="p">:</span>
         <span class="nt">method</span><span class="p">:</span> <span class="s">&quot;PATCH&quot;</span>
         <span class="nt">url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq( &quot;https://api.godaddy.com/v1/domains/&quot; + .domain + &quot;/records&quot; )</span>
         <span class="nt">headers</span><span class="p">:</span>
@@ -1793,7 +1793,7 @@
     <span class="nt">action</span><span class="p">:</span>
       <span class="nt">function</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">send-email</span>
       <span class="nt">secrets</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;SMTP_USER&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;SMTP_PASSWORD&quot;</span><span class="p p-Indicator">]</span>
-      <span class="nt">input</span><span class="p">:</span> 
+      <span class="nt">input</span><span class="p">:</span>
         <span class="nt">to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq( .recipient )</span>
         <span class="nt">subject</span><span class="p">:</span> <span class="s">&#39;Success!&#39;</span>
         <span class="nt">message</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq( &quot;Instance creation successful. Created DNS record pointing &quot; + .subdomain + &quot;.&quot; + .domain + &quot; to &quot; + .address + &quot;!&quot; )</span>
@@ -1804,7 +1804,7 @@
 </code></pre></div>
 <h2 id="finishing-up">Finishing up</h2>
 <p>Hopefully this article has illustrated how to use pre-existing direktiv isolates to bootstrap workflow development! It should also serve as a reminder that, by making a workflow 'modular' through the use of subflows, a complicated workflow can be made to appear quite straightforward.</p>
-<p>If you're interested in seeing what other isolates already exist, check out the <a href="https://github.com/direktiv/direktiv-apps/">direktiv-apps GitHub page</a>. To learn how to write your own custom isolates, click <a href="/getting_started/making-functions">here</a></p>
+<p>If you're interested in seeing what other isolates already exist, check out the <a href="https://github.com/direktiv/direktiv-apps/">direktiv-apps GitHub page</a>. To learn how to write your own custom isolates, click <a href="../../getting_started/making-functions/">here</a></p>
                 
               
               

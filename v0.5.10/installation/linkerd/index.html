@@ -1566,7 +1566,7 @@
                 
                 <h1 id="linkerd-optional">Linkerd (Optional)</h1>
 <p><a href="https://linkerd.io/">Linkerd</a> is a lightweight service mesh for Kubernetes and can be used in Direktiv as a mechanism to secure communication between the components. Linkerd can enable mTLS between the core Direktiv pods as well as the containers running in a flow. Installation of Linkerd is optional.</p>
-<p>The easiest way to install Linkerd is via <a href="https://linkerd.io/2.10/tasks/install-helm/">Helm</a>. The following describes how Linkerd is installed in the <a href="install#run-docker-image">Direktiv test docker container</a>.</p>
+<p>The easiest way to install Linkerd is via <a href="https://linkerd.io/2.10/tasks/install-helm/">Helm</a>. The following describes how Linkerd is installed in the <a href="../../installation#run-docker-image">Direktiv test docker container</a>.</p>
 <h2 id="creating-certificates">Creating Certificates</h2>
 <p>The identity component of Linkerd requires setting up a trust anchor certificate, and an issuer certificate with its key. The following script starts a container and generates the certificates needed:</p>
 <div class="highlight"><pre><span></span><code><span class="go">certDir=$(tmpDir=$(mktemp -d); \</span>

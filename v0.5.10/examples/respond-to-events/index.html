@@ -1491,7 +1491,7 @@
                 
                 <h1 id="reacting-to-consuming-cloud-events">Reacting to ("consuming") Cloud Events</h1>
 <p>Workflows can be triggered in a number of ways; by default they must be manually triggered, but with the correct configuration a workflow will start each time a cloud event reaches the parent namespace that satisfies the constraints detailed in the workflow definition.</p>
-<p>To demonstrate this, let's modify the 'main' workflow from <a href="/examples/create-vm-set-dns">this article</a>, removing the <code>send-email</code> state and replacing it with a state that will generate an event.</p>
+<p>To demonstrate this, let's modify the 'main' workflow from <a href="../../examples/create-vm-set-dns">this article</a>, removing the <code>send-email</code> state and replacing it with a state that will generate an event.</p>
 <div class="highlight"><pre><span></span><code>  <span class="l l-Scalar l-Scalar-Plain">...</span>
 
   <span class="l l-Scalar l-Scalar-Plain"># Add an &#39;A&#39; DNS record</span>
@@ -1500,7 +1500,7 @@
     <span class="l l-Scalar l-Scalar-Plain">log</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.)</span>
     <span class="l l-Scalar l-Scalar-Plain">action</span><span class="p p-Indicator">:</span>
       <span class="nt">function</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add-dns-record</span>
-      <span class="nt">input</span><span class="p">:</span> 
+      <span class="nt">input</span><span class="p">:</span>
         <span class="nt">domain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.domain)</span>
         <span class="nt">subdomain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.subdomain)</span>
         <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.address)</span>
@@ -1524,7 +1524,7 @@
 <div class="highlight"><pre><span></span><code><span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">consume-new-vm-event</span>
 
 <span class="c1"># Start workflow when correct event occurs</span>
-<span class="nt">start</span><span class="p">:</span> 
+<span class="nt">start</span><span class="p">:</span>
   <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">event</span>
   <span class="nt">event</span><span class="p">:</span>
     <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">example.vm.created</span>
@@ -1547,21 +1547,21 @@
     <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">action</span>
     <span class="nt">action</span><span class="p">:</span>
       <span class="nt">function</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">query-fresh-service-cmdb</span>
-      <span class="nt">input</span><span class="p">:</span> 
+      <span class="nt">input</span><span class="p">:</span>
         <span class="nt">url</span><span class="p">:</span> <span class="s">&quot;https://direktiv.freshservice.com/cmdb/items.json&quot;</span>
         <span class="nt">method</span><span class="p">:</span> <span class="s">&quot;POST&quot;</span>
-        <span class="nt">body</span><span class="p">:</span> 
-          <span class="nt">cmdb_config_item</span><span class="p">:</span> 
+        <span class="nt">body</span><span class="p">:</span>
+          <span class="nt">cmdb_config_item</span><span class="p">:</span>
             <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.&quot;example.vm.created&quot;.host)</span>
             <span class="nt">ci_type_id</span><span class="p">:</span> <span class="s">&quot;75000270995&quot;</span>
-            <span class="nt">level_field_attributes</span><span class="p">:</span> 
+            <span class="nt">level_field_attributes</span><span class="p">:</span>
               <span class="nt">aws_region_75000270981</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.&quot;example.vm.created&quot;.region)</span>
               <span class="nt">availability_zone_75000270981</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.&quot;example.vm.created&quot;.region)</span>
               <span class="nt">instance_id_75000270995</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.&quot;example.vm.created&quot;.host)</span>
               <span class="nt">public_ip_75000270995</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.&quot;example.vm.created&quot;.address)</span>
               <span class="nt">public_dns_75000270995</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.&quot;example.vm.created&quot;.host)</span>
               <span class="nt">instance_state_75000270995</span><span class="p">:</span> <span class="s">&quot;created&quot;</span>
-        <span class="nt">headers</span><span class="p">:</span> 
+        <span class="nt">headers</span><span class="p">:</span>
           <span class="s">&quot;Content-Type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;application/json&quot;</span>
           <span class="nt">Authorization</span><span class="p">:</span> <span class="s">&quot;Basic</span><span class="nv"> </span><span class="s">&lt;EXAMPLE_AUTHORISATION&gt;&quot;</span>
     <span class="nt">transform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jq(.msg = .return.item.config_item | del(.return))</span>
