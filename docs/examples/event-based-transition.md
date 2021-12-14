@@ -16,7 +16,7 @@ states:
 - id: check-credit
   type: switch
   conditions:
-  - condition: jq(.checkcredit.value > 500)
+  - condition: jq(.checkcredit.data.value > 500)
     transition: approve-loan
   defaultTransition: reject-loan
 - id: reject-loan
