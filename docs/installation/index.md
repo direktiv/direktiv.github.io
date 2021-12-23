@@ -5,7 +5,7 @@ Installing Direktiv can be done with a simple [helm](https://helm.sh/) install c
 ```shell
 kubetcl create ns direktiv-services-direktiv
 
-helm repo add direktiv https://charts.direktiv.io
+helm repo add direktiv https://chart.direktiv.io
 helm install knative direktiv/knative
 
 helm install -n direktiv --create-namespace direktiv direktiv/direktiv  
@@ -14,7 +14,7 @@ helm install -n direktiv --create-namespace direktiv direktiv/direktiv
 The following diagram shows a high-level architecture of Direktiv and the required and optional components.
 
 <p align="center">
-<img src="overview.png" alt="Direktiv overview"/>
+<img src="arch.png" alt="Direktiv overview"/>
 </p>
 
 Although a few simple helm command will install a working Direktiv instance there can be other requirements. The following list will explain how to install and configure the individual components. It is possible to deploy them in an order of choice but it is recommended to follow the suggested order listed below.

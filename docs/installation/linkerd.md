@@ -15,7 +15,7 @@ exe='cd /certs && step certificate create root.linkerd.cluster.local ca.crt ca.k
 && step certificate create identity.linkerd.cluster.local issuer.crt issuer.key \
 --profile intermediate-ca --not-after 8760h --no-password --insecure \
 --ca ca.crt --ca-key ca.key'; \
-docker run --user root -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c "$exe"; \
+docker run --user 1000:1000 -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c "$exe"; \
 echo $tmpDir);
 ```
 
@@ -49,7 +49,7 @@ To use the service mesh (and, in particular, the mTLS communication) between pod
 This script will create and annotate the namespaces
 
 ```console
-for ns in "default" "postgres" "knative-serving" "direktiv-services-direktiv"
+for ns in "direktiv" "postgres" "knative-serving" "direktiv-services-direktiv"
 do
   kubectl create namespace $ns || true
   kubectl annotate ns --overwrite=true $ns linkerd.io/inject=enabled
