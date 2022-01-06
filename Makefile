@@ -8,7 +8,7 @@ update-api:
 	mkdir -p build/api
 	cd build/api; git clone https://github.com/direktiv/direktiv.git;
 	cd build/api/direktiv; make api-docs
-	cat build/api/header.yml build/api/direktiv/scripts/api/api.md > docs/api/api.md
+	cat build/api/direktiv/scripts/api/api.md > docs/api.md
 
 .PHONY: install-deps
 install-deps:
