@@ -58,6 +58,24 @@ Global registries are applied to all services and functions irrelevant to the na
 #### Global Private Registries
 Global private registries are only used by global services.
 
+#### Example Google Artifact Registry
+
+To use the Google Artifact Registry a service account with a key iis required. How to create a service account and generate a key is documented [here](https://cloud.google.com/artifact-registry/docs/docker/authentication#json-key).
+
+The keed needs to be in base64 format. On linux it can be converted with the following command:
+
+```console
+base64 -w 0 mykey-da8c8b573601.json > base64google.json
+```
+
+Please make sure that there are no line wraps in the base64 file. For base64 encoded files the username is ```_json_key_base64```. Example details for this registry would be something like the following:
+
+|Key|Value|
+|---|---|
+|URL|https://us-central1-docker.pkg.dev|
+|Username|_json_key_base64|
+|Password|ewogICJ0eXBlIjo...WlJkMWhqK1RRRF|
+
 *Note: If a registry is created after a service, the service will need to be recreated to use the latest registry.*
 ## Secrets
 
