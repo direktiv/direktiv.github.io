@@ -9,7 +9,7 @@ The following documentation explains how to install a HA PostgreSQL in a Kuberne
 In this example CrunchyData's postgres operator is used. To install the operator Direktiv provides a helm chart based on [this source](https://github.com/CrunchyData/postgres-operator-examples/) helm chart.
 
 ```console
-helm repo add direktiv https://charts.direktiv.io
+helm repo add direktiv https://chart.direktiv.io
 helm install -n postgres --create-namespace --set singleNamespace=true postgres direktiv/pgo
 ```
 
@@ -43,6 +43,9 @@ spec:
         registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.33-2
       repoHost:
         dedicated: {}
+      metadata:
+        annotations:
+          linkerd.io/inject: disabled
       repos:
         - name: repo1
           volume:
@@ -93,7 +96,7 @@ kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index
 
 ## Backup
 
-Direktiv stores all relevant data in the database so that it can be recreated on a new Kubernetes environment without any additional backup or restore of Kubernetes components. CrunchyData's postgres operator comes with 'pgBackRest' as an automated backup solution. Alternatively, a simple cron job can export Direktiv's data as a plain SQL text file.
+Direktiv stores all relevant data in the database so that it can be recreated on a new Kubernetes environment without any additional backup or restore of Kubernetes components. CrunchyData's postgres operator comes with 'pgBackRest' as an automated backup solution. It has the option to store the backups in [S3 storage](https://access.crunchydata.com/documentation/postgres-operator/4.1.0/gettingstarted/design/backrest-s3-configuration/). Alternatively, a simple cron job can export Direktiv's data as a plain SQL text file.
 
 A simple backup can be created with the following Kubernetes cron job:
 
