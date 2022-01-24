@@ -286,6 +286,8 @@ The first transition to an Error State anywhere within the workflow means that a
 
 An error consists of two parts: an error code, and an error message. The code should be a short string can can contain alphanumeric characters, periods, dashes, and underscores. It is good practice to structure error codes similar to domain names, to make them easier to handle. The message allows you to provide extra context, and can be formatted like a `printf` string where each entry in `args` will be substituted. The `args` must be `jq` commands, allowing the state to insert state information into the error message.
 
+Alternatively the message can be generated with `jq` commands e.g. `message: This is an error jq(.myvalue)`.
+
 ### EventAndState
 
 | Parameter  | Description                                        | Type                                                | Required |
