@@ -771,6 +771,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#k3s" class="md-nav__link">
+    K3s
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#linkerd" class="md-nav__link">
     Linkerd
   </a>
@@ -1567,6 +1574,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#k3s" class="md-nav__link">
+    K3s
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#linkerd" class="md-nav__link">
     Linkerd
   </a>
@@ -1639,6 +1653,10 @@
 
 
 <h1 id="quick-install">Quick Install</h1>
+<p>This is a list of "copy&amp;paste" commands whic creates a one node Direktiv cluster.</p>
+<h2 id="k3s">K3s</h2>
+<div class="highlight"><pre><span></span><code><span class="go">curl -sfL https://get.k3s.io | sh -s - --disable traefik --write-kubeconfig-mode=644 --kube-apiserver-arg feature-gates=TTLAfterFinished=true</span>
+</code></pre></div>
 <h2 id="linkerd">Linkerd</h2>
 <h3 id="create-certificates">Create certificates</h3>
 <div class="highlight"><pre><span></span><code><span class="go">certDir=$(tmpDir=$(mktemp -d); \</span>
@@ -1647,7 +1665,7 @@
 <span class="go">&amp;&amp; step certificate create identity.linkerd.cluster.local issuer.crt issuer.key \</span>
 <span class="go">--profile intermediate-ca --not-after 8760h --no-password --insecure \</span>
 <span class="go">--ca ca.crt --ca-key ca.key&#39;; \</span>
-<span class="go">docker run --user root -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c &quot;$exe&quot;; \</span>
+<span class="go">docker run --user 1000:1000 -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c &quot;$exe&quot;; \</span>
 <span class="go">echo $tmpDir);</span>
 </code></pre></div>
 <h3 id="install-linkerd">Install Linkerd</h3>
@@ -1661,26 +1679,33 @@
 <span class="go">  linkerd/linkerd2 --wait</span>
 </code></pre></div>
 <h3 id="annotate-the-namespaces">Annotate the Namespaces</h3>
-<div class="highlight"><pre><span></span><code><span class="go">for ns in &quot;default&quot; &quot;knative-serving&quot; &quot;direktiv-services-direktiv&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="go">for ns in &quot;default&quot; &quot;postgres&quot; &quot;knative-serving&quot; &quot;direktiv-services-direktiv&quot;</span>
 <span class="go">do</span>
 <span class="go">  kubectl create namespace $ns || true</span>
 <span class="go">  kubectl annotate ns --overwrite=true $ns linkerd.io/inject=enabled</span>
 <span class="go">done;</span>
 </code></pre></div>
 <h2 id="database">Database</h2>
-<div class="highlight"><pre><span></span><code><span class="go">helm repo add direktiv https://charts.direktiv.io</span>
+<div class="highlight"><pre><span></span><code><span class="go">helm repo add direktiv https://chart.direktiv.io</span>
 <span class="go">helm install -n postgres --create-namespace --set singleNamespace=true postgres direktiv/pgo</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="go">kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/pg.yaml</span>
 </code></pre></div>
 <h2 id="knative">Knative</h2>
-<div class="highlight"><pre><span></span><code><span class="go">helm repo add direktiv https://charts.direktiv.io</span>
-<span class="go">helm install -n knative-serving --create-namespace knative direktiv/knative</span>
+<div class="highlight"><pre><span></span><code><span class="go">helm install -n knative-serving --create-namespace knative direktiv/knative</span>
 </code></pre></div>
 <h2 id="direktiv">Direktiv</h2>
-<div class="highlight"><pre><span></span><code><span class="go">kubectl create namespace direktiv</span>
-<span class="go">helm install -n direktiv direktiv direktiv/direktiv</span>
+<div class="highlight"><pre><span></span><code><span class="go">echo &quot;database:</span>
+<span class="go">  host: \&quot;$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o &#39;go-template={{index .data &quot;host&quot;}}&#39; | base64 --decode)\&quot;</span>
+<span class="go">  port: $(kubectl get secrets -n postgres direktiv-pguser-direktiv -o &#39;go-template={{index .data &quot;port&quot;}}&#39; | base64 --decode)</span>
+<span class="go">  user: \&quot;$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o &#39;go-template={{index .data &quot;user&quot;}}&#39; | base64 --decode)\&quot;</span>
+<span class="go">  password: \&quot;$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o &#39;go-template={{index .data &quot;password&quot;}}&#39; | base64 --decode)\&quot;</span>
+<span class="go">  name: \&quot;$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o &#39;go-template={{index .data &quot;dbname&quot;}}&#39; | base64 --decode)\&quot;</span>
+<span class="go">  sslmode: require&quot; &gt; direktiv.yaml</span>
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="go">helm install -f direktiv.yaml direktiv direktiv/direktiv</span>
+</code></pre></div>
+<p>Direktiv is now available on the host IP, e.g. http://192.168.0.100</p>
 
               
             </article>

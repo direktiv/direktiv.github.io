@@ -1581,7 +1581,7 @@
 <span class="go">&amp;&amp; step certificate create identity.linkerd.cluster.local issuer.crt issuer.key \</span>
 <span class="go">--profile intermediate-ca --not-after 8760h --no-password --insecure \</span>
 <span class="go">--ca ca.crt --ca-key ca.key&#39;; \</span>
-<span class="go">docker run --user root -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c &quot;$exe&quot;; \</span>
+<span class="go">docker run --user 1000:1000 -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c &quot;$exe&quot;; \</span>
 <span class="go">echo $tmpDir);</span>
 </code></pre></div>
 <blockquote>
@@ -1607,7 +1607,7 @@
 <li>direktiv-services-direktiv</li>
 </ul>
 <p>This script will create and annotate the namespaces</p>
-<div class="highlight"><pre><span></span><code><span class="go">for ns in &quot;default&quot; &quot;postgres&quot; &quot;knative-serving&quot; &quot;direktiv-services-direktiv&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="go">for ns in &quot;direktiv&quot; &quot;postgres&quot; &quot;knative-serving&quot; &quot;direktiv-services-direktiv&quot;</span>
 <span class="go">do</span>
 <span class="go">  kubectl create namespace $ns || true</span>
 <span class="go">  kubectl annotate ns --overwrite=true $ns linkerd.io/inject=enabled</span>

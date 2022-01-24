@@ -3339,6 +3339,7 @@
 <p>The Error State allows a subflow to throw an error, catchable by the calling workflow.</p>
 <p>The first transition to an Error State anywhere within the workflow means that a waiting caller -- if one exists -- will receive that error after this subflow returns. This doesn't prevent the Error State from transitioning to other states, which might be necessary to clean up or undo actions performed by the workflow. Subsequent transitions into Error States after the first have no effect.</p>
 <p>An error consists of two parts: an error code, and an error message. The code should be a short string can can contain alphanumeric characters, periods, dashes, and underscores. It is good practice to structure error codes similar to domain names, to make them easier to handle. The message allows you to provide extra context, and can be formatted like a <code>printf</code> string where each entry in <code>args</code> will be substituted. The <code>args</code> must be <code>jq</code> commands, allowing the state to insert state information into the error message.</p>
+<p>Alternatively the message can be generated with <code>jq</code> commands e.g. <code>message: This is an error jq(.myvalue)</code>.</p>
 <h3 id="eventandstate">EventAndState</h3>
 <table>
 <thead>

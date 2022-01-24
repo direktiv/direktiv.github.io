@@ -736,6 +736,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#metallb" class="md-nav__link">
+    MetalLB
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1560,6 +1567,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#metallb" class="md-nav__link">
+    MetalLB
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1664,12 +1678,31 @@ sudo sed -e <span class="s1">&#39;/swap/s/^/#/g&#39;</span> -i /etc/fstab
 </code></pre></div>
 <p>To add nodes to the cluster the node token is required, which is saved under <em>/var/lib/rancher/k3s/server/node-token</em>. With this token additional nodes can be added.</p>
 <p><em>Additional server nodes</em></p>
-<div class="highlight"><pre><span></span><code>curl -sfL https://get.k3s.io <span class="p">|</span> <span class="nv">INSTALL_K3S_EXEC</span><span class="o">=</span><span class="s2">&quot;server --disable servicelb --disable traefik --write-kubeconfig-mode=644&quot;</span> <span class="nv">K3S_TOKEN</span><span class="o">=</span><span class="s2">&quot;&lt;TOKEN FROM NODE-TOKEN FILE&gt;&quot;</span> <span class="nv">K3S_URL</span><span class="o">=</span>https://&lt;cluster ip&gt;:6443 sh -
+<div class="highlight"><pre><span></span><code>curl -sfL https://get.k3s.io <span class="p">|</span> <span class="nv">INSTALL_K3S_EXEC</span><span class="o">=</span><span class="s2">&quot;server --disable traefik --write-kubeconfig-mode=644&quot;</span> <span class="nv">K3S_TOKEN</span><span class="o">=</span><span class="s2">&quot;&lt;TOKEN FROM NODE-TOKEN FILE&gt;&quot;</span> <span class="nv">K3S_URL</span><span class="o">=</span>https://&lt;cluster ip&gt;:6443 sh -
 </code></pre></div>
 <blockquote>
 <p>K3s will download container images during installation. For the downloads of those internet connectivity is required. If the nodes are behind a proxy server the Linux environment variables need to provided to the service, e.g.:</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code>curl -sfL https://get.k3s.io <span class="p">|</span> <span class="nv">INSTALL_K3S_EXEC</span><span class="o">=</span><span class="s2">&quot;server --disable traefik --write-kubeconfig-mode=644&quot;</span> <span class="nv">K3S_TOKEN</span><span class="o">=</span><span class="s2">&quot;&lt;TOKEN FROM NODE-TOKEN FILE&gt;&quot;</span> <span class="nv">K3S_URL</span><span class="o">=</span>https://&lt;cluster ip&gt;:6443 <span class="nv">HTTP_PROXY</span><span class="o">=</span><span class="s2">&quot;http://192.168.1.10:3128&quot;</span> <span class="nv">HTTPS_PROXY</span><span class="o">=</span><span class="s2">&quot;http://192.168.1.10:3128&quot;</span> <span class="nv">NO_PROXY</span><span class="o">=</span><span class="s2">&quot;localhost,127.0.0.1,svc,.cluster.local,192.168.1.100,192.168.1.101,192.168.1.102,10.0.0.0/8&quot;</span> sh -
+</code></pre></div>
+<h3 id="metallb">MetalLB</h3>
+<p>In a on-premise environment a Kubernetes bare-metal load-balancer might be required. The folowing example shows the use of <a href="https://metallb.universe.tf/">MetalLB</a>. K3s load-balancer needs to be disabled with <em>--disable servicelb</em> for this to work.</p>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code>curl -sfL https://get.k3s.io <span class="p">|</span> <span class="nv">INSTALL_K3S_EXEC</span><span class="o">=</span><span class="s2">&quot;server --disable servicelb --disable traefik --write-kubeconfig-mode=644&quot;</span> <span class="nv">K3S_TOKEN</span><span class="o">=</span><span class="s2">&quot;&lt;TOKEN FROM NODE-TOKEN FILE&gt;&quot;</span> <span class="nv">K3S_URL</span><span class="o">=</span>https://&lt;cluster ip&gt;:6443 sh -
+</code></pre></div></p>
+<p>MetalLB needs an IP pool to serve IP address. During the installation this pool can be configured with fhe following example YAML file:</p>
+<p><em>values.yaml</em>
+<div class="highlight"><pre><span></span><code><span class="nt">configInline</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">address-pools</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w">     </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">layer2</span><span class="w"></span>
+<span class="w">     </span><span class="nt">addresses</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.122/32</span><span class="w"></span>
+<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.1.0/24</span><span class="w"></span>
+</code></pre></div></p>
+<p>After defining the IP range MetalLB is a simple Helm installation:</p>
+<div class="highlight"><pre><span></span><code>helm repo add metallb https://metallb.github.io/metallb
+helm install metallb metallb/metallb -f values.yaml
 </code></pre></div>
 
               

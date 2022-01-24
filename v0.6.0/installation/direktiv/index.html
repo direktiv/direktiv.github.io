@@ -1560,15 +1560,12 @@
 <p>Installing direktiv is a two-step process. The first part is to install <a href="https://knative.dev">Knative</a>, the platform to execute Direktiv's serverless functions. The second part is installing and configuring Direktiv itself. If Linkerd is required it needs to be <a href="../linkerd">installed first</a> before installing Knative and Direktiv.</p>
 <h2 id="knative">Knative</h2>
 <p>Knative is an essential part of Direktiv. Although Knative provides YAML files for installation it is recommended to use the helm installation with Direktiv's Helm charts. It uses the correct Knative (&gt; 0.25.0) version and comes pre-configured to work seamlessly with Direktiv.</p>
-<div class="highlight"><pre><span></span><code><span class="go">helm repo add direktiv https://charts.direktiv.io</span>
+<div class="highlight"><pre><span></span><code><span class="go">helm repo add direktiv https://chart.direktiv.io</span>
 <span class="go">helm install -n knative-serving --create-namespace knative direktiv/knative</span>
 </code></pre></div>
-<p>For more configuration options click <a href="https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/knative">here</a>.</p>
+<p>For more configuration options click <a href="https://github.com/direktiv/direktiv-charts/tree/main/charts/knative">here</a>.</p>
 <p>For high availability both Kong ingress controllers, for internal and external services, need to be scaled up. The Helm chart values would be:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">kong-external</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
-<span class="nt">kong-internal</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
 </code></pre></div>
 <h2 id="direktiv_1">Direktiv</h2>
 <p>Firstly, create a <code>direktiv.yaml</code> file which contains all of the database connectivity and secret information created in the <a href="../../installation/database">database</a> setup:</p>
@@ -1586,8 +1583,20 @@
 <span class="w">  </span><span class="c1"># -- sslmode for database</span><span class="w"></span>
 <span class="w">  </span><span class="nt">sslmode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">require</span><span class="w"></span>
 </code></pre></div>
+<p>The following script generates this configuration:</p>
+<p><em>direktiv.yaml</em>
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span> <span class="s2">&quot;database:</span>
+<span class="s2">  host: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;host&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  port: </span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;port&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2"></span>
+<span class="s2">  user: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;user&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  password: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;password&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  name: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;dbname&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  sslmode: require&quot;</span>
+</code></pre></div></p>
 <p>Using this <code>direktiv.yaml</code> configuration, deploy the direktiv helm chart:</p>
 <div class="highlight"><pre><span></span><code>kubectl create namespace direktiv-services-direktiv
+
+helm repo add direktiv https://chart.direktiv.io
 helm install -f direktiv.yaml direktiv direktiv/direktiv
 </code></pre></div>
 <p>For more configuration options click <a href="https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv">here</a> but the most important configuration values are the database settings which need to be identical to settings used during <a href="../../installation/database">database</a> setup.</p>

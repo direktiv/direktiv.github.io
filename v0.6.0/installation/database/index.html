@@ -1561,7 +1561,7 @@
 <p>The following documentation explains how to install a HA PostgreSQL in a Kubernetes cluster. This is just an example and it is important to assess inidividual project requirements.</p>
 <h2 id="postgresql-installation">PostgreSQL Installation</h2>
 <p>In this example CrunchyData's postgres operator is used. To install the operator Direktiv provides a helm chart based on <a href="https://github.com/CrunchyData/postgres-operator-examples/">this source</a> helm chart.</p>
-<div class="highlight"><pre><span></span><code><span class="go">helm repo add direktiv https://charts.direktiv.io</span>
+<div class="highlight"><pre><span></span><code><span class="go">helm repo add direktiv https://chart.direktiv.io</span>
 <span class="go">helm install -n postgres --create-namespace --set singleNamespace=true postgres direktiv/pgo</span>
 </code></pre></div>
 <p>After installing the operator the PostgreSQL cluster can be created with Kubernetes YAML as custom resource definition:</p>
@@ -1592,6 +1592,9 @@
 <span class="w">        </span><span class="no">registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.33-2</span><span class="w"></span>
 <span class="w">      </span><span class="nt">repoHost</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dedicated</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">linkerd.io/inject</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">repos</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
 <span class="w">          </span><span class="nt">volume</span><span class="p">:</span><span class="w"></span>
@@ -1633,7 +1636,7 @@
 <p>&#x2757; Please be aware that persistent volume claims are not deleted and must be manually deleted when uninstalling.</p>
 </blockquote>
 <h2 id="backup">Backup</h2>
-<p>Direktiv stores all relevant data in the database so that it can be recreated on a new Kubernetes environment without any additional backup or restore of Kubernetes components. CrunchyData's postgres operator comes with 'pgBackRest' as an automated backup solution. Alternatively, a simple cron job can export Direktiv's data as a plain SQL text file.</p>
+<p>Direktiv stores all relevant data in the database so that it can be recreated on a new Kubernetes environment without any additional backup or restore of Kubernetes components. CrunchyData's postgres operator comes with 'pgBackRest' as an automated backup solution. It has the option to store the backups in <a href="https://access.crunchydata.com/documentation/postgres-operator/4.1.0/gettingstarted/design/backrest-s3-configuration/">S3 storage</a>. Alternatively, a simple cron job can export Direktiv's data as a plain SQL text file.</p>
 <p>A simple backup can be created with the following Kubernetes cron job:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">batch/v1beta1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CronJob</span><span class="w"></span>

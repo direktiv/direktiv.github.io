@@ -630,6 +630,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#example-google-artifact-registry" class="md-nav__link">
+    Example Google Artifact Registry
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1623,6 +1630,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#example-google-artifact-registry" class="md-nav__link">
+    Example Google Artifact Registry
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1707,6 +1721,34 @@
 <p>Global registries are applied to all services and functions irrelevant to the namespace. These registries are also used by global services.</p>
 <h4 id="global-private-registries">Global Private Registries</h4>
 <p>Global private registries are only used by global services.</p>
+<h4 id="example-google-artifact-registry">Example Google Artifact Registry</h4>
+<p>To use the Google Artifact Registry a service account with a key iis required. How to create a service account and generate a key is documented <a href="https://cloud.google.com/artifact-registry/docs/docker/authentication#json-key">here</a>.</p>
+<p>The keed needs to be in base64 format. On linux it can be converted with the following command:</p>
+<div class="highlight"><pre><span></span><code><span class="go">base64 -w 0 mykey-da8c8b573601.json &gt; base64google.json</span>
+</code></pre></div>
+<p>Please make sure that there are no line wraps in the base64 file. For base64 encoded files the username is <code>_json_key_base64</code>. Example details for this registry would be something like the following:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>URL</td>
+<td>https://us-central1-docker.pkg.dev</td>
+</tr>
+<tr>
+<td>Username</td>
+<td>_json_key_base64</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>ewogICJ0eXBlIjo...WlJkMWhqK1RRRF</td>
+</tr>
+</tbody>
+</table>
 <p><em>Note: If a registry is created after a service, the service will need to be recreated to use the latest registry.</em></p>
 <h2 id="secrets">Secrets</h2>
 <p>Similar to how registry tokens are stored, arbitrary secrets can also be stored. That includes passwords, API tokens, certificates, or anything else. Secrets are stored on a namespace-by-namespace basis as key-value pairs. Secreats can be defined with the <a href="../../api">Direktiv API</a> or web interface.</p>
