@@ -23,7 +23,7 @@ Next we'll define a state that gets passed an array of strings. Where we pass ea
 ```yaml
 - id: translate-markdown
   type: foreach
-  array: "jq(.langs[] | {id: .})"
+  array: "jq([.langs[] | {id: .}])"
   action: 
     secrets: ["SERVICE_ACCOUNT_KEY"]
     function: translate
@@ -54,7 +54,7 @@ functions:
 states:
 - id: translate-markdown
   type: foreach
-  array: "jq(.langs[] | {id: .})"
+  array: "jq([.langs[] | {id: .}])"
   action: 
     secrets: ["SERVICE_ACCOUNT_KEY"]
     function: translate

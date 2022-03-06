@@ -154,7 +154,7 @@ functions:
 states:
 - id: poster
   type: foreach
-  array: 'jq(.names[] | { name: . })'
+  array: 'jq([.names[] | { name: . }])'
   action:
     function: httprequest
     input:

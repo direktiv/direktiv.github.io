@@ -18,7 +18,7 @@ functions:
 states:
 - id: solve
   type: foreach
-  array: 'jq(.expressions[] | { expression: . })'
+  array: 'jq([.expressions[] | { expression: . }])'
   action:
     function: solve-math-expression
     input: 'jq({ x: .expression })'
@@ -53,7 +53,7 @@ The results of this foreach loop will be a json array of strings that have the s
 }
 ```
 
-Note: The array for a foreach state must be passed as an array of objects. This is why to iterate over the `expressions` string array, we must pipe it and construct a new array of objects using `.expressions[] | { expression: . }`.
+Note: The array for a foreach state must be passed as an array of objects. This is why to iterate over the `expressions` string array, we must pipe it and construct a new array of objects using `[.expressions[] | { expression: . }]`.
 
 ### jq: `.expressions`
 ```json
@@ -65,19 +65,21 @@ Note: The array for a foreach state must be passed as an array of objects. This 
 ]
 ```
 
-### jq: `.expressions[] | { expression: . }`
+### jq: `[.expressions[] | { expression: . }]`
 ```json
-{
-  "expression": "4+10"
-}
-{
-  "expression": "15-14"
-}
-{
-  "expression": "100*3"
-}
-{
-  "expression": "200/2"
-}
+[
+  {
+    "expression": "4+10"
+  },
+  {
+    "expression": "15-14"
+  },
+  {
+    "expression": "100*3"
+  },
+  {
+    "expression": "200/2"
+  }
+]
 
 ```
