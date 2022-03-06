@@ -7,19 +7,16 @@ Installing direktiv is a two-step process. The first part is to install [Knative
 Knative is an essential part of Direktiv. Although Knative provides YAML files for installation it is recommended to use the helm installation with Direktiv's Helm charts. It uses the correct Knative (> 0.25.0) version and comes pre-configured to work seamlessly with Direktiv.
 
 ```console
-helm repo add direktiv https://charts.direktiv.io
+helm repo add direktiv https://chart.direktiv.io
 helm install -n knative-serving --create-namespace knative direktiv/knative
 ```
 
-For more configuration options click [here](https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/knative).
+For more configuration options click [here](https://github.com/direktiv/direktiv-charts/tree/main/charts/knative).
 
 For high availability both Kong ingress controllers, for internal and external services, need to be scaled up. The Helm chart values would be:
 
 ```yaml
-kong-external:
-  replicaCount: 2
-kong-internal:
-  replicaCount: 2
+replicas: 2
 ```
 
 ## Direktiv
@@ -42,10 +39,25 @@ database:
   sslmode: require
 ```
 
+The following script generates this configuration:
+
+*direktiv.yaml*
+```shell
+echo "database:
+  host: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "host"}}' | base64 --decode)\"
+  port: $(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "port"}}' | base64 --decode)
+  user: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "user"}}' | base64 --decode)\"
+  password: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode)\"
+  name: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "dbname"}}' | base64 --decode)\"
+  sslmode: require"
+```
+
 Using this `direktiv.yaml` configuration, deploy the direktiv helm chart:
 
 ```shell
 kubectl create namespace direktiv-services-direktiv
+
+helm repo add direktiv https://chart.direktiv.io
 helm install -f direktiv.yaml direktiv direktiv/direktiv
 ```
 

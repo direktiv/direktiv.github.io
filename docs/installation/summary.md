@@ -1,5 +1,14 @@
 # Quick Install
 
+This is a list of "copy&paste" commands whic creates a one node Direktiv cluster.
+
+
+## K3s
+
+```console
+curl -sfL https://get.k3s.io | sh -s - --disable traefik --write-kubeconfig-mode=644 --kube-apiserver-arg feature-gates=TTLAfterFinished=true
+```
+
 ## Linkerd
 
 ### Create certificates
@@ -11,7 +20,7 @@ exe='cd /certs && step certificate create root.linkerd.cluster.local ca.crt ca.k
 && step certificate create identity.linkerd.cluster.local issuer.crt issuer.key \
 --profile intermediate-ca --not-after 8760h --no-password --insecure \
 --ca ca.crt --ca-key ca.key'; \
-docker run --user root -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c "$exe"; \
+docker run --user 1000:1000 -v $tmpDir:/certs  -i smallstep/step-cli /bin/bash -c "$exe"; \
 echo $tmpDir);
 ```
 
@@ -31,7 +40,7 @@ helm install linkerd2 \
 ### Annotate the Namespaces
 
 ```console
-for ns in "default" "knative-serving" "direktiv-services-direktiv"
+for ns in "default" "postgres" "knative-serving" "direktiv-services-direktiv"
 do
   kubectl create namespace $ns || true
   kubectl annotate ns --overwrite=true $ns linkerd.io/inject=enabled
@@ -41,7 +50,7 @@ done;
 ## Database
 
 ```console
-helm repo add direktiv https://charts.direktiv.io
+helm repo add direktiv https://chart.direktiv.io
 helm install -n postgres --create-namespace --set singleNamespace=true postgres direktiv/pgo
 ```
 
@@ -52,13 +61,23 @@ kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubern
 ## Knative
 
 ```console
-helm repo add direktiv https://charts.direktiv.io
 helm install -n knative-serving --create-namespace knative direktiv/knative
 ```
 
 ## Direktiv
 
 ```console
-kubectl create namespace direktiv
-helm install -n direktiv direktiv direktiv/direktiv
+echo "database:
+  host: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "host"}}' | base64 --decode)\"
+  port: $(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "port"}}' | base64 --decode)
+  user: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "user"}}' | base64 --decode)\"
+  password: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode)\"
+  name: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "dbname"}}' | base64 --decode)\"
+  sslmode: require" > direktiv.yaml
 ```
+
+```console
+helm install -f direktiv.yaml direktiv direktiv/direktiv
+```
+
+Direktiv is now available on the host IP, e.g. http://192.168.0.100

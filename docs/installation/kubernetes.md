@@ -62,11 +62,40 @@ To add nodes to the cluster the node token is required, which is saved under */v
 *Additional server nodes*
 
 ```shell
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable servicelb --disable traefik --write-kubeconfig-mode=644" K3S_TOKEN="<TOKEN FROM NODE-TOKEN FILE>" K3S_URL=https://<cluster ip>:6443 sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable traefik --write-kubeconfig-mode=644" K3S_TOKEN="<TOKEN FROM NODE-TOKEN FILE>" K3S_URL=https://<cluster ip>:6443 sh -
 ```
 
 > K3s will download container images during installation. For the downloads of those internet connectivity is required. If the nodes are behind a proxy server the Linux environment variables need to provided to the service, e.g.:
 
 ```shell
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable traefik --write-kubeconfig-mode=644" K3S_TOKEN="<TOKEN FROM NODE-TOKEN FILE>" K3S_URL=https://<cluster ip>:6443 HTTP_PROXY="http://192.168.1.10:3128" HTTPS_PROXY="http://192.168.1.10:3128" NO_PROXY="localhost,127.0.0.1,svc,.cluster.local,192.168.1.100,192.168.1.101,192.168.1.102,10.0.0.0/8" sh -
+```
+
+### MetalLB
+
+In a on-premise environment a Kubernetes bare-metal load-balancer might be required. The folowing example shows the use of [MetalLB](https://metallb.universe.tf/). K3s load-balancer needs to be disabled with *--disable servicelb* for this to work.
+
+*Example*
+```shell
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable servicelb --disable traefik --write-kubeconfig-mode=644" K3S_TOKEN="<TOKEN FROM NODE-TOKEN FILE>" K3S_URL=https://<cluster ip>:6443 sh -
+```
+
+MetalLB needs an IP pool to serve IP address. During the installation this pool can be configured with fhe following example YAML file:
+
+*values.yaml*
+```yaml
+configInline:
+  address-pools:
+   - name: default
+     protocol: layer2
+     addresses:
+     - 192.168.0.122/32
+     - 192.168.1.0/24
+```
+
+After defining the IP range MetalLB is a simple Helm installation:
+
+```shell
+helm repo add metallb https://metallb.github.io/metallb
+helm install metallb metallb/metallb -f values.yaml
 ```
