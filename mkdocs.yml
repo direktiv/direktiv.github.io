@@ -37,6 +37,8 @@ extra:
       link: https://direktivio.slack.com/
       name: Slack
 
+extra_css:
+  - stylesheets/extra.css
 
 copyright: "Copyright © 2021 direktiv.io"
 
