@@ -19,16 +19,5 @@ RUN wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/d
 ENV PATH=$PATH:/usr/lib/go-1.16/bin
 WORKDIR /mydocs
 
-# ADD docs /mydocs/docs
-# ADD config /mydocs/config
-# ADD overrides /mydocs/overrides
-# ADD config /mydocs/config
-# ADD mkdocs.yml /mydocs/mkdocs.yml
-# ADD versions.json /mydocs/versions.json
-# ADD get-spec.sh /mydocs/get-spec.sh
-# ADD Makefile /mydocs/Makefile
-
-# WORKDIR /mydocs
-
-# RUN ./get-spec.sh
-# RUN make update-api
+RUN git config --global user.name = "Direktiv Build Bot"
+RUN git config --global user.mail = "info@direktiv.io"
