@@ -8,7 +8,7 @@ rm -rf direktiv
 if [ -z "$DIR" ];
 then
     echo "Cloning branch $BRANCH"
-    git clone -b $BRANCH git@github.com:direktiv/direktiv.git
+    git clone -b $BRANCH https://github.com/direktiv/direktiv.git
     cp -r direktiv/specification docs/spec
     rm -rf direktiv
 else
