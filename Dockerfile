@@ -20,4 +20,6 @@ ENV PATH=$PATH:/usr/lib/go-1.16/bin
 WORKDIR /mydocs
 
 RUN git config --global user.name = "Direktiv Build Bot"
-RUN git config --global user.mail = "info@direktiv.io"
+RUN git config --global user.email = "info@direktiv.io"
+
+CMD ["/mydocs/mike.sh"]
