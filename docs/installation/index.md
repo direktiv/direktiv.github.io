@@ -3,7 +3,7 @@
 Installing Direktiv can be done with a simple [helm](https://helm.sh/) install command. The only requirements for a basic installation is a [PostgreSQL](database) database and a [kubernetes](kubernetes) cluster. Direktiv has been tested with Kubernetes and PostgreSQL offerings of all major cloud providers.
 
 ```shell
-kubetcl create ns direktiv-services-direktiv
+kubectl create ns direktiv-services-direktiv
 
 helm repo add direktiv https://chart.direktiv.io
 helm install knative direktiv/knative
