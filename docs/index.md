@@ -16,20 +16,23 @@ docker run --privileged -p 8080:80 --env HTTPS_PROXY="http://<proxy-address>:443
 
 ***Testing Direktiv***:
 
-Download the `direkcli` command-line tool from the [releases page](https://github.com/direktiv/direktiv/releases)  (contained in the ZIP file) and create your first namespace by running:
+To test the installation create a namespace in Direktiv with the following command:
 
-`direkcli namespaces create demo`
-
-```bash
-$ direkcli namespaces create demo
-Created namespace: demo
-$ direkcli namespaces list
-+------+
-| NAME |
-+------+
-| demo |
-+------+
 ```
+$curl -X PUT "http://localhost:8080/api/namespaces/demo"
+
+{
+  "namespace": {
+    "createdAt": "2021-10-06T00:03:22.444884147Z",
+    "updatedAt": "2021-10-06T00:03:22.444884447Z",
+    "name": "demo",
+    "oid": ""
+  }
+}
+```
+
+The command `curl "http://localhost:8080/api/namespaces"` will return the just created namespace.
+
 
 ### Kubernetes installation
 
