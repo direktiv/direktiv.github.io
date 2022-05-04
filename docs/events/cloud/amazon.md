@@ -39,7 +39,7 @@ The following output should appear (make sure you hold onto the ARN as it is use
 After creating an Authorization token from the Direktiv interface, create the connection using the token as follow:
 
 ```sh
-aws events create-connection --name direktiv-connection --authorization-type API_KEY --auth-parameters "{\"ApiKeyAuthParameters\": {\"ApiKeyName\":\"Authorization\", \"ApiKeyValue\":\"Bearer <DIREKTIV_TOKEN>\"}}"
+aws events create-connection --name direktiv-connection --authorization-type API_KEY --auth-parameters "{\"ApiKeyAuthParameters\": {\"ApiKeyName\":\"direktiv-token\", \"ApiKeyValue\":\"<DIREKTIV_TOKEN>\"}}"
 ```
 
 Upon creating the connection the following output from the CLI should appear.
@@ -58,7 +58,7 @@ We will need to use the connection arn in the next command.
 ## Create an Api-Destination
 
 ```sh
-aws events create-api-destination --name direktiv-api --connection-arn "<CONNECTION_ARN>" --invocation-endpoint https://run.direktiv.io/api/namespaces/complex-workflows/event --http-method POST
+aws events create-api-destination --name direktiv-api --connection-arn "<CONNECTION_ARN>" --invocation-endpoint https://<DIREKTIV_URL>/api/namespaces/<NAMESPACE>/broadcast --http-method POST
 ```
 
 The output should resemble this:
@@ -77,7 +77,7 @@ The output should resemble this:
 Adding the targets to the EventBridge rule also requires us to define an Input Path and Input Template.
 
 ```sh
-aws events put-targets --rule direktiv-rule --targets '[ { "Id": "direktiv-api", "RoleArn": "<ROLE_ARN>", "Arn": "<API_ARN>", "InputTransformer": { "InputPathsMap": { "data":"$", "id":"$.id", "source":"$.source", "state":"$.detail.state", "subject":"$.source", "time":"$.time", "type":"$.detail-type" }, "InputTemplate": " {\"specversion\":\"1.0\", \"id\":<id>, \"source\":<source>, \"type\":<type>, \"subject\":<subject>, \"time\":<time>, \"data\":<data>}" } } ]'
+aws events put-targets --rule direktiv-rule --targets '[ { "Id": "direktiv-api", "RoleArn": "<ROLE_ARN>", "Arn": "<API_ARN>", "InputTransformer": { "InputPathsMap": { "id":"$.id", "source":"$.source", "state":"$.detail.state", "subject":"$.source", "time":"$.time", "type":"$.detail-type" }, "InputTemplate": " {\"specversion\":\"1.0\", \"id\":<id>, \"source\":<source>, \"type\":<type>, \"subject\":<subject>, \"time\":<time>, \"data\":<aws.events.event.json>}" } } ]'
 ```
 
 The output (if successful) below:
@@ -94,15 +94,13 @@ The output (if successful) below:
 Input Path Map captures the EventBridge event so we can easily filter into a cloud event to send to Direktiv
 
 ```json
-{
-   "data":"$",
-   "id":"$.id",
-   "source":"$.source",
-   "state":"$.detail.state",
-   "subject":"$.source",
-   "time":"$.time",
-   "type":"$.detail-type"
-}
+    {
+      "id": "$.id",
+      "source": "$.source",
+      "subject": "$.source",
+      "time": "$.time",
+      "type": "$.detail-type"
+    }
 ```
 
 ### Input Template Example
@@ -110,15 +108,15 @@ Input Path Map captures the EventBridge event so we can easily filter into a clo
 The Input Template allows you to spec out what you want the JSON to look like parsing the values from the input path.
 
 ```json
-{
-   "specversion":"1.0",
-   "id":<id>,
-   "source":<source>,
-   "type":<type>,
-   "subject":<subject>,
-   "time":<time>,
-   "data":<data>
-}
+     {
+       "specversion":"1.0", 
+       "id": "<id>", 
+       "source": "<source>", 
+       "type": "<type>", 
+       "subject": "<subject>", 
+       "time": "<time>",
+       "data": <aws.events.event.json>
+     }
 ```
 
 So now when you change the state of an instance on EC2 a workflow will be triggered on Direktiv if it is listening to 'aws.ec2'. For reference, when an AWS event is generated, the default event structure (for an EC2 status change as an example) is shown below:
@@ -126,16 +124,16 @@ So now when you change the state of an instance on EC2 a workflow will be trigge
 ```json
 {
   "version": "0",
-  "id": "a0bca05d-2cd7-2044-04a6-ce94a6271d10",
+  "id": "7bf73129-1428-4cd3-a780-95db273d1602",
   "detail-type": "EC2 Instance State-change Notification",
   "source": "aws.ec2",
-  "account": "338328518639",
-  "time": "2021-08-04T04:17:23Z",
-  "region": "ap-southeast-2",
-  "resources": [],
+  "account": "123456789012",
+  "time": "2015-11-11T21:29:54Z",
+  "region": "us-east-1",
+  "resources": ["arn:aws:ec2:us-east-1:123456789012:instance/i-abcd1111"],
   "detail": {
-    "instance-id": "i-07dc0a80689d48dab",
-    "state": "running"
+    "instance-id": "i-abcd1111",
+    "state": "pending"
   }
 }
 ```
@@ -145,23 +143,25 @@ The CloudEvent received by Direktiv after the transformation is shown below:
 ```json
 {
   "specversion": "1.0",
-  "id": "3156cfde-9e3d-570f-b1f6-ca4358472fe0",
+  "id": "f694954a-c307-368c-005a-d4279473e156",
   "source": "aws.ec2",
   "type": "EC2 Instance State-change Notification",
   "subject": "aws.ec2",
-  "time": "2021-08-04T04:17:23Z",
+  "time": "2022-05-04T01:57:06Z",
   "data": {
     "version": "0",
-    "id": "3156cfde-9e3d-570f-b1f6-ca4358472fe0",
+    "id": "f694954a-c307-368c-005a-d4279473e156",
     "detail-type": "EC2 Instance State-change Notification",
     "source": "aws.ec2",
     "account": "338328518639",
-    "time": "2021-08-04T04:17:23Z",
+    "time": "2022-05-04T01:57:06Z",
     "region": "ap-southeast-2",
-    "resources": [],
+    "resources": [
+      "arn:aws:ec2:ap-southeast-2:338328518639:instance/i-0cf5a83f321fbed55"
+    ],
     "detail": {
-      "instance-id": "i-07dc0a80689d48dab",
-      "state": "running"
+      "instance-id": "i-0cf5a83f321fbed55",
+      "state": "pending"
     }
   }
 }
