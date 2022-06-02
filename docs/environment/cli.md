@@ -18,7 +18,7 @@ curl -L https://github.com/direktiv/direktiv/releases/latest/download/direktiv_s
 
 ## Setting up a Namespace
 
-Working with this tool assumes that you create a directory which is mirroring a namespace in Direktiv. This directory should be empty at start. The first thing to setup is the connectivity to Direktiv. For this a `.direktiv.conf` file has to be created within this directory. This file needs the api key or token, the address of the Direktiv instance and the namespace it should use.  
+Working with this tool assumes that you create a directory which is mirroring a namespace in Direktiv. This directory should be empty at start. The first thing to setup is the connectivity to Direktiv. For this a `.direktiv.yaml` file has to be created within this directory. This file needs the api key or token, the address of the Direktiv instance and the namespace it should use.  
 
 ```yaml
 auth-token: my-api-key-token
@@ -26,13 +26,13 @@ addr: https://my-direktiv.server
 namespace: direktiv
 ```
 
-This folder is no the base for a namespace `direktiv`. The path from here is relative in Direktiv. This means the folder structure will be the same as the folder structure in Direktiv. 
+This folder is now the base for a namespace `direktiv`. The path from here is relative in Direktiv. This means the folder structure will be the same as the folder structure in Direktiv. 
 
 ## Pushing and Executing
 
-At the moment there are two limitations working with this tool. It can not pull the namespace from Direktiv. For this functionality the Git integration has to be used. The second limitation is that it can not create workflows. They have to exist beforehand and starting a new workflow requires a "dummy" workflow in the system first. 
+At the moment there is one limitation working with this tool. It can not pull the namespace from Direktiv. For this functionality the Git integration has to be used.
 
-After setup there are two commands available. The `push` command pushes a workflow to Direktiv but does not execute it. This command works recursivley e.g. `direktiv-sync push .`. The `exec` command uploads and executes the workflow. During execution the logs are printed to `stdout`.
+After setup there are two commands available. The `push` command pushes a workflow to Direktiv but does not execute it. This command works recursively e.g. `direktiv-sync push .`. The `exec` command uploads and executes the workflow. During execution the logs are printed to `stdout`.
 
 *Examples*
 ```
