@@ -51,3 +51,41 @@ mywf.yaml.script.sh
 ```
 
 The above example will create a workflow variable `script.sh` for the workflow `mywf.yaml`.
+
+## Profiles
+
+If you need to manage multiple configurations, the tool supports "profiles". A profile is a configuration in a list of configurations in the config file. A valid configuration file might look like this:
+
+```yaml
+profiles:
+- id: a
+  auth-token: my-api-key-token
+  addr: https://my-direktiv.server
+  namespace: dev
+- id: b
+  auth-token: my-api-key-token
+  addr: https://my-direktiv.server
+  namespace: prod
+```
+
+The tool supports both types of configuration files, but you cannot mix and match. Either define fields within profiles or define no profiles at all.
+
+When using profiles, the default behaviour is to select the first profile defined in the list. To override this behaviour, you can use the `-P`/`--profile` flag to select one of the other profiles according to its `id`. So for the example above, we can push to `prod` with this flag `--profile=b`.
+
+## Other Ways to Configure
+
+For most configuration settings, the tool will check for values in three places in the following order:
+
+* Commandline flags.
+* Environment variables.
+* A configuration file.
+
+As long as the tool finds all of the values it needs, it doesn't care where it got them from. This means it's not strictly necessary to have a configuration file at all, so long as the settings are defined elsewhere.
+
+The flags are self explanatory, and otherwise available via help information (`-h`/`--help`). For environment variables, all settings are named the same way they appear in a configuration file, except for the following adjustments:
+
+* All characters are UPPERCASE
+* All dashes are replaced with underscores.
+* All named are prefixed with `DIREKTIV_`.
+
+So, for example, we can define an auth token with `DIREKTIV_AUTH_TOKEN=my-api-key-token`.
