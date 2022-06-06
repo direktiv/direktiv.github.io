@@ -6,7 +6,7 @@ Installing Direktiv can be done with a simple [helm](https://helm.sh/) install c
 kubectl create ns direktiv-services-direktiv
 
 helm repo add direktiv https://chart.direktiv.io
-helm install knative direktiv/knative
+helm install -n knative-serving --create-namespace knative direktiv/knative
 
 helm install -n direktiv --create-namespace direktiv direktiv/direktiv  
 ```
