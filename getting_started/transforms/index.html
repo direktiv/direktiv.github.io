@@ -10,21 +10,21 @@
       
       
       
-        <link rel="canonical" href="https://docs.direktiv.io/">
+        <link rel="canonical" href="https://docs.direktiv.io/getting_started/transforms/">
       
-      <link rel="icon" href="assets/favicon.ico">
+      <link rel="icon" href="../../assets/favicon.ico">
       <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.6">
     
     
       
-        <title>Direktiv</title>
+        <title>Transforms & JQ - Direktiv</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.20d9efc8.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.cbb835fc.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
         
           
           
@@ -45,9 +45,9 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#quickstart" class="md-skip">
+        <a href="#transforms-jq" class="md-skip">
           Skip to content
         </a>
       
@@ -88,9 +88,9 @@
 
 <header class="md-header md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Direktiv" class="md-header__button md-logo" aria-label="Direktiv" data-md-component="logo">
+    <a href="../.." title="Direktiv" class="md-header__button md-logo" aria-label="Direktiv" data-md-component="logo">
       
-  <img src="assets/logo.png" alt="logo">
+  <img src="../../assets/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Quickstart
+              Transforms & JQ
             
           </span>
         </div>
@@ -172,12 +172,10 @@
         
   
   
-    
-  
 
 
   <li class="md-tabs__item">
-    <a href="." class="md-tabs__link md-tabs__link--active">
+    <a href="../.." class="md-tabs__link">
       Quickstart
     </a>
   </li>
@@ -186,13 +184,15 @@
         
   
   
+    
+  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="getting_started/helloworld/" class="md-tabs__link">
+      <a href="../helloworld/" class="md-tabs__link md-tabs__link--active">
         Getting Started
       </a>
     </li>
@@ -208,7 +208,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="installation/" class="md-tabs__link">
+      <a href="../../installation/" class="md-tabs__link">
         Installation
       </a>
     </li>
@@ -229,7 +229,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="spec/workflow-yaml/workflow/" class="md-tabs__link">
+      <a href="../../spec/workflow-yaml/workflow/" class="md-tabs__link">
         Specification
       </a>
     </li>
@@ -244,7 +244,7 @@
 
 
   <li class="md-tabs__item">
-    <a href="api/" class="md-tabs__link">
+    <a href="../../api/" class="md-tabs__link">
       API
     </a>
   </li>
@@ -259,7 +259,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="environment/direktiv-development-environment/" class="md-tabs__link">
+      <a href="../../environment/direktiv-development-environment/" class="md-tabs__link">
         Development
       </a>
     </li>
@@ -275,7 +275,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="examples/greeting/" class="md-tabs__link">
+      <a href="../../examples/greeting/" class="md-tabs__link">
         Examples
       </a>
     </li>
@@ -291,7 +291,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="events/" class="md-tabs__link">
+      <a href="../../events/" class="md-tabs__link">
         Events
       </a>
     </li>
@@ -325,9 +325,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Direktiv" class="md-nav__button md-logo" aria-label="Direktiv" data-md-component="logo">
+    <a href="../.." title="Direktiv" class="md-nav__button md-logo" aria-label="Direktiv" data-md-component="logo">
       
-  <img src="assets/logo.png" alt="logo">
+  <img src="../../assets/logo.png" alt="logo">
 
     </a>
     Direktiv
@@ -353,96 +353,11 @@
 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Quickstart
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         Quickstart
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#quickstart" class="md-nav__link">
-    Quickstart
-  </a>
-  
-    <nav class="md-nav" aria-label="Quickstart">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#starting-the-server" class="md-nav__link">
-    Starting the Server
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kubernetes-installation" class="md-nav__link">
-    Kubernetes installation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#workflow-specification" class="md-nav__link">
-    Workflow specification
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#creating-and-running-a-workflow" class="md-nav__link">
-    Creating and Running a Workflow
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    Next steps
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
-    See Also
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -453,12 +368,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       
       
@@ -511,7 +428,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/helloworld/" class="md-nav__link">
+      <a href="../helloworld/" class="md-nav__link">
         Helloworld
       </a>
     </li>
@@ -525,7 +442,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/transitions/" class="md-nav__link">
+      <a href="../transitions/" class="md-nav__link">
         Transitions
       </a>
     </li>
@@ -539,7 +456,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/conditional-transitions/" class="md-nav__link">
+      <a href="../conditional-transitions/" class="md-nav__link">
         Conditional Transitions
       </a>
     </li>
@@ -551,11 +468,73 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="getting_started/transforms/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Transforms & JQ
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Transforms & JQ
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#first-transform" class="md-nav__link">
+    First Transform
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#second-transform" class="md-nav__link">
+    Second Transform
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#third-transform" class="md-nav__link">
+    Third Transform
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fourth-transform" class="md-nav__link">
+    Fourth Transform
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -567,7 +546,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/functions-intro/" class="md-nav__link">
+      <a href="../functions-intro/" class="md-nav__link">
         Introduction to Functions
       </a>
     </li>
@@ -581,7 +560,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/scheduling/" class="md-nav__link">
+      <a href="../scheduling/" class="md-nav__link">
         Scheduling
       </a>
     </li>
@@ -595,7 +574,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/subflows/" class="md-nav__link">
+      <a href="../subflows/" class="md-nav__link">
         Subflows
       </a>
     </li>
@@ -609,7 +588,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/events/" class="md-nav__link">
+      <a href="../events/" class="md-nav__link">
         Events
       </a>
     </li>
@@ -623,7 +602,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/error-handling/" class="md-nav__link">
+      <a href="../error-handling/" class="md-nav__link">
         Error Handling
       </a>
     </li>
@@ -637,7 +616,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/secrets-registries/" class="md-nav__link">
+      <a href="../secrets-registries/" class="md-nav__link">
         Secrets & Registries
       </a>
     </li>
@@ -651,7 +630,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/making-functions/" class="md-nav__link">
+      <a href="../making-functions/" class="md-nav__link">
         Making Custom Functions
       </a>
     </li>
@@ -665,7 +644,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/persistent-data/" class="md-nav__link">
+      <a href="../persistent-data/" class="md-nav__link">
         Persistent Data
       </a>
     </li>
@@ -679,7 +658,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/using-functions/" class="md-nav__link">
+      <a href="../using-functions/" class="md-nav__link">
         Using Functions
       </a>
     </li>
@@ -693,7 +672,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/isolated-functions/" class="md-nav__link">
+      <a href="../isolated-functions/" class="md-nav__link">
         Isolated Functions
       </a>
     </li>
@@ -742,7 +721,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="installation/">Installation</a>
+          <a href="../../installation/">Installation</a>
           
             <label for="__nav_3">
               <span class="md-nav__icon md-icon"></span>
@@ -765,7 +744,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/kubernetes/" class="md-nav__link">
+      <a href="../../installation/kubernetes/" class="md-nav__link">
         Kubernetes
       </a>
     </li>
@@ -779,7 +758,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/linkerd/" class="md-nav__link">
+      <a href="../../installation/linkerd/" class="md-nav__link">
         Linkerd
       </a>
     </li>
@@ -793,7 +772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/database/" class="md-nav__link">
+      <a href="../../installation/database/" class="md-nav__link">
         Database
       </a>
     </li>
@@ -807,7 +786,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/direktiv/" class="md-nav__link">
+      <a href="../../installation/direktiv/" class="md-nav__link">
         Direktiv
       </a>
     </li>
@@ -821,7 +800,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/summary/" class="md-nav__link">
+      <a href="../../installation/summary/" class="md-nav__link">
         Quick Install
       </a>
     </li>
@@ -923,7 +902,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/workflow/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/workflow/" class="md-nav__link">
         Workflow
       </a>
     </li>
@@ -937,7 +916,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/functions/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/functions/" class="md-nav__link">
         Functions
       </a>
     </li>
@@ -951,7 +930,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/starts/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/starts/" class="md-nav__link">
         Triggers / Starts
       </a>
     </li>
@@ -965,7 +944,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/timeouts/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/timeouts/" class="md-nav__link">
         Timeouts
       </a>
     </li>
@@ -979,7 +958,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/actions/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/actions/" class="md-nav__link">
         Actions
       </a>
     </li>
@@ -993,7 +972,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/errors/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/errors/" class="md-nav__link">
         Errors
       </a>
     </li>
@@ -1007,7 +986,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/logging/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/logging/" class="md-nav__link">
         Logging
       </a>
     </li>
@@ -1021,7 +1000,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/metadata/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/metadata/" class="md-nav__link">
         Instance Metadata
       </a>
     </li>
@@ -1093,7 +1072,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/states/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/states/" class="md-nav__link">
         States
       </a>
     </li>
@@ -1107,7 +1086,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/action/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/action/" class="md-nav__link">
         action
       </a>
     </li>
@@ -1121,7 +1100,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/consume-event/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/consume-event/" class="md-nav__link">
         consumeEvent
       </a>
     </li>
@@ -1135,7 +1114,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/delay/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/delay/" class="md-nav__link">
         delay
       </a>
     </li>
@@ -1149,7 +1128,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/error/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/error/" class="md-nav__link">
         error
       </a>
     </li>
@@ -1163,7 +1142,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/events-and/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/events-and/" class="md-nav__link">
         eventsAnd
       </a>
     </li>
@@ -1177,7 +1156,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/events-xor/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/events-xor/" class="md-nav__link">
         eventsXor
       </a>
     </li>
@@ -1191,7 +1170,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/foreach/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/foreach/" class="md-nav__link">
         foreach
       </a>
     </li>
@@ -1205,7 +1184,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/generate-event/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/generate-event/" class="md-nav__link">
         generateEvent
       </a>
     </li>
@@ -1219,7 +1198,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/getter/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/getter/" class="md-nav__link">
         getter
       </a>
     </li>
@@ -1233,7 +1212,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/noop/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/noop/" class="md-nav__link">
         noop
       </a>
     </li>
@@ -1247,7 +1226,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/parallel/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/parallel/" class="md-nav__link">
         parallel
       </a>
     </li>
@@ -1261,7 +1240,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/setter/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/setter/" class="md-nav__link">
         setter
       </a>
     </li>
@@ -1275,7 +1254,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/switch/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/switch/" class="md-nav__link">
         switch
       </a>
     </li>
@@ -1289,7 +1268,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/workflow-yaml/validate/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/validate/" class="md-nav__link">
         validate
       </a>
     </li>
@@ -1357,7 +1336,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/instance-data/instance-data/" class="md-nav__link">
+      <a href="../../spec/instance-data/instance-data/" class="md-nav__link">
         Instance Data
       </a>
     </li>
@@ -1371,7 +1350,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/instance-data/input/" class="md-nav__link">
+      <a href="../../spec/instance-data/input/" class="md-nav__link">
         Input
       </a>
     </li>
@@ -1385,7 +1364,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/instance-data/output/" class="md-nav__link">
+      <a href="../../spec/instance-data/output/" class="md-nav__link">
         Output
       </a>
     </li>
@@ -1399,7 +1378,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/instance-data/transforms/" class="md-nav__link">
+      <a href="../../spec/instance-data/transforms/" class="md-nav__link">
         Transforms
       </a>
     </li>
@@ -1413,7 +1392,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/instance-data/structured-jx/" class="md-nav__link">
+      <a href="../../spec/instance-data/structured-jx/" class="md-nav__link">
         Structured JX
       </a>
     </li>
@@ -1427,7 +1406,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/instance-data/security/" class="md-nav__link">
+      <a href="../../spec/instance-data/security/" class="md-nav__link">
         Security
       </a>
     </li>
@@ -1480,7 +1459,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/variables/variables/" class="md-nav__link">
+      <a href="../../spec/variables/variables/" class="md-nav__link">
         Variables
       </a>
     </li>
@@ -1494,7 +1473,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/variables/system/" class="md-nav__link">
+      <a href="../../spec/variables/system/" class="md-nav__link">
         System
       </a>
     </li>
@@ -1523,7 +1502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api/" class="md-nav__link">
+      <a href="../../api/" class="md-nav__link">
         API
       </a>
     </li>
@@ -1570,7 +1549,7 @@
   
   
     <li class="md-nav__item">
-      <a href="environment/direktiv-development-environment/" class="md-nav__link">
+      <a href="../../environment/direktiv-development-environment/" class="md-nav__link">
         Standalone Environment
       </a>
     </li>
@@ -1584,7 +1563,7 @@
   
   
     <li class="md-nav__item">
-      <a href="environment/cli/" class="md-nav__link">
+      <a href="../../environment/cli/" class="md-nav__link">
         Sync Tool
       </a>
     </li>
@@ -1678,7 +1657,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/greeting/" class="md-nav__link">
+      <a href="../../examples/greeting/" class="md-nav__link">
         Greeting (ActionState)
       </a>
     </li>
@@ -1692,7 +1671,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/event-based-greeting/" class="md-nav__link">
+      <a href="../../examples/event-based-greeting/" class="md-nav__link">
         Event-based Greeting (StartEvent)
       </a>
     </li>
@@ -1706,7 +1685,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/solving-math-expressions/" class="md-nav__link">
+      <a href="../../examples/solving-math-expressions/" class="md-nav__link">
         Solving Math Expressions (Foreach)
       </a>
     </li>
@@ -1720,7 +1699,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/parallel-execution/" class="md-nav__link">
+      <a href="../../examples/parallel-execution/" class="md-nav__link">
         Parallel Execution (Parallel)
       </a>
     </li>
@@ -1734,7 +1713,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/event-based-transition/" class="md-nav__link">
+      <a href="../../examples/event-based-transition/" class="md-nav__link">
         Check Credit Score (ConsumeEvent)
       </a>
     </li>
@@ -1748,7 +1727,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/non-json-input/" class="md-nav__link">
+      <a href="../../examples/non-json-input/" class="md-nav__link">
         Handling Non-JSON Input
       </a>
     </li>
@@ -1762,7 +1741,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/logging/" class="md-nav__link">
+      <a href="../../examples/logging/" class="md-nav__link">
         Logging
       </a>
     </li>
@@ -1776,7 +1755,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/create-vm-set-dns/" class="md-nav__link">
+      <a href="../../examples/create-vm-set-dns/" class="md-nav__link">
         Create VM and DNS Record
       </a>
     </li>
@@ -1790,7 +1769,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/respond-to-events/" class="md-nav__link">
+      <a href="../../examples/respond-to-events/" class="md-nav__link">
         Reacting to Consuming Cloud Events
       </a>
     </li>
@@ -1804,7 +1783,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/website-change/" class="md-nav__link">
+      <a href="../../examples/website-change/" class="md-nav__link">
         Check for Website Change
       </a>
     </li>
@@ -1818,7 +1797,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/terraform-and-ansible/" class="md-nav__link">
+      <a href="../../examples/terraform-and-ansible/" class="md-nav__link">
         Terraform or Ansible
       </a>
     </li>
@@ -1832,7 +1811,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/using-terraform-plugin/" class="md-nav__link">
+      <a href="../../examples/using-terraform-plugin/" class="md-nav__link">
         Running Terraform Scripts
       </a>
     </li>
@@ -1846,7 +1825,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/md-translation/" class="md-nav__link">
+      <a href="../../examples/md-translation/" class="md-nav__link">
         Convert Markdown to Multiple Languages
       </a>
     </li>
@@ -1860,7 +1839,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/check-email-for-intent/" class="md-nav__link">
+      <a href="../../examples/check-email-for-intent/" class="md-nav__link">
         Check Email for Intent
       </a>
     </li>
@@ -1874,7 +1853,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/automatically-blur-nsfw-images/" class="md-nav__link">
+      <a href="../../examples/automatically-blur-nsfw-images/" class="md-nav__link">
         Blur a NSFW Image
       </a>
     </li>
@@ -1888,7 +1867,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/regex-check-for-mobile/" class="md-nav__link">
+      <a href="../../examples/regex-check-for-mobile/" class="md-nav__link">
         Check Email for Mobile Number
       </a>
     </li>
@@ -1902,7 +1881,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/git-clone-go-build/" class="md-nav__link">
+      <a href="../../examples/git-clone-go-build/" class="md-nav__link">
         Git Clone and Go Build
       </a>
     </li>
@@ -1916,7 +1895,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/scheduled-example/" class="md-nav__link">
+      <a href="../../examples/scheduled-example/" class="md-nav__link">
         Scheduling (ScheduledStartType)
       </a>
     </li>
@@ -1930,7 +1909,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/start-example/" class="md-nav__link">
+      <a href="../../examples/start-example/" class="md-nav__link">
         Event Listener (EventStartType)
       </a>
     </li>
@@ -1944,7 +1923,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/start-event-and-example/" class="md-nav__link">
+      <a href="../../examples/start-event-and-example/" class="md-nav__link">
         EventAnd Listener (EventAndStartType)
       </a>
     </li>
@@ -1958,7 +1937,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/start-event-xor-example/" class="md-nav__link">
+      <a href="../../examples/start-event-xor-example/" class="md-nav__link">
         EventXor Listener (EventXorStartType)
       </a>
     </li>
@@ -1972,7 +1951,7 @@
   
   
     <li class="md-nav__item">
-      <a href="examples/variable-mime-types/" class="md-nav__link">
+      <a href="../../examples/variable-mime-types/" class="md-nav__link">
         Variable Mimetypes
       </a>
     </li>
@@ -2015,7 +1994,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="events/">Events</a>
+          <a href="../../events/">Events</a>
           
             <label for="__nav_8">
               <span class="md-nav__icon md-icon"></span>
@@ -2061,7 +2040,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="events/cloud/">Cloud</a>
+          <a href="../../events/cloud/">Cloud</a>
           
             <label for="__nav_8_2">
               <span class="md-nav__icon md-icon"></span>
@@ -2084,7 +2063,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/cloud/amazon/" class="md-nav__link">
+      <a href="../../events/cloud/amazon/" class="md-nav__link">
         Amazon
       </a>
     </li>
@@ -2098,7 +2077,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/cloud/azure/" class="md-nav__link">
+      <a href="../../events/cloud/azure/" class="md-nav__link">
         Azure
       </a>
     </li>
@@ -2112,7 +2091,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/cloud/gcp/" class="md-nav__link">
+      <a href="../../events/cloud/gcp/" class="md-nav__link">
         Google Cloud Platform
       </a>
     </li>
@@ -2165,7 +2144,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/knative/knative/" class="md-nav__link">
+      <a href="../../events/knative/knative/" class="md-nav__link">
         Eventing
       </a>
     </li>
@@ -2179,7 +2158,7 @@
   
   
     <li class="md-nav__item">
-      <a href="events/knative/example/" class="md-nav__link">
+      <a href="../../events/knative/example/" class="md-nav__link">
         Kafka Example
       </a>
     </li>
@@ -2217,6 +2196,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -2225,56 +2206,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#quickstart" class="md-nav__link">
-    Quickstart
+  <a href="#first-transform" class="md-nav__link">
+    First Transform
   </a>
-  
-    <nav class="md-nav" aria-label="Quickstart">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#starting-the-server" class="md-nav__link">
-    Starting the Server
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#kubernetes-installation" class="md-nav__link">
-    Kubernetes installation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#workflow-specification" class="md-nav__link">
-    Workflow specification
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#creating-and-running-a-workflow" class="md-nav__link">
-    Creating and Running a Workflow
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    Next steps
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
-    See Also
+  <a href="#second-transform" class="md-nav__link">
+    Second Transform
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#third-transform" class="md-nav__link">
+    Third Transform
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fourth-transform" class="md-nav__link">
+    Fourth Transform
   </a>
   
 </li>
@@ -2293,87 +2247,78 @@
                 
                   
 
-  <a href="https://github.com/direktiv/direktiv/edit/master/docs/index.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/direktiv/direktiv/edit/master/docs/getting_started/transforms.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
-  <h1>Quickstart</h1>
-
-<h2 id="quickstart">Quickstart</h2>
-<h3 id="starting-the-server">Starting the Server</h3>
-<p>Getting a local playground environment can be easily done with Docker. The following command starts a docker container with kubernetes. <em>On startup it can take a few minutes to download all images.</em> When the installation is done all pods should show "Running" or "Completed".</p>
-<div class="highlight"><pre><span></span><code>docker run --privileged -p 8080:80 -ti direktiv/direktiv-kube
+<h1 id="transforms-jq">Transforms &amp; JQ</h1>
+<p>Every workflow instance always has something called the "Instance Data", which is a JSON object that is used to pass data around. Almost everywhere a <code>transition</code> can happen in a workflow definition a <code>transform</code> can also happen allowing the author to filter, enrich, or otherwise modify the instance data.</p>
+<p>The <code>transform</code> field can contain a valid <code>jq</code> command, which will be applied to the existing instance data to generate a new JSON object that will entirely replace it. Note that only a JSON <strong>object</strong> will be considered a valid output from this <code>jq</code> command: <code>jq</code> is capable of outputting primitives and arrays, but these are not acceptable output for a <code>transform</code>. </p>
+<p>Because the Noop State logs its instance data before applying its <code>transform</code> &amp; <code>transition</code> we can follow the results of these transforms throughout the demo.</p>
+<p>Transforms can be wrapped in <code>'jq()'</code> or <code>jq()</code>. The difference between the two is that one instructs YAML more explicitly what's in the string. This can be important if you use <code>jq</code> commands containing braces, for example: <code>jq({a: 1})</code>. Because if this is not explicitly quoted, YAML interprets it incorrectly and throws errors. The quoted form is always valid and generally safer.</p>
+<h3 id="first-transform">First Transform</h3>
+<p>The first transform defines a completely new JSON object.</p>
+<p><strong>Command</strong></p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;jq({</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;number&quot;:</span><span class="nv"> </span><span class="s">2,</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;objects&quot;:</span><span class="nv"> </span><span class="s">[{</span><span class="w"></span>
+<span class="w">      </span><span class="s">&quot;k1&quot;:</span><span class="nv"> </span><span class="s">&quot;v1&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">}]</span><span class="w"></span>
+<span class="w">  </span><span class="s">})&#39;</span><span class="w"></span>
 </code></pre></div>
-<p>For proxy usage:</p>
-<div class="highlight"><pre><span></span><code>docker run --privileged -p <span class="m">8080</span>:80 --env <span class="nv">HTTPS_PROXY</span><span class="o">=</span><span class="s2">&quot;http://&lt;proxy-address&gt;:443&quot;</span> --env <span class="nv">NO_PROXY</span><span class="o">=</span><span class="s2">&quot;.default,10.0.0.0/8,172.0.0.0/8,localhost&quot;</span> direktiv/direktiv-kube
+<p><strong>Resulting Instance Data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;objects&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;k1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v1&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<p><strong><em>Testing Direktiv</em></strong>:</p>
-<p>To test the installation create a namespace in Direktiv with the following command:</p>
-<div class="highlight"><pre><span></span><code>$curl -X PUT &quot;http://localhost:8080/api/namespaces/demo&quot;
-
-{
-  &quot;namespace&quot;: {
-    &quot;createdAt&quot;: &quot;2021-10-06T00:03:22.444884147Z&quot;,
-    &quot;updatedAt&quot;: &quot;2021-10-06T00:03:22.444884447Z&quot;,
-    &quot;name&quot;: &quot;demo&quot;,
-    &quot;oid&quot;: &quot;&quot;
-  }
-}
+<h3 id="second-transform">Second Transform</h3>
+<p>The second transform enriches the existing instance data by adding a new field to it.</p>
+<p><strong>Command</strong></p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;jq(.multiplier</span><span class="nv"> </span><span class="s">=</span><span class="nv"> </span><span class="s">10)&#39;</span><span class="w"></span>
 </code></pre></div>
-<p>The command <code>curl "http://localhost:8080/api/namespaces"</code> will return the just created namespace.</p>
-<h3 id="kubernetes-installation">Kubernetes installation</h3>
-<p>For instructions on how to install in a pre-existing Kubernetes environment, following the <a href="installation/">installation instructions</a>.</p>
-<h3 id="workflow-specification">Workflow specification</h3>
-<p>The below example is the minimal configuration needed for a workflow, following the <a href="specification/">workflow language specification</a>:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helloworld</span><span class="w"></span>
-<span class="nt">states</span><span class="p">:</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello</span><span class="w"></span>
-<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">noop</span><span class="w"></span>
-<span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Hello</span><span class="nv"> </span><span class="s">jq(.name)!&quot;</span><span class="w"></span>
+<p><strong>Resulting Instance Data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;multiplier&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;objects&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;k1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v1&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h3 id="creating-and-running-a-workflow">Creating and Running a Workflow</h3>
-<p>The following script does everything required to run the first workflow. This includes creating a namespace &amp; workflow and running the workflow the first time.  </p>
-<div class="highlight"><pre><span></span><code>$ curl -X PUT <span class="s2">&quot;http://localhost:8080/api/namespaces/demo&quot;</span>
-<span class="o">{</span>
-  <span class="s2">&quot;namespace&quot;</span>: <span class="o">{</span>
-    <span class="s2">&quot;createdAt&quot;</span>: <span class="s2">&quot;2021-10-06T00:03:22.444884147Z&quot;</span>,
-    <span class="s2">&quot;updatedAt&quot;</span>: <span class="s2">&quot;2021-10-06T00:03:22.444884447Z&quot;</span>,
-    <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;demo&quot;</span>,
-    <span class="s2">&quot;oid&quot;</span>: <span class="s2">&quot;&quot;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-$ cat &gt; helloworld.yml <span class="s">&lt;&lt;- EOF</span>
-<span class="s">states:</span>
-<span class="s">- id: hello</span>
-<span class="s">  type: noop</span>
-<span class="s">  transform:</span>
-<span class="s">    msg: &quot;Hello, jq(.name)!&quot;</span>
-<span class="s">EOF</span>
-$ curl -vv -X PUT --data-binary <span class="s2">&quot;@helloworld.yml&quot;</span> <span class="s2">&quot;http://localhost:8080/api/namespaces/demo/tree/helloworld?op=create-workflow&quot;</span>
-<span class="o">{</span>
-  <span class="s2">&quot;namespace&quot;</span>: <span class="s2">&quot;demo&quot;</span>,
-  <span class="s2">&quot;node&quot;</span>: <span class="o">{</span>...<span class="o">}</span>,
-  <span class="s2">&quot;revision&quot;</span>: <span class="o">{</span>...<span class="o">}</span>
-<span class="o">}</span>
-$ cat &gt; input.json <span class="s">&lt;&lt;- EOF</span>
-<span class="s">{</span>
-<span class="s">  &quot;name&quot;: &quot;Alan&quot;</span>
-<span class="s">}</span>
-<span class="s">EOF</span>
-$ curl -vv -X POST --data-binary <span class="s2">&quot;@input.json&quot;</span> <span class="s2">&quot;http://localhost:8080/api/namespaces/demo/tree/helloworld?op=wait&quot;</span>
-<span class="o">{</span><span class="s2">&quot;msg&quot;</span>:<span class="s2">&quot;Hello, Alan!&quot;</span><span class="o">}</span>
+<h3 id="third-transform">Third Transform</h3>
+<p>The third transform multiplies two fields to produce a new field, then pipes the results into another command that deletes two fields.</p>
+<p><strong>Command</strong></p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;jq(.result</span><span class="nv"> </span><span class="s">=</span><span class="nv"> </span><span class="s">.multiplier</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">.number</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">del(.multiplier,</span><span class="nv"> </span><span class="s">.number))&#39;</span><span class="w"></span>
 </code></pre></div>
-<h3 id="next-steps">Next steps</h3>
-<p>For more complex examples review the <a href="getting_started/helloworld">Getting Started</a> section of the documentation.</p>
-<h2 id="see-also">See Also</h2>
-<ul>
-<li>The <a href="https://direktiv.io/">direktiv.io</a> website.</li>
-<li>The <a href="https://github.com/direktiv/direktiv/">direktiv.io</a> repository.</li>
-<li>The <a href="https://godoc.org/github.com/direktiv/direktiv">Godoc</a> library documentation.</li>
-</ul>
+<p><strong>Resulting Instance Data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;objects&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;k1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v1&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">],</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="fourth-transform">Fourth Transform</h3>
+<p>The fourth transform selects a child object nested within the instance data and makes that into the new instance data.</p>
+<p><strong>Command</strong></p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;jq(.objects[0])&#39;</span><span class="w"></span>
+</code></pre></div>
+<p><strong>Resulting Instance Data</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;k1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;v1&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
 
 
 
@@ -2398,15 +2343,30 @@ $ curl -vv -X POST --data-binary <span class="s2">&quot;@input.json&quot;</span>
     
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
+        
+        <a href="../conditional-transitions/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Conditional Transitions" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Conditional Transitions
+            </div>
+          </div>
+        </a>
+      
       
         
-        <a href="getting_started/helloworld/" class="md-footer__link md-footer__link--next" aria-label="Next: Helloworld" rel="next">
+        <a href="../functions-intro/" class="md-footer__link md-footer__link--next" aria-label="Next: Introduction to Functions" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Helloworld
+              Introduction to Functions
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -2466,10 +2426,10 @@ $ curl -vv -X POST --data-binary <span class="s2">&quot;@input.json&quot;</span>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.tracking", "navigation.tabs.sticky", "navigation.top", "navigation.indexes"], "search": "assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.tabs.sticky", "navigation.top", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.078830c0.min.js"></script>
+      <script src="../../assets/javascripts/bundle.078830c0.min.js"></script>
       
     
   </body>
