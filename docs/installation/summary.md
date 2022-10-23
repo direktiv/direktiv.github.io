@@ -56,7 +56,7 @@ helm install -n postgres --create-namespace --set singleNamespace=true postgres 
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/pg.yaml
+kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/basic.yaml
 ```
 
 ## Knative
