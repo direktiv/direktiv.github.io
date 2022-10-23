@@ -7,7 +7,7 @@ Direktiv requires a few components to run. At least the [database](../database) 
 - Knative
 - Direktiv
 
-The following is a two-step orcess. First Knative is installed. Knative is responsible to execute Direktiv's serverless functions. It comes pre-configured to work with Direktiv. 
+The following is a two-step process. First Knative is installed. Knative is responsible to execute Direktiv's serverless functions. It comes pre-configured to work with Direktiv. 
 
 ## Knative
 
