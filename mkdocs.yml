@@ -25,8 +25,6 @@ theme:
     - navigation.indexes
 
 extra:
-  version:
-    provider: mike
   social:
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/direktiv_io
@@ -40,10 +38,20 @@ extra:
 extra_css:
   - stylesheets/extra.css
 
-copyright: "Copyright © 2021 direktiv.io"
+copyright: "Copyright © 2022 direktiv.io"
 
 markdown_extensions:
   - pymdownx.highlight
   - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true 
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
+  

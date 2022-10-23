@@ -1,29 +1,37 @@
 # Direktiv
 
-Installing direktiv is a two-step process. The first part is to install [Knative](https://knative.dev), the platform to execute Direktiv's serverless functions. The second part is installing and configuring Direktiv itself. If Linkerd is required it needs to be [installed first](../linkerd) before installing Knative and Direktiv.
+Direktiv requires a few components to run. At least the [database](../database) has to be installed before proceeding with this part of the installation. 
+
+- [Linkerd](../linkerd/)
+- [Database](../database)
+- Knative
+- Direktiv
+
+The following is a two-step orcess. First Knative is installed. Knative is responsible to execute Direktiv's serverless functions. It comes pre-configured to work with Direktiv. 
 
 ## Knative
 
-Knative is an essential part of Direktiv. Although Knative provides YAML files for installation it is recommended to use the helm installation with Direktiv's Helm charts. It uses the correct Knative (> 0.25.0) version and comes pre-configured to work seamlessly with Direktiv.
+Knative is an essential part of Direktiv. Although Knative provides YAML files and an operator for installation it is recommended to use the Helm installation with Direktiv's Helm charts. It uses the correct Knative (> 1.5.0) version and comes pre-configured to work seamlessly with Direktiv.
 
-```console
+```console title="Knative Installation"
 helm repo add direktiv https://chart.direktiv.io
 helm install -n knative-serving --create-namespace knative direktiv/knative
 ```
 
-For more configuration options click [here](https://github.com/direktiv/direktiv-charts/tree/main/charts/knative).
+For high-availability for internal and external services the services need to be scaled up. The Helm chart values should be set to:
 
-For high availability both Kong ingress controllers, for internal and external services, need to be scaled up. The Helm chart values would be:
-
-```yaml
+```yaml title="High Availability"
 replicas: 2
 ```
 
+For more configuration options [visit the Helm chart documentation](https://github.com/direktiv/direktiv-charts/tree/main/charts/knative).
+
+
 ## Direktiv
 
-Firstly, create a `direktiv.yaml` file which contains all of the database connectivity and secret information created in the [database](../../installation/database) setup:
+Firstly, create a `direktiv.yaml` file which contains all of the database connectivity and secret information created during the [database](../database) setup:
 
-```yaml
+```yaml title="Direktiv Database Configuration"
 database:
   # -- database host
   host: "direktiv-ha.postgres.svc"
@@ -39,26 +47,33 @@ database:
   sslmode: require
 ```
 
-The following script generates this configuration:
-
-*direktiv.yaml*
-```shell
+```bash title="Database Configuration (No Connection Pooling)"
 echo "database:
   host: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "host"}}' | base64 --decode)\"
   port: $(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "port"}}' | base64 --decode)
   user: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "user"}}' | base64 --decode)\"
   password: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode)\"
   name: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "dbname"}}' | base64 --decode)\"
-  sslmode: require"
+  sslmode: require" > direktiv.yaml
+```
+
+```bash title="Database Configuration (With Connection Pooling)"
+echo "database:
+  host: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "pgbouncer-host"}}' | base64 --decode)\"
+  port: $(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "pgbouncer-port"}}' | base64 --decode)
+  user: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "user"}}' | base64 --decode)\"
+  password: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode)\"
+  name: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "dbname"}}' | base64 --decode)\"
+  sslmode: require" > direktiv.yaml
 ```
 
 Using this `direktiv.yaml` configuration, deploy the direktiv helm chart:
 
-```shell
+```bash
+# This namespace might haven been created already during Linkerd installation
 kubectl create namespace direktiv-services-direktiv
 
-helm repo add direktiv https://chart.direktiv.io
-helm install -f direktiv.yaml direktiv direktiv/direktiv
+helm install -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
 ```
 
-For more configuration options click [here](https://github.com/direktiv/direktiv/tree/main/kubernetes/charts/direktiv) but the most important configuration values are the database settings which need to be identical to settings used during [database](../../installation/database) setup.
+For more configuration options go to Direktiv's [helm charts](https://github.com/direktiv/direktiv-charts/tree/main/charts/direktiv).
