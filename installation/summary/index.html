@@ -2385,7 +2385,7 @@ helm install linkerd-control-plane <span class="se">\</span>
 <div class="highlight"><pre><span></span><code>helm repo add direktiv https://chart.direktiv.io
 helm install -n postgres --create-namespace --set <span class="nv">singleNamespace</span><span class="o">=</span><span class="nb">true</span> postgres direktiv/pgo
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/pg.yaml
+<div class="highlight"><pre><span></span><code>kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/basic.yaml
 </code></pre></div>
 <h2 id="knative">Knative</h2>
 <div class="highlight"><pre><span></span><code>helm install -n knative-serving --create-namespace knative direktiv/knative
