@@ -1,6 +1,6 @@
 INHERIT: config/nav.yml
 
-site_name: Direktiv
+site_name: direktiv
 site_url: https://docs.direktiv.io
 site_description: Direktiv Documentation
 repo_url: https://github.com/direktiv/direktiv
@@ -10,13 +10,13 @@ plugins:
 - search
 theme:
   name: material
-  logo: assets/logo.png
+  logo: assets/path36.png
   favicon: assets/favicon.ico
   custom_dir: overrides
   palette:
     scheme: default
-    primary: blue
-    accent: white
+    primary: Neutral/Gray 900
+    accent: Neutral/Gray 400
   features:
     - navigation.tabs
     - navigation.tracking
@@ -54,4 +54,6 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - pymdownx.superfences
+  
+  
   

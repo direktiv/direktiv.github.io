@@ -1,4 +1,8 @@
-## Quickstart
+<p align=center>
+<img src="../assets/Banner.svg" alt="direktiv-specification"/>
+</p>
+
+### Quickstart
 
 ### Starting the Server
 

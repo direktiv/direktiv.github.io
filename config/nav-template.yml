@@ -1,7 +1,7 @@
 INHERIT: redirects.yml
 
 nav:
-  - Quickstart: index.md
+  - : index.md
   - Getting Started: 
     - Helloworld: getting_started/helloworld.md
     - Transitions: getting_started/transitions.md
@@ -64,3 +64,4 @@ nav:
     - Knative:
       - Eventing: events/knative/knative.md
       - Kafka Example: events/knative/example.md
+   
