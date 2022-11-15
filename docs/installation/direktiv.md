@@ -11,21 +11,18 @@ The following is a two-step process. First Knative is installed. Knative is resp
 
 ## Knative
 
-Knative is an essential part of Direktiv. Although Knative provides YAML files and an operator for installation it is recommended to use the Helm installation with Direktiv's Helm charts. It uses the correct Knative (> 1.5.0) version and comes pre-configured to work seamlessly with Direktiv.
+Knative is an essential part of Direktiv and can be installed with Knative's operator. The following command installs this operator in the default namespace.
 
-```console title="Knative Installation"
-helm repo add direktiv https://chart.direktiv.io
-helm install -n knative-serving --create-namespace knative direktiv/knative
+
+```sh
+kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.8.1/operator.yaml
 ```
 
-For high-availability for internal and external services the services need to be scaled up. The Helm chart values should be set to:
+After the deployment of the operator a new instance of Knative Serving can be created. Direktiv requires a certain configuration for Knative to work. Direktiv has it's own Helm file to deploy the instance with the correct configuration.
 
-```yaml title="High Availability"
-replicas: 2
+```sh
+helm install -n knative-serving --create-namespace knative-instance direktiv/knative-instance
 ```
-
-For more configuration options [visit the Helm chart documentation](https://github.com/direktiv/direktiv-charts/tree/main/charts/knative).
-
 
 ## Direktiv
 
@@ -70,9 +67,6 @@ echo "database:
 Using this `direktiv.yaml` configuration, deploy the direktiv helm chart:
 
 ```bash
-# This namespace might haven been created already during Linkerd installation
-kubectl create namespace direktiv-services-direktiv
-
 helm install -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
 ```
 
