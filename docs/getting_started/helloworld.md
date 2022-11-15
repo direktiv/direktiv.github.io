@@ -3,7 +3,7 @@
 
 # Hello, World!
 
-Every workflow begins with a YAML-based "Workflow Definition". In this article you'll learn the first basics of the workflow definition.
+Getting a local playground environment can be easily done with Docker. The following command starts a docker container with kubernetes. On startup it can take a few minutes to download all images. When the installation is done all pods should show "Running" or "Completed".
 
 ## Demo
 
@@ -116,9 +116,11 @@ Any state may optionally define a "transform", and it's used here to generate th
 
 === "Tab 1"
 
-    Tab1
+    Any state may optionally define a "transform", and it's used here to generate the classic "Hello, World!" message. Transform applies a jq command to the instance data and replaces the instance data with the results. We'll go into more detail about transforms later.
+
 
 === "Tab 2"
 
-    Tab2
+    Any state may optionally define a "transform", and it's used here to generate the classic "Hello, World!" message. Transform applies a jq command to the instance data and replaces the instance data with the results. We'll go into more detail about transforms later.
+
 
