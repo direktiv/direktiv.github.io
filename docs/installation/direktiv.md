@@ -21,7 +21,7 @@ kubectl apply -f https://github.com/knative/operator/releases/download/knative-v
 After the deployment of the operator a new instance of Knative Serving can be created. Direktiv requires a certain configuration for Knative to work. Direktiv has it's own Helm file to deploy the instance with the correct configuration.
 
 ```sh
-helm install -n knative-serving --create-namespace knative-instance direktiv/knative-instance
+helm install -n knative-serving --create-namespace knative-serving direktiv/knative-instance
 ```
 
 ## Direktiv
