@@ -2235,14 +2235,12 @@
 </ul>
 <p>The following is a two-step process. First Knative is installed. Knative is responsible to execute Direktiv's serverless functions. It comes pre-configured to work with Direktiv. </p>
 <h2 id="knative">Knative</h2>
-<p>Knative is an essential part of Direktiv. Although Knative provides YAML files and an operator for installation it is recommended to use the Helm installation with Direktiv's Helm charts. It uses the correct Knative (&gt; 1.5.0) version and comes pre-configured to work seamlessly with Direktiv.</p>
-<div class="highlight"><span class="filename">Knative Installation</span><pre><span></span><code><span class="go">helm repo add direktiv https://chart.direktiv.io</span>
-<span class="go">helm install -n knative-serving --create-namespace knative direktiv/knative</span>
+<p>Knative is an essential part of Direktiv and can be installed with Knative's operator. The following command installs this operator in the default namespace.</p>
+<div class="highlight"><pre><span></span><code>kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.8.1/operator.yaml
 </code></pre></div>
-<p>For high-availability for internal and external services the services need to be scaled up. The Helm chart values should be set to:</p>
-<div class="highlight"><span class="filename">High Availability</span><pre><span></span><code><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<p>After the deployment of the operator a new instance of Knative Serving can be created. Direktiv requires a certain configuration for Knative to work. Direktiv has it's own Helm file to deploy the instance with the correct configuration.</p>
+<div class="highlight"><pre><span></span><code>helm install -n knative-serving --create-namespace knative-serving direktiv/knative-instance
 </code></pre></div>
-<p>For more configuration options <a href="https://github.com/direktiv/direktiv-charts/tree/main/charts/knative">visit the Helm chart documentation</a>.</p>
 <h2 id="direktiv_1">Direktiv</h2>
 <p>Firstly, create a <code>direktiv.yaml</code> file which contains all of the database connectivity and secret information created during the <a href="../database">database</a> setup:</p>
 <div class="highlight"><span class="filename">Direktiv Database Configuration</span><pre><span></span><code><span class="nt">database</span><span class="p">:</span><span class="w"></span>
@@ -2276,10 +2274,7 @@
 <span class="s2">  sslmode: require&quot;</span> &gt; direktiv.yaml
 </code></pre></div>
 <p>Using this <code>direktiv.yaml</code> configuration, deploy the direktiv helm chart:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># This namespace might haven been created already during Linkerd installation</span>
-kubectl create namespace direktiv-services-direktiv
-
-helm install -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
+<div class="highlight"><pre><span></span><code>helm install -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
 </code></pre></div>
 <p>For more configuration options go to Direktiv's <a href="https://github.com/direktiv/direktiv-charts/tree/main/charts/direktiv">helm charts</a>.</p>
 

@@ -2388,7 +2388,8 @@ helm install -n postgres --create-namespace --set <span class="nv">singleNamespa
 <div class="highlight"><pre><span></span><code>kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/basic.yaml
 </code></pre></div>
 <h2 id="knative">Knative</h2>
-<div class="highlight"><pre><span></span><code>helm install -n knative-serving --create-namespace knative direktiv/knative
+<div class="highlight"><pre><span></span><code>kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.8.1/operator.yaml
+helm install -n knative-serving --create-namespace knative-serving direktiv/knative-instance
 </code></pre></div>
 <h2 id="direktiv">Direktiv</h2>
 <div class="highlight"><pre><span></span><code><span class="nb">echo</span> <span class="s2">&quot;database:</span>

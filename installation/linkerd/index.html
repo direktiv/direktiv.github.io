@@ -2269,14 +2269,8 @@ helm install linkerd-crds linkerd/linkerd-crds -n linkerd --create-namespace
   linkerd/linkerd-control-plane --wait
 </code></pre></div>
 <h2 id="annotate-namespaces">Annotate Namespaces</h2>
-<p>To use the service mesh (and, in particular, the mTLS communication) between pods within a Direktiv cluster the namespaces need to be annotated for Linkerd to inject its proxy. The default namespaces to annotate are:</p>
-<ul>
-<li>direktiv</li>
-<li>knative-serving</li>
-<li>direktiv-services-direktiv</li>
-</ul>
-<p>This script will create and annotate the namespaces:</p>
-<div class="highlight"><span class="filename">Annotate Namespaces</span><pre><span></span><code><span class="k">for</span> ns <span class="k">in</span> <span class="s2">&quot;direktiv&quot;</span> <span class="s2">&quot;knative-serving&quot;</span> <span class="s2">&quot;direktiv-services-direktiv&quot;</span>
+<p>To use the service mesh (and, in particular, the mTLS communication) between pods within a Direktiv cluster the namespaces need to be annotated for Linkerd to inject its proxy. The default namespace to annotate is <code>direktiv</code>.</p>
+<div class="highlight"><span class="filename">Annotate Namespaces</span><pre><span></span><code><span class="k">for</span> ns <span class="k">in</span> <span class="s2">&quot;direktiv&quot;</span>
 <span class="k">do</span>
   kubectl create namespace <span class="nv">$ns</span> <span class="o">||</span> <span class="nb">true</span>
   kubectl annotate ns --overwrite<span class="o">=</span><span class="nb">true</span> <span class="nv">$ns</span> linkerd.io/inject<span class="o">=</span>enabled
