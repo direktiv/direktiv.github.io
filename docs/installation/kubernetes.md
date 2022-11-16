@@ -15,6 +15,9 @@ A single node setup requires no further configuration and K3s can be used with t
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.7+k3s1 sh -s - --disable traefik --write-kubeconfig-mode=644
 ```
 
+!!! warning annotate "K3S Version"
+    If an error message occurs during installation, e.g. `resource mapping not found for name: "linkerd-heartbeat" namespace: "linkerd" from "": no matches for kind "CronJob" in version "batch/v1beta1"` it is most likely the wrong K3S version. To keep K3S small there is only a subset of Kubernetes APIs available. Please use the version provided in the previous installation command. 
+
 ### Multi Node Setup
 
 For production use it is recommended to run Direktiv in a multi-node environment. The K3s [documentation page](https://docs.k3s.io/installation) provides a lot of information about configuration and installation options. The following is a quick installation instruction to setup a three node cluster with nodes action as servers and agents. 
