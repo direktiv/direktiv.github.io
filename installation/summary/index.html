@@ -2350,7 +2350,7 @@
 <h1 id="quick-install">Quick Install</h1>
 <p>This is a list of "copy&amp;paste" commands which creates a one node Direktiv cluster.</p>
 <h2 id="k3s">K3s</h2>
-<div class="highlight"><pre><span></span><code>curl -sfL https://get.k3s.io <span class="p">|</span> sh -s - --disable traefik --write-kubeconfig-mode<span class="o">=</span><span class="m">644</span> --kube-apiserver-arg feature-gates<span class="o">=</span><span class="nv">TTLAfterFinished</span><span class="o">=</span><span class="nb">true</span>
+<div class="highlight"><pre><span></span><code>curl -sfL https://get.k3s.io <span class="p">|</span> <span class="nv">INSTALL_K3S_VERSION</span><span class="o">=</span>v1.24.7+k3s1 sh -s - --disable traefik --write-kubeconfig-mode<span class="o">=</span><span class="m">644</span>
 </code></pre></div>
 <h2 id="linkerd">Linkerd</h2>
 <h3 id="create-certificates">Create certificates</h3>

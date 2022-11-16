@@ -2322,11 +2322,15 @@
 <h1 id="kubernetes">Kubernetes</h1>
 <p>Direktiv is a cloud-native solution requiring Kubernetes to run. It is working with all Kubernetes offerings of the major cloud providers as well as on-premise Kubernetes installations. The minimum version is 1.22. The easiest way to install a Kubernetes cluster for Kubernetes is using <a href="https://k3s.io/">k3s</a>. The following section explains how to install k3s on-premise with K3s. The minmi</p>
 <h2 id="k3s">K3s</h2>
-<p>Direktiv supports Kubernetes offerings from all major cloud providers and requires Kubernets 1.19+ to be installed. Direktiv supports Kubernetes setups with a single node, seperate server and agents nodes as well as small setups with nodes acting both as server and agent. The folowing section describes the installation with <a href="https://k3s.io/">k3s</a>.</p>
+<p>Direktiv supports Kubernetes offerings from all major cloud providers and requires Kubernets 1.19+ to be installed. Direktiv supports Kubernetes setups with a single node, seperate server and agents nodes as well as small setups with nodes acting both as server and agent. The following section describes the installation with <a href="https://k3s.io/">k3s</a>.</p>
 <h3 id="single-node-setup">Single Node Setup</h3>
 <p>A single node setup requires no further configuration and K3s can be used with the default settings. This setup disables Traefik to be replaced with Nginx during the installation. If proxy configuration is required please read the <a href="#proxy-setup">proxy setup section</a>. </p>
-<div class="highlight"><span class="filename">One Node Setup</span><pre><span></span><code>curl -sfL https://get.k3s.io <span class="p">|</span> sh -s - --disable traefik --write-kubeconfig-mode<span class="o">=</span><span class="m">644</span>
+<div class="highlight"><span class="filename">One Node Setup</span><pre><span></span><code>curl -sfL https://get.k3s.io <span class="p">|</span> <span class="nv">INSTALL_K3S_VERSION</span><span class="o">=</span>v1.24.7+k3s1 sh -s - --disable traefik --write-kubeconfig-mode<span class="o">=</span><span class="m">644</span>
 </code></pre></div>
+<div class="admonition warning annotate">
+<p class="admonition-title">K3S Version</p>
+<p>If an error message occurs during installation, e.g. <code>resource mapping not found for name: "linkerd-heartbeat" namespace: "linkerd" from "": no matches for kind "CronJob" in version "batch/v1beta1"</code> it is most likely the wrong K3S version. To keep K3S small there is only a subset of Kubernetes APIs available. Please use the version provided in the previous installation command. </p>
+</div>
 <h3 id="multi-node-setup">Multi Node Setup</h3>
 <p>For production use it is recommended to run Direktiv in a multi-node environment. The K3s <a href="https://docs.k3s.io/installation">documentation page</a> provides a lot of information about configuration and installation options. The following is a quick installation instruction to setup a three node cluster with nodes action as servers and agents. </p>
 <h4 id="server-configuration">Server configuration</h4>
