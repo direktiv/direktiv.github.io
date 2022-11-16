@@ -4,7 +4,7 @@ Direktiv is a cloud-native solution requiring Kubernetes to run. It is working w
 
 ## K3s
 
-Direktiv supports Kubernetes offerings from all major cloud providers and requires Kubernets 1.19+ to be installed. Direktiv supports Kubernetes setups with a single node, seperate server and agents nodes as well as small setups with nodes acting both as server and agent. The folowing section describes the installation with [k3s](https://k3s.io/).
+Direktiv supports Kubernetes offerings from all major cloud providers and requires Kubernets 1.19+ to be installed. Direktiv supports Kubernetes setups with a single node, seperate server and agents nodes as well as small setups with nodes acting both as server and agent. The following section describes the installation with [k3s](https://k3s.io/).
 
 
 ### Single Node Setup
@@ -12,7 +12,7 @@ Direktiv supports Kubernetes offerings from all major cloud providers and requir
 A single node setup requires no further configuration and K3s can be used with the default settings. This setup disables Traefik to be replaced with Nginx during the installation. If proxy configuration is required please read the [proxy setup section](#proxy-setup). 
 
 ```bash title="One Node Setup"
-curl -sfL https://get.k3s.io | sh -s - --disable traefik --write-kubeconfig-mode=644
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.7+k3s1 sh -s - --disable traefik --write-kubeconfig-mode=644
 ```
 
 ### Multi Node Setup

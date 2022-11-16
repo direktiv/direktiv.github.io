@@ -6,7 +6,7 @@ This is a list of "copy&paste" commands which creates a one node Direktiv cluste
 ## K3s
 
 ```bash
-curl -sfL https://get.k3s.io | sh -s - --disable traefik --write-kubeconfig-mode=644 --kube-apiserver-arg feature-gates=TTLAfterFinished=true
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.7+k3s1 sh -s - --disable traefik --write-kubeconfig-mode=644
 ```
 
 ## Linkerd
