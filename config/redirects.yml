@@ -1,4 +1,4 @@
 plugins:
   redirects:
     redirect_maps:
-      index.md: quickstart.md
+      getting_started/index.md : getting_started/index.md 

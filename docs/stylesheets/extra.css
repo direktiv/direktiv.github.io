@@ -8,6 +8,54 @@
   [dir=ltr] .md-header__title {
   margin-left: -0.4rem;
   }
+  .md-tabs__link--active, .md-tabs__link:is(:focus,:hover) {
+
+
+/* Desktop/Texts/Paragraph 02 */
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 22px;
+/* identical to box height, or 138% */
+
+
+/* Shades/White */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+
+flex: none;
+order: 0;
+flex-grow: 0;
+}
+  .md-tabs__item {
+
+
+/* Desktop/Texts/Paragraph 02 */
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 22px;
+/* identical to box height, or 138% */
+
+
+/* Neutral/Gray 400 */
+
+color: #9CA3B8;
+
+
+/* Inside auto layout */
+
+flex: none;
+order: 3;
+flex-grow: 0;
+}
   .md-nav__item .md-nav__link--active {
   color: #5364FE;
   }
@@ -105,7 +153,7 @@
     font-size: 36px;
     line-height: 44px;
     }
-    
+     
   
   .md-typeset h2{
   
