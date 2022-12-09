@@ -3,7 +3,7 @@
 
 # Hello, World!
 
-Every workflow begins with a YAML-based "Workflow Definition". In this article you'll learn the first basics of the workflow definition.
+Getting a local playground environment can be easily done with Docker. The following command starts a docker container with kubernetes. On startup it can take a few minutes to download all images. When the installation is done all pods should show "Running" or "Completed".
 
 ## Demo
 
@@ -68,3 +68,59 @@ There are many types of state that do all sorts of different things. We'll go ov
 ```
 
 Any state may optionally define a "transform", and it's used here to generate the classic "Hello, World!" message. Transform applies a `jq` command to the instance data and replaces the instance data with the results. We'll go into more detail about transforms later.
+
+
+
+!!! note
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+
+---
+
+
+
+!!! info
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+
+---
+
+!!! tip
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+
+---
+
+!!! warning
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+
+
+---
+
+!!! example
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+
+
+---
+
+!!! danger
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+
+    
+    ---
+
+   
+
+=== "Tab 1"
+
+    Any state may optionally define a "transform", and it's used here to generate the classic "Hello, World!" message. Transform applies a jq command to the instance data and replaces the instance data with the results. We'll go into more detail about transforms later.
+
+
+=== "Tab 2"
+
+    Any state may optionally define a "transform", and it's used here to generate the classic "Hello, World!" message. Transform applies a jq command to the instance data and replaces the instance data with the results. We'll go into more detail about transforms later.
+
+
