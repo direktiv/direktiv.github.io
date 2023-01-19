@@ -695,6 +695,8 @@ label.md-sidebar__scrollwrap {
 .md-nav__list > .md-nav__item {
   font-size: 14px;
   color: #000000 !important;
+  /* avoid cropping long words */
+  word-break: break-word;
 }
 
 /* right navigation, first layer links */
