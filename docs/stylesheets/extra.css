@@ -255,16 +255,6 @@
   order: 0;
   flex-grow: 0;
 }
-[dir="ltr"]
-  .md-sidebar--secondary:not([hidden])
-  ~ .md-content
-  > .md-content__inner,
-[dir="rtl"]
-  .md-sidebar--primary:not([hidden])
-  ~ .md-content
-  > .md-content__inner {
-  margin-right: -1.8rem;
-}
 
 a.md-nav__link:after {
   font-family: var(--md-text-font-family);
