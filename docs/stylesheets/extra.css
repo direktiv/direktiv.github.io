@@ -691,6 +691,12 @@ label.md-sidebar__scrollwrap {
   left: -1px;
 }
 
+/* right and left navigation, first layer */
+.md-nav__list > .md-nav__item {
+  font-size: 14px;
+  color: #000000 !important;
+}
+
 /* right navigation, first layer links */
 .md-nav--secondary > .md-nav__list > .md-nav__item > .md-nav__link {
   font-size: 14px;
