@@ -71,6 +71,7 @@
   font-family: var(--md-text-font-family);
 }
 
+/* right navigation title */
 .md-nav__title {
   display: block;
 
