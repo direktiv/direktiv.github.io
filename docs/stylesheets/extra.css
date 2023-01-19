@@ -678,8 +678,19 @@ label.md-sidebar__scrollwrap {
   color: var(--md-default-fg-color--light);
 }
 
+/* border for right navigation */
 .md-nav__list[data-md-component="toc"] {
   padding-right: 0rem;
+  border-left: 1px solid #e9ebf0;
+  position: relative;
+}
+
+/* highlight border */
+.md-sidebar--secondary .md-nav__link--active::before {
+  content: "\00a0 ";
+  border-left: 1px solid #9ca3b8;
+  position: absolute;
+  left: -1px;
 }
 
 /* right navigation, first layer links */
