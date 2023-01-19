@@ -94,6 +94,16 @@
   color: #000000;
 }
 
+/* left navigation title */
+.md-nav--lifted
+  > .md-nav__list
+  > .md-nav__item--active
+  > .md-nav__link:not(.md-nav__link--index) {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+}
+
 .md-nav__item .md-nav__link--active {
   color: #5364fe;
 }
