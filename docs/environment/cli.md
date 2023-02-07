@@ -21,9 +21,9 @@ curl -L https://github.com/direktiv/direktiv/releases/latest/download/direktiv_s
 Working with this tool assumes that you create a directory which is mirroring a namespace in Direktiv. This directory should be empty at start. The first thing to setup is the connectivity to Direktiv. For this a `.direktiv.yaml` file has to be created within this directory. This file needs the api key or token, the address of the Direktiv instance and the namespace it should use.  
 
 ```yaml
-auth-token: my-api-key-token
-addr: https://my-direktiv.server
-namespace: direktiv
+auth: "my-api-key-token"
+addr: "https://my-direktiv.server"
+namespace: "direktiv"
 ```
 
 This folder is now the base for a namespace `direktiv`. The path from here is relative in Direktiv. This means the folder structure will be the same as the folder structure in Direktiv. 
