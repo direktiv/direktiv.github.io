@@ -6,9 +6,12 @@ Text here
 ## Sub Title
 
 Text here
-<div>
 
 ### Sub Title 2
+
+
+:material-information-outline:{ title="Important information" }
+
 
 Text here
 

@@ -1,8 +1,11 @@
+---
+title: Direktiv Docs
+---
+#
+
 <p align=center>
 <img src="../assets/Banner.svg" alt="direktiv-specification"/>
 </p>
-
-### Quickstart
 
 ### Starting the Server
 
@@ -97,8 +100,8 @@ $ curl -vv -X POST --data-binary "@input.json" "http://localhost:8080/api/namesp
 
 For more complex examples review the [Getting Started](getting_started/helloworld) section of the documentation.
 
-## See Also
+<!-- ## See Also
 
 * The [direktiv.io](https://direktiv.io/) website.
 * The [direktiv.io](https://github.com/direktiv/direktiv/) repository.
-* The [Godoc](https://godoc.org/github.com/direktiv/direktiv) library documentation.
+* The [Godoc](https://godoc.org/github.com/direktiv/direktiv) library documentation. -->

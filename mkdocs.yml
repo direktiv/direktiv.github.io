@@ -38,7 +38,7 @@ extra:
 extra_css:
   - stylesheets/extra.css
 
-copyright: "Copyright © 2022 direktiv.io"
+copyright: "Copyright © 2023 direktiv.io"
 
 markdown_extensions:
   - pymdownx.highlight
@@ -54,6 +54,7 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - pymdownx.superfences
-  
+  - toc:
+      toc_depth: 2
   
   

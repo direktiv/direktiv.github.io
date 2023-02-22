@@ -2,8 +2,6 @@
 <img src="../assets/Banner.svg" alt="direktiv-specification"/>
 </p>
 
-### Quickstart
-
 ### Starting the Server
 
 Getting a local playground environment can be easily done with Docker. The following command starts a docker container with kubernetes. *On startup it can take a few minutes to download all images.* When the installation is done all pods should show "Running" or "Completed".
