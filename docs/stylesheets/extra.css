@@ -299,16 +299,10 @@ li.md-nav__link:before {
   background-color: #f4f6f9;
   border-radius: 8px;
   border-color: #f4f6f9;
-
   display: flow-root;
   font-size: 0.64rem;
   margin: 1.5625em 0;
-
-  padding: 5 1.6rem;
-  padding-top: 16px;
-  padding-right: 0.6rem;
-  padding-bottom: 24px;
-  padding-left: 0.6rem;
+  padding-top: 0px 0.6rem;
   page-break-inside: avoid;
 }
 p {
@@ -384,6 +378,7 @@ md-typeset .tabbed-set > input {
   color: #8031ff;
 }
 
+// icon
 .md-typeset .admonition-title:before,
 .md-typeset summary:before {
   background-color: #448aff;
@@ -398,8 +393,6 @@ md-typeset .tabbed-set > input {
   -webkit-mask-size: contain;
   mask-size: contain;
   position: absolute;
-  top: 1.625em;
-  width: 1rem;
 }
 /*tip header text*/
 .md-typeset :is(.tip, .hint, .important) > :is(.admonition-title, summary) {
@@ -408,7 +401,6 @@ md-typeset .tabbed-set > input {
 }
 /*note header text*/
 .md-typeset :is(.note, .hint, .important) > :is(.admonition-title, summary) {
-  background-color: #f4f6f9;
   color: #5653ff;
 }
 .md-typeset
@@ -434,22 +426,16 @@ md-typeset .tabbed-set > input {
   > :is(.admonition-title, summary):before {
   background-color: #3786e3;
 }
-/*info icon color*/
-.md-typeset :is(.example) > :is(.admonition-title, summary):before {
-  background-color: #37c679;
-}
+
 /*info header text*/
 .md-typeset :is(.info, .hint, .important) > :is(.admonition-title, summary) {
-  background-color: #f4f6f9;
   color: #3786e3;
 }
 
 .md-typeset :is(.example) > :is(.admonition-title, summary) {
-  background-color: #f4f6f9;
   color: #37c679;
 }
 .md-typeset :is(.danger, .error) > :is(.admonition-title, summary) {
-  background-color: #f4f6f9;
   color: #fe6161;
 }
 .md-typeset
@@ -458,9 +444,11 @@ md-typeset .tabbed-set > input {
   background-color: #3786e3;
 }
 /*note header color*/
-.md-typeset :is(.note, .hint, .important) > :is(.admonition-title, summary) {
-  background-color: #f4f6f9;
+
+.admonition-title {
+  background-color: white !important;
 }
+
 .md-typeset .admonition > *,
 .md-typeset details > * {
   box-sizing: border-box;
@@ -513,6 +501,7 @@ md-typeset .tabbed-set > input {
   background: white;
   transform-style: preserve-3d;
 }
+
 .md-typeset
   :-webkit-any(.warning, .caution, .attention)
   > :-webkit-any(.admonition-title, summary) {
