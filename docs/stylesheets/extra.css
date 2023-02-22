@@ -227,11 +227,7 @@
 }
 
 .md-typeset h4 {
-  width: 258px;
-  height: 34px;
-
   /* Docs/Sub Title 1 */
-
   font-family: var(--md-text-font-family);
   font-style: normal;
   font-weight: 500;
