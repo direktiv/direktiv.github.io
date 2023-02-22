@@ -6,7 +6,6 @@ Text here
 ## Sub Title
 
 Text here
-<div>
 
 ### Sub Title 2
 
