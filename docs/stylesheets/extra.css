@@ -403,6 +403,12 @@ md-typeset .tabbed-set > input {
 .md-typeset :is(.note, .hint, .important) > :is(.admonition-title, summary) {
   color: #5653ff;
 }
+
+/*info icon color*/
+.md-typeset :is(.example) > :is(.admonition-title, summary):before {
+  background-color: #37c679;
+}
+
 .md-typeset
   :is(.warning, .caution, .attention)
   > :is(.admonition-title, summary) {
