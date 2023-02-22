@@ -472,34 +472,38 @@ md-typeset .tabbed-set > input {
   -webkit-mask-image: var(--md-admonition-icon--warning);
 }
 
-.md-typeset :is(.admonition, details):is(.warning, .caution, .attention) {
+.md-typeset
+  :is(.admonition, details):is(
+    .note,
+    .example,
+    .danger,
+    .warning,
+    .caution,
+    .attention,
+    .info,
+    .tip,
+    .hint,
+    .important
+  ) {
   border-color: #f4f6f9;
-  border-top-color: #f4f6f9;
-  border-right-color: #f4f6f9;
-  border-bottom-color: #f4f6f9;
-  border-left-color: #f4f6f9;
 }
-.md-typeset :is(.admonition, details):is(.tip, .hint, .important) {
-  border-color: #f4f6f9;
-  border-top-color: #f4f6f9;
-  border-right-color: #f4f6f9;
-  border-bottom-color: #f4f6f9;
-  border-left-color: #f4f6f9;
+
+// icon
+.md-typeset .admonition-title:before,
+.md-typeset
+  :is(.note, .hint, .important)
+  > :is(.admonition-title, summary):before {
+  top: 0px !important;
+  left: 10px !important;
+  background: red !important;
 }
-.md-typeset :is(.admonition, details):is(.info, .hint, .important) {
-  border-color: #f4f6f9;
-  border-top-color: #f4f6f9;
-  border-right-color: #f4f6f9;
-  border-bottom-color: #f4f6f9;
-  border-left-color: #f4f6f9;
+
+[dir="ltr"] .md-typeset .admonition-title {
+  padding: 7px 12px 5px 40px;
 }
+
 /*note border color*/
 .md-typeset :is(.admonition, details):is(.note, .hint, .important) {
-  border-color: #f4f6f9;
-  border-top-color: #f4f6f9;
-  border-right-color: #f4f6f9;
-  border-bottom-color: #f4f6f9;
-  border-left-color: #f4f6f9;
   background-image: "Banner.svg";
   background-size: 20px 20px;
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
@@ -508,27 +512,6 @@ md-typeset .tabbed-set > input {
   position: relative;
   background: white;
   transform-style: preserve-3d;
-}
-.md-typeset :is(.admonition, details):is(.warning, .caution, .attention) {
-  border-color: #f4f6f9;
-  border-top-color: #f4f6f9;
-  border-right-color: #f4f6f9;
-  border-bottom-color: #f4f6f9;
-  border-left-color: #f4f6f9;
-}
-.md-typeset :is(.admonition, details):is(.example) {
-  border-color: #f4f6f9;
-  border-top-color: #f4f6f9;
-  border-right-color: #f4f6f9;
-  border-bottom-color: #f4f6f9;
-  border-left-color: #f4f6f9;
-}
-.md-typeset :is(.admonition, details):is(.danger, .error) {
-  border-color: #f4f6f9;
-  border-top-color: #f4f6f9;
-  border-right-color: #f4f6f9;
-  border-bottom-color: #f4f6f9;
-  border-left-color: #f4f6f9;
 }
 .md-typeset
   :-webkit-any(.warning, .caution, .attention)
