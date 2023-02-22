@@ -558,20 +558,12 @@ md-typeset .tabbed-set > input {
 }
 
 .md-typeset .tabbed-labels > label:hover {
-  background: linear-gradient(331.49deg, #8031ff 0%, #5767ff 100%);
-  border-radius: 25px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  color: #ffff;
-  gap: 10px;
+  color: #5364fe;
 }
 
 label {
   font-family: var(--md-text-font-family);
   font-style: normal;
-
   text-align: left;
   flex: none;
   order: 0;
