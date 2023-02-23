@@ -3,8 +3,8 @@ INHERIT: redirects.yml
 nav:
    
   - Getting Started: 
-    - Quickstart: getting_started/index.md
-    - Helloworld: getting_started/helloworld.md
+    - Getting Started: getting_started/index.md
+    - States: getting_started/states.md
     - Transitions: getting_started/transitions.md
     - Conditional Transitions: getting_started/conditional-transitions.md
     - Transforms & JQ: getting_started/transforms.md

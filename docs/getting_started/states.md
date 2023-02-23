@@ -1,19 +1,19 @@
+All Direktiv workflows start with a YAML-based flow definition. In this section, you'll grasp the fundamentals of workflow definitions and states. Each Direktiv flow is composed of one or more states that are connected as directed acyclic graphs (DAGs). Although there are numerous [state types](/spec/workflow-yaml/states/) available in Direktiv, they all share several common attributes and we will discuss them further in detail here.
 
-
-
-# Hello, World!
-
-Getting a local playground environment can be easily done with Docker. The following command starts a docker container with kubernetes. On startup it can take a few minutes to download all images. When the installation is done all pods should show "Running" or "Completed".
-
-## Demo
+## Simple State
 
 ```yaml
-id: helloworld
 states:
 - id: hello
   type: noop
-  transform: 'jq({ msg: "Hello, world!" })'
 ```
+
+	ID       string            `yaml:"id"`
+	Type     StateType         `yaml:"type"`
+	Log      interface{}       `yaml:"log,omitempty"`
+	Metadata interface{}       `yaml:"metadata,omitempty"`
+	Catch    []ErrorDefinition `yaml:"catch,omitempty"`
+
 
 Run this workflow. Leave the Workflow Input empty for now. You should see something like the following:
 

@@ -1,8 +1,6 @@
-<p align=center>
-<img src="../assets/Banner.svg" alt="direktiv-specification"/>
-</p>
+asdasds
 
-### Starting the Server
+<!-- ### Starting the Server
 
 Getting a local playground environment can be easily done with Docker. The following command starts a docker container with kubernetes. *On startup it can take a few minutes to download all images.* When the installation is done all pods should show "Running" or "Completed".
 
@@ -99,4 +97,4 @@ For more complex examples review the [Getting Started](getting_started/helloworl
 
 * The [direktiv.io](https://direktiv.io/) website.
 * The [direktiv.io](https://github.com/direktiv/direktiv/) repository.
-* The [Godoc](https://godoc.org/github.com/direktiv/direktiv) library documentation.
+* The [Godoc](https://godoc.org/github.com/direktiv/direktiv) library documentation. -->
