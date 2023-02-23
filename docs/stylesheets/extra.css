@@ -487,13 +487,17 @@ md-typeset .tabbed-set > input {
 .md-typeset
   :is(.note, .hint, .important)
   > :is(.admonition-title, summary):before {
-  top: 0px !important;
+  top: 100px !important;
+  left: 100px !important;
+}
+
+[dir="ltr"] .md-typeset .admonition-title:before {
+  top: auto !important;
   left: 10px !important;
-  background: red !important;
 }
 
 [dir="ltr"] .md-typeset .admonition-title {
-  padding: 7px 12px 5px 40px;
+  padding: 7px 12px 5px 35px;
 }
 
 /*note border color*/
