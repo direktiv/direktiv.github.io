@@ -40,16 +40,10 @@ helm install linkerd-control-plane \
 
 ## Annotate Namespaces
 
-To use the service mesh (and, in particular, the mTLS communication) between pods within a Direktiv cluster the namespaces need to be annotated for Linkerd to inject its proxy. The default namespaces to annotate are:
-
-- direktiv
-- knative-serving
-- direktiv-services-direktiv
-
-This script will create and annotate the namespaces:
+To use the service mesh (and, in particular, the mTLS communication) between pods within a Direktiv cluster the namespaces need to be annotated for Linkerd to inject its proxy. The default namespace to annotate is `direktiv`.
 
 ```bash title="Annotate Namespaces"
-for ns in "direktiv" "knative-serving" "direktiv-services-direktiv"
+for ns in "direktiv"
 do
   kubectl create namespace $ns || true
   kubectl annotate ns --overwrite=true $ns linkerd.io/inject=enabled

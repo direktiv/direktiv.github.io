@@ -6,7 +6,7 @@ This is a list of "copy&paste" commands which creates a one node Direktiv cluste
 ## K3s
 
 ```bash
-curl -sfL https://get.k3s.io | sh -s - --disable traefik --write-kubeconfig-mode=644 --kube-apiserver-arg feature-gates=TTLAfterFinished=true
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.7+k3s1 sh -s - --disable traefik --write-kubeconfig-mode=644
 ```
 
 ## Linkerd
@@ -62,7 +62,8 @@ kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubern
 ## Knative
 
 ```bash
-helm install -n knative-serving --create-namespace knative direktiv/knative
+kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.8.1/operator.yaml
+helm install -n knative-serving --create-namespace knative-serving direktiv/knative-instance
 ```
 
 ## Direktiv

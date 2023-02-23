@@ -18,14 +18,14 @@ The following sections explain how to install each component in a local cluster:
 
 #### Run Docker Image
 
-For testing there is a "all-in-one" Docker image available. It contains all required components alrteday installed and can be used for testing or development. It has a container registry installed on port 31212 as well which can be used to push local images.
+For testing there is a "all-in-one" Docker image available. It contains all required components already installed and can be used for testing or development. It has a container registry installed on port 31212 as well which can be used to push local images.
 
 
 ```bash title="Direktiv Docker Container"
 docker run --privileged -p 8080:80 -ti direktiv/direktiv-kube
 ```
 
-The docker image has addtional environment variables which can add other functionalities and configurations:
+The docker image has additional environment variables which can add other functionalities and configurations:
 
 - APIKEY: Set an API key for the application
 - HTTPS_PROXY: Sets the HTTPS_PROXY environment variable
