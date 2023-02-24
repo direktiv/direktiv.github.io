@@ -1,4 +1,6 @@
+### Retries
 
+One obvious use for loops is to retry some logic if an error occurs, but there's no need to design looping workflow because Direktiv has configurable error catching & retrying available on every action-based state. This will be discussed in a later article.
 
 # Error Handling
 

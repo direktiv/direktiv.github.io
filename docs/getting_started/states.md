@@ -1,4 +1,13 @@
-All Direktiv workflows start with a YAML-based flow definition. In this section, you'll grasp the fundamentals of workflow definitions and states. Each Direktiv flow is composed of one or more states that are connected as directed acyclic graphs (DAGs). Although there are numerous [state types](/spec/workflow-yaml/states/) available in Direktiv, they all share several common attributes and we will discuss them further in detail here.
+Direktiv Flows are YAML-based definitions of states connected in a directed acyclic graph (DAG). During runtime, the flow controls how execution progresses and which states are being called. It provides different [state types](/spec/workflow-yaml/states/) to allow e.g. decision making, execute functions, event triggering and subflow calls. 
+
+During execution data will be stored as JSON which can be accessed or modified in any given state.  Direktiv takes any kind of input to start the process off and returns a result as JSON output once finished.
+
+*Direktiv Flow*
+![Direktiv Flow](/assets/workflow.png)
+
+## Workflow definition
+
+All states for a flow are listed under `states`. Every workflow must have at least one state. The first state under `states` will be executed first and all subsequent states need to be connected  via transitions. If a state has no `transition` attribute the flow ends at that point of the execution. 
 
 ## Simple State
 
@@ -6,44 +15,18 @@ All Direktiv workflows start with a YAML-based flow definition. In this section,
 states:
 - id: hello
   type: noop
+  log: this is the log
+  transform: 
+    hello: world
 ```
 
-	ID       string            `yaml:"id"`
-	Type     StateType         `yaml:"type"`
-	Log      interface{}       `yaml:"log,omitempty"`
-	Metadata interface{}       `yaml:"metadata,omitempty"`
-	Catch    []ErrorDefinition `yaml:"catch,omitempty"`
-
-
-Run this workflow. Leave the Workflow Input empty for now. You should see something like the following:
-
-### Output
+The above flow contains a single `noop` ("no operation") and shows the common attributes in all available states within Dirketiv. When the flow is getting executed Direktiv creates an `instance` of that flow definition and tracks the progress and state data of that instance. The output of that flow would be the following:
 
 ```json
 {
-  "msg": "Hello, world!"
+  "hello": "world"
 }
 ```
-
-## Workflow Definition
-
-Now that we've seen it in action, let's go through each of the lines in the Workflow Definition and understand what they mean.
-
-### Workflow ID
-
-```yaml
-id: helloworld
-```
-
-Every workflow definition needs to specify a workflow identifier at the top of the document. The identifier is used by UIs and other workflows as a reference to this workflow. This identifier must be unique within the namespace (more on namespaces later).
-
-### States
-
-```yaml
-states:
-```
-
-A workflow just wouldn't be a workflow without states to actually do something. Every workflow must have at least one state. 
 
 ### State ID
 
@@ -51,7 +34,7 @@ A workflow just wouldn't be a workflow without states to actually do something. 
 - id: hello
 ```
 
-Like the workflow itself, every state has to have its own identifier. The state identifier is used in logging and to define transitions, which will come up in a later example when we define more than one state. A state identifier must be unique within the workflow definition. 
+Every state has to have its own identifier. The state identifier is used in logging and to define transitions, which will come up in a later example when we define more than one state. A state identifier must be unique within the workflow definition. 
 
 ### State Type
 
@@ -59,68 +42,45 @@ Like the workflow itself, every state has to have its own identifier. The state 
   type: noop
 ```
 
-There are many types of state that do all sorts of different things. We'll go over the possible states later, but for this example we're using the `noop` state. The `noop` state (short for "no-operation") does nothing other than log Instance Data. 
+There are many [state types](/spec/workflow-yaml/states/) that do all sorts of different things. It is required to provide the state type. 
+
+### Log 
+
+```yaml
+  log: this is the log
+```
+
+Every state has the `log` attribute and the content of the log attribute will be stored in the logs of the instance. 
 
 ### Transform Command
 
 ```yaml
-  transform: 'jq({ msg: "Hello, world!" })'
+  transform: 
+    hello: world
 ```
 
-Any state may optionally define a "transform", and it's used here to generate the classic "Hello, World!" message. Transform applies a `jq` command to the instance data and replaces the instance data with the results. We'll go into more detail about transforms later.
+Any state may optionally define a "transform" to modify the state data. The transform can [add and delete data in the state or even wipe all data in the state](/getting_started/transforms/). 
 
+## Simple Transition
 
+A `transition` attribute in a state instructs Direktiv to move to the next state. Transitions can also be [conditional](/getting_started/transitions/) or during [error handling](/getting_started/error-handling/) but the following is a simple sequential transition.
 
-!!! note
+```yaml hl_lines="8 10 12 14"
+states:
 
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+- id: hello
+  type: noop
+  log: this is the log
+  transform: 
+    hello: world
+  transition: next-step
 
----
+- id: next-step
+  type: noop
+  log: last-step
 
-
-
-!!! info
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-
----
-
-!!! tip
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-
----
-
-!!! warning
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-
-
----
-
-!!! example
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-
-
----
-
-!!! danger
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-
-    
-    ---
-
-   
-
-=== "Tab 1"
-
-    Any state may optionally define a "transform", and it's used here to generate the classic "Hello, World!" message. Transform applies a jq command to the instance data and replaces the instance data with the results. We'll go into more detail about transforms later.
-
-
-=== "Tab 2"
-
-    Any state may optionally define a "transform", and it's used here to generate the classic "Hello, World!" message. Transform applies a jq command to the instance data and replaces the instance data with the results. We'll go into more detail about transforms later.
-
+- id: last-step
+  type: noop
+  log: second stage
+```
 

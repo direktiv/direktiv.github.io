@@ -674,3 +674,7 @@ label.md-sidebar__scrollwrap {
   font-size: 14px;
   color: #000000;
 }
+
+.highlight .hll {
+  background-color: #dae9ff;
+}

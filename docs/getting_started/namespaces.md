@@ -22,29 +22,35 @@ curl -X PUT "http://localhost:8080/api/namespaces/demo"
 
 !!! info "Server Name"
 
-    Please adjust the server name to your environment if you are not using the all-in-one image for this :Getting Started" guide.
+    Please adjust the server name to your environment if you are not using the all-in-one image for this "Getting Started" guide.
 
 ## Create Mirror (Git) Namespace
 
 To create a Git namespace Direktiv requires at least the two attributes `url` and `ref`. The `ref` value is the tag, branch or commit to use as the base whereas the `url` points to the Git repository to use. If there are only those two attributes provided the access to the repository needs to be `public`.  
 
 *Public Git* 
-```json
-{
-  "url": "https://github.com/direktiv/direktiv-examples.git",
-  "ref": "main"
+```sh
+curl -X PUT http://localhost:8080/api/namespaces/demo \
+--data-binary @- << EOF
+{ 
+    "url": "https://github.com/direktiv/direktiv-examples.git", 
+    "ref": "main" 
 }
+EOF
 ```
 
 If it is a `private` repository Direktiv requires either `passphrase`, which can be Github or Gitlab token or a `publicKey`/`privateKey` combination where the public key is registered with the Git instance. 
 
 *Private Git with Token* 
-```json
-{
-  "url": "https://github.com/direktiv/direktiv-examples.git",
-  "ref": "main",
-  "passphrase": "abhsh2763gshs"
+```sh
+curl -X PUT http://localhost:8080/api/namespaces/demo \
+--data-binary @- << EOF
+{ 
+    "url": "https://github.com/direktiv/direktiv-examples.git", 
+    "ref": "main",
+    "passphrase": "abhsh2763gshs"
 }
+EOF
 ```
 
 !!! tip "GitLab Passphrases"
@@ -52,3 +58,9 @@ If it is a `private` repository Direktiv requires either `passphrase`, which can
     GitLab requires a username for the token. The username needs to be prepended like `username:glpat-152zshj2756`
 
 ## Delete Namespace
+
+Delting a namepsace with the API is very simple. The command requires the `recursive` attribute if there is already content in the namespace.
+
+```sh
+curl -X DELETE http://localhost:8080/api/namespaces/demo?recursive=true
+```
