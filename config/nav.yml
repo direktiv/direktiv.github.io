@@ -96,6 +96,7 @@ nav:
       - Variable Mimetypes: examples/variable-mime-types.md
   - Events:
       - General: events/index.md
+      - Filter: events/filter.md
       - Cloud:
           - General: events/cloud/index.md
           - Amazon: events/cloud/amazon.md

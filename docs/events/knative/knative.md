@@ -1,9 +1,62 @@
+Direktiv provides a sink and a source for integration into [Knative Eventing](https://knative.dev/docs/eventing/). Knative uses a [broker](https://knative.dev/docs/eventing/brokers/) to relay events between systems and the [Kafka example](../example) shows how to use Kafka as broker. This section however explains the concept via direct connections between sinks and sources. 
+
+## Knative Installation
+
+```yaml title="Knative Eventing with Kafka"
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: knative-eventing
+---
+apiVersion: operator.knative.dev/v1beta1
+kind: KnativeEventing
+metadata:
+  name: knative-eventing
+  namespace: knative-eventing
+spec:
+  config:
+    config-br-default-channel:
+      channel-template-spec: |
+        apiVersion: messaging.knative.dev/v1beta1
+        kind: KafkaChannel
+        spec:
+          numPartitions: 6
+          replicationFactor: 1
+    default-ch-webhook:
+      default-ch-config: |
+        clusterDefault:
+          apiVersion: messaging.knative.dev/v1beta1
+          kind: KafkaChannel
+          spec:
+            numPartitions: 10
+            replicationFactor: 1
+```
+
+```sh
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.9.2/eventing-kafka-controller.yaml
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.9.2/eventing-kafka-broker.yaml
+```
+
+!!! information "Knative Version"
 
 
-Direktiv provides a sink and a source for integration into [Knative Eventing](https://knative.dev). This [Kafka example](../example) provides a test configuration
-with Knative Eventing, Kafka and Direktiv.
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-broker-config
+  namespace: knative-eventing
+data:
+  default.topic.partitions: "10"
+  default.topic.replication.factor: "1"
+  bootstrap.servers: "my-cluster-kafka-bootstrap.kafka:9092"
+```
 
-# Sink
+
+
+# OLD / REWRITE
+
+## Sink
 
 If eventing is enabled in Direktiv's helm chart an additional service is available in the namespace called *direktiv-eventing*.
 Knative triggers can be used to subscribe to events from configured [Knative sources](https://knative.dev/docs/developer/eventing/sources/) and executes flows in Direktiv.
@@ -27,7 +80,7 @@ spec:
     uri: /mynamespace
 ```
 
-# Source
+## Source
 
 Direktiv provides a source for integrating Direktiv events into Knative as well. To use the source eventing needs to be enabled via helm.
 
