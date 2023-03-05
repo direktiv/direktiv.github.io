@@ -1,38 +1,40 @@
 
-This example provides an example using Kafka as Knative event broker and Kafka as event source as well. After [installing Knative Eventing](/events/knative/knative/#knative-installation). The following steps are required:
+This example uses Kafka as Knative event broker and event source and sink as well.After receiving a message from Kafka, Knative forwards it to Direktiv which subsequently initiates a flow and publishes an event back to Knative which will broker the event to a receive topic in Kafka. To run this example the following steps are required:
 
 - [Installing Kafka](#installing-kafka)
 - [Installing Knative with Kafka](#knative-with-kafka)
-- [Configure Kafka & Direktiv Source](#configure-kafka-direktiv-source)
-- Configure Kafka Sink
+- [Configure Kafka Source](#configuring-kafka-source)
+- [Configure Direktiv Source](#configuring-direktiv-source)
+- [Configuring Kafka Sink](#configuring-kafka-sink)
+- [Flow](#flow)
 
+!!! warning "Example Versions"
+    The version numbers in this example might have changed over time. Please make sure to update them accordingly if required.
 
-In this example we will generate an event in Kafka, consume it in Direktiv via Knative and publish a new event back to Knative.
-
-<p align="center">
-<img src="../../../assets/kafka.png" alt="kafka-diagram"/>
-</p>
+![Knative Example](/assets/knative-example.png)
 
 ## Installing Kafka
 
-For production environments Knative Eventing requires a broker. The broker creates an event mesh with triggers and subscriptions. Brokers can be be based on RabbitMQ or Kafka. Here we will use Kafka and the [Strimzi Operator](https://strimzi.io) for installing Kafka. This is a two-=step process, installing the kafka operator and creating the Kafka cluster itself.
+To enable Eventing in a production environment, Knative requires the installation of an event broker. By setting up triggers and subscriptions, Knative brokers like RabbitMQ or Kafka can build an event mesh architecture. Here we will be using Kafka and the [Strimzi Operator](https://strimzi.io) for the installation. This is a two-step process, installing the Kafka operator and creating the Kafka cluster itself.
 
 ```sh title="Installing Strimzi Operator"
 kubectl create namespace kafka
 kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
+kubectl wait --for=condition=ready pod -l name=strimzi-cluster-operator -n kafka --timeout=300s
 ```
 
 !!! warning "Kafka Installation"
     The Kafka installation instructions provided here is just an example and can not be used as-is
     in production environments. Please go to https://strimzi.io for full documentation. 
 
-After the operator is running the following command enables KRaft for the operator. 
+After the operator is running the following command enables KRaft for the operator. This allows an installation without Zookeeper and should simplify this setup.
 
 ```sh title="Enable KRaft"
 kubectl -n kafka set env deployment/strimzi-cluster-operator STRIMZI_FEATURE_GATES=+UseKRaft
+kubectl wait --for=condition=ready pod -l name=strimzi-cluster-operator -n kafka --timeout=300s
 ```
 
-To create the cluster use the following command. This will create the actual Kafka instance used later in this exmaple. 
+The following command will create the actual Kafka cluster which will be used in this example. 
 
 ```yaml title="Create Kafka Instance"
 cat <<-EOF | kubectl apply -f -
@@ -73,7 +75,7 @@ EOF
 
 ## Knative with Kafka
 
-To use Knative triggers Knative will be installed with Kafka as Broker and Channel provider. Please be aware that this is not a production setting and for this example only. The first step is to create create Knative eventing pods with the Knative operator. 
+To use Kafka as the underlying mechanism for message brokering Knative needs to be configured during installation. The YAML here will create Knative Eventing instance with the required settings.
 
 ```yaml title="Knative Eventing with Kafka"
 cat <<-EOF | kubectl apply -f -
@@ -108,16 +110,14 @@ spec:
 EOF
 ```
 
-This installation requires the Knative Kafka controller and data plane. This can be installed with two `kubectl` commands.
-
+This installation requires the Knative Kafka controller and data plane as well. This can be installed with two `kubectl` commands.
 
 ```sh title="Knative Kafka Dependencies"
-kubectl apply -f https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.8.1/eventing-kafka-controller.yaml
-kubectl apply -f https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.8.1/eventing-kafka-broker.yaml
-kubectl apply -f https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.8.1/eventing-kafka-source.yaml
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.9.3/eventing-kafka-controller.yaml
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.9.3/eventing-kafka-broker.yaml
 ```
 
-The following two commands are creating the broker configuration and creates the broker.
+The last step is to create the actual broker. The following two commands are creating the broker configuration and the broker using the configuration.
 
 ```yaml title="Kafka Configuration"
 cat <<-EOF | kubectl apply -f -
@@ -153,7 +153,7 @@ spec:
 EOF
 ```
 
-After this process Knative is installed with a working Kafka broker. The setup can be tested with `kubectl`.
+The Kafka broker is now up and running. The setup can be tested with `kubectl`.
 
 ```sh title="Working Knative Eventing"
 kubectl get brokers.eventing.knative.dev
@@ -161,11 +161,11 @@ NAME      URL                                                                   
 default   http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default/default   16m   True    
 ```
 
-## Configure Kafka & Direktiv Source
+## Configuring Kafka Source
 
-As explained earlier Kafka will be an event source and a sink. There fore we need two channels. The first one triggers events in Direktiv and the second one will receive events from Direktiv. 
+Kafka will be an event source and a sink in this example. Therefore we need two channels. One channel sending messages and a second channeld to receive the outcome of the whole message process. 
 
-```yaml
+```yaml title="Sender & Receiver Topics"
 cat <<-EOF | kubectl apply -f -
 ---
   apiVersion: kafka.strimzi.io/v1beta2
@@ -200,13 +200,12 @@ EOF
 kubectl get kafkatopics.kafka.strimzi.io  -n kafka
 ```
 
-With that setup 
+With that setup a Kafka source can be installed which will trigger the event flow. This YAML creates the source which sends all messages to the Kafka broker. This shows the decoupling of the events. The producer or sender is unaware of the receiver(s) of the message. 
 
+```yaml title="Install Kafka Source"
 
+kubectl apply -f https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.9.3/eventing-kafka-source.yaml
 
-
-
-```yaml
 cat <<-EOF | kubectl apply -f -
 ---
 apiVersion: sources.knative.dev/v1beta1
@@ -227,174 +226,22 @@ spec:
 EOF
 ```
 
-# OLD!!!
-
-
-
-### Kafka Setup
-
-If there is no Kafka instance available in the environment, it is easy to setup and configure Kafka with [Strimzi](https://strimzi.io/quickstarts/). This is a two step process: installing the kafka operator and creating the Kafka cluster itself.
-
-*Install Operator*
-```console
-kubectl create namespace kafka
-kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
-```
-
-
-
-### Create Kafka Topics
-
-In this example we will consume an event from one channel and publish to a second channel. Therefore we need two new topics to subscribe and publish to.
-
-```yaml
-cat <<-EOF | kubectl apply -f -
----
-  apiVersion: kafka.strimzi.io/v1beta2
-  kind: KafkaTopic
-  metadata:
-    name: knative-direktiv-topic
-    namespace: kafka
-    labels:
-      strimzi.io/cluster: my-cluster
-  spec:
-    partitions: 3
-    replicas: 1
-    config:
-      retention.ms: 7200000
-      segment.bytes: 1073741824
-EOF
-
-cat <<-EOF | kubectl apply -f -
----
-  apiVersion: kafka.strimzi.io/v1beta2
-  kind: KafkaTopic
-  metadata:
-    name: receiver-topic
-    namespace: kafka
-    labels:
-      strimzi.io/cluster: my-cluster
-  spec:
-    partitions: 3
-    replicas: 1
-    config:
-      retention.ms: 7200000
-      segment.bytes: 1073741824
-EOF
-
-# test if topics have been created
-kubectl get kafkatopics.kafka.strimzi.io  -n kafka
-```
-
-### Create Broker
-
-In Knative there are different broker and channel combinations available. Here we will use Kafka as a Broker. To install Kafka as Knative broker there needs to be a Kafka broker controller and the implementation itself.
-
-*Install Kafka Broker Controller*
-```yaml
-kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/v0.26.0/eventing-kafka-controller.yaml
-kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/v0.26.0/eventing-kafka-broker.yaml
-```
-
-With these installed the actual broker can be created. It requires a configmap to nominate the Kafka bootstrap server(s) and the broker yaml file to create the actual broker.
-
-*Kafka Broker Configuration*
-```yaml
-cat <<-EOF | kubectl apply -f -
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kafka-broker-config
-  namespace: knative-eventing
-data:
-  default.topic.partitions: "10"
-  default.topic.replication.factor: "1"
-  bootstrap.servers: "my-cluster-kafka-bootstrap.kafka:9092"
-EOF
-```
-
-*Kafka Broker*
-```yaml
-cat <<-EOF | kubectl apply -f -
----
-apiVersion: eventing.knative.dev/v1
-kind: Broker
-metadata:
-  annotations:
-    eventing.knative.dev/broker.class: Kafka
-  name: default
-  namespace: default
-spec:
-  config:
-    apiVersion: v1
-    kind: ConfigMap
-    name: kafka-broker-config
-    namespace: knative-eventing
-EOF
-```
-
-An successful installation creates a broker in ready state.
-
-```console
-kubectl get brokers.eventing.knative.dev
-
-NAME      URL                                                                              AGE   READY   REASON
-default   http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default/default   3s    True    
-```
-
-### Kafka Source
-
-The basic Knative and Kafka setup is finished and the sources and sinks to integrate the components are the last components missing.
-
-*Install Kafka Source Implementation*
-```console
-kubectl apply -f https://storage.googleapis.com/knative-nightly/eventing-kafka/latest/source.yaml
-```
-
-Creating a Kafka source requires to provide the bootstrap server and the topic to subscribe to. The topic *knative-direktiv-topic* was created at the beginning of this example and will be the channel to ingest events into Direktiv. The *sink* value configures this source to send all events coming from this channel to the Kafka broker.
-
-*Create Kafka Source*
-```yaml
-cat <<-EOF | kubectl apply -f -
----
-apiVersion: sources.knative.dev/v1beta1
-kind: KafkaSource
-metadata:
-  name: direktiv-kafka-source
-spec:
-  consumerGroup: knative-group
-  bootstrapServers:
-  - my-cluster-kafka-bootstrap.kafka:9092 # note the kafka namespace
-  topics:
-  - knative-direktiv-topic
-  sink:
-    ref:
-      apiVersion: eventing.knative.dev/v1
-      kind: Broker
-      name: default
-EOF
-```
-
-This yaml creates the source and it is ready to consume events.
-
-```console
+```sh title="Working Kafka Source"
 kubectl get kafkasources.sources.knative.dev
 
 NAME                    TOPICS                       BOOTSTRAPSERVERS                            READY   REASON   AGE
-direktiv-kafka-source   ["knative-direktiv-topic"]   ["my-cluster-kafka-bootstrap.kafka:9092"]   True             10s
+direktiv-kafka-source   ["sender-topic"]             ["my-cluster-kafka-bootstrap.kafka:9092"]   True             4m16s
 ```
 
-With this source Knative can receive events but it requires a trigger to have another system consume the event. The setup of source, broker and trigger decouples the systems involved in this architecture. The folllwing yaml creates such a trigger. Because there is a [trigger filter](https://knative.dev/docs/eventing/broker/triggers/) defined this trigger consumes all events of type *dev.knative.kafka.event* and forwards it to Direktiv's *direktiv-eventing* service. The *uri* value specifies the target namespace in Direktiv.
+With this source enabled Knative can receive events but it requires a trigger to have another system consume the event. A trigger is a simple mechnism in Knative to "forward" certain events to subscribers. In this YAML there is a trigger filter defined this trigger consumes all events of type `dev.knative.kafka.event` and forwards it to Direktiv's direktiv-eventing service. The `uri` value specifies the target namespace in Direktiv. For more information about eventing filters visit the [Knative documentation page about filters](https://knative.dev/docs/eventing/experimental-features/new-trigger-filters/).
 
-```yaml
+```yaml title="Trigger to Direktiv"
 cat <<-EOF | kubectl apply -f -
 ---
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
   name: direktiv-in
-  namespace: default
 spec:
   broker: default
   filter:
@@ -409,25 +256,21 @@ spec:
 EOF
 ```
 
-This setup will already send events to a namespace called *direktiv* if data arrives at the *knative-direktiv-topic* topic in Kafka. This can be easily tested but the direktiv namespace has to exist in Direktiv. To test it we start a pod which connects to the topic.
+This setup can already send events to a namespace called `direktiv` if data arrives at the `sender-topic` topic in Kafka. This can be easily tested if the namespace `direktiv` already exists in Direktiv. To test it we start a pod which connects to the sender topic.
 
-```console
-kubectl -n kafka run kafka-producer -ti --image=quay.io/strimzi/kafka:0.26.0-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list my-cluster-kafka-bootstrap.kafka:9092 --topic knative-direktiv-topic
+```sh title="Kafka Client Pod "
+kubectl -n kafka run kafka-producer -ti --image=quay.io/strimzi/kafka:latest-kafka-3.4.0 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list my-cluster-kafka-bootstrap.kafka:9092 --topic sender-topic
 ```
 
-After running the pod add JSON into the command prompt, e.g. *{}*. This sends the JSON object to Kafka. Knative's broker will pick it up and executes the trigger for direktiv. The event will appear on the *direktiv* namespace dashboard.
+After running the pod add JSON into the command prompt, e.g. *{}*. This sends the JSON object to Kafka. Knative's broker will pick up the message and execute the trigger for Direktiv. The event will appear on the *direktiv* namespace dashboard.
 
-<p align="center">
-<img src="../../../assets/eventin.png" alt="event-ui-log"/>
-</p>
+![Kafka Event Logs](/assets/kafka-event.png)
 
-### Direktiv Source
+## Configuring Direktiv Source
 
-To connect Direktiv back to Knative again we need to install *[direktiv-knative-source](https://github.com/vorteil/direktiv-knative-source)*. This source listens to events generated in Direktiv and pushes them to Knative. In this example the message is pushed back to the broker. The required argument for this source is the direktiv URI within the cluster, e.g. direktiv-flow.default:3333.
+To connect Direktiv back to Knative we need to install `direktiv-knative-source`. This source listens to events generated in Direktiv and pushes them to Knative. In this example the message is pushed back to the broker which can then use triggers to distribute the event. The required argument for this source is the direktiv URI within the cluster, e.g. `direktiv-flow.default:3333`.
 
-*Direktiv Source*
-
-```yaml
+```yaml title="Direktiv Source"
 cat <<-EOF | kubectl apply -f -
 ---
 apiVersion: sources.knative.dev/v1
@@ -450,42 +293,39 @@ spec:
 EOF
 ```
 
-### Kafka Sink
+## Configuring Kafka Sink
 
-The last task left is installing a Kafka sink and trigger to send events coming from Direktiv to the broker.
+The last step is to create a Kafka sink which consumes the event coming from Direktiv. This closes the communication cycle from Kafka to Direktiv and back to Kafka again. For this to work a Kafka sink has to be installed.
 
-*Installing Kafka Sink Implementation*
-```console
-kubectl apply -f https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/v0.26.0/eventing-kafka-sink.yaml
-```
+```sh title="Kafka Sink Installation"
+kubectl apply -f https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.9.3/eventing-kafka-sink.yaml
 
-*Creating Kafka Sink*
-```yaml
 cat <<-EOF | kubectl apply -f -
 ---
 apiVersion: eventing.knative.dev/v1alpha1
 kind: KafkaSink
 metadata:
   name: direktiv-kafka-sink
-  namespace: default
 spec:
   topic: receiver-topic
   bootstrapServers:
-   - my-cluster-kafka-bootstrap.kafka:9092
+  - my-cluster-kafka-bootstrap.kafka:9092
 EOF
 ```
 
-The following yaml configures the trigger for Kafka. It is important to add a filter for this trigger. In this case the trigger fires if the type of the cloudevent is *myevent*.
+!!! warning "Sink Topic"
+    Send a message to the `receiver-topic` if the sink reports an error about a missing topic. 
 
-*Creating Kafka Trigger*
-```yaml
+After installing the sink a trigger is required to tie them together. A filter can applied to that trigger as well. In this case the trigger accepts events if the type of the cloudevent is `myevent`.
+
+
+```yaml title=""
 cat <<-EOF | kubectl apply -f -
 ---
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
   name: direktiv-receive
-  namespace: default
 spec:
   broker: default
   filter:
@@ -499,11 +339,11 @@ spec:
 EOF
 ```
 
-### Workflow
+## Flow
 
-After all these components are installed and connected we need to create a workflow in the *direktiv* namespace. To see the full configuration we will create flow which listens to Knative events, extracts the data and sends it back to Knative and eventually Kafka.
+After all components are installed and connected a flow in Direktiv is required to actually transfrom the message and send it back. The example flow in the `direktiv` namespace here will listen to all `dev.knative.kafka.event` events and return the event under the new attribute `x`.
 
-```yaml
+```yaml title="Simple Flow  "
 start:
   type: event
   state: tellme
@@ -519,35 +359,15 @@ states:
       x: jq(."dev.knative.kafka.event".data)
 ```
 
-A second receiver pod is needed to see the events coming from Direktiv . It listens to topic *receiver-topic* which was created at the beginning of this tutorial. If data is put on the *knative-direktiv-topic* it will appear in this receiver topic.
+With that setup a new message on the `sender-topic` queue should show as `{ "x": {}}` in the receiver topic. 
 
-```console
-kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.26.0-kafka-3.0.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic receiver-topic --from-beginning
+```sh title="Listen to Receiver Topic"
+kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:latest-kafka-3.4.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic receiver-topic --from-beginning
 ```
 
 
-
-
-
-
-<!-- ### Install Knative
-
-The knative installation is simply applying two yaml files to the cluster.
-
-*Install Knative*
-
-```console
-kubectl apply -f https://github.com/knative/eventing/releases/download/v0.26.1/eventing-crds.yaml
-
-kubectl apply -f https://github.com/knative/eventing/releases/download/v0.26.1/eventing-core.yaml
+``` information 
+KAFKA is a registered trademark of The Apache Software Foundation and
+has been licensed for use by [3rd party name]. [3rd party name] has no
+affiliation with and is not endorsed by The Apache Software Foundation.
 ```
-
-After successful installation there are two pods runnning:
-
-```console
-kubectl get pods -n knative-eventing
-
-NAME                                   READY   STATUS    RESTARTS   AGE
-eventing-controller-7b466b585f-76fd4   1/1     Running   0          7s
-eventing-webhook-5c8886cb56-q2h7r      1/1     Running   0          7s
-``` -->
