@@ -364,10 +364,3 @@ With that setup a new message on the `sender-topic` queue should show as `{ "x":
 ```sh title="Listen to Receiver Topic"
 kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:latest-kafka-3.4.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic receiver-topic --from-beginning
 ```
-
-
-``` information 
-KAFKA is a registered trademark of The Apache Software Foundation and
-has been licensed for use by [3rd party name]. [3rd party name] has no
-affiliation with and is not endorsed by The Apache Software Foundation.
-```
