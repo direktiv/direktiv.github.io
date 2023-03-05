@@ -15,7 +15,7 @@ Knative is an essential part of Direktiv and can be installed with Knative's ope
 
 
 ```sh
-kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.8.1/operator.yaml
+kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.9.2/operator.yaml
 ```
 
 After the deployment of the operator a new instance of Knative Serving can be created. Direktiv requires a certain configuration for Knative to work. Direktiv has it's own Helm file to deploy the instance with the correct configuration.
