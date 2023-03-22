@@ -12,7 +12,7 @@ Direktiv supports Kubernetes offerings from all major cloud providers and requir
 A single node setup requires no further configuration and K3s can be used with the default settings. This setup disables Traefik to be replaced with Nginx during the installation. If proxy configuration is required please read the [proxy setup section](#proxy-setup). 
 
 ```bash title="One Node Setup"
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.7+k3s1 sh -s - --disable traefik --write-kubeconfig-mode=644
+curl -sfL https://get.k3s.io | sh -s - --disable traefik --write-kubeconfig-mode=644
 ```
 
 !!! warning annotate "K3S Version"
