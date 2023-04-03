@@ -17,7 +17,7 @@ echo $(pwd));
 ```
 
 !!! warning annotate "Permissions"
-    The directory where the certificates are located is stored in $certDir. If there are permission problems, please try a new directory.
+    The directory where the certificates are located is stored in $certDir. If there are permission problems, please try a different directory with write permissions.
 
 ## Install with Helm
 
@@ -42,10 +42,6 @@ helm install linkerd-control-plane \
 
 To use the service mesh (and, in particular, the mTLS communication) between pods within a Direktiv cluster the namespaces need to be annotated for Linkerd to inject its proxy. The default namespace to annotate is `direktiv`.
 
-```bash title="Annotate Namespaces"
-for ns in "direktiv"
-do
-  kubectl create namespace $ns || true
-  kubectl annotate ns --overwrite=true $ns linkerd.io/inject=enabled
-done;
+```bash title="Annotate Namespace"
+kubectl annotate ns --overwrite=true direktiv linkerd.io/inject=enabled
 ```

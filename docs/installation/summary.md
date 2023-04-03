@@ -38,14 +38,10 @@ helm install linkerd-control-plane \
   linkerd/linkerd-control-plane --wait
 ```
 
-### Annotate the Namespaces
+### Annotate the Namespace
 
 ```bash
-for ns in "default" "knative-serving" "direktiv-services-direktiv"
-do
-  kubectl create namespace $ns || true
-  kubectl annotate ns --overwrite=true $ns linkerd.io/inject=enabled
-done;
+kubectl annotate ns --overwrite=true direktiv linkerd.io/inject=enabled
 ```
 
 ## Database
@@ -62,8 +58,10 @@ kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubern
 ## Knative
 
 ```bash
-kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.8.1/operator.yaml
-helm install -n knative-serving --create-namespace knative-serving direktiv/knative-instance
+kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.9.4/operator.yaml
+kubectl create ns knative-serving
+kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/knative/basic.yaml
+kubectl delete ns contour-external
 ```
 
 ## Direktiv

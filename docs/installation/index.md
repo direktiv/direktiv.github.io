@@ -1,18 +1,24 @@
 # Installation
 
-Direktiv is using [Helm](https://helm.sh/) charts for installation. For a basic installation there are only two dependencies. A [PostgreSQL](database) database and [Knative](direktiv). Optional dependencies are Linkerd as service mesh and monitoring and tracing tools, e.g. backends for Direktiv's Opentlemetry configuration. The following diagram shows a high-level architecture of Direktiv and the required and optional components.
+Direktiv is using [Helm](https://helm.sh/) charts for installation. For a basic installation there are only two dependencies. A [PostgreSQL](database) database and [Knative](direktiv). Optional dependencies are Linkerd as service mesh and monitoring and tracing tools, e.g. backends for Direktiv's Opentelemetry configuration. The following diagram shows a high-level architecture of Direktiv and the required and optional components.
+
 <div class ="image-wrapper">
 <p align="center">
 <img src="arch.png" alt="Direktiv Overview"/>
 </p>
-<div>
+</div>
 
 The following sections explain how to install each component in a local cluster:
 
+
 - [Kubernetes](kubernetes)
+
 - [Linkerd](linkerd)
+
 - [Postgres](database)
+
 - [Direktiv](direktiv)
+
 - [Knative](direktiv#knative)
 
 
