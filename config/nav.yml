@@ -105,3 +105,4 @@ nav:
       - Knative:
           - Eventing: events/knative/knative.md
           - Kafka Example: events/knative/example.md
+          - VMware Example: events/knative/vmware.md

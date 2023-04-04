@@ -1,114 +1,87 @@
 Direktiv provides a sink and a source for integration into [Knative Eventing](https://knative.dev/docs/eventing/). Knative uses a [broker](https://knative.dev/docs/eventing/brokers/) to relay events between systems and the [Kafka example](../example) shows how to use Kafka as broker. This section however explains the concept via direct connections between sinks and sources. 
 
+## Preparing Direktiv
+
+Knative requires a sink to send events to Direktiv. Direktiv comes with a ready-to-use Knative sink but it has to be enabled. This can be done during installation or afterward with an `helm upgrade`. The following configuration in Direktiv's `value.yaml` adds the required sink service.
+
+```yaml title="Enabling Eventing"
+eventing:
+    enabled: true
+```
+
+```bash title="Upgrade Direktiv"
+helm upgrade -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
+```
+
+After that change there is an additional service `direktiv-eventing` available in Direktiv's namespace. 
+
+
 ## Knative Installation
 
-```yaml title="Knative Eventing with Kafka"
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: knative-eventing
----
+During the default installation Knative's operator has been installed an makes installing Knative eventing an easy task with the default settings. 
+
+```sh title="Operator Installation"
+kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.9.4/operator.yaml
+```
+
+```sh title="Create Eventing Namespace"
+kubectl create ns knative-eventing
+```
+
+```yaml title="Install Default Knative Eventing"
+kubectl apply -f - <<EOF
 apiVersion: operator.knative.dev/v1beta1
 kind: KnativeEventing
 metadata:
   name: knative-eventing
   namespace: knative-eventing
-spec:
-  config:
-    config-br-default-channel:
-      channel-template-spec: |
-        apiVersion: messaging.knative.dev/v1beta1
-        kind: KafkaChannel
-        spec:
-          numPartitions: 6
-          replicationFactor: 1
-    default-ch-webhook:
-      default-ch-config: |
-        clusterDefault:
-          apiVersion: messaging.knative.dev/v1beta1
-          kind: KafkaChannel
-          spec:
-            numPartitions: 10
-            replicationFactor: 1
+EOF
 ```
 
-```sh
-kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.9.2/eventing-kafka-controller.yaml
-kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.9.2/eventing-kafka-broker.yaml
-```
+!!! warning annotate "Default Installation"
+    The default installation uses an in-memory channel which is not recommended in production use because it is best-effort. 
 
-!!! information "Knative Version"
+## Simple Ping Source
+
+An easy way to test test the installation is to install a "ping" source. This is one of many [sources](https://knative.dev/docs/eventing/sources/#knative-sources) provided by the Knative project. The examples below are almost identical except the `uri` parameter. Direktiv uses this to define the target namespaces. If the value is empty or `/` it will send the event to all namespace. If it contains a value e.g. `/mynamespace` it will send it to that namespace only. Event filters can be defined with a query parameter `filter`, e.g. `/mynamespace?filter=myfilter`.
 
 
-```yaml
-apiVersion: v1
-kind: ConfigMap
+```yaml title="Events For All Namespaces"
+kubectl apply -f - <<EOF
+apiVersion: sources.knative.dev/v1
+kind: PingSource
 metadata:
-  name: kafka-broker-config
-  namespace: knative-eventing
-data:
-  default.topic.partitions: "10"
-  default.topic.replication.factor: "1"
-  bootstrap.servers: "my-cluster-kafka-bootstrap.kafka:9092"
-```
-
-
-
-# OLD / REWRITE
-
-## Sink
-
-If eventing is enabled in Direktiv's helm chart an additional service is available in the namespace called *direktiv-eventing*.
-Knative triggers can be used to subscribe to events from configured [Knative sources](https://knative.dev/docs/developer/eventing/sources/) and executes flows in Direktiv.
-Triggers can target namespaces with the *uri* parameter in the YAML configuration. It is also possible to send to all namespaces if the *uri* is set to '/'.
-Sending events to all namespaces is a costly operation and should not be used if not absolutely necessary.
-
-*Knative trigger for namespace*
-```yaml
-apiVersion: eventing.knative.dev/v1
-kind: Trigger
-metadata:
-  name: my-namespace-trigger
+  name: my-ping
   namespace: default
 spec:
-  broker: default
-  subscriber:
+  schedule: "*/1 * * * *"
+  contentType: application/json
+  data: '{"message": "Hello world!"}'
+  sink:
     ref:
       apiVersion: v1
       kind: Service
-      name: direktiv-eventing
-    uri: /mynamespace
+      name: direktiv-eventing   
+EOF
 ```
 
-## Source
 
-Direktiv provides a source for integrating Direktiv events into Knative as well. To use the source eventing needs to be enabled via helm.
-
-*Helm Configuration*
-```yaml
-eventing:
-  enabled: true
-```
-
-The image to use as a source is *vorteil/direktiv-knative-source* which establishes a GRPC stream to Direktiv to fetch the generated events. The required *arg* provides the Direktiv connection URL.
-
-*Direktiv Knative Source*
-```yaml
+```yaml title="Events For One Namespace"
+kubectl apply -f - <<EOF
 apiVersion: sources.knative.dev/v1
-kind: ContainerSource
+kind: PingSource
 metadata:
-  name: direktiv-source
+  name: my-ping
+  namespace: default
 spec:
-  template:
-    spec:
-      containers:
-        - image: vorteil/direktiv-knative-source
-          name: direktiv-source
-          args:
-            - --direktiv=direktiv-flow.default:3333
+  schedule: "*/1 * * * *"
+  contentType: application/json
+  data: '{"message": "Hello world!"}'
   sink:
     ref:
-      apiVersion: eventing.knative.dev/v1
-      kind: Broker
-      name: default
+      apiVersion: v1
+      kind: Service
+      name: direktiv-eventing   
+    uri: /hello
+EOF
 ```

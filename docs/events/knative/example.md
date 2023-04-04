@@ -1,5 +1,5 @@
 
-This example uses Kafka as Knative event broker and event source and sink as well.After receiving a message from Kafka, Knative forwards it to Direktiv which subsequently initiates a flow and publishes an event back to Knative which will broker the event to a receive topic in Kafka. To run this example the following steps are required:
+This example uses Kafka as Knative event broker and event source and sink as well. After receiving a message from Kafka, Knative forwards it to Direktiv which subsequently initiates a flow and publishes an event back to Knative which will broker the event to a receive topic in Kafka. To run this example the following steps are required:
 
 - [Installing Kafka](#installing-kafka)
 - [Installing Knative with Kafka](#knative-with-kafka)
@@ -15,7 +15,7 @@ This example uses Kafka as Knative event broker and event source and sink as wel
 
 ## Installing Kafka
 
-To enable Eventing in a production environment, Knative requires the installation of an event broker. By setting up triggers and subscriptions, Knative brokers like RabbitMQ or Kafka can build an event mesh architecture. Here we will be using Kafka and the [Strimzi Operator](https://strimzi.io) for the installation. This is a two-step process, installing the Kafka operator and creating the Kafka cluster itself.
+To enable Knative Eventing in a production environment, Knative requires the installation of an event broker. By setting up triggers and subscriptions, Knative brokers like RabbitMQ or Kafka can build an event mesh architecture. Here we will be using Kafka and the [Strimzi Operator](https://strimzi.io) for the installation. This is a two-step process, installing the Kafka operator and creating the Kafka cluster itself.
 
 ```sh title="Installing Strimzi Operator"
 kubectl create namespace kafka
@@ -114,6 +114,7 @@ This installation requires the Knative Kafka controller and data plane as well. 
 
 ```sh title="Knative Kafka Dependencies"
 kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.9.3/eventing-kafka-controller.yaml
+sleep 3
 kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.9.3/eventing-kafka-broker.yaml
 ```
 
@@ -143,7 +144,7 @@ metadata:
   annotations:
     eventing.knative.dev/broker.class: Kafka
   name: default
-  namespace: default
+  namespace: knative-eventing
 spec:
   config:
     apiVersion: v1
@@ -212,6 +213,7 @@ apiVersion: sources.knative.dev/v1beta1
 kind: KafkaSource
 metadata:
   name: direktiv-kafka-source
+  namespace: knative-eventing
 spec:
   consumerGroup: knative-group
   bootstrapServers:
@@ -242,6 +244,7 @@ apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
   name: direktiv-in
+  namespace: knative-eventing
 spec:
   broker: default
   filter:
@@ -277,6 +280,7 @@ apiVersion: sources.knative.dev/v1
 kind: ContainerSource
 metadata:
   name: direktiv-source
+  namespace: knative-eventing
 spec:
   template:
     spec:
@@ -306,6 +310,7 @@ apiVersion: eventing.knative.dev/v1alpha1
 kind: KafkaSink
 metadata:
   name: direktiv-kafka-sink
+  namespace: knative-eventing
 spec:
   topic: receiver-topic
   bootstrapServers:
@@ -314,18 +319,22 @@ EOF
 ```
 
 !!! warning "Sink Topic"
-    Send a message to the `receiver-topic` if the sink reports an error about a missing topic. 
+    Send a message to the `receiver-topic` if the sink reports an error about a missing topic: 
+    ```
+    kubectl -n kafka run kafka-receiver -ti --image=quay.io/strimzi/kafka:latest-kafka-3.4.0 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list my-cluster-kafka-bootstrap.kafka:9092 --topic receiver-topic
+    ```
 
 After installing the sink a trigger is required to tie them together. A filter can applied to that trigger as well. In this case the trigger accepts events if the type of the cloudevent is `myevent`.
 
 
-```yaml title=""
+```yaml title="Kafka Receiver Sink"
 cat <<-EOF | kubectl apply -f -
 ---
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
   name: direktiv-receive
+  namespace: knative-eventing
 spec:
   broker: default
   filter:
@@ -359,7 +368,7 @@ states:
       x: jq(."dev.knative.kafka.event".data)
 ```
 
-With that setup a new message on the `sender-topic` queue should show as `{ "x": {}}` in the receiver topic. 
+With that setup a new message e.g. `"Hello"` on the `sender-topic` queue should show as `{ "x": { "Hello" }}` in the receiver topic. Please make sure to send valid JSON because this is being used as the data playload for the event. 
 
 ```sh title="Listen to Receiver Topic"
 kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:latest-kafka-3.4.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic receiver-topic --from-beginning
