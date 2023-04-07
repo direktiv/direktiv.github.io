@@ -16,7 +16,7 @@
 | `input` | Selects or generates the data to send as input to the function. | [Structured JQ](../instance-data/structured-jx.md) | no |
 | `secrets` | Defines a list of secrets to temporarily add to the instance data under `.secrets`, before evaluating the `input`. | []string | no |
 | `retries` | | [[]RetryPolicyDefinition](#RetryPolicyDefinition) | no |
-| `files` | Determines a list of files to load onto the function's file-system from variables. Only valid if the referenced function supports it. | [[]FunctionFileDefinition](#FunctionFileDefinition) | no |
+| `files` | Determines a list of files to load onto the function's file-system from variables. Only valid if the referenced function supports it. | [[]FunctionFileDefinition](#functionfiledefinition) | no |
 
 ## RetryPolicyDefinition 
 

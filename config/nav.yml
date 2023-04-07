@@ -70,7 +70,7 @@ nav:
   - API: api.md
   - Development:
       - Standalone Environment: environment/direktiv-development-environment.md
-      - Sync Tool: environment/cli.md
+      - direktivctl: environment/cli.md
   - Examples:
       - Greeting (ActionState): examples/greeting.md
       - Event-based Greeting (StartEvent): examples/event-based-greeting.md
