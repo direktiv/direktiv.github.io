@@ -1,5 +1,3 @@
-# Direktiv Sync Tool
-
 Although developing workflows with the web UI is easy, a command line tool can be used to make local workflow development faster and more convenient. Direktiv's cli `direktivctl` is used for pushing and executing flows remotely. This enables the developer to stay in his development environment, e.g. Visual Studio Code. 
 
 ## Installing 
