@@ -1,15 +1,14 @@
 # Git Mirrors
 
-Direktiv supports keeping a clone of a git repository as a source of workflows and variables. 
+Direktiv supports keeping a clone of a git repository as a source of flows and variables. 
 
 ## Setting Up A Git Mirror
 
-Git mirrors can be set up as entire Direktiv namespaces or just as a directory or subdirectory within an existing namespace. The two are treated nearly identically. The following arguments can be supplied when creating a mirror as a namespace:
+Git mirrors can be set up as entire Direktiv namespaces and supports submodules. The following arguments can be supplied when creating a mirror as a namespace:
 
 * `namespace`
 * `url`
 * `ref`
-* `cron`
 * Auth:
   * None
   * Git access token:
@@ -18,8 +17,6 @@ Git mirrors can be set up as entire Direktiv namespaces or just as a directory o
     * `private_key`
     * `public_key`
     * `passphrase`
-
-And when creating a mirror as a directory, the only difference is that the a `path` argument is also required. In the UI, the `namespace` is determined implicitly, and the `path` is referred to as a "directory name". 
 
 The following arguments are considered sensitive, and will never be returned via the API, except in a redacted form: `access_token`, `private_key`, `passphrase`. 
 
@@ -67,12 +64,6 @@ All Direktiv mirror operations are encapsulated within an "activity". This serve
 
 For various reasons you may need to update the settings of a mirror. Whether it's to change which branch or commit it's referencing, or to update your credentials. All of this is supported. For convenience, Direktiv will only apply changes to settings you ask it to, anything else will remain unchanged. This means for example that you can swap from branch `v1.0.x` to `v1.1.x` without resupplying your SSH keys if you want to.
 
-## Modifying the Contents of a Local Mirror
-
-Under normal circumstances a mirror is meant to be managed by Direktiv, and the remote repository being referenced is considered an absolute source of truth. For this reason, everything within a mirror is normally kept in a read-only state. If you want to make temporary changes to a local mirror for any reason you will need to set it as writable first. 
-
-As long as the mirror is writable all syncing is blocked. You should remember to relinquish control back to Direktiv by setting the mirror as read-only as soon as possible. Note that Direktiv does not push any changes to the remote repository for you, so any changes you have made will be discarded the next time the mirror is synced. 
-
 ## Repository Contents
 
 ### Directory
@@ -80,17 +71,17 @@ As long as the mirror is writable all syncing is blocked. You should remember to
 If a directory appears within the repository it will be created within the local mirror. Except in the following circumstances:
 
 * If the directory name begins with `.`
-* If the directory contains no workflows (recursively).
+* If the directory contains no flows (recursively).
 
-This means repositories can group workflows logically and have that grouping preserved on Direktiv.
+This means repositories can group flows logically and have that grouping preserved on Direktiv.
 
 ### Workflow
 
-If a file name ends in `.yml` or `.yaml` it will be treated as a workflow unless it can instead be treated as a workflow variable. As long as the name contains only acceptable workflow name characters.
+If a file name ends in `.yml` or `.yaml` it will be treated as a flow unless it can instead be treated as a workflow variable. As long as the name contains only acceptable workflow name characters.
 
 Workflow names will have their suffix trimmed in Direktiv. So `hello.yaml` will create a workflow called `hello`. 
 
-Files that evaluate as workflows according to these rules are considered to be so even if they cannot be interpreted as valid workflows. This ensures that mirrors can include up-to-date sources that perfectly mirror those found in the remote repository, even if those sources are flawed or incompatible with the version of Direktiv. 
+Files that evaluate as flows according to these rules are considered to be so even if they cannot be interpreted as valid flows. This ensures that mirrors can include up-to-date sources that perfectly mirror those found in the remote repository, even if those sources are flawed or incompatible with the version of Direktiv. 
 
 ### Workflow Variable
 

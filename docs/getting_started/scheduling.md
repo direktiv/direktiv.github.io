@@ -1,18 +1,17 @@
 
 # Scheduling
 
-Sometimes you want a workflow to run periodically. Direktiv supports scheduling based on "cron", and in this article you'll see how that's done.
+Sometimes a flow needs to run periodically. Direktiv supports scheduling based on "cron". The `cron` is one of the [start definitions](/spec/workflow-yaml/starts/).
 
 ## Demo
 
 ```yaml
-id: scraper
 start:
   type: scheduled
-  cron: "0 */2 * * *"
+  cron: "* 0/2 * * *"
 functions:
 - id: httprequest
-  image: direktiv/request:v1
+  image: gcr.io/direktiv/functions/http-request:1.0
   type: reusable
 states:
 - id: getter
@@ -22,36 +21,25 @@ states:
     input: 
       method: "GET"
       url: "https://jsonplaceholder.typicode.com/todos/1"
-  transform: 'jq(.return)'
-  transition: logger
-- id: logger
-  type: noop
-  log: 'jg(.)'
-
 ```
 
 ## Start Types
 
-Workflow definitions can have one of many different start types. Up until now you've left the `start` section out entirely, which causes it to `default`, which is appropriate for a direct-invoke/subflow workflow. Now we can have a look at `scheduled` workflows.
+Flow definitions can have one of many different start types. If the `start` section left out entirely, causes it to `default`, which is appropriate for a direct-invoke/subflow flow. 
 
 ```yaml
 start:
   type: scheduled
   cron: "0 */2 * * *"
 ```
+Direktiv supports valid cron expressions and prevents scheduled flows from being directly invoked or used as a subflow, which is why this example does not specify any input data. Scheduled flows can not accept any payloads. 
 
-There's not much to see here. Add the `start` section, set `type` to `scheduled`, and define a valid cron string and away you go!
+## Active/Inactive Flows
 
-Direktiv prevents scheduled workflows from being directly invoked or used as a subflow, which is why this demo doesn't specify any input data. Just configure the workflow and check the logs over time to see the scheduled workflow in action.
+Every flow definition can be considered "active" or "inactive". Being "active" doesn't mean that there's an instance running right now, it means that Direktiv will allow instances to be created from it. This setting is part of the API, not a part of the flow definition.
 
-## Active/Inactive Workflows
-
-Every workflow definition can be considered "active" or "inactive". Being "active" doesn't mean that there's an instance running right now, it means that Direktiv will allow instances to be created from it. This setting is part of the API, not a part of the workflow definition.
-
-With scheduled workflows we can finally see why this setting could be useful: you can toggle the schedule on and off without modifying the workflow definition itself.
+With scheduled flows this is a useful setting. It can toggle the schedule on and off without modifying the flow definition itself.
 
 ## Cron
 
-Cron is a time-based job scheduler in Unix-like operating systems. Direktiv doesn't run cron, but it does borrow their syntax and expressions for scheduling.
-
-In the example above our cron expression is "`0 */2 * * *`". This tells Direktiv to run the workflow once every two hours. There are many great resources online to help you create your own custom cron expressions.
+Cron is a time-based job scheduler in Unix-like operating systems. Direktiv doesn't run cron, but it does borrow their syntax and expressions for scheduling. In the example above the cron expression is "`0 */2 * * *`". This tells Direktiv to run the flow once every two hours. There are many great resources online to help creating custom cron expressions.

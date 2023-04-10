@@ -29,7 +29,7 @@ In this example a request is being made to an URL. This URL does not exist to si
 
 ## Catchable Errors
 
-Errors that occur during instance execution usually are considered "catchable". Any workflow state may optionally define error catchers, and if a catchable error is raised Direktiv will check to see if any catchers can handle it.
+Errors that occur during instance execution usually are considered "catchable". Any flow state may optionally define error catchers, and if a catchable error is raised Direktiv will check to see if any catchers can handle it.
 
 Errors have a "code", which is a string formatted in a style similar to a domain name. Error catchers can explicitly catch a single error code or they can use `*` wildcards in their error codes to catch ranges of errors. Setting the error catcher to just "`*`" means it will handle any error, so long as no catcher defined higher up in the list has already caught it.
 
@@ -89,7 +89,7 @@ Flows sometimes perform actions which may need to be reverted or undone if the f
 
 ## Cause Errors
 
-Sometimes it is important to fail the workflow with a custom error. This is possible with the `error` state. This can used e.g. in switch states.
+Sometimes it is important to fail the flow with a custom error. This is possible with the `error` state. This can used e.g. in switch states.
 
 ```yaml
 states:

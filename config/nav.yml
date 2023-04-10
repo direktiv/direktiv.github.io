@@ -7,17 +7,19 @@ nav:
       - Flows & States: getting_started/states.md
       - Transforms & JQ/JS: getting_started/transforms.md
       - Input & Transitions: getting_started/transitions.md
+      - Conditional Transitions: getting_started/conditional-transitions.md
       - Introduction to Functions: getting_started/functions-intro.md
+      - Scheduling: getting_started/scheduling.md
+      - Subflows: getting_started/subflows.md
       - Persistent Data: getting_started/persistent-data.md
       - Error Handling: getting_started/error-handling.md
       - Events in Direktiv: getting_started/events.md
       - Validating Input: getting_started/validating.md
       - Secrets & Registries: getting_started/secrets-registries.md
       - Advanced Topics:
-          - Timeouts: getting_started/validating.md
-          - Start Types: getting_started/validating.md
-          - Custom Functions: getting_started/making-functions.md
-          - Metadata: getting_started/validating.md
+          - Timeouts: getting_started/advanced/timeout.md 
+          - Custom Functions: getting_started/advanced/making-functions.md
+          - Metadata: getting_started/advanced/metadata.md 
   - Installation:
       - Install: installation/index.md
       - Kubernetes: installation/kubernetes.md

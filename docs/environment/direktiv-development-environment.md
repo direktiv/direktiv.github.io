@@ -1,4 +1,4 @@
-To improve function and workflows development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom functions is described in <a href="../../getting_started/making-functions">this section</a>.
+To improve function and flow development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom functions is described in <a href="../../getting_started/making-functions">this section</a>.
 
 ## Running Direktiv
 
@@ -70,7 +70,7 @@ There is always the option to use the multipass configuration if the Docker imag
 Multipass creates a virtual machine with Direktiv pre-configured. The configuration is different from the Docker image but all features are available to that approach as well. The cloud-init script will do the configuration during first boot and takes a few minutes to complete. Eventing is anebled by default.
 
 ```sh title="Start Multipass Instance"
-multipass launch --cpus 4 --disk 10G --memory 4G --name direktiv --cloud-init https://raw.githubusercontent.com/direktiv/direktiv/main/build/docker/all/multipass/init.yaml
+multipass launch --cpus 4 --disk 20G --memory 6G --name direktiv --cloud-init https://raw.githubusercontent.com/direktiv/direktiv/main/build/docker/all/multipass/init.yaml
 ```
 
 After startup the machine can be access with a simple command. For convenience there is a `kubectl` shortcut and code completion installed. 
@@ -78,6 +78,9 @@ After startup the machine can be access with a simple command. For convenience t
 ```sh title="Accessing Shell"
 multipass exec direktiv -- /bin/bash
 ```
+
+!!! warning VPN
+    multipass does not work in a VPN. The VPN needs to be turned off for this example installation.
 
 If the installation is not successful there is a cloud-init log available on the virtual machine `/var/log/cloud-init-output.log` to check the logs.
 
@@ -129,7 +132,7 @@ write_files:
 After changing the file multipass requires this file instead of the default one.
 
 ```sh title="Custom Cloud-Init"
-multipass launch --cpus 4 --disk 10G --memory 4G --name direktiv --cloud-init myinit.yaml
+multipass launch --cpus 4 --disk 20G --memory 6G --name direktiv --cloud-init myinit.yaml
 ```
 
 !!! warning 
@@ -190,7 +193,7 @@ curl http://<IP>:31212/v2/_catalog
 
 ## Testing Configuration
 
-To test if everything is working this example creates a namespace and a workflow and executes it. The value for `<ADDRESS>` has to be replaced with either `localhost:8080` for Docker or the IP of the multipass instance. 
+To test if everything is working this example creates a namespace and a flow and executes it. The value for `<ADDRESS>` has to be replaced with either `localhost:8080` for Docker or the IP of the multipass instance. 
 
 ```sh title="Testing Installation"
 # create namespace 'test'
@@ -212,10 +215,10 @@ states:
       - command: ehoc Hello
 EOF
 
-# upload workflow
+# upload flow
 curl -X PUT  --data-binary @helloworld.yml "http://<ADDRESS>/api/namespaces/test/tree/test?op=create-workflow"
 
-# execute workflow (initial call will be slightly slower than subsequent calls)
+# execute flow (initial call will be slightly slower than subsequent calls)
 curl "http://<ADDRESS>/api/namespaces/test/tree/test?op=wait"
 ```
 

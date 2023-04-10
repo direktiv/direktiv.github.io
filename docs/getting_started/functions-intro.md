@@ -1,7 +1,7 @@
 
 # Introduction to Functions
 
-Flows wouldn't be very powerful if they were limited to just the predefined states. That's why Direktiv can run "functions" which are basically serverless containers or even a separate workflow, referred to as a [`subflow`](/getting_started/subflows/). Direktiv uses the `action` state to provide this functionality.
+Flows wouldn't be very powerful if they were limited to just the predefined states. That's why Direktiv can run "functions" which are basically serverless containers or even a separate flow, referred to as a [`subflow`](/getting_started/subflows/). Direktiv uses the `action` state to provide this functionality.
 
 ### Example
 

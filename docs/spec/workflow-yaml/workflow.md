@@ -27,7 +27,7 @@ Workflows have inputs and outputs, usually in JSON. Where examples appear in thi
 
 ### WorkflowDefinition
 
-This is the top-level structure of a Direktiv workflow definition. All workflows must have one.
+This is the top-level structure of a Direktiv workflow definition. All flows must have one.
 
 | Parameter | Description | Type | Required |
 | --- | --- | --- | --- |

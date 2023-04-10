@@ -15,7 +15,7 @@
 
 ## ValidateStateDefinition
 
-Since workflows receive external input it may be necessary to check that instance data is valid. The `validate` state exists for this purpose. If this state is the first state in the flow the UI will generate a input form based on the specification.
+Since flows receive external input it may be necessary to check that instance data is valid. The `validate` state exists for this purpose. If this state is the first state in the flow the UI will generate a input form based on the specification.
 
 | Parameter | Description | Type | Required |
 | --- | --- | --- | --- |

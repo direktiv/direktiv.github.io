@@ -1,6 +1,6 @@
-Direktiv namespaces allow you the flexibility to divide projects, teams or use-cases. These spaces are totally seperate and independent of each other in terms of e.g. workflows, secrets and services. You can easily create a namespace using the user interface or through an API call.
+Direktiv namespaces allow you the flexibility to divide projects, teams or use-cases. These spaces are totally seperate and independent of each other in terms of e.g. flows, secrets and services. You can easily create a namespace using the user interface or through an API call.
 
-Namespaces come in two different types. The `standard` version only stores data in Direktiv, while the `mirror` namespaces use Git as their source of truth for configuration and workflows. It is recommended to use Git-backed namespaces for projects but for this guide a `standard` namespace will suffice.
+Namespaces come in two different types. The `standard` version only stores data in Direktiv, while the `mirror` namespaces use Git as their source of truth for configuration and flows. It is recommended to use Git-backed namespaces for projects but for this guide a `standard` namespace will suffice.
 
 ## Create Standard Namespace
 

@@ -7,7 +7,7 @@ During execution data will be stored as JSON which can be accessed or modified i
 
 ## Workflow definition
 
-All states for a flow are listed under `states`. Every workflow must have at least one state. The first state under `states` will be executed first and all subsequent states need to be connected  via transitions. If a state has no `transition` attribute the flow ends at that point of the execution. 
+All states for a flow are listed under `states`. Every flow must have at least one state. The first state under `states` will be executed first and all subsequent states need to be connected  via transitions. If a state has no `transition` attribute the flow ends at that point of the execution. 
 
 ## Simple State
 
@@ -34,7 +34,7 @@ The above flow contains a single `noop` ("no operation") and shows the common at
 - id: hello
 ```
 
-Every state has to have its own identifier. The state identifier is used in logging and to define transitions, which will come up in a later example when we define more than one state. A state identifier must be unique within the workflow definition. 
+Every state has to have its own identifier. The state identifier is used in logging and to define transitions, which will come up in a later example when we define more than one state. A state identifier must be unique within the flow definition. 
 
 ### State Type
 

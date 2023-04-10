@@ -1,4 +1,4 @@
-Although developing workflows with the web UI is easy, a command line tool can be used to make local workflow development faster and more convenient. Direktiv's cli `direktivctl` is used for pushing and executing flows remotely. This enables the developer to stay in his development environment, e.g. Visual Studio Code. 
+Although developing flows with the web UI is easy, a command line tool can be used to make local flow development faster and more convenient. Direktiv's cli `direktivctl` is used for pushing and executing flows remotely. This enables the developer to stay in his development environment, e.g. Visual Studio Code. 
 
 ## Installing 
 
@@ -29,7 +29,7 @@ This file has to be in the root folder of that project and after creating this, 
 
 ## Pushing and Executing
 
-After setup there are two commands available. The `push` command pushes a workflow to Direktiv but does not execute it. This command works recursively e.g. `direktivctl workflows push .`. The `exec` command uploads and executes the workflow. During execution the logs are printed to `stdout`.
+After setup there are two commands available. The `push` command pushes a flow to Direktiv but does not execute it. This command works recursively e.g. `direktivctl workflows push .`. The `exec` command uploads and executes the flow. During execution the logs are printed to `stdout`.
 
 ```sh title="CLI Examples"
 direktivctl workflows push myworkflow.yaml
@@ -39,14 +39,14 @@ direktivctl workflows exec mywf.yaml
 
 ## Workflow Attributes
 
-Based on naming convetion workflow attributes can be set as well. If the file starts with the characters as the workflow direktivctl will assume it is a workflow attribute and create it. 
+Based on naming convetion workflow attributes can be set as well. If the file starts with the characters as the flow direktivctl will assume it is a flow attribute and create it. 
 
 ```
 mywf.yaml
 mywf.yaml.script.sh
 ```
 
-The above example will create a workflow variable `script.sh` for the workflow `mywf.yaml`.
+The above example will create a flow variable `script.sh` for the flow `mywf.yaml`.
 
 ## Profiles
 

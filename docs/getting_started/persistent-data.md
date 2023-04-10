@@ -2,7 +2,7 @@
 
 # Persistent Data
 
-Direktiv supports storing and retrieving data that is persisted beyond the scope of a single state or workflow instance. This article shows how to store and retrieve these variables. 
+Direktiv supports storing and retrieving data that is persisted beyond the scope of a single state or flow instance. This article shows how to store and retrieve these variables. 
 
 ## Demo
 
@@ -23,17 +23,17 @@ states:
     value: 'jq(.var.x)'
 ```
 
-This demo increments a counter each time the workflow is executed. It gets the variable `x` from `workflow` scope and increments it vi `jq`. The secons state stores the data in the same variable on the same scope.
+This demo increments a counter each time the flow is executed. It gets the variable `x` from `workflow` scope and increments it vi `jq`. The secons state stores the data in the same variable on the same scope.
 
 ## Scopes
 
 There are three scopes for storing persistent data: `instance`, `workflow`, and `namespace`.
 
-Data stored in the `instance` scope only exists for the duration of the running workflow instance.
+Data stored in the `instance` scope only exists for the duration of the running flow instance.
 
-Data stored in the `workflow` scope exists until the workflow definition is deleted, and is accessible to all instances of that workflow.
+Data stored in the `workflow` scope exists until the flow definition is deleted, and is accessible to all instances of that flow.
 
-Data stored in the `namespace` scope exists until the namespace itself is deleted, and is accessible to all instances of all workflows originating on that namespace.
+Data stored in the `namespace` scope exists until the namespace itself is deleted, and is accessible to all instances of all flows originating on that namespace.
 
 ## Setter State
 
@@ -86,7 +86,7 @@ Direktiv makes no effort to guarantee any thread-safety on persistent data. Mult
 Accessing persistent data from within a function is a fairly straightforward process. The request that the custom function receives from Direktiv contains a header 'Direktiv-TempDir', which contains all of the variables specified in the function definition. The `as`, `key`, `scope`, and `type` fields can all play a role in the placement and naming of files within this directory:
 
 - `key`
-  - The key used to select a variable from within the workflow definition. If no `as` field is provided, the file on a custom function will correspond to the value of `key`.
+  - The key used to select a variable from within the flow definition. If no `as` field is provided, the file on a custom function will correspond to the value of `key`.
 - `scope`
   - Which scope to get the variable from: `instance`, `workflow`, or `namespace`. Defaults to `instance` if omitted.
 - `as`

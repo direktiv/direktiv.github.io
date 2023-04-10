@@ -3,9 +3,9 @@
 
 Many flows require sensitive information such as passwords or authentication tokens to access third-party APIs. This article shows the best way to handle sensitive data such as this so that they don not need to be stored as plaintext in flow definitions. Additionally this article shows how to pull containers from a private repository.
 
-## Demo
+Stored secrets can be requested in a function via the `secrets` attribute and is available as `.secrets.SECRETNAME`
 
-```yaml
+```yaml title="Secrets"
 functions:
 - id: httprequest
   image: direktiv/request:v1
@@ -24,11 +24,9 @@ states:
         "Authorization": "bearer jq(.secrets.secretToken)"
 ```
 
-This workflow will use a private Docker container marketplace.gcr.io to perform a GET request and return the results to the instance data.
-
 ## Registries
 
-Direktiv can store authentication information for a Docker repository on a namespace-by-namespace basis. Creating secrets can be done via the [Direktiv API](../../api) or web interface in the settings page.
+Direktiv can store authentication information for a container repositories on a namespace-by-namespace basis. Creating secrets can be done via the [Direktiv API](../../api) or web interface in the settings page.
 
 With the relevant registry defined, functions referencing containers on that registry become accessible. For example, if a registry was created via the api with the following curl command:
 
@@ -45,21 +43,9 @@ curl -X 'POST' \
 
 This registry would be used automatically by Direktiv when running the workflow in the demo.
 
-### Registry Types
-
-There are 3 types of registries that encompass different function scopes:
-#### Namespace Registries
-Namespace registries are applied to all services and functions created in the same namespace.
-
-#### Global Registries
-Global registries are applied to all services and functions irrelevant to the namespace. These registries are also used by global services.
-
-#### Global Private Registries
-Global private registries are only used by global services.
-
 #### Example Google Artifact Registry
 
-To use the Google Artifact Registry a service account with a key iis required. How to create a service account and generate a key is documented [here](https://cloud.google.com/artifact-registry/docs/docker/authentication#json-key).
+To use the Google Artifact Registry a service account with a key is required. How to create a service account and generate a key is documented [here](https://cloud.google.com/artifact-registry/docs/docker/authentication#json-key).
 
 The keed needs to be in base64 format. On linux it can be converted with the following command:
 
@@ -75,7 +61,9 @@ Please make sure that there are no line wraps in the base64 file. For base64 enc
 |Username|_json_key_base64|
 |Password|ewogICJ0eXBlIjo...WlJkMWhqK1RRRF|
 
-*Note: If a registry is created after a service, the service will need to be recreated to use the latest registry.*
+!!!note
+    If a registry is created after a service, the service will need to be recreated to use the latest registry.
+
 ## Secrets
 
 Similar to how registry tokens are stored, arbitrary secrets can also be stored. That includes passwords, API tokens, certificates, or anything else. Secrets are stored on a namespace-by-namespace basis as key-value pairs. Secreats can be defined with the [Direktiv API](../../api) or web interface.

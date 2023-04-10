@@ -7,7 +7,7 @@
 
 ## NoopStateDefinition
 
-Often workflows need to do something that can be achieved using logic built into most state types. For example, to log something, or to transform the instance data by running a `jq` command. In many cases this can be done by an existing state within the workflow, but sometimes it's necessary to split it out into a separate state. The `noop` state exists for this purpose.
+Often flows need to do something that can be achieved using logic built into most state types. For example, to log something, or to transform the instance data by running a `jq` command. In many cases this can be done by an existing state within the workflow, but sometimes it's necessary to split it out into a separate state. The `noop` state exists for this purpose.
 
 | Parameter | Description | Type | Required |
 | --- | --- | --- | --- |

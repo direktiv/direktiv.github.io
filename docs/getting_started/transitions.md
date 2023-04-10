@@ -40,7 +40,7 @@ Running the above example will always go to the `failure` state because no input
 
 ## Input Data
 
-To make the above example more useful the flow needs input data. Input data in Direktiv will never be empty. If the workflow is called with no data it will be executed with an empty JSON object `{}`. If the payload is in JSON format it will be base64 encoded and provided with the attribute `input`. 
+To make the above example more useful the flow needs input data. Input data in Direktiv will never be empty. If the flow is called with no data it will be executed with an empty JSON object `{}`. If the payload is in JSON format it will be base64 encoded and provided with the attribute `input`. 
 
 ```json
 {
@@ -56,7 +56,7 @@ The above flow can be called with a simple JSON providing a value for age.
 }
 ```
 
-The curl command to call the workflow via the API is the following. Please adjust the workflow and server name if required.
+The curl command to call the flow via the API is the following. Please adjust the flow and server name if required.
 
 ```sh
 curl -X POST http://localhost:8080/api/namespaces/demo/tree/MYWORKFLOWNAME?op=wait \
