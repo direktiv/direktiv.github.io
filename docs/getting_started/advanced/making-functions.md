@@ -24,9 +24,9 @@ In the above example Direktiv would post JSON `{ "hello": "world" }` to the func
 
 ## Reporting Errors
 
-If something goes wrong a function can report an error to the calling workflow instance by adding HTTP headers to the response. If these headers are populated the execution of the function will be considered a failure regardless of what's stored in response data.
+If something goes wrong a function can report an error to the calling flow instance by adding HTTP headers to the response. If these headers are populated the execution of the function will be considered a failure regardless of what's stored in response data.
 
-The headers to report errors are: `Direktiv-ErrorCode` and `Direktiv-ErrorMessage`. If an error message is defined without defining an error code the calling workflow instance will be marked as "crashed" without exposing any helpful information, so it's important to always define both. Errors raised by functions are always 'catchable' by their error codes.
+The headers to report errors are: `Direktiv-ErrorCode` and `Direktiv-ErrorMessage`. If an error message is defined without defining an error code the calling flow instance will be marked as "crashed" without exposing any helpful information, so it's important to always define both. Errors raised by functions are always 'catchable' by their error codes.
 
 ```json title="Error Headers"
   "Direktiv-ErrorCode": "myapp.input",
@@ -39,7 +39,7 @@ Logging for functions is a simple HTTP POST or GET request to the address:
 
 `http://localhost:8889/log?aid=$ACTIONID`
 
-If POST is used the body of the request is getting logged for GET requests add a *log* request parameter. The important parameter is $ACTIONID. Each requests gets an action id which identifies the workflow instance. This parameter has to be passed back to attach the log to the instance. This information is passed in as in the initial request (*Direktiv-ActionID*).
+If POST is used the body of the request is getting logged for GET requests add a *log* request parameter. The important parameter is $ACTIONID. Each requests gets an action id header which identifies the flow instance. This parameter has to be passed back to attach the log to the instance. This information is passed in as in the initial request (*Direktiv-ActionID*).
 
 ## Examples
 

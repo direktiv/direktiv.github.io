@@ -54,7 +54,7 @@ Becomes:
 }
 ```
 
-This treatment of binary data allows flows to handle non-JSON inputs. Common examples include XML and form data. Just use a function to extract the information needed from these other formats and convert them to JSON.
+This treatment of binary data allows workflows to handle non-JSON inputs. Common examples include XML and form data. Just use a function to extract the information needed from these other formats and convert them to JSON.
 
 One thing to keep in mind that might trip you up: if you provide no input data whatsoever that's not valid JSON. It is valid binary data, which means this input:
 
@@ -73,7 +73,7 @@ An empty string is a valid base64 representation of zero bytes.
 
 ## CRON
 
-By their nature, scheduled flows have empty input. They will always be:
+By their nature, scheduled workflows have empty input. They will always be:
 
 ```json
 {}
@@ -83,7 +83,7 @@ This doesn't mean they have to do exactly the same thing each time, it just mean
 
 ## CloudEvents Events
 
-Workflows that are triggered by receiving one or more events will include the received event(s) in their input data. Each received event will appear in the instance data under a property with the same value as their event type, to allow flows to distinguish between events.
+Workflows that are triggered by receiving one or more events will include the received event(s) in their input data. Each received event will appear in the instance data under a property with the same value as their event type, to allow workflows to distinguish between events.
 
 For an instance triggered with the following event:
 

@@ -1,6 +1,6 @@
 # Timeouts
 
-Direktiv supports timeouts on different levels. The main reason for having timeouts is to avoid having long-running or orphaned flows. The default timeout for workflows and actions is 15 minutes.
+Direktiv supports timeouts on different levels. The main reason for having timeouts is to avoid having long-running or orphaned flows. The default timeout for flows and actions is 15 minutes.
 
 ## Flow Timeouts
 
@@ -86,4 +86,4 @@ states:
 ```
 
 !!! warning "Timeouts in States"
-    Direktiv is not automatically calculating timeouts. If an action has a 30 minute timeout the workflow timeout has to be increased as well to cater for long running actions. 
+    Direktiv is not automatically calculating timeouts. If an action has a 30 minute timeout the flow timeout has to be increased as well to cater for long-running actions. 

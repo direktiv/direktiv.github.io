@@ -17,9 +17,9 @@ nav:
       - Validating Input: getting_started/validating.md
       - Secrets & Registries: getting_started/secrets-registries.md
       - Advanced Topics:
-          - Timeouts: getting_started/advanced/timeout.md 
+          - Timeouts: getting_started/advanced/timeout.md
           - Custom Functions: getting_started/advanced/making-functions.md
-          - Metadata: getting_started/advanced/metadata.md 
+          - Metadata: getting_started/advanced/metadata.md
   - Installation:
       - Install: installation/index.md
       - Kubernetes: installation/kubernetes.md

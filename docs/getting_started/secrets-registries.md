@@ -41,7 +41,7 @@ curl -X 'POST' \
 }'
 ```
 
-This registry would be used automatically by Direktiv when running the workflow in the demo.
+This registry would be used automatically by Direktiv when running the flow in the demo.
 
 #### Example Google Artifact Registry
 
@@ -68,7 +68,7 @@ Please make sure that there are no line wraps in the base64 file. For base64 enc
 
 Similar to how registry tokens are stored, arbitrary secrets can also be stored. That includes passwords, API tokens, certificates, or anything else. Secrets are stored on a namespace-by-namespace basis as key-value pairs. Secreats can be defined with the [Direktiv API](../../api) or web interface.
 
-Wherever actions appear in workflow definitions there's always an optional `secrets` field. For every secret named in this field, Direktiv will find and decrypt the relevant secret from your namespace and add it to the data from which the action input is generated just before running the `jq` command that generates that logic. This means your `jq` commands can reference your secret and place it wherever it needs to be.
+Wherever actions appear in flow definitions there's always an optional `secrets` field. For every secret named in this field, Direktiv will find and decrypt the relevant secret from your namespace and add it to the data from which the action input is generated just before running the `jq` command that generates that logic. This means your `jq` commands can reference your secret and place it wherever it needs to be.
 
 Direktiv discards the secret-enriched data after generating the action input, so the secrets won't naturally appear in your instance output or logs. But once Direktiv passes that data to your action it has no control over how it's used. It's up to you to ensure your action doesn't log sensitive information and doesn't send sensitive information where it shouldn't go.
 
