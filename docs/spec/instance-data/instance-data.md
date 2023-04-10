@@ -16,7 +16,7 @@ So is this:
 
 ```json
 {
-	"list": [1, 2, 3]
+  "list": [1, 2, 3]
 }
 ```
 
@@ -24,12 +24,12 @@ And this:
 
 ```json
 {
-	"a": 5,
-	"b": "6",
-	"c": true,
-	"d": {
-		"list": [7, "8"]
-	}
+  "a": 5,
+  "b": "6",
+  "c": true,
+  "d": {
+    "list": [7, "8"]
+  }
 }
 ```
 
@@ -49,7 +49,7 @@ Nor is this:
 
 ```json
 [{
-	"a": 5
+  "a": 5
 }]
 ```
 
@@ -57,7 +57,7 @@ Another way of looking at it: it's not valid instance data unless it's valid JSO
 
 ## Size Limit
 
-The size of instance data is measured in terms of the length (in bytes) of its JSON representation. For technical reasons, there is an enforced upper limit allowed for this maximum size. This limit can vary according to the specific configuration of a Direktiv installation, but the default is 32 MiB.
+The size of instance data is measured in terms of the length (in bytes) of its JSON representation. For technical reasons, there is an enforced upper limit allowed for this maximum size. This limit can vary according to the specific configuration of a Direktiv installation, but the default is 128 MiB.
 
 ## Lifecycle
 

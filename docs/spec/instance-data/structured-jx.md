@@ -16,67 +16,50 @@ The one exception to this rule is if the returned data type is a string, in whic
 
 ### Example 1
 
-**Instance Data**
-
-```json
+```json title="Instance Data"
 {
-	"a": [1, 2, 3]
+  "a": [1, 2, 3]
 }
 ```
 
-**Structured JX**
-
-```yaml
+```yaml title="Structured JX"
 'jq(.a)'
 ```
 
-**Evaluated Result**
-
-```json
+```json title="Evaluated Result"
 [1, 2, 3]
 ```
 
 ### Example 2
 
-**Instance Data**
 
-```json
+```json title="Instance Data"
 {
-	"a": [1, 2, 3]
+  "a": [1, 2, 3]
 }
 ```
 
-**Structured JX**
-
-```yaml
+```yaml title="Structured JX"
 'a: jq(.a)'
 ```
 
-**Evaluated Result**
-
-```json
+```json title="Evaluated Result"
 "a: [1, 2, 3]"
 ```
 
 ### Example 3
 
-**Instance Data**
-
-```json
+```json title="Instance Data"
 {
-	"a": "hello"
+  "a": "hello"
 }
 ```
 
-**Structured JX**
-
-```yaml
+```yaml title="Structured JX"
 'a: jq(.a)'
 ```
 
-**Evaluated Result**
-
-```json
+```json title="Evaluated Result"
 "a: hello"
 ```
 
@@ -90,15 +73,11 @@ When writing scripts this way, the instance data is copied and exposed to the sc
 
 ### Example 1
 
-**JQ**
-
-```yaml
+```yaml title="JQ"
 transform: 'jq({x: 5})'
 ```
 
-**Analogous Javascript**
-
-```yaml
+```yaml title="Analogous Javascript"
 transform: |
   js(
     items = new Object()
@@ -109,15 +88,11 @@ transform: |
 
 ## Example 2
 
-**JQ**
-
-```yaml
+```yaml title="JQ"
 transform: 'jq({x: .a})'
 ```
 
-**Analogous Javascript**
-
-```yaml
+```yaml title="Analogous Javascript"
 transform: |
   js(
     items = new Object()
@@ -134,24 +109,20 @@ The "Structured" part of Structured JX is so named because you don't have to pro
 
 ### Example
 
-**Instance Data Before Transform**
-
-```json
+```json title="Instance Data Before Transform"
 {
-	"a": [1, 2, 3]
+  "a": [1, 2, 3]
 }
 ```
 
-**Transform**
-
-```yaml
+```yaml title="Transform"
 tranform:
   x: 'jq(.a)'
   y: |
     js(
-	  var output = data['a'].map((x) => {return ++x;})
+    var output = data['a'].map((x) => {return ++x;})
       return output
-	)
+  )
   z: 5
   listA: ["a", "b", "c"]
   listB:
@@ -160,21 +131,19 @@ tranform:
   - f
   obj:
     i: 10
-	j: 'jq(.a[2])'
+  j: 'jq(.a[2])'
 ```
 
-**Evaluated Result**
-
-```json
+```json title="Evaluated Result"
 {
-	"listA": ["a", "b", "c"],
-	"listB": ["d", "e", "f"],
-	"obj": {
-		"i": 10,
-		"j": 3
-	},
-	"x": [1, 2, 3],
-	"y": [2, 3, 4],
-	"z": 5
+  "listA": ["a", "b", "c"],
+  "listB": ["d", "e", "f"],
+  "obj": {
+    "i": 10,
+    "j": 3
+  },
+  "x": [1, 2, 3],
+  "y": [2, 3, 4],
+  "z": 5
 }
 ```

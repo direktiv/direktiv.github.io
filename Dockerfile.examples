@@ -1,0 +1,12 @@
+FROM golang:1.19 as builder
+
+COPY example-builder/ src/
+
+RUN cd src/ && go build -o /builder main.go
+
+
+FROM ubuntu:22.04
+
+COPY --from=builder /builder /builder
+
+CMD ["/builder", "/examples"]

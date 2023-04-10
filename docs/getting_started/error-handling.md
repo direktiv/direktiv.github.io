@@ -1,87 +1,31 @@
-### Retries
-
-One obvious use for loops is to retry some logic if an error occurs, but there's no need to design looping workflow because Direktiv has configurable error catching & retrying available on every action-based state. This will be discussed in a later article.
-
 # Error Handling
 
+One obvious use for loops is to retry some logic if an error occurs, but there's no need to design looping flow because Direktiv has configurable error catching & retrying available on every action-based state. This will be discussed in a later article.
 
-Handling errors can be an important part of a workflow. In this article you'll learn about timeouts, how to catch errors, retries, and recovery.
+Handling errors can be an important part of a flow.
 
 ## Demo
 
 ```yaml
-id: unreliable
-start:
-  type: scheduled
-  cron: "0 * * * *"
 functions:
-- id: select
-  image: direktiv/select:v1
-  type: reusable
-- id: insert
-  image: direktiv/insert:v1
-  type: reusable
-- id: delete
-  image: direktiv/delete:v1
-  type: reusable
-- id: cruncher
-  image: direktiv/cruncher:v1
-  type: reusable
-- id: notify
-  image: direktiv/notifier:v1
-  type: reusable
+- id: http-request
+  image: gcr.io/direktiv/functions/http-request:1.0
+  type: knative-workflow
 states:
-- id: select-rows
+- id: do-request
   type: action
   action:
-    function: select
+    function: http-request
+    input:
+      url: http://doesnotexist.xy
     retries:
-      max_attempts: 3
-      delay: PT30S
+      max_attempts: 2
+      delay: PT5S
       multiplier: 2.0
       codes: [".*"]
-  transform: 'jq(.return)'
-  transition: crunch-numbers
-  catch:
-  - error: "*"
-- id: crunch-numbers
-  type: action
-  action:
-    function: cruncher
-  transform: 'jq(.return)'
-  transition: store-some-results
-- id: store-some-results
-  type: action
-  action:
-    function: insert
-    input: 'jq(.someResults)'
-  transition: store-other-results
-  catch:
-  - error: "*"
-    transition: report-failure
-- id: store-other-results
-  type: action
-  action:
-    function: insert
-    input: 'jq(.otherResults)'
-  catch:
-  - error: "*"
-    transition: revert-store-some-results
-- id: revert-store-some-results
-  type: action
-  action:
-    function: delete
-    input: 'jq(.someResults)'
-  transition: report-failure
-- id: report-failure
-  type: action
-  action:
-    function: notifier
 ```
 
-In this demo the `select`, `delete`, and `insert` functions are hypothetical containers that interact with a database, and the `crunch` function is a hypothetical container that produces some output from an input. The `notifier` function is a stand-in for whatever method you want to report an error: email, SMS, etc.
-
-This demo simulates some sort of database transaction through a workflow in order to demonstrate error handling. In reality you should write a custom Isolate to actually perform a real database transaction if possible.
+In this example a request is being made to an URL. This URL does not exist to simulate the retry mechanism. It uses the multiplier to try within 5 seconds the first time and 10 seconds the second time.
 
 ## Catchable Errors
 
@@ -89,13 +33,41 @@ Errors that occur during instance execution usually are considered "catchable". 
 
 Errors have a "code", which is a string formatted in a style similar to a domain name. Error catchers can explicitly catch a single error code or they can use `*` wildcards in their error codes to catch ranges of errors. Setting the error catcher to just "`*`" means it will handle any error, so long as no catcher defined higher up in the list has already caught it.
 
-If no catcher is able to handle an error, the workflow will fail immediately.
+If no catcher is able to handle an error, the flow will fail immediately.
+
+
+```yaml
+functions:
+- id: http-request
+  image: gcr.io/direktiv/functions/http-request:1.0
+  type: knative-workflow
+states:
+- id: do-request
+  type: action
+  action:
+    function: http-request
+    input:
+      url: http://doesnotexist.xy
+    retries:
+      max_attempts: 2
+      delay: PT5S
+      multiplier: 2.0
+      codes: [".*"]
+  catch:
+  - error: "direktiv.retries.exceeded"
+    transition: handle-error
+- id: handle-error
+  type: noop
+  log: this did not work
+```
+
+In this case the flow catches the failed retries and transitions to `handle-error` and the flow finished successful. Every other error will mark the flow execution as failed.
 
 ## Uncatchable Errors
 
-Rarely, some errors are considered "uncatchable", but generally an uncatchable error becomes catchable if escalated to a calling workflow. One example of this is the error triggered by Direktiv if a workflow fails to complete within its maximum timeout.
+Rarely, some errors are considered "uncatchable", but generally an uncatchable error becomes catchable if escalated to a calling flow. One example of this is the error triggered by Direktiv if a flow fails to complete within its maximum timeout.
 
-If a workflow fails to complete within its maximum timeout it will not be given an opportunity to catch the error and continue running. But if that workflow is running as a subflow its parent workflow will be able to detect and handle that error.
+If a flow fails to complete within its maximum timeout it will not be given an opportunity to catch the error and continue running. But if that flow is running as a subflow its parentflow will be able to detect and handle that error.
 
 ## Retries
 
@@ -113,4 +85,24 @@ In this example you can see that a maximum number of attempts is defined, alongs
 
 ## Recovery
 
-Workflows sometimes perform actions which may need to be reverted or undone if the workflow as a whole cannot complete successfully. Solving these problems requires careful use of error catchers and transitions.
+Flows sometimes perform actions which may need to be reverted or undone if the flow as a whole cannot complete successfully. Solving these problems requires careful use of error catchers and transitions.
+
+## Cause Errors
+
+Sometimes it is important to fail the workflow with a custom error. This is possible with the `error` state. This can used e.g. in switch states.
+
+```yaml
+states:
+- id: a
+  type: switch
+  defaultTransition: fail
+  conditions:
+  - condition: 'jq(.y == true)'
+
+- id: fail
+  type: error
+  error: badinput
+  message: 'value y not set'
+```
+
+In this example if the payload does not contain `y: true` the flow fails. The error throwns `badinput` is thrown and the flow failed. The error `badinput` could be caught by a parent flow.

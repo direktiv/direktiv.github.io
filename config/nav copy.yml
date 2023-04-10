@@ -1,23 +1,27 @@
 INHERIT: redirects.yml
 nav:
-  - Quickstart: index.md
-  - Getting Started:
+  - Getting Started: 
       - Getting Started: getting_started/index.md
       - Namespaces: getting_started/namespaces.md
       - Flows & States: getting_started/states.md
       - Transforms & JQ/JS: getting_started/transforms.md
       - Input & Transitions: getting_started/transitions.md
+    #   - Conditional Transitions: getting_started/conditional-transitions.md
       - Introduction to Functions: getting_started/functions-intro.md
+    #   - Scheduling: getting_started/scheduling.md
+    #   - Subflows: getting_started/subflows.md
       - Persistent Data: getting_started/persistent-data.md
       - Error Handling: getting_started/error-handling.md
-      - Events in Direktiv: getting_started/events.md
+      - Events: getting_started/events.md
       - Validating Input: getting_started/validating.md
       - Secrets & Registries: getting_started/secrets-registries.md
+    #   - Making Custom Functions: getting_started/making-functions.md
+    #   - Using Functions: getting_started/using-functions.md
       - Advanced Topics:
-          - Timeouts: getting_started/validating.md
-          - Start Types: getting_started/validating.md
+          - Timeouts: getting_started/validating.md 
+          - Start Types: getting_started/validating.md 
           - Custom Functions: getting_started/making-functions.md
-          - Metadata: getting_started/validating.md
+          - Metadata: getting_started/validating.md 
   - Installation:
       - Install: installation/index.md
       - Kubernetes: installation/kubernetes.md
@@ -67,20 +71,28 @@ nav:
       - direktivctl: environment/cli.md
       - Git Sync: environment/git.md
   - Examples:
-    - AWS Examples: examples/aws.md
-    - Conditional State: examples/conditional-states.md
-    - Counter: examples/counter-persistent-data.md
-    - Cron: examples/cron.md
-    - Foreach : examples/foreach.md
-    - Greeting Example: examples/greeting.md
-    - Event-based Workflow: examples/greeting-event-listener.md
-    - Convert Input: examples/input-convert.md
-    - Request API: examples/request-external-api.md
-    - Scripting: examples/scripting.md
-    - Solving Math Expressions: examples/solving-math-expressions.md
-    - Subflows: examples/subflows.md
-    - Variable Mime Type Example: examples/variable-mime-type.md
-    - Variable Scopes: examples/variables.md
+      - Greeting (ActionState): examples/greeting.md
+      - Event-based Greeting (StartEvent): examples/event-based-greeting.md
+      - Solving Math Expressions (Foreach): examples/solving-math-expressions.md
+      - Parallel Execution (Parallel): examples/parallel-execution.md
+      - Check Credit Score (ConsumeEvent): examples/event-based-transition.md
+      - Handling Non-JSON Input: examples/non-json-input.md
+      - Logging: examples/logging.md
+      - Create VM and DNS Record: examples/create-vm-set-dns.md
+      - Reacting to Consuming Cloud Events: examples/respond-to-events.md
+      - Check for Website Change: examples/website-change.md
+      - Terraform or Ansible: examples/terraform-and-ansible.md
+      - Running Terraform Scripts: examples/using-terraform-plugin.md
+      - Convert Markdown to Multiple Languages: examples/md-translation.md
+      - Check Email for Intent: examples/check-email-for-intent.md
+      - Blur a NSFW Image: examples/automatically-blur-nsfw-images.md
+      - Check Email for Mobile Number: examples/regex-check-for-mobile.md
+      - Git Clone and Go Build: examples/git-clone-go-build.md
+      - Scheduling (ScheduledStartType): examples/scheduled-example.md
+      - Event Listener (EventStartType): examples/start-example.md
+      - EventAnd Listener (EventAndStartType): examples/start-event-and-example.md
+      - EventXor Listener (EventXorStartType): examples/start-event-xor-example.md
+      - Variable Mimetypes: examples/variable-mime-types.md
   - Events:
       - General: events/index.md
       - Filter: events/filter.md

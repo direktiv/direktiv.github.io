@@ -1,23 +1,29 @@
 INHERIT: redirects.yml
 
 nav:
-   
+  - Quickstart: index.md
   - Getting Started: 
-    - Getting Started: getting_started/index.md
-    - States: getting_started/states.md
-    - Transitions: getting_started/transitions.md
-    - Conditional Transitions: getting_started/conditional-transitions.md
-    - Transforms & JQ: getting_started/transforms.md
-    - Introduction to Functions: getting_started/functions-intro.md
-    - Scheduling: getting_started/scheduling.md
-    - Subflows: getting_started/subflows.md
-    - Events: getting_started/events.md
-    - Error Handling: getting_started/error-handling.md
-    - Secrets & Registries: getting_started/secrets-registries.md
-    - Making Custom Functions: getting_started/making-functions.md
-    - Persistent Data: getting_started/persistent-data.md
-    - Using Functions: getting_started/using-functions.md
-    - Isolated Functions: getting_started/isolated-functions.md
+      - Getting Started: getting_started/index.md
+      - Namespaces: getting_started/namespaces.md
+      - Flows & States: getting_started/states.md
+      - Transforms & JQ/JS: getting_started/transforms.md
+      - Input & Transitions: getting_started/transitions.md
+    #   - Conditional Transitions: getting_started/conditional-transitions.md
+      - Introduction to Functions: getting_started/functions-intro.md
+    #   - Scheduling: getting_started/scheduling.md
+    #   - Subflows: getting_started/subflows.md
+      - Persistent Data: getting_started/persistent-data.md
+      - Error Handling: getting_started/error-handling.md
+      - Events in Direktiv: getting_started/events.md
+      - Validating Input: getting_started/validating.md
+      - Secrets & Registries: getting_started/secrets-registries.md
+    #   - Making Custom Functions: getting_started/making-functions.md
+    #   - Using Functions: getting_started/using-functions.md
+      # - Advanced Topics:
+      #     - Timeouts: getting_started/validating.md 
+      #     - Start Types: getting_started/validating.md 
+      #     - Custom Functions: getting_started/making-functions.md
+      #     - Metadata: getting_started/validating.md 
   - Installation:
     - Install: installation/index.md
     - Kubernetes: installation/kubernetes.md
@@ -31,7 +37,8 @@ nav:
   - API: api.md
   - Development:
     - Standalone Environment: environment/direktiv-development-environment.md
-    - Sync Tool: environment/cli.md
+    - direktivctl: environment/cli.md
+    - Git Sync: environment/git.md
   - Examples:
     - Greeting (ActionState): examples/greeting.md
     - Event-based Greeting (StartEvent): examples/event-based-greeting.md
@@ -57,6 +64,7 @@ nav:
     - Variable Mimetypes: examples/variable-mime-types.md
   - Events:
     - General: events/index.md
+    - Filter: events/filter.md
     - Cloud:
       - General: events/cloud/index.md
       - Amazon: events/cloud/amazon.md
@@ -65,4 +73,4 @@ nav:
     - Knative:
       - Eventing: events/knative/knative.md
       - Kafka Example: events/knative/example.md
-   
+      - VMware Example: events/knative/vmware.md

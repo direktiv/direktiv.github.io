@@ -1,12 +1,11 @@
 
 # Secrets & Registries
 
-Many workflows require sensitive information such as passwords or authentication tokens to access third-party APIs. In this article you'll learn the best way to handle sensitive data such as this so that you don't need to store them as plaintext in workflow definitions. You'll also learn how to source Docker containers from private repositories.
+Many flows require sensitive information such as passwords or authentication tokens to access third-party APIs. This article shows the best way to handle sensitive data such as this so that they don not need to be stored as plaintext in flow definitions. Additionally this article shows how to pull containers from a private repository.
 
 ## Demo
 
 ```yaml
-id: httpget
 functions:
 - id: httprequest
   image: direktiv/request:v1

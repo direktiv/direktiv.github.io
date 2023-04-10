@@ -2,19 +2,24 @@
 
 BRANCH=${BRANCH:-'main'}
 
-rm -rf docs/spec   
-rm -rf direktiv
+# rm -rf docs/spec   
+# rm -rf direktiv
 
-if [ -z "$DIR" ];
-then
-    echo "Cloning branch $BRANCH"
-    git clone -b $BRANCH https://github.com/direktiv/direktiv.git
-    cp -r direktiv/specification docs/spec
-    rm -rf direktiv
-else
-    echo "Copying directory $DIR"
-    cp -r $DIR docs/spec
-fi
+# if [ -z "$DIR" ];
+# then
+#     echo "Cloning branch $BRANCH"
+#     git clone -b $BRANCH https://github.com/direktiv/direktiv.git
+#     cp -r direktiv/specification docs/spec
+#     rm -rf direktiv
+# else
+#     echo "Copying directory $DIR"
+#     cp -r $DIR docs/spec
+# fi
+
+rm -rf direktiv
+cp -Rf /home/jensg/go/src/github.com/direktiv/direktiv direktiv
+cp -r direktiv/specification/* docs/spec
+rm -rf direktiv
 
 echo "Scanning docs..."
 
@@ -27,4 +32,7 @@ do
     echo "${path}"
 done
 
+# cat docs/spec/index.yml config/nav-template.yml | yq -o j '.'  | jq '.index = [.index[] | walk(if type == "string" then ("spec/" + .) else . end) ]' | jq '.nav = [{index:.index, nav:.nav[]} | if .nav."Specification"? then .nav."Specification"=.index else . end | .nav] | del(.index)' 
+
 cat docs/spec/index.yml config/nav-template.yml | yq -o j '.' | jq '.index = [.index[] | walk(if type == "string" then ("spec/" + .) else . end) ]' | jq '.nav = [{index:.index, nav:.nav[]} | if .nav."Specification"? then .nav."Specification"=.index else . end | .nav] | del(.index)' | yq -P '.' > config/nav.yml
+# cat docs/spec/index.yml config/nav-template.yml | yq -o j '.' | jq '.index = [.index[] | walk(if type == "string" then ("spec/" + .) else . end) ]' | jq '.nav = [{index:.index, nav:.nav[]} | if .nav."Specification"? then .nav."Specification"=.index else . end | .nav] | del(.index)' | yq -P '.' > config/nav.yml

@@ -10,15 +10,30 @@ update-api:
 	cd build/api/direktiv; make api-docs
 	cat build/api/direktiv/scripts/api/api.md > docs/api.md
 
+
+.PHONY: update-spec
+update-spec:
+	./get-spec.sh
+
 .PHONY: install-deps
 install-deps:
 	./install-swagger.sh
 
-# Validate jekyll files
-.PHONY: validate-api
-validate-api:
-	bundle exec jekyll build --drafts
-	bundle exec htmlproofer ./_site --url-ignore "/#/"
+.PHONY: create-examples
+create-examples:
+	rm -Rf direktiv-examples
+	git clone https://github.com/direktiv/direktiv-examples.git
+	docker build -f Dockerfile.examples -t exbuilder  .
+	docker run -v $(shell pwd)/direktiv-examples:/examples exbuilder
+	$(shell pwd)/add-example-nav.sh
+	rm -Rf docs/examples
+	cp -Rf direktiv-examples/out docs/examples
+	rm -f docs/examples/nav.out
+
+
+.PHONY: update-all
+update-all: update-spec create-examples update-api
+
 
 .PHONY: test-links
 test-links:
