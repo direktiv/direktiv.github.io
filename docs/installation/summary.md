@@ -26,9 +26,9 @@ echo $(pwd));
 ### Install Linkerd
 
 ```bash
-helm repo add linkerd https://helm.linkerd.io/stable;
+helm repo add linkerd https://helm.linkerd.io/stable
 
-helm install linkerd-crds linkerd/linkerd-crds -n linkerd --create-namespace 
+helm install linkerd-crds linkerd/linkerd-crds -n linkerd --create-namespace
 
 helm install linkerd-control-plane \
   -n linkerd \
@@ -77,12 +77,11 @@ echo "database:
 ```
 
 ```bash
-helm install -f direktiv.yaml direktiv direktiv/direktiv
+helm install -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
 ```
 
 ### Get IP of Direktiv
 
 ```bash
-kubectl get services direktiv-ingress-nginx-controller --output jsonpath='{.status.loadBalancer.ingress[0].ip}'
+kubectl -n direktiv get services direktiv-ingress-nginx-controller --output jsonpath='{.status.loadBalancer.ingress[0].ip}'
 ```
-
