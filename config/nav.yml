@@ -74,6 +74,7 @@ nav:
     - Counter: examples/counter-persistent-data.md
     - Cron: examples/cron.md
     - Foreach : examples/foreach.md
+    - Self-Destroying VM in GCP: examples/gcp-vm-destroy.md
     - Greeting Example: examples/greeting.md
     - Event-based Workflow: examples/greeting-event-listener.md
     - Convert Input: examples/input-convert.md

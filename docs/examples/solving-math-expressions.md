@@ -35,7 +35,7 @@ description: |
 
 functions:
 - id: solve-math-expression
-  image: gcr.io/direktiv/functions/bash:1.0
+  image: direktiv/bash:dev
   type: knative-workflow
 
 states:

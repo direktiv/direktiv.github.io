@@ -9,7 +9,7 @@ If Direktiv gets non-JSON input, in this case a binary file, it encodes it as Ba
 ```yaml title="Convert Flow"
 functions:
 - id: csvkit
-  image: gcr.io/direktiv/functions/csvkit:1.0
+  image: direktiv/csvkit:dev
   type: knative-workflow
 
 # Fetch base64 input and store it workflow variable

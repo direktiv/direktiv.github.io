@@ -37,7 +37,7 @@ description: |
   Execute a HTTP request to generate a persons details from the fake data API fakerapi. 
 functions:
 - id: http-request
-  image: gcr.io/direktiv/functions/http-request:1.0
+  image: direktiv/http-request:dev
   type: knative-workflow
 states:
 #

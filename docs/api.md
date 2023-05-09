@@ -34,14 +34,14 @@ Direktiv Documentation can be found at https://docs.direktiv.io/
 
 ### Security Schemes
 
-#### api_key (header: KEY)
+#### direktiv-token (header: KEY)
 
 
 
 > **Type**: apikey
 
 ### Security Requirements
-  * api_key
+  * direktiv-token
 
 ## All endpoints
 
@@ -592,7 +592,7 @@ POST /api/functions/namespaces/{namespace}
 Creates namespace scoped knative service.
 Service Names are unique on a scope level.
 These services can be used as functions in workflows, more about this can be read here:
-https://docs.direktiv.io/docs/walkthrough/using-functions.html
+https://docs.direktiv.io/getting_started/functions-intro/
 
 
 #### Parameters

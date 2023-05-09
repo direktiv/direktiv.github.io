@@ -53,7 +53,7 @@ start:
 
 functions:
 - id: hello-world
-  image: gcr.io/direktiv/functions/hello-world:1.0
+  image: direktiv/hello-world:dev
   type: knative-workflow
 
   

@@ -11,7 +11,7 @@ This is the most basic example. It shows that each action call in the foreach lo
 ```yaml title="Simple Foreach"
 functions:
 - id: echo
-  image: gcr.io/direktiv/functions/echo:1.0
+  image: direktiv/echo:dev
   type: knative-workflow
 
 states:
@@ -66,7 +66,7 @@ This examples shows how to use JQ for a more complex foreach scenario. It genera
 ```yaml title="JQ Foreach"
 functions:
 - id: echo
-  image: gcr.io/direktiv/functions/echo:1.0
+  image: direktiv/echo:dev
   type: knative-workflow
   
 states:
@@ -138,7 +138,7 @@ This example uses Javascript to achieve the same outcome. If data structures are
 ```yaml title="JS Foreach"
 functions:
 - id: echo
-  image: gcr.io/direktiv/functions/echo:1.0
+  image: direktiv/echo:dev
   type: knative-workflow
 
 states:
