@@ -42,6 +42,10 @@ helm install linkerd-control-plane \
 
 To use the service mesh (and, in particular, the mTLS communication) between pods within a Direktiv cluster the namespaces need to be annotated for Linkerd to inject its proxy. The default namespace to annotate is `direktiv`.
 
+```bash title="Create Namespace"
+kubectl create namespace direktiv
+```
+
 ```bash title="Annotate Namespace"
 kubectl annotate ns --overwrite=true direktiv linkerd.io/inject=enabled
 ```

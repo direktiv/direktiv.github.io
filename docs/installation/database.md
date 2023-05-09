@@ -265,7 +265,7 @@ echo "database:
 
 ## Restore from S3
 
-It is always recommended to test the backup and restore before using Direktiv in production. To restore from S3 is a straightforward process. The first step is to pick the backup used for the restore process. It can be found under `bd/backup` in the bucket used for backups in S3. It looks like this: `20221023-042407F`. There are two differtent scenarios to consider. The first one is a restore for an existing database. This can be a restore of as certain backup or a point-in-time recovery. This can be achieved with a `restore` attribute in the dtaabase configuration YAML.
+It is always recommended to test the backup and restore before using Direktiv in production. To restore from S3 is a straightforward process. The first step is to pick the backup used for the restore process. It can be found under `bd/backup` in the bucket used for backups in S3. It looks like this: `20221023-042407F`. There are two differtent scenarios to consider. The first one is a restore for an existing database. This can be a restore of as certain backup or a point-in-time recovery. This can be achieved with a `restore` attribute in the database configuration YAML.
 
 
 ```yaml title="Restore From S3 (Same Database)"
@@ -386,7 +386,6 @@ sudo chown -R 26:tape  /var/lib/rancher/k3s/storage/<New PV Directory>
 
 The selected restore needs to be configured in the database configuration YAML and applied with `kubectl apply -f mydb.yaml`.
 
-
 ```yaml title="Restore from PVC"
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
@@ -432,6 +431,7 @@ kubectl -n postgres get pods \
   --selector=postgres-operator.crunchydata.com/role=master \
   -o jsonpath='{.items[*].metadata.labels.postgres-operator\.crunchydata\.com/instance}'
 ```
+
 ```bash title="Cluster Information"
 kubectl -n postgres describe postgrescluster direktiv
 ```

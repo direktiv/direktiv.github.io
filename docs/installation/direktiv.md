@@ -83,4 +83,10 @@ Using this `direktiv.yaml` configuration, deploy the direktiv helm chart:
 helm install -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
 ```
 
+Direktiv should now be running. Run this to get the IP of the UI:
+
+```bash
+kubectl -n direktiv get services direktiv-ingress-nginx-controller --output jsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
+
 For more configuration options go to Direktiv's [helm charts](https://github.com/direktiv/direktiv-charts/tree/main/charts/direktiv).

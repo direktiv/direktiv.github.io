@@ -2,7 +2,7 @@ If you're beginning your journey with Direktiv, there are two easy ways to do so
 
 ## Docker (Linux only)
 
-The Docker image works on Linux only and can be used foe easy development of flows on a local machine.
+The Docker image works on Linux only and can be used for easy development of flows on a local machine.
 
 ```sh title="Running Docker Image"
 docker run --privileged -p 8080:80 -ti direktiv/direktiv-kube
