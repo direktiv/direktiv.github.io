@@ -10,21 +10,21 @@
       
       
       
-        <link rel="canonical" href="https://docs.direktiv.io/spec/variables/system/">
+        <link rel="canonical" href="https://docs.direktiv.io/examples/gcp-vm-destroy/">
       
-      <link rel="icon" href="../../../assets/favicon.ico">
+      <link rel="icon" href="../../assets/favicon.ico">
       <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.6">
     
     
       
-        <title>System - direktiv</title>
+        <title>Self-Destroying VM in GCP - direktiv</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.20d9efc8.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
         
           
           
@@ -45,9 +45,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#system-variables" class="md-skip">
+        <a href="#self-destroying-vm-in-gcp" class="md-skip">
           Skip to content
         </a>
       
@@ -88,9 +88,9 @@
 
 <header class="md-header md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="direktiv" class="md-header__button md-logo" aria-label="direktiv" data-md-component="logo">
+    <a href="../.." title="direktiv" class="md-header__button md-logo" aria-label="direktiv" data-md-component="logo">
       
-  <img src="../../../assets/path36.png" alt="logo">
+  <img src="../../assets/path36.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              System
+              Self-Destroying VM in GCP
             
           </span>
         </div>
@@ -175,7 +175,7 @@
 
 
   <li class="md-tabs__item">
-    <a href="../../.." class="md-tabs__link">
+    <a href="../.." class="md-tabs__link">
       Quickstart
     </a>
   </li>
@@ -190,7 +190,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../getting_started/" class="md-tabs__link">
+      <a href="../../getting_started/" class="md-tabs__link">
         Getting Started
       </a>
     </li>
@@ -206,7 +206,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../installation/" class="md-tabs__link">
+      <a href="../../installation/" class="md-tabs__link">
         Installation
       </a>
     </li>
@@ -215,8 +215,6 @@
       
         
   
-  
-    
   
 
 
@@ -229,7 +227,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../workflow-yaml/workflow/" class="md-tabs__link md-tabs__link--active">
+      <a href="../../spec/workflow-yaml/workflow/" class="md-tabs__link">
         Specification
       </a>
     </li>
@@ -244,7 +242,7 @@
 
 
   <li class="md-tabs__item">
-    <a href="../../../api/" class="md-tabs__link">
+    <a href="../../api/" class="md-tabs__link">
       API
     </a>
   </li>
@@ -259,7 +257,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../environment/direktiv-development-environment/" class="md-tabs__link">
+      <a href="../../environment/direktiv-development-environment/" class="md-tabs__link">
         Development
       </a>
     </li>
@@ -269,13 +267,15 @@
         
   
   
+    
+  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="../../../examples/aws/" class="md-tabs__link">
+      <a href="../aws/" class="md-tabs__link md-tabs__link--active">
         Examples
       </a>
     </li>
@@ -291,7 +291,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../events/" class="md-tabs__link">
+      <a href="../../events/" class="md-tabs__link">
         Events
       </a>
     </li>
@@ -325,9 +325,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="direktiv" class="md-nav__button md-logo" aria-label="direktiv" data-md-component="logo">
+    <a href="../.." title="direktiv" class="md-nav__button md-logo" aria-label="direktiv" data-md-component="logo">
       
-  <img src="../../../assets/path36.png" alt="logo">
+  <img src="../../assets/path36.png" alt="logo">
 
     </a>
     direktiv
@@ -355,7 +355,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         Quickstart
       </a>
     </li>
@@ -415,7 +415,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../getting_started/">Getting Started</a>
+          <a href="../../getting_started/">Getting Started</a>
           
             <label for="__nav_2">
               <span class="md-nav__icon md-icon"></span>
@@ -438,7 +438,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/namespaces/" class="md-nav__link">
+      <a href="../../getting_started/namespaces/" class="md-nav__link">
         Namespaces
       </a>
     </li>
@@ -452,7 +452,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/states/" class="md-nav__link">
+      <a href="../../getting_started/states/" class="md-nav__link">
         Flows & States
       </a>
     </li>
@@ -466,7 +466,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/transforms/" class="md-nav__link">
+      <a href="../../getting_started/transforms/" class="md-nav__link">
         Transforms & JQ/JS
       </a>
     </li>
@@ -480,7 +480,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/transitions/" class="md-nav__link">
+      <a href="../../getting_started/transitions/" class="md-nav__link">
         Input & Transitions
       </a>
     </li>
@@ -494,7 +494,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/conditional-transitions/" class="md-nav__link">
+      <a href="../../getting_started/conditional-transitions/" class="md-nav__link">
         Conditional Transitions
       </a>
     </li>
@@ -508,7 +508,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/functions-intro/" class="md-nav__link">
+      <a href="../../getting_started/functions-intro/" class="md-nav__link">
         Introduction to Functions
       </a>
     </li>
@@ -522,7 +522,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/scheduling/" class="md-nav__link">
+      <a href="../../getting_started/scheduling/" class="md-nav__link">
         Scheduling
       </a>
     </li>
@@ -536,7 +536,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/subflows/" class="md-nav__link">
+      <a href="../../getting_started/subflows/" class="md-nav__link">
         Subflows
       </a>
     </li>
@@ -550,7 +550,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/persistent-data/" class="md-nav__link">
+      <a href="../../getting_started/persistent-data/" class="md-nav__link">
         Persistent Data
       </a>
     </li>
@@ -564,7 +564,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/error-handling/" class="md-nav__link">
+      <a href="../../getting_started/error-handling/" class="md-nav__link">
         Error Handling
       </a>
     </li>
@@ -578,7 +578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/events/" class="md-nav__link">
+      <a href="../../getting_started/events/" class="md-nav__link">
         Events in Direktiv
       </a>
     </li>
@@ -592,7 +592,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/validating/" class="md-nav__link">
+      <a href="../../getting_started/validating/" class="md-nav__link">
         Validating Input
       </a>
     </li>
@@ -606,7 +606,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/secrets-registries/" class="md-nav__link">
+      <a href="../../getting_started/secrets-registries/" class="md-nav__link">
         Secrets & Registries
       </a>
     </li>
@@ -654,7 +654,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/advanced/timeout/" class="md-nav__link">
+      <a href="../../getting_started/advanced/timeout/" class="md-nav__link">
         Timeouts
       </a>
     </li>
@@ -668,7 +668,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/advanced/making-functions/" class="md-nav__link">
+      <a href="../../getting_started/advanced/making-functions/" class="md-nav__link">
         Custom Functions
       </a>
     </li>
@@ -682,7 +682,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../getting_started/advanced/metadata/" class="md-nav__link">
+      <a href="../../getting_started/advanced/metadata/" class="md-nav__link">
         Metadata
       </a>
     </li>
@@ -738,7 +738,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../installation/">Installation</a>
+          <a href="../../installation/">Installation</a>
           
             <label for="__nav_3">
               <span class="md-nav__icon md-icon"></span>
@@ -761,7 +761,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../installation/kubernetes/" class="md-nav__link">
+      <a href="../../installation/kubernetes/" class="md-nav__link">
         Kubernetes
       </a>
     </li>
@@ -775,7 +775,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../installation/linkerd/" class="md-nav__link">
+      <a href="../../installation/linkerd/" class="md-nav__link">
         Linkerd
       </a>
     </li>
@@ -789,7 +789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../installation/database/" class="md-nav__link">
+      <a href="../../installation/database/" class="md-nav__link">
         Database
       </a>
     </li>
@@ -803,7 +803,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../installation/direktiv/" class="md-nav__link">
+      <a href="../../installation/direktiv/" class="md-nav__link">
         Direktiv
       </a>
     </li>
@@ -817,7 +817,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../installation/summary/" class="md-nav__link">
+      <a href="../../installation/summary/" class="md-nav__link">
         Quick Install
       </a>
     </li>
@@ -837,14 +837,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
       
       
       
@@ -921,7 +919,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/workflow/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/workflow/" class="md-nav__link">
         Workflow
       </a>
     </li>
@@ -935,7 +933,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/functions/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/functions/" class="md-nav__link">
         Functions
       </a>
     </li>
@@ -949,7 +947,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/starts/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/starts/" class="md-nav__link">
         Triggers / Starts
       </a>
     </li>
@@ -963,7 +961,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/timeouts/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/timeouts/" class="md-nav__link">
         Timeouts
       </a>
     </li>
@@ -977,7 +975,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/actions/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/actions/" class="md-nav__link">
         Actions
       </a>
     </li>
@@ -991,7 +989,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/errors/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/errors/" class="md-nav__link">
         Errors
       </a>
     </li>
@@ -1005,7 +1003,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/logging/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/logging/" class="md-nav__link">
         Logging
       </a>
     </li>
@@ -1019,7 +1017,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/metadata/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/metadata/" class="md-nav__link">
         Instance Metadata
       </a>
     </li>
@@ -1091,7 +1089,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/states/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/states/" class="md-nav__link">
         States
       </a>
     </li>
@@ -1105,7 +1103,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/action/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/action/" class="md-nav__link">
         action
       </a>
     </li>
@@ -1119,7 +1117,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/consume-event/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/consume-event/" class="md-nav__link">
         consumeEvent
       </a>
     </li>
@@ -1133,7 +1131,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/delay/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/delay/" class="md-nav__link">
         delay
       </a>
     </li>
@@ -1147,7 +1145,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/error/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/error/" class="md-nav__link">
         error
       </a>
     </li>
@@ -1161,7 +1159,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/events-and/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/events-and/" class="md-nav__link">
         eventsAnd
       </a>
     </li>
@@ -1175,7 +1173,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/events-xor/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/events-xor/" class="md-nav__link">
         eventsXor
       </a>
     </li>
@@ -1189,7 +1187,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/foreach/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/foreach/" class="md-nav__link">
         foreach
       </a>
     </li>
@@ -1203,7 +1201,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/generate-event/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/generate-event/" class="md-nav__link">
         generateEvent
       </a>
     </li>
@@ -1217,7 +1215,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/getter/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/getter/" class="md-nav__link">
         getter
       </a>
     </li>
@@ -1231,7 +1229,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/noop/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/noop/" class="md-nav__link">
         noop
       </a>
     </li>
@@ -1245,7 +1243,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/parallel/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/parallel/" class="md-nav__link">
         parallel
       </a>
     </li>
@@ -1259,7 +1257,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/setter/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/setter/" class="md-nav__link">
         setter
       </a>
     </li>
@@ -1273,7 +1271,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/switch/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/switch/" class="md-nav__link">
         switch
       </a>
     </li>
@@ -1287,7 +1285,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow-yaml/validate/" class="md-nav__link">
+      <a href="../../spec/workflow-yaml/validate/" class="md-nav__link">
         validate
       </a>
     </li>
@@ -1355,7 +1353,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../instance-data/instance-data/" class="md-nav__link">
+      <a href="../../spec/instance-data/instance-data/" class="md-nav__link">
         Instance Data
       </a>
     </li>
@@ -1369,7 +1367,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../instance-data/input/" class="md-nav__link">
+      <a href="../../spec/instance-data/input/" class="md-nav__link">
         Input
       </a>
     </li>
@@ -1383,7 +1381,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../instance-data/output/" class="md-nav__link">
+      <a href="../../spec/instance-data/output/" class="md-nav__link">
         Output
       </a>
     </li>
@@ -1397,7 +1395,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../instance-data/transforms/" class="md-nav__link">
+      <a href="../../spec/instance-data/transforms/" class="md-nav__link">
         Transforms
       </a>
     </li>
@@ -1411,7 +1409,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../instance-data/structured-jx/" class="md-nav__link">
+      <a href="../../spec/instance-data/structured-jx/" class="md-nav__link">
         Structured JX
       </a>
     </li>
@@ -1425,7 +1423,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../instance-data/security/" class="md-nav__link">
+      <a href="../../spec/instance-data/security/" class="md-nav__link">
         Security
       </a>
     </li>
@@ -1444,14 +1442,12 @@
               
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
       
       
       
@@ -1480,7 +1476,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../variables/" class="md-nav__link">
+      <a href="../../spec/variables/variables/" class="md-nav__link">
         Variables
       </a>
     </li>
@@ -1492,21 +1488,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../spec/variables/system/" class="md-nav__link">
         System
       </a>
-      
     </li>
   
 
@@ -1533,7 +1519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../api/" class="md-nav__link">
+      <a href="../../api/" class="md-nav__link">
         API
       </a>
     </li>
@@ -1582,7 +1568,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../environment/direktiv-development-environment/" class="md-nav__link">
+      <a href="../../environment/direktiv-development-environment/" class="md-nav__link">
         Standalone Environment
       </a>
     </li>
@@ -1596,7 +1582,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../environment/cli/" class="md-nav__link">
+      <a href="../../environment/cli/" class="md-nav__link">
         direktivctl
       </a>
     </li>
@@ -1610,7 +1596,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../environment/git/" class="md-nav__link">
+      <a href="../../environment/git/" class="md-nav__link">
         Git Sync
       </a>
     </li>
@@ -1630,12 +1616,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
       
       
       
@@ -1690,7 +1678,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/aws/" class="md-nav__link">
+      <a href="../aws/" class="md-nav__link">
         AWS Examples
       </a>
     </li>
@@ -1704,7 +1692,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/conditional-states/" class="md-nav__link">
+      <a href="../conditional-states/" class="md-nav__link">
         Conditional State
       </a>
     </li>
@@ -1718,7 +1706,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/counter-persistent-data/" class="md-nav__link">
+      <a href="../counter-persistent-data/" class="md-nav__link">
         Counter
       </a>
     </li>
@@ -1732,7 +1720,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/cron/" class="md-nav__link">
+      <a href="../cron/" class="md-nav__link">
         Cron
       </a>
     </li>
@@ -1746,7 +1734,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/foreach/" class="md-nav__link">
+      <a href="../foreach/" class="md-nav__link">
         Foreach
       </a>
     </li>
@@ -1758,11 +1746,21 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../../examples/gcp-vm-destroy/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Self-Destroying VM in GCP
       </a>
+      
     </li>
   
 
@@ -1774,7 +1772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/greeting/" class="md-nav__link">
+      <a href="../greeting/" class="md-nav__link">
         Greeting Example
       </a>
     </li>
@@ -1788,7 +1786,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/greeting-event-listener/" class="md-nav__link">
+      <a href="../greeting-event-listener/" class="md-nav__link">
         Event-based Workflow
       </a>
     </li>
@@ -1802,7 +1800,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/input-convert/" class="md-nav__link">
+      <a href="../input-convert/" class="md-nav__link">
         Convert Input
       </a>
     </li>
@@ -1816,7 +1814,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/request-external-api/" class="md-nav__link">
+      <a href="../request-external-api/" class="md-nav__link">
         Request API
       </a>
     </li>
@@ -1830,7 +1828,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/scripting/" class="md-nav__link">
+      <a href="../scripting/" class="md-nav__link">
         Scripting
       </a>
     </li>
@@ -1844,7 +1842,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/solving-math-expressions/" class="md-nav__link">
+      <a href="../solving-math-expressions/" class="md-nav__link">
         Solving Math Expressions
       </a>
     </li>
@@ -1858,7 +1856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/subflows/" class="md-nav__link">
+      <a href="../subflows/" class="md-nav__link">
         Subflows
       </a>
     </li>
@@ -1872,7 +1870,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/variable-mime-type/" class="md-nav__link">
+      <a href="../variable-mime-type/" class="md-nav__link">
         Variable Mime Type Example
       </a>
     </li>
@@ -1886,7 +1884,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../examples/variables/" class="md-nav__link">
+      <a href="../variables/" class="md-nav__link">
         Variable Scopes
       </a>
     </li>
@@ -1931,7 +1929,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../events/">Events</a>
+          <a href="../../events/">Events</a>
           
             <label for="__nav_8">
               <span class="md-nav__icon md-icon"></span>
@@ -1954,7 +1952,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/filter/" class="md-nav__link">
+      <a href="../../events/filter/" class="md-nav__link">
         Filter
       </a>
     </li>
@@ -1991,7 +1989,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../../events/cloud/">Cloud</a>
+          <a href="../../events/cloud/">Cloud</a>
           
             <label for="__nav_8_3">
               <span class="md-nav__icon md-icon"></span>
@@ -2014,7 +2012,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/cloud/amazon/" class="md-nav__link">
+      <a href="../../events/cloud/amazon/" class="md-nav__link">
         Amazon
       </a>
     </li>
@@ -2028,7 +2026,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/cloud/azure/" class="md-nav__link">
+      <a href="../../events/cloud/azure/" class="md-nav__link">
         Azure
       </a>
     </li>
@@ -2042,7 +2040,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/cloud/gcp/" class="md-nav__link">
+      <a href="../../events/cloud/gcp/" class="md-nav__link">
         Google Cloud Platform
       </a>
     </li>
@@ -2097,7 +2095,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/knative/knative/" class="md-nav__link">
+      <a href="../../events/knative/knative/" class="md-nav__link">
         Eventing
       </a>
     </li>
@@ -2111,7 +2109,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/knative/example/" class="md-nav__link">
+      <a href="../../events/knative/example/" class="md-nav__link">
         Kafka Example
       </a>
     </li>
@@ -2125,7 +2123,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../events/knative/vmware/" class="md-nav__link">
+      <a href="../../events/knative/vmware/" class="md-nav__link">
         VMware Example
       </a>
     </li>
@@ -2178,36 +2176,148 @@
                 
                   
 
-  <a href="https://github.com/direktiv/direktiv/edit/master/docs/spec/variables/system.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/direktiv/direktiv/edit/master/docs/examples/gcp-vm-destroy.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
-<h1 id="system-variables">System Variables</h1>
-<p>In addition to the standard scopes, there is a special <code>system</code> scope. This scope is a utility to make miscellaneous information accessible to an instance. The following special variables exist in the system scope:</p>
-<table>
-<thead>
-<tr>
-<th>Key</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>instance</td>
-<td>Returns the instance ID of the running instance.</td>
-</tr>
-<tr>
-<td>uuid</td>
-<td>Returns a randomly generated UUID.</td>
-</tr>
-<tr>
-<td>epoch</td>
-<td>Returns the current time in unix/epoch format.</td>
-</tr>
-</tbody>
-</table>
+<h1 id="self-destroying-vm-in-gcp">Self-Destroying VM in GCP</h1>
+<p><a href="https://github.com/direktiv/direktiv-examples/tree/main/gcp-vm-destroy">Self-Destroying VM in GCP on Github</a></p>
+<p>This example shows how to create virtual machines (VM) in Google cloud and delete after a certain time. This can be used for build processes or creating test instances. This example requires a <a href="https://cloud.google.com/iam/docs/keys-create-delete">service account JSON</a> key in Google Cloud.</p>
+<p>It consist of three workflows. The create flow is responsible for creating the virtual machine. This example uses a Google Cloud VM but conceptually it works with every cloud provider. This flow returns all the important information about the created machine. At the end it starts a subflow which waits for an event to delete the virtual machine. If that event does not arrive and times out, the delete process starts even in the absence of that event. </p>
+<p>This flow has a validate state at the beginning and a transform to set defaults for the virtual machine creation.</p>
+<div class="highlight"><span class="filename">Create VM Flow</span><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcp</span><span class="w"></span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcr.io/direktiv/functions/gcp:1.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deleter</span><span class="w"> </span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">subflow</span><span class="w"></span>
+<span class="w">  </span><span class="nt">workflow</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deleter.yaml</span><span class="w"></span>
+
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
+
+<span class="c1"># validate input for flow</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">input</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">validate</span><span class="w"></span>
+<span class="w">  </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create GCP VM</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span><span class="w"></span>
+<span class="w">    </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;name&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">        </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VM Name</span><span class="w"></span>
+<span class="w">      </span><span class="nt">disk</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">        </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Disk Size</span><span class="w"></span>
+<span class="w">      </span><span class="nt">zone</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">        </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Zone</span><span class="w"></span>
+<span class="w">      </span><span class="nt">machine</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">        </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Machine Type</span><span class="w"></span>
+<span class="w">      </span><span class="nt">tags</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array</span><span class="w"></span>
+<span class="w">        </span><span class="nt">items</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.name)</span><span class="w"></span>
+<span class="w">    </span><span class="nt">disk</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.disk // &quot;10GB&quot;)</span><span class="w"></span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.zone // &quot;us-west2-a&quot;)</span><span class="w"></span>
+<span class="w">    </span><span class="nt">machine</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.machine // &quot;e2-standard-16&quot;)</span><span class="w"></span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.tags // [])</span><span class="w"></span>
+<span class="w">  </span><span class="nt">transition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcp</span><span class="w"></span>
+
+<span class="c1"># create vm with parameters provided</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcp</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">action</span><span class="w"></span>
+<span class="w">  </span><span class="nt">action</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;gcpJSONKey&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;gcpProject&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;gcpAccount&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">input</span><span class="p">:</span><span class="w"> </span>
+<span class="w">      </span><span class="nt">account</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.secrets.gcpAccount)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.secrets.gcpProject)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.secrets.gcpJSONKey | @base64 )</span><span class="w"></span>
+<span class="w">      </span><span class="nt">commands</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcloud compute instances create jq(.name) --boot-disk-size jq(.disk) --zone jq(.zone) --machine-type jq(.machine) jq(if .tags then &quot;--tags &quot; + (.tags | join(&quot;,&quot;)) end) --format=json</span><span class="w"></span>
+<span class="w">  </span><span class="nt">transition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">load-delete</span><span class="w"></span>
+
+<span class="c1"># start the delete flow</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">load-delete</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">action</span><span class="w"></span>
+<span class="w">  </span><span class="nt">async</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">action</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deleter</span><span class="w"></span>
+<span class="w">    </span><span class="nt">input</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.name)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.zone)</span><span class="w"></span>
+</code></pre></div>
+<p>The <code>timeout</code> defines how long that flow waits before it starts to delete the virtual machine. </p>
+<div class="highlight"><span class="filename">Delete Flow</span><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcp</span><span class="w"></span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcr.io/direktiv/functions/gcp:1.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>
+
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
+
+<span class="c1"># waits for the delete event, if it times out it deletes the VM anyways</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wait</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">consumeEvent</span><span class="w"></span>
+<span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PT1H</span><span class="w"></span>
+<span class="w">  </span><span class="nt">log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">waiting for delete event for jq(.name)</span><span class="w"></span>
+<span class="w">  </span><span class="nt">event</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">io.direktiv.gcp.vm.delete</span><span class="w"> </span>
+<span class="w">    </span><span class="nt">context</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.name)</span><span class="w"></span>
+<span class="w">  </span><span class="nt">transition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check-instance</span><span class="w"></span>
+<span class="w">  </span><span class="nt">catch</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">error</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;direktiv.cancels.timeout.soft&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">transition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check-instance</span><span class="w"></span>
+
+<span class="c1"># lists instances to check if there is something to delete</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check-instance</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">action</span><span class="w"></span>
+<span class="w">  </span><span class="nt">action</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;gcpJSONKey&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;gcpProject&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;gcpAccount&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">input</span><span class="p">:</span><span class="w"> </span>
+<span class="w">      </span><span class="nt">account</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.secrets.gcpAccount)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.secrets.gcpProject)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.secrets.gcpJSONKey | @base64 )</span><span class="w"></span>
+<span class="w">      </span><span class="nt">commands</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcloud compute instances list --filter=&quot;name=jq(.name)&quot; --format json</span><span class="w"></span>
+<span class="w">  </span><span class="nt">transition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">length-check</span><span class="w"></span>
+
+<span class="c1"># if the previous state returns a VM it proceeds to deleting</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">length-check</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">switch</span><span class="w"></span>
+<span class="w">  </span><span class="nt">conditions</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;jq(.return.gcp[0].result</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">length</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">0)&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">transition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delete</span><span class="w"></span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delete</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">action</span><span class="w"></span>
+<span class="w">  </span><span class="nt">action</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;gcpJSONKey&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;gcpProject&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;gcpAccount&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">input</span><span class="p">:</span><span class="w"> </span>
+<span class="w">      </span><span class="nt">account</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.secrets.gcpAccount)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.secrets.gcpProject)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.secrets.gcpJSONKey | @base64 )</span><span class="w"></span>
+<span class="w">      </span><span class="nt">commands</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcloud compute instances delete jq(.name) --zone=jq(.zone) -q</span><span class="w"></span>
+</code></pre></div>
+<p>The virtual machine can be deleted by sending an event. This can come from outside via an API call or within a flow with the <code>generateEvent</code> state.</p>
+<div class="highlight"><span class="filename">Trigger Event Example</span><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">a</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generateEvent</span><span class="w"></span>
+<span class="w">  </span><span class="nt">event</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">io.direktiv.gcp.vm.delete</span><span class="w"></span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
+<span class="w">    </span><span class="nt">context</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jq(.name)</span><span class="w"></span>
+</code></pre></div>
 
 
 
@@ -2233,7 +2343,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../variables/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Variables" rel="prev">
+        <a href="../foreach/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Foreach" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -2242,20 +2352,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Variables
+              Foreach
             </div>
           </div>
         </a>
       
       
         
-        <a href="../../../api/" class="md-footer__link md-footer__link--next" aria-label="Next: API" rel="next">
+        <a href="../greeting/" class="md-footer__link md-footer__link--next" aria-label="Next: Greeting Example" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              API
+              Greeting Example
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -2315,10 +2425,10 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.tabs.sticky", "navigation.top", "navigation.indexes"], "search": "../../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.tabs.sticky", "navigation.top", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.078830c0.min.js"></script>
+      <script src="../../assets/javascripts/bundle.078830c0.min.js"></script>
       
     
   </body>
