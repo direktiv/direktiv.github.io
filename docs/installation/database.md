@@ -2,7 +2,7 @@
 
 Direktiv requires a PostgreSQL 13+ database. It acts as datastore as well as pub/sub system between Direktiv's components. It has been tested with Postgres offerings from cloud providers as well as on-premise installations. It is recommended to use a managed Postgres service from cloud providers. If that is not possible Postgres can be installed in Kubernetes as well. 
 
-To install a Postgres instance in Kubernetes we are using [CrunchyData's](https://www.crunchydata.com) operator and [helm charts](https://github.com/CrunchyData/postgres-operator-examples/). The following section will provide exmaples for different installation scenarions from basic testing setups to more complex high-availability configurations. For inidividual changes please visit the [CrunchyData Operator](https://access.crunchydata.com/documentation/postgres-operator/latest/) documentation page. 
+To install a Postgres instance in Kubernetes we are using [Percona's](https://docs.percona.com/percona-operator-for-postgresql/) Postgres operator. The following section will provide exmaples for different installation scenarios from basic testing setups to more complex high-availability configurations. For inidividual changes please visit the [Percona Operator](https://docs.percona.com/percona-operator-for-postgresql/) documentation page. 
 
 ##  Installing the Operator
 
@@ -10,7 +10,7 @@ The operator is provided as [Helm chart](https://helm.sh/) and the installation 
 
 ```bash title="Install Postgres Operator"
 helm repo add direktiv https://chart.direktiv.io
-helm install -n postgres --create-namespace postgres direktiv/pgo
+helm install -n postgres --create-namespace postgres direktiv/percona-postgres
 ```
 
 !!! warning annotate "Backup Ports"
@@ -27,40 +27,64 @@ kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubern
 ```
 
 ```yaml title="Basic Database Configuration"
-apiVersion: postgres-operator.crunchydata.com/v1beta1
-kind: PostgresCluster
+apiVersion: pgv2.percona.com/v2
+kind: PerconaPGCluster
 metadata:
-  name: direktiv
-  namespace: postgres
+  name: direktiv-cluster
+
 spec:
-  postgresVersion: 14
+  crVersion: 2.3.0
+
+  users:
+    - name: direktiv
+      databases:
+        - direktiv
+    - name: postgres
+
+  image: perconalab/percona-postgresql-operator:main-ppg15-postgres
+  imagePullPolicy: Always
+  postgresVersion: 15
+  port: 5432
+
   instances:
-    - name: "direktiv"
+  - name: instance1
+    replicas: 1
+    dataVolumeClaimSpec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+
+  proxy:
+    pgBouncer:
       replicas: 1
-      dataVolumeClaimSpec:
-        accessModes:
-        - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: "1Gi"
+      image: perconalab/percona-postgresql-operator:main-ppg15-pgbouncer
+
   backups:
     pgbackrest:
       global:
-        # Keep 4 Backups
         repo1-retention-full: "4"
         repo1-retention-full-type: count
+      image: perconalab/percona-postgresql-operator:main-ppg15-pgbackrest
+      manual:
+        repoName: repo1
+        options:
+         - --type=full
       repos:
       - name: repo1
         schedules:
-          # Run every Sunday
           full: "0 1 * * 0"
         volume:
           volumeClaimSpec:
             accessModes:
-            - "ReadWriteOnce"
+            - ReadWriteOnce
             resources:
               requests:
-                storage: "4Gi"
+                storage: 1Gi
+  pmm:
+    enabled: false
+    image: percona/pmm-client:2.37.0
 ```
 
 ### High-Availability
@@ -72,55 +96,92 @@ kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubern
 ```
 
 ```yaml title="High-Availability Configuration"
-apiVersion: postgres-operator.crunchydata.com/v1beta1
-kind: PostgresCluster
+apiVersion: pgv2.percona.com/v2
+kind: PerconaPGCluster
 metadata:
-  name: direktiv
+  name: direktiv-cluster
   namespace: postgres
 spec:
-  postgresVersion: 14
+  crVersion: 2.3.0
+
+  users:
+    - name: direktiv
+      databases:
+        - direktiv
+    - name: postgres
+
+  image: perconalab/percona-postgresql-operator:main-ppg15-postgres
+  imagePullPolicy: Always
+  postgresVersion: 15
+  port: 5432
+
   instances:
-    - name: "instance1"
-      replicas: 3
+  - name: instance1
+    replicas: 2
+    resources:
+      limits:
+        cpu: 2.0
+        memory: 4Gi
+    dataVolumeClaimSpec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 4Gi
+    topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          postgres-operator.crunchydata.com/instance-set: instance1
+
+  proxy:
+    pgBouncer:
+      replicas: 2
+      image: perconalab/percona-postgresql-operator:main-ppg15-pgbouncer
       affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-                - key: "postgres-operator.crunchydata.com/cluster"
-                  operator: In
-                  values:
-                  - direktiv
-            topologyKey: "kubernetes.io/hostname"
-      dataVolumeClaimSpec:
-        accessModes:
-        - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: "1Gi"
+       podAntiAffinity:
+         preferredDuringSchedulingIgnoredDuringExecution:
+         - weight: 1
+           podAffinityTerm:
+             labelSelector:
+               matchLabels:
+                 postgres-operator.crunchydata.com/cluster: keycloakdb
+                 postgres-operator.crunchydata.com/role: pgbouncer
+             topologyKey: kubernetes.io/hostname
+
   backups:
     pgbackrest:
+      image: perconalab/percona-postgresql-operator:main-ppg15-pgbackrest
       global:
         repo1-retention-full: "4"
         repo1-retention-full-type: count
+      manual:
+        repoName: repo1
+        options:
+         - --type=full
       repos:
       - name: repo1
         schedules:
-          full: "0 1 * * 0"
+          full: "0 0 * * 6"
           differential: "0 1 * * 1-6"
         volume:
           volumeClaimSpec:
             accessModes:
-            - "ReadWriteOnce"
+            - ReadWriteOnce
             resources:
               requests:
-                storage: "4Gi"
+                storage: 4Gi
+  pmm:
+    enabled: false
+    image: percona/pmm-client:2.37.0
 ```
 
 
 ### High-Availability with S3 Backup
 
-CrunchyData's Postgres operator can store backups in AWS, Azure and Google Cloud as well. The following example shows how to use AWS S3 as backup storage. A secret is required for the S3 backend with the appropriate permission. This requires a `s3.conf` file with the S3 key and secret.
+Percona's Postgres operator can store backups in AWS, Azure and Google Cloud as well. The following example shows how to use AWS S3 as backup storage. A secret is required for the S3 backend with the appropriate permission. This requires a `s3.conf` file with the S3 key and secret.
 
 ```bash title="s3.conf"
 [global]
@@ -140,104 +201,76 @@ To test if the values are correct run the following command:
 kubectl get secret -n postgres direktiv-pgbackrest-secret -o go-template='{{ index .data "s3.conf" | base64decode }}'
 ```
 
-High-Availabilty can be achieved by scaling the database replicas. The following example has added daily differential backups and pod anti-affinity to spread the pods across the cluster. If anti-affinity is used the cluster needs to have the same number of nodes and database replicas.
+High-Availabilty can be achieved by scaling the database replicas. The following example has added daily differential backups and pod anti-affinity and topology spread constraints to spread the pods across the cluster. If anti-affinity is used the cluster needs to have the same number of nodes and database replicas.
 
 ```bash title="S3 Backup Install"
 kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/s3.yaml
 ```
 
 ```yaml title="S3 Configuration"
-  apiVersion: postgres-operator.crunchydata.com/v1beta1
-  kind: PostgresCluster
-  metadata:
-    name: direktiv
-    namespace: postgres
-  spec:
-    postgresVersion: 14
-    instances:
-      - name: "instance1"
-        replicas: 1
-        dataVolumeClaimSpec:
-          accessModes:
-          - "ReadWriteOnce"
-          resources:
-            requests:
-              storage: "1Gi"
-    backups:
-      pgbackrest:
-        configuration:
-        - secret:
-            name: direktiv-pgbackrest-secret
-        global:
-          repo1-retention-full: "4"
-          repo1-retention-full-type: count
-        repos:
-        - name: repo1
-          s3:
-            bucket: my-bucket
-            endpoint: s3.eu-central-1.amazonaws.com:443
-            region: eu-central-1
-          schedules:
-            full: "0 1 * * 0"
+apiVersion: pgv2.percona.com/v2
+kind: PerconaPGCluster
+metadata:
+  name: direktiv-cluster
+  namespace: postgres
+spec:
+  crVersion: 2.3.0
+
+  users:
+    - name: direktiv
+      databases:
+        - direktiv
+    - name: postgres
+
+  image: perconalab/percona-postgresql-operator:main-ppg15-postgres
+  imagePullPolicy: Always
+  postgresVersion: 15
+  port: 5432
+
+  instances:
+  - name: instance1
+    replicas: 1
+    dataVolumeClaimSpec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+
+  proxy:
+    pgBouncer:
+      replicas: 1
+      image: perconalab/percona-postgresql-operator:main-ppg15-pgbouncer
+
+  backups:
+    pgbackrest:
+      image: perconalab/percona-postgresql-operator:main-ppg15-pgbackrest
+      global:
+        repo1-retention-full: "4"
+        repo1-retention-full-type: time
+      configuration:
+      - secret:
+          name: direktiv-pgbackrest-secret
+      manual:
+        repoName: repo1
+        options:
+         - --type=full
+      repos:
+      - name: repo1
+        s3:
+         bucket: direktiv-backup
+         endpoint: "https://eu-central-1.linodeobjects.com"
+         region: "US"
+        schedules:
+          full: "0 1 * * 0"
+  pmm:
+    enabled: false
+    image: percona/pmm-client:2.37.0
 ```
 
 ### Connection-Pooling
 
-Connection pooling help scaling and maintaining availability between your application and the database. The Postgres Operator provides the option to install `pgBouncer` as connection pooling mechanism. If it is a multi-node cluster the `pgBouncer` replicas can be increased and spread acorss the cluster with pod anit-affinity rules. 
-
-```bash title="pgBouncer Install"
-kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/pgbouncer.yaml
-```
-
-```yaml title="pgBouncer Configuration"
-apiVersion: postgres-operator.crunchydata.com/v1beta1
-kind: PostgresCluster
-metadata:
-  name: direktiv
-  namespace: postgres
-spec:
-  postgresVersion: 14
-  instances:
-    - name: "direktiv"
-      replicas: 1
-      dataVolumeClaimSpec:
-        accessModes:
-        - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: "1Gi"
-  proxy:
-    pgBouncer:
-      replicas: 2
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-                - key: "postgres-operator.crunchydata.com/cluster"
-                  operator: In
-                  values:
-                  - direktiv
-            topologyKey: "kubernetes.io/hostname"
-  backups:
-    pgbackrest:
-      global:
-        # Keep 4 Backups
-        repo1-retention-full: "4"
-        repo1-retention-full-type: count
-      repos:
-      - name: repo1
-        schedules:
-          # Run every Sunday
-          full: "0 1 * * 0"
-        volume:
-          volumeClaimSpec:
-            accessModes:
-            - "ReadWriteOnce"
-            resources:
-              requests:
-                storage: "4Gi"
-```
+Connection pooling help scaling and maintaining availability between your application and the database. The Postgres Operator provides `pgBouncer` as connection pooling mechanism. If it is a multi-node cluster the `pgBouncer` replicas can be increased and spread across the cluster with pod anit-affinity rules. Direktiv can connect to the Postgres instances as well as to `pgBouncer`.
 
 ### Getting Database Secrets
 
@@ -245,21 +278,21 @@ Direktiv will need the database connection information during installation with 
 
 ```bash title="Database Configuration (No Connection Pooling)"
 echo "database:
-  host: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "host"}}' | base64 --decode)\"
-  port: $(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "port"}}' | base64 --decode)
-  user: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "user"}}' | base64 --decode)\"
-  password: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode)\"
-  name: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "dbname"}}' | base64 --decode)\"
+  host: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "host"}}' | base64 --decode)\"
+  port: $(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "port"}}' | base64 --decode)
+  user: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "user"}}' | base64 --decode)\"
+  password: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode)\"
+  name: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "dbname"}}' | base64 --decode)\"
   sslmode: require" > direktiv.yaml
 ```
 
 ```bash title="Database Configuration (With Connection Pooling)"
 echo "database:
-  host: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "pgbouncer-host"}}' | base64 --decode)\"
-  port: $(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "pgbouncer-port"}}' | base64 --decode)
-  user: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "user"}}' | base64 --decode)\"
-  password: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode)\"
-  name: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "dbname"}}' | base64 --decode)\"
+  host: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "pgbouncer-host"}}' | base64 --decode)\"
+  port: $(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "pgbouncer-port"}}' | base64 --decode)
+  user: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "user"}}' | base64 --decode)\"
+  password: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode)\"
+  name: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "dbname"}}' | base64 --decode)\"
   sslmode: require" > direktiv.yaml
 ```
 
