@@ -7,11 +7,17 @@ During execution data will be stored as JSON which can be accessed or modified i
 
 ## Workflow definition
 
+It is best practices for all workflows to begin with the following line, so that tools can identify it as a Direktiv workflow:
+```yaml
+direktiv_api: workflow/v1
+```
+
 All states for a flow are listed under `states`. Every flow must have at least one state. The first state under `states` will be executed first and all subsequent states need to be connected  via transitions. If a state has no `transition` attribute the flow ends at that point of the execution. 
 
 ## Simple State
 
 ```yaml
+direktiv_api: workflow/v1
 states:
 - id: hello
   type: noop

@@ -6,6 +6,8 @@ Direktiv flows can have different start actions. This can be a direct call or wa
 
  
 ```yaml title="Cron"
+direktiv_api: workflow/v1
+
 start:
   type: scheduled
   cron: '* * * * *' # Trigger a new instance every minute.

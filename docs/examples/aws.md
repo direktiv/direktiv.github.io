@@ -16,6 +16,8 @@ This flow will create a new t2.small instance on ec2 ap-southeast-2 region. The 
 
 
 ```yaml title="Start AWS Instance"
+direktiv_api: workflow/v1
+
 functions:
 - id: aws-cli
   image: direktiv/aws-cli:dev
@@ -43,6 +45,8 @@ This flow will upload a file to a S3 bucket. The file name and data are set in t
 
 
 ```yaml title="Start AWS Instance"
+direktiv_api: workflow/v1
+
 functions:
 - id: s3
   image: direktiv/aws-cli:dev

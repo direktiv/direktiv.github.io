@@ -9,6 +9,8 @@ This flow has a validate state at the beginning and a transform to set defaults 
 
 
 ```yaml title="Create VM Flow"
+direktiv_api: workflow/v1
+
 functions:
 - id: gcp
   image: gcr.io/direktiv/functions/gcp:1.0
@@ -86,6 +88,8 @@ The `timeout` defines how long that flow waits before it starts to delete the vi
 
 
 ```yaml title="Delete Flow"
+direktiv_api: workflow/v1
+
 functions:
 - id: gcp
   image: gcr.io/direktiv/functions/gcp:1.0
@@ -147,6 +151,8 @@ The virtual machine can be deleted by sending an event. This can come from outsi
 
 
 ```yaml title="Trigger Event Example"
+direktiv_api: workflow/v1
+
 states:
 - id: a
   type: generateEvent

@@ -5,6 +5,7 @@ A simple example that shows how to store a counter as a flow variable for persis
 
 
 ```yaml title="Counter Example"
+direktiv_api: workflow/v1
 description: "Simple Counter getter and setter variable example"
 states:
   #

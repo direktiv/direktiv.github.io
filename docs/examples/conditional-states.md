@@ -5,6 +5,8 @@ This example demonstrates the use of a switch state to conditional transition to
 
 
 ```yaml title="Simple Switch Statement"
+direktiv_api: workflow/v1
+
 description: |
   Conditionally transition to states depending if input credit score is higher
   or lower than creditMinRequired.

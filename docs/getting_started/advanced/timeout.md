@@ -7,6 +7,8 @@ Direktiv supports timeouts on different levels. The main reason for having timeo
 There is a general flow time out setting which controls how Direktiv will try to gracefully stop or interrupt the flow and eventually kill the flow if that is not possible. The time has to be provided in `ISO8601` format.
 
 ```yaml
+direktiv_api: workflow/v1
+
 timeouts:
   interrupt: PT20M
   kill: PT30M
@@ -22,6 +24,8 @@ states:
 Every state has a timeout attribute as well. This is in particular interesting for functions and the action state. If the timeout is triggered in an action Direktiv sends an interrupt to the action and it is up to the function to handle it.
 
 ```yaml title="Action Timeouts"
+direktiv_api: workflow/v1
+
 functions:
 - id: httprequest
   image: gcr.io/direktiv/functions/http-request:1.0
@@ -44,6 +48,8 @@ states:
 Another use for timeouts is events. There are three states consuming events: [consumeEvent](/spec/workflow-yaml/consume-event/), [eventsAnd](/spec/workflow-yaml/events-and) and [eventsXor](/spec/workflow-yaml/events-xor/). If the timeout is reached the flow fails or the error can be caught and handled. 
 
 ```yaml title="Event Wait And Timeout"
+direktiv_api: workflow/v1
+
 states:
 - id: something
   type: noop
@@ -64,6 +70,8 @@ states:
 Timeouts in actions can be caught and the error thrown is `direktiv.cancels.timeout.soft`. Based on that error the flow can be re-routed. 
 
 ```yaml title="Catch Timeout"
+direktiv_api: workflow/v1
+
 states:
 - id: something
   type: noop

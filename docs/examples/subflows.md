@@ -6,6 +6,8 @@ It uses the same parameters and provides the same functionality.
 
 
 ```yaml title="Parent Flow"
+direktiv_api: workflow/v1
+
 functions:
 # Define subflow function
 - id: sub
@@ -25,6 +27,7 @@ states:
 
 
 ```yaml title="Subflow"
+direktiv_api: workflow/v1
 states:
 - id: print
   type: noop

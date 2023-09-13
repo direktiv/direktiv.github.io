@@ -10,6 +10,8 @@ The `generate-greeting` flow generates the `greetingcloudevent` that the `eventb
 
 
 ```yaml title="Listener Workflow"
+direktiv_api: workflow/v1
+
 # Example Input:
 # This input is a cloud event and was generated from the greeting-generate flow.
 # {
@@ -79,6 +81,8 @@ states:
 
 
 ```yaml title="Generator Workflow"
+direktiv_api: workflow/v1
+
 description: |
   Generate a cloud with of type "greetingcloudevent" with name data as input.
 

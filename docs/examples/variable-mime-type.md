@@ -9,6 +9,8 @@ By default (mimeType=application/json) all variables are treated as JSON values.
 
 
 ```yaml title="JSON String Data"
+direktiv_api: workflow/v1
+
 description: |
   Store the workflow variable 'StringVar' as a json encoded string.  
 
@@ -36,6 +38,8 @@ If the data is YAML it will be converted to JSON in the variable.
 
 
 ```yaml title="JSON Data"
+direktiv_api: workflow/v1
+
 description: |
   Store the workflow variable 'StringVar' as a json.  
 
@@ -63,6 +67,8 @@ There are certain scenarios where you would not want to store the variable with 
 
 
 ```yaml title="Plain Text"
+direktiv_api: workflow/v1
+
 description: |
   Store the workflow variable 'StringVar' as a plaintext string.  
 
@@ -96,6 +102,8 @@ Another special behaviour is that it's also possible to auto decode a base64 str
 
 
 ```yaml title="Base64 Variable"
+direktiv_api: workflow/v1
+
 description: |
   Auto decode base64 string and store the resulting value 
   as the workflow variable 'MessageVar'.  

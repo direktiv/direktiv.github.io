@@ -6,6 +6,8 @@ This example shows how we can write a flow to communicate with a external API se
 
 
 ```yaml title="API Request"
+direktiv_api: workflow/v1
+
 # Example Output:
 # {
 #   "person": {

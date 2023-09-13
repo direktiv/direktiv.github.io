@@ -3,6 +3,7 @@
 In some cases it is important to validate the state of the flow. This can be done as the first state in the flow to protect the flow from rogue data or within the flow to check the state data before proceeding. Direktiv is using JSON schema to validate the state data.
 
 ```yaml title="Check Attribute"
+direktiv_api: workflow/v1
 states:
 - id: data
   type: noop
@@ -24,6 +25,7 @@ The above example will succedd because the attribute `name` is set and it is a s
 
 
 ```yaml title="Failed Attribute"
+direktiv_api: workflow/v1
 states:
 - id: start
   type: validate
@@ -43,6 +45,7 @@ JSON schema is used to validate JSON structures and not contents. It can not val
 Direktiv can generate a form if the validate state is the first state in the flow. 
 
 ```yaml title="Validate Form"
+direktiv_api: workflow/v1
 states:
 - id: start
   type: validate
@@ -61,6 +64,7 @@ states:
 In this example the `default` attribute is used and it is shown in the form. Direktiv can not set defaults via API or in a running flow. It is for  form generation only. If defaults are required `jq` can be used like `jq(.name // "Michael")`. The following validate would ask for the name but set it to `Michael` if it is empty.
 
 ```yaml title="Setting Defaults"
+direktiv_api: workflow/v1
 states:
 - id: start
   type: validate

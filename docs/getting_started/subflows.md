@@ -3,6 +3,8 @@
 Just like scripting or programming, with Direktiv it's possible to organize your logic into reusable modules. Anytime a flow is invoked by another we it is called subflow. A subflow can be called like actions and it uses the same parameters as functions.
 
 ```yaml title="Subflow 'checker'"
+direktiv_api: workflow/v1
+
 functions:
 - id: httprequest
   image: gcr.io/direktiv/functions/http-request:1.0
@@ -54,6 +56,7 @@ states:
 ```
 
 ```yaml title="Parent Flow"
+direktiv_api: workflow/v1
 functions:
 - id: checker-sub
   type: subflow
