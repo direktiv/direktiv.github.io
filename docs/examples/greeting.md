@@ -5,8 +5,6 @@ This simple example flow uses a single `action` state to call the `hello-world` 
 
 
 ```yaml title="Greeter Flow"
-direktiv_api: workflow/v1
-
 # Example Input:
 # {
 #     "name": "World"
@@ -20,6 +18,7 @@ direktiv_api: workflow/v1
 #     }
 # }
 
+direktiv_api: workflow/v1
 
 description: |
   Execute a action state to call the direktiv/greeting action, which 'greets' 

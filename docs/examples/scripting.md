@@ -11,6 +11,7 @@ In the above example there would be a `script.sh` flow variable. The following f
 
 ```yaml title="Python Flow"
 direktiv_api: workflow/v1
+
 functions:
 - id: python
   image: direktiv/python:dev

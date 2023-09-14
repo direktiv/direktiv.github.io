@@ -6,8 +6,6 @@ This example shows how we can write a flow to communicate with a external API se
 
 
 ```yaml title="API Request"
-direktiv_api: workflow/v1
-
 # Example Output:
 # {
 #   "person": {
@@ -34,6 +32,8 @@ direktiv_api: workflow/v1
 #     "website": "http://wiza.com"
 #   }
 # }
+
+direktiv_api: workflow/v1
 
 description: |
   Execute a HTTP request to generate a persons details from the fake data API fakerapi. 

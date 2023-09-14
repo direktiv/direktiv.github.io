@@ -7,8 +7,6 @@ The example demonstrates the use of an action isolate to solve a number of mathe
 
 
 ```yaml title="Solver Flow"
-direktiv_api: workflow/v1
-
 # Example Input:
 # {
 #  "expressions": [
@@ -30,6 +28,7 @@ direktiv_api: workflow/v1
 #   ]
 # }
 
+direktiv_api: workflow/v1
 
 description: |
   Executes an action that solves a math expression. 

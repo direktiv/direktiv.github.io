@@ -69,28 +69,21 @@ nav:
       - direktivctl: environment/cli.md
       - Git Sync: environment/git.md
   - Examples:
-      - Greeting (ActionState): examples/greeting.md
-      - Event-based Greeting (StartEvent): examples/event-based-greeting.md
-      - Solving Math Expressions (Foreach): examples/solving-math-expressions.md
-      - Parallel Execution (Parallel): examples/parallel-execution.md
-      - Check Credit Score (ConsumeEvent): examples/event-based-transition.md
-      - Handling Non-JSON Input: examples/non-json-input.md
-      - Logging: examples/logging.md
-      - Create VM and DNS Record: examples/create-vm-set-dns.md
-      - Reacting to Consuming Cloud Events: examples/respond-to-events.md
-      - Check for Website Change: examples/website-change.md
-      - Terraform or Ansible: examples/terraform-and-ansible.md
-      - Running Terraform Scripts: examples/using-terraform-plugin.md
-      - Convert Markdown to Multiple Languages: examples/md-translation.md
-      - Check Email for Intent: examples/check-email-for-intent.md
-      - Blur a NSFW Image: examples/automatically-blur-nsfw-images.md
-      - Check Email for Mobile Number: examples/regex-check-for-mobile.md
-      - Git Clone and Go Build: examples/git-clone-go-build.md
-      - Scheduling (ScheduledStartType): examples/scheduled-example.md
-      - Event Listener (EventStartType): examples/start-example.md
-      - EventAnd Listener (EventAndStartType): examples/start-event-and-example.md
-      - EventXor Listener (EventXorStartType): examples/start-event-xor-example.md
-      - Variable Mimetypes: examples/variable-mime-types.md
+    - AWS Examples: examples/aws.md
+    - Conditional State: examples/conditional-states.md
+    - Counter: examples/counter-persistent-data.md
+    - Cron: examples/cron.md
+    - Foreach : examples/foreach.md
+    - Self-Destroying VM in GCP: examples/gcp-vm-destroy.md
+    - Greeting Example: examples/greeting.md
+    - Event-based Workflow: examples/greeting-event-listener.md
+    - Convert Input: examples/input-convert.md
+    - Request API: examples/request-external-api.md
+    - Scripting: examples/scripting.md
+    - Solving Math Expressions: examples/solving-math-expressions.md
+    - Subflows: examples/subflows.md
+    - Variable Mime Type Example: examples/variable-mime-type.md
+    - Variable Scopes: examples/variables.md
   - Events:
       - General: events/index.md
       - Filter: events/filter.md
