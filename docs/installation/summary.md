@@ -47,8 +47,8 @@ kubectl annotate ns --overwrite=true direktiv linkerd.io/inject=enabled
 ## Database
 
 ```bash
-helm repo add direktiv https://chart.direktiv.io
-helm install -n postgres --create-namespace --set singleNamespace=true postgres direktiv/pgo
+helm repo add percona https://percona.github.io/percona-helm-charts/
+helm install -n postgres pg-operator percona/pg-operator --wait
 ```
 
 ```bash

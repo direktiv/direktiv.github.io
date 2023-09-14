@@ -9,8 +9,8 @@ To install a Postgres instance in Kubernetes we are using [Percona's](https://do
 The operator is provided as [Helm chart](https://helm.sh/) and the installation is straighforward. Add Direktiv's helm chart repository and run the installation command.
 
 ```bash title="Install Postgres Operator"
-helm repo add direktiv https://chart.direktiv.io
-helm install -n postgres --create-namespace postgres direktiv/percona-postgres
+helm repo add percona https://percona.github.io/percona-helm-charts/
+helm install -n postgres pg-operator percona/pg-operator --wait
 ```
 
 !!! warning annotate "Backup Ports"
@@ -31,7 +31,9 @@ apiVersion: pgv2.percona.com/v2
 kind: PerconaPGCluster
 metadata:
   name: direktiv-cluster
-
+  namespace: postgres
+  #  finalizers:
+  #  - percona.com/delete-pvc
 spec:
   crVersion: 2.3.0
 
@@ -41,9 +43,9 @@ spec:
         - direktiv
     - name: postgres
 
-  image: perconalab/percona-postgresql-operator:main-ppg15-postgres
+  image: perconalab/percona-postgresql-operator:main-ppg14-postgres
   imagePullPolicy: Always
-  postgresVersion: 15
+  postgresVersion: 14
   port: 5432
 
   instances:
@@ -59,14 +61,15 @@ spec:
   proxy:
     pgBouncer:
       replicas: 1
-      image: perconalab/percona-postgresql-operator:main-ppg15-pgbouncer
+      image: perconalab/percona-postgresql-operator:main-ppg14-pgbouncer
 
   backups:
     pgbackrest:
+      image: perconalab/percona-postgresql-operator:main-ppg14-pgbackrest
       global:
+        # Keep 4 Backups
         repo1-retention-full: "4"
         repo1-retention-full-type: count
-      image: perconalab/percona-postgresql-operator:main-ppg15-pgbackrest
       manual:
         repoName: repo1
         options:
@@ -74,9 +77,9 @@ spec:
       repos:
       - name: repo1
         schedules:
-          full: "0 1 * * 0"
+          full: "0 0 * * 6"
         volume:
-          volumeClaimSpec:
+          volumeClaimSpec:  
             accessModes:
             - ReadWriteOnce
             resources:
@@ -110,9 +113,9 @@ spec:
         - direktiv
     - name: postgres
 
-  image: perconalab/percona-postgresql-operator:main-ppg15-postgres
+  image: perconalab/percona-postgresql-operator:main-ppg14-postgres
   imagePullPolicy: Always
-  postgresVersion: 15
+  postgresVersion: 14
   port: 5432
 
   instances:
@@ -139,7 +142,7 @@ spec:
   proxy:
     pgBouncer:
       replicas: 2
-      image: perconalab/percona-postgresql-operator:main-ppg15-pgbouncer
+      image: perconalab/percona-postgresql-operator:main-ppg14-pgbouncer
       affinity:
        podAntiAffinity:
          preferredDuringSchedulingIgnoredDuringExecution:
@@ -153,7 +156,7 @@ spec:
 
   backups:
     pgbackrest:
-      image: perconalab/percona-postgresql-operator:main-ppg15-pgbackrest
+      image: perconalab/percona-postgresql-operator:main-ppg14-pgbackrest
       global:
         repo1-retention-full: "4"
         repo1-retention-full-type: count
@@ -222,9 +225,9 @@ spec:
         - direktiv
     - name: postgres
 
-  image: perconalab/percona-postgresql-operator:main-ppg15-postgres
+  image: perconalab/percona-postgresql-operator:main-ppg14-postgres
   imagePullPolicy: Always
-  postgresVersion: 15
+  postgresVersion: 14
   port: 5432
 
   instances:
@@ -240,11 +243,11 @@ spec:
   proxy:
     pgBouncer:
       replicas: 1
-      image: perconalab/percona-postgresql-operator:main-ppg15-pgbouncer
+      image: perconalab/percona-postgresql-operator:main-ppg14-pgbouncer
 
   backups:
     pgbackrest:
-      image: perconalab/percona-postgresql-operator:main-ppg15-pgbackrest
+      image: perconalab/percona-postgresql-operator:main-ppg14-pgbackrest
       global:
         repo1-retention-full: "4"
         repo1-retention-full-type: time
@@ -298,64 +301,44 @@ echo "database:
 
 ## Restore from S3
 
-It is always recommended to test the backup and restore before using Direktiv in production. To restore from S3 is a straightforward process. The first step is to pick the backup used for the restore process. It can be found under `bd/backup` in the bucket used for backups in S3. It looks like this: `20221023-042407F`. There are two differtent scenarios to consider. The first one is a restore for an existing database. This can be a restore of as certain backup or a point-in-time recovery. This can be achieved with a `restore` attribute in the database configuration YAML.
-
+It is always recommended to test the backup and restore before using Direktiv in production. To restore from S3 is a straightforward process. The first step is to pick the backup used for the restore process. It can be found under `pgbackrest/backup/db` in the bucket used for backups in S3. It looks like this: `20221023-042407F`. There are two differtent scenarios to consider. The first one is a restore for an existing database. This can be a restore of as certain backup or a point-in-time recovery. 
 
 ```yaml title="Restore From S3 (Same Database)"
 ...
-    backups:
-      pgbackrest:
-        configuration:
-        - secret:
-            name: direktiv-pgbackrest-secret
-        global:
-          repo1-retention-full: "4"
-          repo1-retention-full-type: count
-        repos:
-        - name: repo1
-          s3:
-            bucket: cd-direktiv-backup
-            endpoint: s3.eu-central-1.amazonaws.com:443
-            region: eu-central-1
-          schedules:
-            full: "0 1 * * 0"
-        # Enable Restore
-        restore:
-          enabled: true
-          repoName: repo1
-          options:
-          - --set=20221023-042407F
-          # point-in-time recovery alternative
-          # - --type=time
-          # - --target="2021-06-09 14:15:11-04"
+apiVersion: pgv2.percona.com/v2
+kind: PerconaPGRestore
+metadata:
+  name: restore
+  namespace: postgres
+spec:
+  pgCluster: direktiv-cluster
+  repoName: repo1
+  options:
+  - --set=20230914-061517F
+  # point-in-time recovery alternative
+  # - --type=time
+  # - --target="2023-06-09 14:15:11-04"
 ```
 
 The second scenario is if the whole database has been destroyed and it is a restore to a new database instance. In this case a `datasource` attribute has to be added to define the source for the backup.
 
 ```yaml title="Restore From S3 (New Database)"
-  apiVersion: postgres-operator.crunchydata.com/v1beta1
-  kind: PostgresCluster
-  metadata:
-    name: direktiv
-    namespace: postgres
-  spec:
+...
     dataSource:
       postgresCluster:
         clusterName: direktiv
         repoName: repo1
         options:
         - --set=20221023-042407F
-    postgresVersion: 14
-    instances:
 ...
 ```
 
 !!! info annotate "Additional Information"
-     For more information visit CrunchyData's documentation about [disaster recovery](https://access.crunchydata.com/documentation/postgres-operator/v5/tutorial/disaster-recovery/).
+     For more information visit Percona's documentation about [backup and restore](https://docs.percona.com/percona-operator-for-postgresql/2.0/backups.html).
 
 ## Restore from PVC
 
-In case the database is not using S3 backups the backups need to be stored in a safe location in case of loss of the node storing the backups. The data has to be transferred via e.g. scp in using a cron job. A restore of an existing database can be achieved with a simple `restore` attribute in the database configuration YAML mentioned in the S3 restore section of this documentation. The process is different if the backup node has been destroyed. It is important to not do this restore procedure if a backup is laready running. The backup needs to be rescheduled to execute it without running a backup in parallel.
+In case the database is not using S3 backups the backups need to be stored in a safe location in case of loss of the node storing the backups. The data has to be transferred via e.g. `scp` using a cron job. A restore of an existing database can be achieved with a simple `restore` attribute in the database configuration YAML mentioned in the S3 restore section of this documentation. The process is different if the backup node has been destroyed. It is important to not do this restore procedure if a backup is already running. The backup needs to be rescheduled to execute it without running a backup in parallel.
 
 ### Identify Backup PVC
 
@@ -366,8 +349,8 @@ kubectl get pv
 
 NAME                                       CAPACITY   ...     CLAIM         
 # This is the backup node                           
-pvc-80ae5325-8b27-4695-b6df-b362dd946cb7   1Gi        ...     postgres/direktiv-repo1                 
-pvc-ce9bb226-1038-49bf-bed6-e6d0188b228c   1Gi        ...     postgres/direktiv-direktiv-wnh4-pgdata   
+pvc-80ae5325-8b27-4695-b6df-b362dd946cb7   1Gi        ...     postgres/direktiv-cluster-repo1              
+pvc-ce9bb226-1038-49bf-bed6-e6d0188b228c   1Gi        ...     postgres/direktiv-cluster-instance1-q9sm-pgdata  
 ```
 
 Describing the PV shows the node where the data is stored and the directory of the data. This directory needs to be stored in a safe location for a later restore.
@@ -420,11 +403,7 @@ sudo chown -R 26:tape  /var/lib/rancher/k3s/storage/<New PV Directory>
 The selected restore needs to be configured in the database configuration YAML and applied with `kubectl apply -f mydb.yaml`.
 
 ```yaml title="Restore from PVC"
-apiVersion: postgres-operator.crunchydata.com/v1beta1
-kind: PostgresCluster
-metadata:
-  name: direktiv
-  namespace: postgres
+...
 spec:
   dataSource:
     postgresCluster:
@@ -433,7 +412,7 @@ spec:
       options:
       - --set=20221023-075501F
       - --archive-mode=off
-  postgresVersion: 14
+...
 ```
 
 ### Update Password
@@ -443,10 +422,10 @@ If this is a new installation of the database the password will be overwritten a
 ```bash title="Update User Password"
 
 # get the old password
-kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode
+kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode
 
 # execute in pod 
-kubectl exec -n postgres --stdin --tty direktiv-direktiv-<POD-ID> -- psql
+kubectl exec -n postgres --stdin --tty direktiv-cluster-instance1-<POD-ID> -- psql
 
 # update user password
 ALTER USER direktiv WITH PASSWORD '<PASSWORD FROM FIRST COMMAND>';
@@ -470,5 +449,5 @@ kubectl -n postgres describe postgrescluster direktiv
 ```
 
 ```bash title="Use psql in Database Instance"
-kubectl exec -n postgres --stdin --tty direktiv-direktiv-nl9z-0 -- psql
+kubectl exec -n postgres --stdin --tty direktiv-cluster-instance1-<ID> -- psql
 ```
