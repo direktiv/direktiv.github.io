@@ -2315,8 +2315,8 @@ helm install linkerd-control-plane <span class="se">\</span>
 <div class="highlight"><pre><span></span><code>kubectl annotate ns --overwrite<span class="o">=</span><span class="nb">true</span> direktiv linkerd.io/inject<span class="o">=</span>enabled
 </code></pre></div>
 <h2 id="database">Database</h2>
-<div class="highlight"><pre><span></span><code>helm repo add direktiv https://chart.direktiv.io
-helm install -n postgres --create-namespace --set <span class="nv">singleNamespace</span><span class="o">=</span><span class="nb">true</span> postgres direktiv/pgo
+<div class="highlight"><pre><span></span><code>helm repo add percona https://percona.github.io/percona-helm-charts/
+helm install -n postgres pg-operator percona/pg-operator --wait
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/basic.yaml
 </code></pre></div>

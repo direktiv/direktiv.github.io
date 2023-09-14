@@ -2286,11 +2286,11 @@
 
 <h1 id="database">Database</h1>
 <p>Direktiv requires a PostgreSQL 13+ database. It acts as datastore as well as pub/sub system between Direktiv's components. It has been tested with Postgres offerings from cloud providers as well as on-premise installations. It is recommended to use a managed Postgres service from cloud providers. If that is not possible Postgres can be installed in Kubernetes as well. </p>
-<p>To install a Postgres instance in Kubernetes we are using <a href="https://www.crunchydata.com">CrunchyData's</a> operator and <a href="https://github.com/CrunchyData/postgres-operator-examples/">helm charts</a>. The following section will provide exmaples for different installation scenarions from basic testing setups to more complex high-availability configurations. For inidividual changes please visit the <a href="https://access.crunchydata.com/documentation/postgres-operator/latest/">CrunchyData Operator</a> documentation page. </p>
+<p>To install a Postgres instance in Kubernetes we are using <a href="https://docs.percona.com/percona-operator-for-postgresql/">Percona's</a> Postgres operator. The following section will provide exmaples for different installation scenarios from basic testing setups to more complex high-availability configurations. For inidividual changes please visit the <a href="https://docs.percona.com/percona-operator-for-postgresql/">Percona Operator</a> documentation page. </p>
 <h2 id="installing-the-operator">Installing the Operator</h2>
 <p>The operator is provided as <a href="https://helm.sh/">Helm chart</a> and the installation is straighforward. Add Direktiv's helm chart repository and run the installation command.</p>
-<div class="highlight"><span class="filename">Install Postgres Operator</span><pre><span></span><code>helm repo add direktiv https://chart.direktiv.io
-helm install -n postgres --create-namespace postgres direktiv/pgo
+<div class="highlight"><span class="filename">Install Postgres Operator</span><pre><span></span><code>helm repo add percona https://percona.github.io/percona-helm-charts/
+helm install -n postgres pg-operator percona/pg-operator --wait
 </code></pre></div>
 <div class="admonition warning annotate">
 <p class="admonition-title">Backup Ports</p>
@@ -2301,91 +2301,155 @@ helm install -n postgres --create-namespace postgres direktiv/pgo
 <p>This basic configuration is good for small instances and testing. It creates weekly backups and keeps the last 4 backups. Direktiv connects directly to the Database without connection pooling.</p>
 <div class="highlight"><span class="filename">Basic Install</span><pre><span></span><code>kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/basic.yaml
 </code></pre></div>
-<div class="highlight"><span class="filename">Basic Database Configuration</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-operator.crunchydata.com/v1beta1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PostgresCluster</span><span class="w"></span>
+<div class="highlight"><span class="filename">Basic Database Configuration</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgv2.percona.com/v2</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaPGCluster</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv-cluster</span><span class="w"></span>
 <span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
+<span class="w">  </span><span class="c1">#  finalizers:</span><span class="w"></span>
+<span class="w">  </span><span class="c1">#  - percona.com/delete-pvc</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">crVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.3.0</span><span class="w"></span>
+
+<span class="w">  </span><span class="nt">users</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
+<span class="w">      </span><span class="nt">databases</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
+
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-postgres</span><span class="w"></span>
+<span class="w">  </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span><span class="w"></span>
 <span class="w">  </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span><span class="w"></span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5432</span><span class="w"></span>
+
 <span class="w">  </span><span class="nt">instances</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;direktiv&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">instance1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">dataVolumeClaimSpec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span><span class="w"></span>
+<span class="w">      </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span><span class="w"></span>
+
+<span class="w">  </span><span class="nt">proxy</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pgBouncer</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dataVolumeClaimSpec</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ReadWriteOnce&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1Gi&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbouncer</span><span class="w"></span>
+
 <span class="w">  </span><span class="nt">backups</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">pgbackrest</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbackrest</span><span class="w"></span>
 <span class="w">      </span><span class="nt">global</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="c1"># Keep 4 Backups</span><span class="w"></span>
 <span class="w">        </span><span class="nt">repo1-retention-full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span><span class="w"></span>
 <span class="w">        </span><span class="nt">repo1-retention-full-type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">count</span><span class="w"></span>
+<span class="w">      </span><span class="nt">manual</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">repoName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
+<span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--type=full</span><span class="w"></span>
 <span class="w">      </span><span class="nt">repos</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
 <span class="w">        </span><span class="nt">schedules</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="c1"># Run every Sunday</span><span class="w"></span>
-<span class="w">          </span><span class="nt">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">6&quot;</span><span class="w"></span>
 <span class="w">        </span><span class="nt">volume</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">volumeClaimSpec</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">volumeClaimSpec</span><span class="p">:</span><span class="w">  </span>
 <span class="w">            </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ReadWriteOnce&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span><span class="w"></span>
 <span class="w">            </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
 <span class="w">              </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
-<span class="w">                </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4Gi&quot;</span><span class="w"></span>
+<span class="w">                </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pmm</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/pmm-client:2.37.0</span><span class="w"></span>
 </code></pre></div>
 <h3 id="high-availability">High-Availability</h3>
 <p>High-Availabilty can be achieved by scaling the database replicas. The following example has added daily differential backups and pod anti-affinity to spread the pods across the cluster. If anti-affinity is used the cluster needs to have the same number of nodes and database replicas.</p>
 <div class="highlight"><span class="filename">Basic Install</span><pre><span></span><code>kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/ha.yaml
 </code></pre></div>
-<div class="highlight"><span class="filename">High-Availability Configuration</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-operator.crunchydata.com/v1beta1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PostgresCluster</span><span class="w"></span>
+<div class="highlight"><span class="filename">High-Availability Configuration</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgv2.percona.com/v2</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaPGCluster</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv-cluster</span><span class="w"></span>
 <span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">crVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.3.0</span><span class="w"></span>
+
+<span class="w">  </span><span class="nt">users</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
+<span class="w">      </span><span class="nt">databases</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
+
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-postgres</span><span class="w"></span>
+<span class="w">  </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span><span class="w"></span>
 <span class="w">  </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span><span class="w"></span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5432</span><span class="w"></span>
+
 <span class="w">  </span><span class="nt">instances</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;instance1&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">instance1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.0</span><span class="w"></span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4Gi</span><span class="w"></span>
+<span class="w">    </span><span class="nt">dataVolumeClaimSpec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span><span class="w"></span>
+<span class="w">      </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4Gi</span><span class="w"></span>
+<span class="w">    </span><span class="nt">topologySpreadConstraints</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">maxSkew</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">      </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes.io/hostname</span><span class="w"></span>
+<span class="w">      </span><span class="nt">whenUnsatisfiable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DoNotSchedule</span><span class="w"></span>
+<span class="w">      </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">postgres-operator.crunchydata.com/instance-set</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">instance1</span><span class="w"></span>
+
+<span class="w">  </span><span class="nt">proxy</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pgBouncer</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbouncer</span><span class="w"></span>
 <span class="w">      </span><span class="nt">affinity</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">podAntiAffinity</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">requiredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">              </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;postgres-operator.crunchydata.com/cluster&quot;</span><span class="w"></span>
-<span class="w">                  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">In</span><span class="w"></span>
-<span class="w">                  </span><span class="nt">values</span><span class="p">:</span><span class="w"></span>
-<span class="w">                  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
-<span class="w">            </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;kubernetes.io/hostname&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dataVolumeClaimSpec</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ReadWriteOnce&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1Gi&quot;</span><span class="w"></span>
+<span class="w">       </span><span class="nt">podAntiAffinity</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="nt">preferredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">           </span><span class="nt">podAffinityTerm</span><span class="p">:</span><span class="w"></span>
+<span class="w">             </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">               </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w"></span>
+<span class="w">                 </span><span class="nt">postgres-operator.crunchydata.com/cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keycloakdb</span><span class="w"></span>
+<span class="w">                 </span><span class="nt">postgres-operator.crunchydata.com/role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgbouncer</span><span class="w"></span>
+<span class="w">             </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes.io/hostname</span><span class="w"></span>
+
 <span class="w">  </span><span class="nt">backups</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">pgbackrest</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbackrest</span><span class="w"></span>
 <span class="w">      </span><span class="nt">global</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="nt">repo1-retention-full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span><span class="w"></span>
 <span class="w">        </span><span class="nt">repo1-retention-full-type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">count</span><span class="w"></span>
+<span class="w">      </span><span class="nt">manual</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">repoName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
+<span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--type=full</span><span class="w"></span>
 <span class="w">      </span><span class="nt">repos</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
 <span class="w">        </span><span class="nt">schedules</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">6&quot;</span><span class="w"></span>
 <span class="w">          </span><span class="nt">differential</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">1-6&quot;</span><span class="w"></span>
 <span class="w">        </span><span class="nt">volume</span><span class="p">:</span><span class="w"></span>
 <span class="w">          </span><span class="nt">volumeClaimSpec</span><span class="p">:</span><span class="w"></span>
 <span class="w">            </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ReadWriteOnce&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span><span class="w"></span>
 <span class="w">            </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
 <span class="w">              </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
-<span class="w">                </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4Gi&quot;</span><span class="w"></span>
+<span class="w">                </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4Gi</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pmm</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/pmm-client:2.37.0</span><span class="w"></span>
 </code></pre></div>
 <h3 id="high-availability-with-s3-backup">High-Availability with S3 Backup</h3>
-<p>CrunchyData's Postgres operator can store backups in AWS, Azure and Google Cloud as well. The following example shows how to use AWS S3 as backup storage. A secret is required for the S3 backend with the appropriate permission. This requires a <code>s3.conf</code> file with the S3 key and secret.</p>
+<p>Percona's Postgres operator can store backups in AWS, Azure and Google Cloud as well. The following example shows how to use AWS S3 as backup storage. A secret is required for the S3 backend with the appropriate permission. This requires a <code>s3.conf</code> file with the S3 key and secret.</p>
 <div class="highlight"><span class="filename">s3.conf</span><pre><span></span><code><span class="o">[</span>global<span class="o">]</span>
 repo1-s3-key<span class="o">=</span>MYKEY
 repo1-s3-key-secret<span class="o">=</span>MYSECRET
@@ -2396,172 +2460,129 @@ repo1-s3-key-secret<span class="o">=</span>MYSECRET
 <p>To test if the values are correct run the following command:</p>
 <div class="highlight"><span class="filename">Show S3 Secrets</span><pre><span></span><code>kubectl get secret -n postgres direktiv-pgbackrest-secret -o go-template<span class="o">=</span><span class="s1">&#39;{{ index .data &quot;s3.conf&quot; | base64decode }}&#39;</span>
 </code></pre></div>
-<p>High-Availabilty can be achieved by scaling the database replicas. The following example has added daily differential backups and pod anti-affinity to spread the pods across the cluster. If anti-affinity is used the cluster needs to have the same number of nodes and database replicas.</p>
+<p>High-Availabilty can be achieved by scaling the database replicas. The following example has added daily differential backups and pod anti-affinity and topology spread constraints to spread the pods across the cluster. If anti-affinity is used the cluster needs to have the same number of nodes and database replicas.</p>
 <div class="highlight"><span class="filename">S3 Backup Install</span><pre><span></span><code>kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/s3.yaml
 </code></pre></div>
-<div class="highlight"><span class="filename">S3 Configuration</span><pre><span></span><code><span class="w">  </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-operator.crunchydata.com/v1beta1</span><span class="w"></span>
-<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PostgresCluster</span><span class="w"></span>
-<span class="w">  </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
-<span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
-<span class="w">  </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span><span class="w"></span>
-<span class="w">    </span><span class="nt">instances</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;instance1&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dataVolumeClaimSpec</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ReadWriteOnce&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
-<span class="w">              </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1Gi&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">backups</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">pgbackrest</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">configuration</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secret</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv-pgbackrest-secret</span><span class="w"></span>
-<span class="w">        </span><span class="nt">global</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">repo1-retention-full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="nt">repo1-retention-full-type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">count</span><span class="w"></span>
-<span class="w">        </span><span class="nt">repos</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
-<span class="w">          </span><span class="nt">s3</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-bucket</span><span class="w"></span>
-<span class="w">            </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3.eu-central-1.amazonaws.com:443</span><span class="w"></span>
-<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eu-central-1</span><span class="w"></span>
-<span class="w">          </span><span class="nt">schedules</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">0&quot;</span><span class="w"></span>
-</code></pre></div>
-<h3 id="connection-pooling">Connection-Pooling</h3>
-<p>Connection pooling help scaling and maintaining availability between your application and the database. The Postgres Operator provides the option to install <code>pgBouncer</code> as connection pooling mechanism. If it is a multi-node cluster the <code>pgBouncer</code> replicas can be increased and spread acorss the cluster with pod anit-affinity rules. </p>
-<div class="highlight"><span class="filename">pgBouncer Install</span><pre><span></span><code>kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/pgbouncer.yaml
-</code></pre></div>
-<div class="highlight"><span class="filename">pgBouncer Configuration</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-operator.crunchydata.com/v1beta1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PostgresCluster</span><span class="w"></span>
+<div class="highlight"><span class="filename">S3 Configuration</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgv2.percona.com/v2</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaPGCluster</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv-cluster</span><span class="w"></span>
 <span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">crVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.3.0</span><span class="w"></span>
+
+<span class="w">  </span><span class="nt">users</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
+<span class="w">      </span><span class="nt">databases</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
+
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-postgres</span><span class="w"></span>
+<span class="w">  </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span><span class="w"></span>
 <span class="w">  </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span><span class="w"></span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5432</span><span class="w"></span>
+
 <span class="w">  </span><span class="nt">instances</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;direktiv&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dataVolumeClaimSpec</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ReadWriteOnce&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1Gi&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">instance1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">dataVolumeClaimSpec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span><span class="w"></span>
+<span class="w">      </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span><span class="w"></span>
+
 <span class="w">  </span><span class="nt">proxy</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">pgBouncer</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
-<span class="w">      </span><span class="nt">affinity</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">podAntiAffinity</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">requiredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">              </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;postgres-operator.crunchydata.com/cluster&quot;</span><span class="w"></span>
-<span class="w">                  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">In</span><span class="w"></span>
-<span class="w">                  </span><span class="nt">values</span><span class="p">:</span><span class="w"></span>
-<span class="w">                  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
-<span class="w">            </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;kubernetes.io/hostname&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbouncer</span><span class="w"></span>
+
 <span class="w">  </span><span class="nt">backups</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">pgbackrest</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbackrest</span><span class="w"></span>
 <span class="w">      </span><span class="nt">global</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="c1"># Keep 4 Backups</span><span class="w"></span>
 <span class="w">        </span><span class="nt">repo1-retention-full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">repo1-retention-full-type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">count</span><span class="w"></span>
+<span class="w">        </span><span class="nt">repo1-retention-full-type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">time</span><span class="w"></span>
+<span class="w">      </span><span class="nt">configuration</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secret</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv-pgbackrest-secret</span><span class="w"></span>
+<span class="w">      </span><span class="nt">manual</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">repoName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
+<span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--type=full</span><span class="w"></span>
 <span class="w">      </span><span class="nt">repos</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
+<span class="w">        </span><span class="nt">s3</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv-backup</span><span class="w"></span>
+<span class="w">         </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://eu-central-1.linodeobjects.com&quot;</span><span class="w"></span>
+<span class="w">         </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;US&quot;</span><span class="w"></span>
 <span class="w">        </span><span class="nt">schedules</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="c1"># Run every Sunday</span><span class="w"></span>
 <span class="w">          </span><span class="nt">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">0&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">volume</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">volumeClaimSpec</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">accessModes</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ReadWriteOnce&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">              </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
-<span class="w">                </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4Gi&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pmm</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/pmm-client:2.37.0</span><span class="w"></span>
 </code></pre></div>
+<h3 id="connection-pooling">Connection-Pooling</h3>
+<p>Connection pooling help scaling and maintaining availability between your application and the database. The Postgres Operator provides <code>pgBouncer</code> as connection pooling mechanism. If it is a multi-node cluster the <code>pgBouncer</code> replicas can be increased and spread across the cluster with pod anit-affinity rules. Direktiv can connect to the Postgres instances as well as to <code>pgBouncer</code>.</p>
 <h3 id="getting-database-secrets">Getting Database Secrets</h3>
 <p>Direktiv will need the database connection information during installation with a Helm chart. It is a good start for an installation YAML to have this information. It can be easily done by running a simple script:</p>
 <div class="highlight"><span class="filename">Database Configuration (No Connection Pooling)</span><pre><span></span><code><span class="nb">echo</span> <span class="s2">&quot;database:</span>
-<span class="s2">  host: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;host&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
-<span class="s2">  port: </span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;port&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2"></span>
-<span class="s2">  user: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;user&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
-<span class="s2">  password: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;password&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
-<span class="s2">  name: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;dbname&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  host: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;host&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  port: </span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;port&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2"></span>
+<span class="s2">  user: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;user&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  password: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;password&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  name: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;dbname&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
 <span class="s2">  sslmode: require&quot;</span> &gt; direktiv.yaml
 </code></pre></div>
 <div class="highlight"><span class="filename">Database Configuration (With Connection Pooling)</span><pre><span></span><code><span class="nb">echo</span> <span class="s2">&quot;database:</span>
-<span class="s2">  host: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;pgbouncer-host&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
-<span class="s2">  port: </span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;pgbouncer-port&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2"></span>
-<span class="s2">  user: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;user&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
-<span class="s2">  password: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;password&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
-<span class="s2">  name: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;dbname&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  host: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;pgbouncer-host&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  port: </span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;pgbouncer-port&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2"></span>
+<span class="s2">  user: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;user&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  password: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;password&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
+<span class="s2">  name: \&quot;</span><span class="k">$(</span>kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;dbname&quot;}}&#39;</span> <span class="p">|</span> base64 --decode<span class="k">)</span><span class="s2">\&quot;</span>
 <span class="s2">  sslmode: require&quot;</span> &gt; direktiv.yaml
 </code></pre></div>
 <h2 id="restore-from-s3">Restore from S3</h2>
-<p>It is always recommended to test the backup and restore before using Direktiv in production. To restore from S3 is a straightforward process. The first step is to pick the backup used for the restore process. It can be found under <code>bd/backup</code> in the bucket used for backups in S3. It looks like this: <code>20221023-042407F</code>. There are two differtent scenarios to consider. The first one is a restore for an existing database. This can be a restore of as certain backup or a point-in-time recovery. This can be achieved with a <code>restore</code> attribute in the database configuration YAML.</p>
+<p>It is always recommended to test the backup and restore before using Direktiv in production. To restore from S3 is a straightforward process. The first step is to pick the backup used for the restore process. It can be found under <code>pgbackrest/backup/db</code> in the bucket used for backups in S3. It looks like this: <code>20221023-042407F</code>. There are two differtent scenarios to consider. The first one is a restore for an existing database. This can be a restore of as certain backup or a point-in-time recovery. </p>
 <div class="highlight"><span class="filename">Restore From S3 (Same Database)</span><pre><span></span><code><span class="nn">...</span><span class="w"></span>
-<span class="w">    </span><span class="nt">backups</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">pgbackrest</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">configuration</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secret</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv-pgbackrest-secret</span><span class="w"></span>
-<span class="w">        </span><span class="nt">global</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">repo1-retention-full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="nt">repo1-retention-full-type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">count</span><span class="w"></span>
-<span class="w">        </span><span class="nt">repos</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
-<span class="w">          </span><span class="nt">s3</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cd-direktiv-backup</span><span class="w"></span>
-<span class="w">            </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3.eu-central-1.amazonaws.com:443</span><span class="w"></span>
-<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eu-central-1</span><span class="w"></span>
-<span class="w">          </span><span class="nt">schedules</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">0&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="c1"># Enable Restore</span><span class="w"></span>
-<span class="w">        </span><span class="nt">restore</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">          </span><span class="nt">repoName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
-<span class="w">          </span><span class="nt">options</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--set=20221023-042407F</span><span class="w"></span>
-<span class="w">          </span><span class="c1"># point-in-time recovery alternative</span><span class="w"></span>
-<span class="w">          </span><span class="c1"># - --type=time</span><span class="w"></span>
-<span class="w">          </span><span class="c1"># - --target=&quot;2021-06-09 14:15:11-04&quot;</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgv2.percona.com/v2</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaPGRestore</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pgCluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv-cluster</span><span class="w"></span>
+<span class="w">  </span><span class="nt">repoName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">options</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--set=20230914-061517F</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># point-in-time recovery alternative</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># - --type=time</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># - --target=&quot;2023-06-09 14:15:11-04&quot;</span><span class="w"></span>
 </code></pre></div>
 <p>The second scenario is if the whole database has been destroyed and it is a restore to a new database instance. In this case a <code>datasource</code> attribute has to be added to define the source for the backup.</p>
-<div class="highlight"><span class="filename">Restore From S3 (New Database)</span><pre><span></span><code><span class="w">  </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-operator.crunchydata.com/v1beta1</span><span class="w"></span>
-<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PostgresCluster</span><span class="w"></span>
-<span class="w">  </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
-<span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
-<span class="w">  </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Restore From S3 (New Database)</span><pre><span></span><code><span class="nn">...</span><span class="w"></span>
 <span class="w">    </span><span class="nt">dataSource</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">postgresCluster</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
 <span class="w">        </span><span class="nt">repoName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo1</span><span class="w"></span>
 <span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--set=20221023-042407F</span><span class="w"></span>
-<span class="w">    </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span><span class="w"></span>
-<span class="w">    </span><span class="nt">instances</span><span class="p">:</span><span class="w"></span>
 <span class="nn">...</span><span class="w"></span>
 </code></pre></div>
 <div class="admonition info annotate">
 <p class="admonition-title">Additional Information</p>
-<p>For more information visit CrunchyData's documentation about <a href="https://access.crunchydata.com/documentation/postgres-operator/v5/tutorial/disaster-recovery/">disaster recovery</a>.</p>
+<p>For more information visit Percona's documentation about <a href="https://docs.percona.com/percona-operator-for-postgresql/2.0/backups.html">backup and restore</a>.</p>
 </div>
 <h2 id="restore-from-pvc">Restore from PVC</h2>
-<p>In case the database is not using S3 backups the backups need to be stored in a safe location in case of loss of the node storing the backups. The data has to be transferred via e.g. scp in using a cron job. A restore of an existing database can be achieved with a simple <code>restore</code> attribute in the database configuration YAML mentioned in the S3 restore section of this documentation. The process is different if the backup node has been destroyed. It is important to not do this restore procedure if a backup is laready running. The backup needs to be rescheduled to execute it without running a backup in parallel.</p>
+<p>In case the database is not using S3 backups the backups need to be stored in a safe location in case of loss of the node storing the backups. The data has to be transferred via e.g. <code>scp</code> using a cron job. A restore of an existing database can be achieved with a simple <code>restore</code> attribute in the database configuration YAML mentioned in the S3 restore section of this documentation. The process is different if the backup node has been destroyed. It is important to not do this restore procedure if a backup is already running. The backup needs to be rescheduled to execute it without running a backup in parallel.</p>
 <h3 id="identify-backup-pvc">Identify Backup PVC</h3>
 <p>The first step to store the backup is to identify the node where the backup is stored. </p>
 <div class="highlight"><span class="filename">Identify PV</span><pre><span></span><code>kubectl get pv
 
 NAME                                       CAPACITY   ...     CLAIM         
 <span class="c1"># This is the backup node                           </span>
-pvc-80ae5325-8b27-4695-b6df-b362dd946cb7   1Gi        ...     postgres/direktiv-repo1                 
-pvc-ce9bb226-1038-49bf-bed6-e6d0188b228c   1Gi        ...     postgres/direktiv-direktiv-wnh4-pgdata   
+pvc-80ae5325-8b27-4695-b6df-b362dd946cb7   1Gi        ...     postgres/direktiv-cluster-repo1              
+pvc-ce9bb226-1038-49bf-bed6-e6d0188b228c   1Gi        ...     postgres/direktiv-cluster-instance1-q9sm-pgdata  
 </code></pre></div>
 <p>Describing the PV shows the node where the data is stored and the directory of the data. This directory needs to be stored in a safe location for a later restore.</p>
 <div class="highlight"><span class="filename">Identify PV</span><pre><span></span><code>kubectl describe  pv pvc-80ae5325-8b27-4695-b6df-b362dd946cb7
@@ -2601,11 +2622,7 @@ sudo cp -Rf  &lt;Backup Directory&gt;/backup /var/lib/rancher/k3s/storage/&lt;Ne
 sudo chown -R <span class="m">26</span>:tape  /var/lib/rancher/k3s/storage/&lt;New PV Directory&gt;
 </code></pre></div>
 <p>The selected restore needs to be configured in the database configuration YAML and applied with <code>kubectl apply -f mydb.yaml</code>.</p>
-<div class="highlight"><span class="filename">Restore from PVC</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-operator.crunchydata.com/v1beta1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PostgresCluster</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span><span class="w"></span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"></span>
+<div class="highlight"><span class="filename">Restore from PVC</span><pre><span></span><code><span class="nn">...</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">dataSource</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">postgresCluster</span><span class="p">:</span><span class="w"></span>
@@ -2614,15 +2631,15 @@ sudo chown -R <span class="m">26</span>:tape  /var/lib/rancher/k3s/storage/&lt;N
 <span class="w">      </span><span class="nt">options</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--set=20221023-075501F</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--archive-mode=off</span><span class="w"></span>
-<span class="w">  </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span><span class="w"></span>
+<span class="nn">...</span><span class="w"></span>
 </code></pre></div>
 <h3 id="update-password">Update Password</h3>
 <p>If this is a new installation of the database the password will be overwritten and the command to generate the <code>direktiv.yaml</code> file is incorrect. Therefore it is advised to update the password to the password in the Kubernetes secret and update Direktiv with the new password.</p>
 <div class="highlight"><span class="filename">Update User Password</span><pre><span></span><code><span class="c1"># get the old password</span>
-kubectl get secrets -n postgres direktiv-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;password&quot;}}&#39;</span> <span class="p">|</span> base64 --decode
+kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o <span class="s1">&#39;go-template={{index .data &quot;password&quot;}}&#39;</span> <span class="p">|</span> base64 --decode
 
 <span class="c1"># execute in pod </span>
-kubectl <span class="nb">exec</span> -n postgres --stdin --tty direktiv-direktiv-&lt;POD-ID&gt; -- psql
+kubectl <span class="nb">exec</span> -n postgres --stdin --tty direktiv-cluster-instance1-&lt;POD-ID&gt; -- psql
 
 <span class="c1"># update user password</span>
 ALTER USER direktiv WITH PASSWORD <span class="s1">&#39;&lt;PASSWORD FROM FIRST COMMAND&gt;&#39;</span><span class="p">;</span>
@@ -2637,7 +2654,7 @@ ALTER USER direktiv WITH PASSWORD <span class="s1">&#39;&lt;PASSWORD FROM FIRST 
 </code></pre></div>
 <div class="highlight"><span class="filename">Cluster Information</span><pre><span></span><code>kubectl -n postgres describe postgrescluster direktiv
 </code></pre></div>
-<div class="highlight"><span class="filename">Use psql in Database Instance</span><pre><span></span><code>kubectl <span class="nb">exec</span> -n postgres --stdin --tty direktiv-direktiv-nl9z-0 -- psql
+<div class="highlight"><span class="filename">Use psql in Database Instance</span><pre><span></span><code>kubectl <span class="nb">exec</span> -n postgres --stdin --tty direktiv-cluster-instance1-&lt;ID&gt; -- psql
 </code></pre></div>
 
 
