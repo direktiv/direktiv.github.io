@@ -3,6 +3,19 @@
   "type": "object",
   "required": ["states"],
   "title": "direktiv-workflow",
+  "meta": {
+    "maintainer": {
+      "name": "Direktiv",
+      "email": "info@direktiv.io"
+    },
+    "company": {
+      "name": "Direktiv",
+      "website": "https://direktiv.io"
+    },
+    "documentation": "https://docs.direktiv.io/",
+    "version": "15.09.2023",
+    "createdAt": "15.09.2023"
+  },
   "properties": {
     "url": {
       "description": "Link to further information.",
