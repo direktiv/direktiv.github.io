@@ -68,6 +68,7 @@ nav:
       - Standalone Environment: environment/direktiv-development-environment.md
       - direktivctl: environment/cli.md
       - Git Sync: environment/git.md
+      - VSCode: environment/vscode.md
   - Examples:
     - AWS Examples: examples/aws.md
     - Conditional State: examples/conditional-states.md

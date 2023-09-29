@@ -86,7 +86,7 @@ The above steps only determine whether a file will be evaluated as a potential D
 
 ### Workflows
 
-As mentioned in the File-System section above, workflows will be loaded from any `.yaml` or `.yml` file that parses without error. This processing of ambiguous files may in rare circumstances lead to Direktiv creating workflows from yaml files that had nothing to do with Direktiv. This behaviour is therefore deprecated. The correct way to define a workflow is to include the `direktiv-api` field, set to `workflow/v1`. For example, a file `/hello.yaml` containing the following contents defines a simple helloworld workflow of the same name and location in the file-tree:
+As mentioned in the File-System section above, workflows will be loaded from any `.yaml` or `.yml` file that parses without error. This processing of ambiguous files may in rare circumstances lead to Direktiv creating workflows from yaml files that had nothing to do with Direktiv. This behaviour is therefore deprecated. The correct way to define a workflow is to include the `direktiv_api` field, set to `workflow/v1`. For example, a file `/hello.yaml` containing the following contents defines a simple helloworld workflow of the same name and location in the file-tree:
 
 ```yaml
 direktiv_api: workflow/v1
@@ -103,7 +103,7 @@ When workflows are unambiguously defined this way, they do not need to parse suc
 Namespace services can be defined within a Direktiv Project so they are automatically created during mirroring. This is done using appropriate Direktiv resource definition files. For example, a `/services.yaml` file containing the following contents defines a simple http requester service named `requester`. The `services` field is an array, meaning that these files may define one or more services each. The user may divide or combine their service definitions amongst as many files as they like.
 
 ```yaml
-direktiv-api: services/v1
+direktiv_api: services/v1
 services:
 - name: requester
   image: direktiv/request:v4
@@ -128,7 +128,7 @@ services:
 CloudEvent filters can be defined within a Direktiv Project so they are automatically created during mirroring. This is done using appropriate Direktiv resource definition files. For example, a `/filters.yaml` file containing the following contents defines a simple event filter named `dropper`. The `filters` field is an array, meaning that these files may define one or more filters each. The user may divide or combine their filter definitions amongst as many files as they like.
 
 ```yaml
-direktiv-api: filters/v1
+direktiv_api: filters/v1
 filters:
 - name: dropper
   inline-js: |
@@ -149,7 +149,7 @@ When writing JavaScript it is often preferable not to directly embed it within Y
 
 
 ```yaml
-direktiv-api: filters/v1
+direktiv_api: filters/v1
 filters:
 - name: dropper
   source: ./Dropper.js

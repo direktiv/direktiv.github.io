@@ -2,12 +2,12 @@
 
 For efficient management of Direktiv workflows outside our UI, we offer a schema validation using Direktiv's official schema and the Red Hat YAML extension in Visual Studio Code. This provides automatic validation and intellisense. Follow the guide below to set it up.
 
-## Prerequisites:
+## Prerequisites
 
 - **Visual Studio Code**: Ensure that you have Visual Studio Code installed on your system.
 - **Internet Connection**: This is essential for fetching the Direktiv schema.
 
-## Step-by-step Guide:
+## Step-by-step Guide
 
 ### 1. Install the Red Hat YAML Extension
 
