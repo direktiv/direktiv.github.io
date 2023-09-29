@@ -18,6 +18,7 @@ This simple example flow uses a single `action` state to call the `hello-world` 
 #     }
 # }
 
+direktiv_api: workflow/v1
 
 description: |
   Execute a action state to call the direktiv/greeting action, which 'greets' 

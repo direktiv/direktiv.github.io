@@ -24,6 +24,8 @@ To request the metadata the `instance` attribute is the value required for subse
 The following flow with just `delay` states can be used to test the result of the metadata call.
 
 ```yaml title="Metadata Flow Example"
+direktiv_api: workflow/v1
+
 states:
 - id: step1
   type: delay

@@ -7,6 +7,8 @@ If Direktiv gets non-JSON input, in this case a binary file, it encodes it as Ba
 
 
 ```yaml title="Convert Flow"
+direktiv_api: workflow/v1
+
 functions:
 - id: csvkit
   image: direktiv/csvkit:dev

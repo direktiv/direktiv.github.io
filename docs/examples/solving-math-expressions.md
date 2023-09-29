@@ -28,6 +28,7 @@ The example demonstrates the use of an action isolate to solve a number of mathe
 #   ]
 # }
 
+direktiv_api: workflow/v1
 
 description: |
   Executes an action that solves a math expression. 

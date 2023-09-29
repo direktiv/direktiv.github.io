@@ -11,6 +11,8 @@ This example uses a setter state to set a variable in the `instance` scope. The 
 
 
 ```yaml title="Set Variables"
+direktiv_api: workflow/v1
+
 functions:
 - id: bash
   image: direktiv/bash:dev

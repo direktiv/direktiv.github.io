@@ -7,6 +7,7 @@ Handling errors can be an important part of a flow.
 ## Demo
 
 ```yaml
+direktiv_api: workflow/v1
 functions:
 - id: http-request
   image: gcr.io/direktiv/functions/http-request:1.0
@@ -37,6 +38,7 @@ If no catcher is able to handle an error, the flow will fail immediately.
 
 
 ```yaml
+direktiv_api: workflow/v1
 functions:
 - id: http-request
   image: gcr.io/direktiv/functions/http-request:1.0
@@ -92,6 +94,8 @@ Flows sometimes perform actions which may need to be reverted or undone if the f
 Sometimes it is important to fail the flow with a custom error. This is possible with the `error` state. This can used e.g. in switch states.
 
 ```yaml
+direktiv_api: workflow/v1
+
 states:
 - id: a
   type: switch

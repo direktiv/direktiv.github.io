@@ -6,6 +6,7 @@ Sometimes a flow needs to run periodically. Direktiv supports scheduling based o
 ## Demo
 
 ```yaml
+direktiv_api: workflow/v1
 start:
   type: scheduled
   cron: "* 0/2 * * *"
