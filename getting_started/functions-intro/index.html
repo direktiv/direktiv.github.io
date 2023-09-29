@@ -1626,6 +1626,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1676,6 +1678,20 @@
     <li class="md-nav__item">
       <a href="../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2301,7 +2317,9 @@
 <h1 id="introduction-to-functions">Introduction to Functions</h1>
 <p>Flows wouldn't be very powerful if they were limited to just the predefined states. That's why Direktiv can run "functions" which are basically serverless containers or even a separate flow, referred to as a <a href="/getting_started/subflows/"><code>subflow</code></a>. Direktiv uses the <code>action</code> state to provide this functionality.</p>
 <h3 id="example">Example</h3>
-<div class="highlight"><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">functions</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-request</span><span class="w"></span>
 <span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcr.io/direktiv/functions/http-request:1.0</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>
@@ -2371,7 +2389,9 @@
 </code></pre></div>
 <h2 id="store-value">Store Value</h2>
 <p>As mentioned earlier, every return of a function is getting overwritten with the next function call. Therefore it is important to store the data in the state if it is needed later in the flow. This can be done with a simple transform at the end of the action state. In the example here we store only the response status.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">functions</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-request</span><span class="w"></span>
 <span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcr.io/direktiv/functions/http-request:1.0</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>
@@ -2389,7 +2409,9 @@
 <p>The http request function returns an array so the JQ command would be <code>.return[0]</code> to get the 0th item from it and the <code>.status</code> fetches the status of that item. More function can be found at <a href="https://apps.direktiv.io">apps.direktiv.io</a>.</p>
 <h2 id="foreach">Foreach</h2>
 <p>Another way to call functions is the <code>foreach</code> function. This is useful if an array of objects need to be processed the same way, e.g. executing multiple http requests. </p>
-<div class="highlight"><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">functions</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-request</span><span class="w"></span>
 <span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcr.io/direktiv/functions/http-request:1.0</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>
@@ -2415,7 +2437,9 @@
 </ul>
 <h2 id="parallel">Parallel</h2>
 <p>The parallel execution can be used if the flow needs to execute functions in parallel with the same state data. An example would be quality gates during a release process where functional tests and load test can potentially be run in parallel. </p>
-<div class="highlight"><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">functions</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http-request</span><span class="w"></span>
 <span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcr.io/direktiv/functions/http-request:1.0</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>

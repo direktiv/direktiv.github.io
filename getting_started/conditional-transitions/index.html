@@ -1605,6 +1605,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1655,6 +1657,20 @@
     <li class="md-nav__item">
       <a href="../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2258,7 +2274,8 @@
 
 <h1 id="conditional-transitions">Conditional Transitions</h1>
 <p>Oftentimes a flow needs to be a little bit smarter than an immutable sequence of states. That's when conditional transitions are required. For these cases Direktiv provides a <code>switch</code> state which can route the flow based on conditions. Each condition can route the flow to a different state but there can be a <code>defaultTransition</code> to transition to if none of the conditions are true. </p>
-<div class="highlight"><span class="filename">Loop Demo</span><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Loop Demo</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">functions</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">httprequest</span><span class="w"></span>
 <span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcr.io/direktiv/functions/http-request:1.0</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>

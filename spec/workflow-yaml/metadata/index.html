@@ -1562,6 +1562,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1612,6 +1614,20 @@
     <li class="md-nav__item">
       <a href="../../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2187,7 +2203,8 @@
 <h1 id="instance-metadata">Instance Metadata</h1>
 <p>Instance metadata is a way to monitor an instance. An instance can update its metadata at any time, replacing it with whatever information it needs to expose via the API.</p>
 <p>All states can write to instance metadata via a common field <code>metadata</code>. This field uses <a href="../../instance-data/structured-jx/">structured jx</a> to support querying instance data and inserting it into the metadata. </p>
-<div class="highlight"><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">a</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delay</span><span class="w"></span>
 <span class="w">  </span><span class="nt">duration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PT1M</span><span class="w"></span>

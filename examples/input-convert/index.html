@@ -1548,6 +1548,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1598,6 +1600,20 @@
     <li class="md-nav__item">
       <a href="../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2186,7 +2202,9 @@
 <p><a href="https://github.com/direktiv/direktiv-examples/tree/main/input-convert">Convert Input on Github</a></p>
 <p>This example show how to handle input which is not JSON. This example uses a XLSX file and converts it to JSON to be used in the workflow. </p>
 <p>If Direktiv gets non-JSON input, in this case a binary file, it encodes it as Base64 and starts the workflow with a an <code>input</code> variable containing the binary file. </p>
-<div class="highlight"><span class="filename">Convert Flow</span><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Convert Flow</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">functions</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csvkit</span><span class="w"></span>
 <span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv/csvkit:dev</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>

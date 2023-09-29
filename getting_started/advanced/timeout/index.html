@@ -1614,6 +1614,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1664,6 +1666,20 @@
     <li class="md-nav__item">
       <a href="../../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2276,7 +2292,9 @@
 <p>Direktiv supports timeouts on different levels. The main reason for having timeouts is to avoid having long-running or orphaned flows. The default timeout for flows and actions is 15 minutes.</p>
 <h2 id="flow-timeouts">Flow Timeouts</h2>
 <p>There is a general flow time out setting which controls how Direktiv will try to gracefully stop or interrupt the flow and eventually kill the flow if that is not possible. The time has to be provided in <code>ISO8601</code> format.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">timeouts</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">timeouts</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">interrupt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PT20M</span><span class="w"></span>
 <span class="w">  </span><span class="nt">kill</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PT30M</span><span class="w"></span>
 
@@ -2287,7 +2305,9 @@
 </code></pre></div>
 <h2 id="state-timeouts">State Timeouts</h2>
 <p>Every state has a timeout attribute as well. This is in particular interesting for functions and the action state. If the timeout is triggered in an action Direktiv sends an interrupt to the action and it is up to the function to handle it.</p>
-<div class="highlight"><span class="filename">Action Timeouts</span><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Action Timeouts</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">functions</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">httprequest</span><span class="w"></span>
 <span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcr.io/direktiv/functions/http-request:1.0</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>
@@ -2305,7 +2325,9 @@
 </code></pre></div>
 <h2 id="events">Events</h2>
 <p>Another use for timeouts is events. There are three states consuming events: <a href="/spec/workflow-yaml/consume-event/">consumeEvent</a>, <a href="/spec/workflow-yaml/events-and">eventsAnd</a> and <a href="/spec/workflow-yaml/events-xor/">eventsXor</a>. If the timeout is reached the flow fails or the error can be caught and handled. </p>
-<div class="highlight"><span class="filename">Event Wait And Timeout</span><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Event Wait And Timeout</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">something</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">noop</span><span class="w"></span>
 <span class="w">  </span><span class="nt">transition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">consume</span><span class="w"></span>
@@ -2321,7 +2343,9 @@
 </code></pre></div>
 <h2 id="catching-timeouts">Catching Timeouts</h2>
 <p>Timeouts in actions can be caught and the error thrown is <code>direktiv.cancels.timeout.soft</code>. Based on that error the flow can be re-routed. </p>
-<div class="highlight"><span class="filename">Catch Timeout</span><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Catch Timeout</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">something</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">noop</span><span class="w"></span>
 <span class="w">  </span><span class="nt">transition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">consume</span><span class="w"></span>

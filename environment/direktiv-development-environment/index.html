@@ -1550,6 +1550,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1665,6 +1667,20 @@
     <li class="md-nav__item">
       <a href="../git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2411,6 +2427,7 @@ curl -X PUT http://&lt;ADDRESS&gt;/api/namespaces/test
 
 <span class="c1"># create the workflow file</span>
 cat &gt; helloworld.yml <span class="s">&lt;&lt;- EOF</span>
+<span class="s">direktiv_api: workflow/v1</span>
 <span class="s">functions:</span>
 <span class="s">- id: get</span>
 <span class="s">  type: reusable</span>

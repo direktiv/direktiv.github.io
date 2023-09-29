@@ -1548,6 +1548,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1598,6 +1600,20 @@
     <li class="md-nav__item">
       <a href="../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2253,7 +2269,9 @@
 <p>The flow will use these secrets to configure AWS access.</p>
 <h2 id="run-ec2-instance-flow-example">Run EC2 Instance Flow Example</h2>
 <p>This flow will create a new t2.small instance on ec2 ap-southeast-2 region. The flow uses the 'awsgo' action which executes the cli command passed in the command input property.</p>
-<div class="highlight"><span class="filename">Start AWS Instance</span><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Start AWS Instance</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">functions</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-cli</span><span class="w"></span>
 <span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv/aws-cli:dev</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>
@@ -2273,7 +2291,9 @@
 </code></pre></div>
 <h2 id="upload-file-to-s3-bucket-example">Upload File to S3 Bucket Example</h2>
 <p>This flow will upload a file to a S3 bucket. The file name and data are set in the input. The input property <code>fileData</code> can be a url-encoded base64 string or a standard base64 string.</p>
-<div class="highlight"><span class="filename">Start AWS Instance</span><pre><span></span><code><span class="nt">functions</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Start AWS Instance</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">functions</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span><span class="w"></span>
 <span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv/aws-cli:dev</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span><span class="w"></span>
@@ -2355,7 +2375,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../../environment/git/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Git Sync" rel="prev">
+        <a href="../../environment/vscode/" class="md-footer__link md-footer__link--prev" aria-label="Previous: VSCode" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -2364,7 +2384,7 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Git Sync
+              VSCode
             </div>
           </div>
         </a>

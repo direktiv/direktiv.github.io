@@ -1594,6 +1594,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1644,6 +1646,20 @@
     <li class="md-nav__item">
       <a href="../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2241,7 +2257,9 @@
 <p>Input data and <a href="/getting_started/states/#simple-transition">transitions</a>, in particular conditional transitions, are an important part in Direktiv. As previously shown a state can define a transition as the next state in the flow. If there is no transition defined the flow ends at that point in the execution. So far the examples have only shown sequential transition but here there will be a conditional transition based on input data of the flow. </p>
 <h2 id="conditional-transition">Conditional Transition</h2>
 <p>To execute conditional transitions Direktiv provides a <code>switch</code> which makes decisions about where to transition to next based on the instance data by evaluating a number of <code>jq</code> or <code>js</code> expressions and checking the results. </p>
-<div class="highlight"><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ifelse</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">switch</span><span class="w"></span>
 <span class="w">  </span><span class="nt">conditions</span><span class="p">:</span><span class="w"></span>

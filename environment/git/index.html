@@ -1550,6 +1550,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1646,8 +1648,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#repository-contents" class="md-nav__link">
-    Repository Contents
+  <a href="#direktiv-projects" class="md-nav__link">
+    Direktiv Projects
   </a>
   
 </li>
@@ -1656,6 +1658,20 @@
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vscode/" class="md-nav__link">
+        VSCode
+      </a>
     </li>
   
 
@@ -2230,8 +2246,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#repository-contents" class="md-nav__link">
-    Repository Contents
+  <a href="#direktiv-projects" class="md-nav__link">
+    Direktiv Projects
   </a>
   
 </li>
@@ -2257,9 +2273,9 @@
 
 
 <h1 id="git-mirrors">Git Mirrors</h1>
-<p>Direktiv supports keeping a clone of a git repository as a source of flows and variables. </p>
+<p>Direktiv supports configuring a namespace to use a git repository as the source of its contents and configuration.</p>
 <h2 id="setting-up-a-git-mirror">Setting Up A Git Mirror</h2>
-<p>Git mirrors can be set up as entire Direktiv namespaces and supports submodules. The following arguments can be supplied when creating a mirror as a namespace:</p>
+<p>The following arguments can be supplied when creating a mirror as a namespace:</p>
 <ul>
 <li><code>namespace</code></li>
 <li><code>url</code></li>
@@ -2305,25 +2321,205 @@
 <p>All Direktiv mirror operations are encapsulated within an "activity". This serves as a way of organizing the logic and logs of an operation in a convenient way. Cloning a remote repository can take time, and it's possible that the operation will fail or produce unexpected results. Check the list of recent activities and their logs to learn more about any issues you encounter.</p>
 <h2 id="modifying-the-configuration-of-a-local-mirror">Modifying the Configuration of a Local Mirror</h2>
 <p>For various reasons you may need to update the settings of a mirror. Whether it's to change which branch or commit it's referencing, or to update your credentials. All of this is supported. For convenience, Direktiv will only apply changes to settings you ask it to, anything else will remain unchanged. This means for example that you can swap from branch <code>v1.0.x</code> to <code>v1.1.x</code> without resupplying your SSH keys if you want to.</p>
-<h2 id="repository-contents">Repository Contents</h2>
-<h3 id="directory">Directory</h3>
-<p>If a directory appears within the repository it will be created within the local mirror. Except in the following circumstances:</p>
-<ul>
-<li>If the directory name begins with <code>.</code></li>
-<li>If the directory contains no flows (recursively).</li>
-</ul>
-<p>This means repositories can group flows logically and have that grouping preserved on Direktiv.</p>
-<h3 id="workflow">Workflow</h3>
-<p>If a file name ends in <code>.yml</code> or <code>.yaml</code> it will be treated as a flow unless it can instead be treated as a workflow variable. As long as the name contains only acceptable workflow name characters.</p>
-<p>Workflow names will have their suffix trimmed in Direktiv. So <code>hello.yaml</code> will create a workflow called <code>hello</code>. </p>
-<p>Files that evaluate as flows according to these rules are considered to be so even if they cannot be interpreted as valid flows. This ensures that mirrors can include up-to-date sources that perfectly mirror those found in the remote repository, even if those sources are flawed or incompatible with the version of Direktiv. </p>
-<h3 id="workflow-variable">Workflow Variable</h3>
-<p>If a file name contains <code>.yml.</code> or <code>.yaml.</code> it will be treated as a workflow variable. As long as the name contains only acceptable workflow name characters.</p>
-<p>Workflow variable names are given as a concatenation of the workflow file and the variable name. For example, if you have a workflow called <code>hello.yaml</code> you can create a workflow variable called <code>x.json</code> by naming it <code>hello.yaml.x.json</code>.</p>
-<h3 id="namespace-variable">Namespace Variable</h3>
-<p>If a file is named with a prefix of "<code>var.</code>" it will be treated as a namespace variable. Unless it evaluated to one of the other types already.</p>
-<h3 id="archive-variables">Archive Variables</h3>
-<p>If a directory has a name that would evaluate to a namespace variable or a workflow variable if only the directory was actually a file, Direktiv will still make a variable from it. It will automatically tar the contents of the directory and gzip them, making them easily usable within functions.</p>
+<h2 id="direktiv-projects">Direktiv Projects</h2>
+<p>When a filetree is intended for mirroring by Direktiv, we call it a Direktiv Project. What follows is an explanation of the rules for Direktiv Projects.</p>
+<h3 id="file-system">File-System</h3>
+<p>When performing a sync, Direktiv will produce a copy of every directory and file from the git project into your Direktiv file-system, with some exceptions and caveats. Other kinds of file-system objects such as symlinks are skipped.</p>
+<ol>
+<li>
+<p>Files and directories will only be copied if their names are valid within Direktiv. At this time, valid names must conform to the following regex pattern: <code>(([a-zA-Z][a-zA-Z0-9_\-\.]*[a-zA-Z0-9])|([a-zA-Z]))</code>. Also, names beginning with <code>.</code> (hidden files) are also excluded. This helps to reduce pollution in your file-tree by avoiding common unhelpful git project contents such as <code>.gitignore</code> and <code>.git/</code>.</p>
+</li>
+<li>
+<p>If a <code>/.direktivignore</code> file exists, Direktiv will use this file in exactly the same way <code>.gitignore</code> files are used by <code>git</code> to more precisely control what is and isn't copied.</p>
+</li>
+<li>
+<p>If a file ending with the <code>.yaml</code> or <code>.yml</code> extension is unambiguously identified as a Direktiv resource definition (by including a top level field <code>direktiv_api</code>), it will not be copied. Instead, such a file will be processed and its definitions added to the namespace. More on this later.</p>
+</li>
+<li>
+<p>If a file ending with the <code>.yaml</code> or <code>.yml</code> extension is ambiguous, Direktiv will attempt to parse it as a workflow. If it succeeds without error, it will be added to the file-system as a Direktiv Workflow. Otherwise, it will be added to the file-system as a generic yaml file.  </p>
+</li>
+</ol>
+<blockquote>
+<p>Deprecated: the correct way to add a workflow is to unambiguously define one. This ambiguousness step is only included short-term to maintain backwards compatibility.</p>
+</blockquote>
+<p>The above steps only determine whether a file will be evaluated as a potential Direktiv resource definition or copied into the file-tree. Exclusion for any of the above reasons won't break direct references to such files in Direktiv resource definitions. This means, for example, that you can define a filter (more on this later) that references a Javascript file, while still excluding the javascript file from appearing in the file-tree using <code>.direktivignore</code>.</p>
+<h3 id="workflows">Workflows</h3>
+<p>As mentioned in the File-System section above, workflows will be loaded from any <code>.yaml</code> or <code>.yml</code> file that parses without error. This processing of ambiguous files may in rare circumstances lead to Direktiv creating workflows from yaml files that had nothing to do with Direktiv. This behaviour is therefore deprecated. The correct way to define a workflow is to include the <code>direktiv_api</code> field, set to <code>workflow/v1</code>. For example, a file <code>/hello.yaml</code> containing the following contents defines a simple helloworld workflow of the same name and location in the file-tree:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello</span><span class="w"></span>
+<span class="err"> </span><span class="w w-Error"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">noop</span><span class="w"></span>
+<span class="err"> </span><span class="w"> </span><span class="nt">transform</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;jq({</span><span class="nv"> </span><span class="s">msg:</span><span class="nv"> </span><span class="s">&quot;Hello,</span><span class="nv"> </span><span class="s">world!&quot;</span><span class="nv"> </span><span class="s">})&#39;</span><span class="w"></span>
+</code></pre></div>
+<p>When workflows are unambiguously defined this way, they do not need to parse successfully as valid workflows to be copied into the file-system.</p>
+<h3 id="namespace-services">Namespace Services</h3>
+<p>Namespace services can be defined within a Direktiv Project so they are automatically created during mirroring. This is done using appropriate Direktiv resource definition files. For example, a <code>/services.yaml</code> file containing the following contents defines a simple http requester service named <code>requester</code>. The <code>services</code> field is an array, meaning that these files may define one or more services each. The user may divide or combine their service definitions amongst as many files as they like.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">services/v1</span><span class="w"></span>
+<span class="nt">services</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">requester</span><span class="w"></span>
+<span class="err"> </span><span class="w w-Error"> </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv/request:v4</span><span class="w"></span>
+</code></pre></div>
+<h4 id="namespaceservicesdefinition">NamespaceServicesDefinition</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Type</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>direktiv_api</code></td>
+<td>Set it to 'services/v1'.</td>
+<td>string</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>services</code></td>
+<td></td>
+<td><a href="#namespaceservicedefinition">[]NamespaceServiceDefinition</a></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h4 id="namespaceservicedefinition">NamespaceServiceDefinition</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Type</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>The name for this service, which should be unique amonst all services within the namespace / project.</td>
+<td>string</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>The image to use for this service.</td>
+<td>string</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="filters">Filters</h3>
+<p>CloudEvent filters can be defined within a Direktiv Project so they are automatically created during mirroring. This is done using appropriate Direktiv resource definition files. For example, a <code>/filters.yaml</code> file containing the following contents defines a simple event filter named <code>dropper</code>. The <code>filters</code> field is an array, meaning that these files may define one or more filters each. The user may divide or combine their filter definitions amongst as many files as they like.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filters/v1</span><span class="w"></span>
+<span class="nt">filters</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dropper</span><span class="w"></span>
+<span class="err"> </span><span class="w w-Error"> </span><span class="nt">inline-js</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="err">   </span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">if (event[&quot;source&quot;] == &quot;mysource&quot;) {</span><span class="w"></span>
+<span class="err">     </span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nslog(&quot;rename source&quot;)</span><span class="w"></span>
+<span class="err">     </span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">event[&quot;source&quot;] = &quot;newsource&quot;</span><span class="w"></span>
+<span class="err">   </span><span class="w"> </span><span class="err">}</span><span class="w"></span>
+
+<span class="err">   </span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">if (event[&quot;source&quot;] == &quot;hello&quot;) {</span><span class="w"></span>
+<span class="err">     </span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nslog(&quot;drop me&quot;)</span><span class="w"></span>
+<span class="err">     </span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">return null</span><span class="w"></span>
+<span class="err">   </span><span class="w"> </span><span class="err">}</span><span class="w"></span>
+
+<span class="err">   </span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">return event</span><span class="w"></span>
+</code></pre></div>
+<p>When writing JavaScript it is often preferable not to directly embed it within YAML. This is supported as well. An alternative way of defining the same filter as above could be to have the following <code>/filters.yaml</code> file, along with the following <code>/Dropper.js</code> file. Notice that there is an illegal character (capital D) in that that file name, which automatically prevents it from appearing in the file-tree, but does not preclude it from being part of this filter definition.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filters/v1</span><span class="w"></span>
+<span class="nt">filters</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dropper</span><span class="w"></span>
+<span class="err"> </span><span class="w w-Error"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./Dropper.js</span><span class="w"></span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">event</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;mysource&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">nslog</span><span class="p">(</span><span class="s2">&quot;rename source&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="nx">event</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;newsource&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">event</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;hello&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">nslog</span><span class="p">(</span><span class="s2">&quot;drop me&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">return</span><span class="w"> </span><span class="nx">event</span><span class="w"></span>
+</code></pre></div>
+<h4 id="eventfiltersdefinition">EventFiltersDefinition</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Type</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>direktiv_api</code></td>
+<td>Set it to 'services/v1'.</td>
+<td>string</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>filters</code></td>
+<td></td>
+<td><a href="#eventfilterdefinition">[]EventFilterDefinition</a></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h4 id="eventfilterdefinition">EventFilterDefinition</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Type</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>The name for this filter, which should be unique amonst all filters within the namespace / project.</td>
+<td>string</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>inline_javascript</code></td>
+<td>JavaScript filter logic.</td>
+<td>string</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>A filepath to a file containing JavaScript filter logic.</td>
+<td>string</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<h3 id="variables">Variables</h3>
+<p>There are too many questions raised by syncing namespace &amp; workflow variables that have no obvious or clearly best answer. This means they are bound to cause confusion, and since all problems they solved can now be solved in other ways, this feature is being removed.</p>
+<p>A deprecated way of syncing these still exists, but going forward users should think of alternative ways to solve these problems. Ways such as file-system files, which can now be read as variables by the engine. And <code>jq</code> initialization statements such as <code>.x // 5</code>.</p>
+<p>What follows is a description of the deprecated behaviour.</p>
+<blockquote>
+<p>Note: variables are not subject to the same naming concerns as workflows, and so all files will be checked for adhering to these naming conventions, even if they would otherwise be excluded.</p>
+</blockquote>
+<h4 id="namespace-variables">Namespace Variables</h4>
+<p>If a file is named like <code>var.*</code> then it is treated as a namespace variable. For example, <code>var.style.css</code> will become a namespace variable called <code>style.css</code>.</p>
+<h4 id="workflow-variables">Workflow Variables</h4>
+<p>If a file is named such that it is prefixed with the full name of another file that was evaluated to be a workflow (followed by a <code>.</code>), then the file is treated as a workflow variable attached to that workflow. For example, if you have a workflow <code>/hello.yaml</code>, and another file called <code>/hello.yaml.page.html</code>, then the <code>/hello.yaml</code> workflow will gain a workflow variable called <code>page.html</code>.</p>
+<h3 id="unsyncables">Unsyncables</h3>
+<h4 id="container-registries">Container Registries</h4>
+<p>Configuring container registries requires a password, which is sensitive information that should not be committed to a git project. We therefore do not support any way to sync these at the moment.</p>
+<h4 id="secrets">Secrets</h4>
+<p>Sensitive information should not be committed to git projects. We therefore do not support any way to sync these at the moment.</p>
+<p>As a small help to users, when workflows are created referencing secrets that haven't been defined, uninitialized secrets are created. These don't contain any helpful information, but they populate the list of secrets within the namespace for easy adjustment.</p>
+<h3 id="errors">Errors</h3>
+<p>The syncing process adopts a fault-tolerant approach to errors. This means that as often as possible, detected errors should be logged as such, but not prevent the greater sync operation from succeeding. Users are strongly encouraged to check the logs of their sync operation to confirm that there were no unexpected problems with their git repository.</p>
 
 
 
@@ -2365,13 +2561,13 @@
       
       
         
-        <a href="../../examples/aws/" class="md-footer__link md-footer__link--next" aria-label="Next: AWS Examples" rel="next">
+        <a href="../vscode/" class="md-footer__link md-footer__link--next" aria-label="Next: VSCode" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              AWS Examples
+              VSCode
             </div>
           </div>
           <div class="md-footer__button md-icon">

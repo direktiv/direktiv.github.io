@@ -1591,6 +1591,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1641,6 +1643,20 @@
     <li class="md-nav__item">
       <a href="../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2230,7 +2246,8 @@
 
 <h1 id="validating-input">Validating Input</h1>
 <p>In some cases it is important to validate the state of the flow. This can be done as the first state in the flow to protect the flow from rogue data or within the flow to check the state data before proceeding. Direktiv is using JSON schema to validate the state data.</p>
-<div class="highlight"><span class="filename">Check Attribute</span><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Check Attribute</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">noop</span><span class="w"></span>
 <span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"> </span>
@@ -2247,7 +2264,8 @@
 <span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
 </code></pre></div>
 <p>The above example will succedd because the attribute <code>name</code> is set and it is a string, in this case <code>Michael</code>. If the the value would be an integer the flow would fail.</p>
-<div class="highlight"><span class="filename">Failed Attribute</span><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Failed Attribute</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">validate</span><span class="w"></span>
 <span class="w">  </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
@@ -2261,7 +2279,8 @@
 <p>JSON schema is used to validate JSON structures and not contents. It can not validate if the value of <code>name</code> has a certain content. If that is a requirement Direktiv's <a href="/spec/workflow-yaml/switch/">switch statement</a> has to be used. </p>
 <h2 id="first-state">First State</h2>
 <p>Direktiv can generate a form if the validate state is the first state in the flow. </p>
-<div class="highlight"><span class="filename">Validate Form</span><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Validate Form</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">validate</span><span class="w"></span>
 <span class="w">  </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
@@ -2276,7 +2295,8 @@
 <span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">My Name</span><span class="w"></span>
 </code></pre></div>
 <p>In this example the <code>default</code> attribute is used and it is shown in the form. Direktiv can not set defaults via API or in a running flow. It is for  form generation only. If defaults are required <code>jq</code> can be used like <code>jq(.name // "Michael")</code>. The following validate would ask for the name but set it to <code>Michael</code> if it is empty.</p>
-<div class="highlight"><span class="filename">Setting Defaults</span><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><span class="filename">Setting Defaults</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">validate</span><span class="w"></span>
 <span class="w">  </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>

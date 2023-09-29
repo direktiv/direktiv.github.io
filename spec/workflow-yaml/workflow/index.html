@@ -1562,6 +1562,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1612,6 +1614,20 @@
     <li class="md-nav__item">
       <a href="../../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2187,7 +2203,8 @@
 <h1 id="workflow-definition">Workflow Definition</h1>
 <h1 id="direktiv-workflow-definition">Direktiv Workflow Definition</h1>
 <p>This document describes the rules for Direktiv workflow definition files. These files are written in YAML and dictate the behaviour of a workflow running on Direktiv. </p>
-<div class="highlight"><span class="filename">Workflow</span><pre><span></span><code><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<div class="highlight"><span class="filename">Workflow</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">  </span><span class="no">A simple &quot;Hello, world&quot; demonstration.</span><span class="w"></span>
 <span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello</span><span class="w"></span>
@@ -2213,6 +2230,12 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>direktiv_api</code></td>
+<td>Set it to 'workflow/v1' to reduce ambiguity, enabling tools to better identify this file as a workflow.</td>
+<td>string</td>
+<td>no</td>
+</tr>
 <tr>
 <td><code>url</code></td>
 <td>Link to further information.</td>

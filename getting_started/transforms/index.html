@@ -1598,6 +1598,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1648,6 +1650,20 @@
     <li class="md-nav__item">
       <a href="../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2291,7 +2307,8 @@
 </code></pre></div>
 <h3 id="first-transform">First Transform</h3>
 <p>Although a <code>transform</code> can use <code>jq</code> or <code>js</code> to modify data plain YAML can be used to do the transform. The following example does such a static transform. This can be used to e.g. set-up defaults or a basic object to work with in that flow. </p>
-<div class="highlight"><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transform1</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">noop</span><span class="w"></span>
 <span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"></span>
@@ -2316,7 +2333,8 @@
 <h3 id="second-transform">Second Transform</h3>
 <p>The second transform enriches the existing instance data by adding a new field to it.</p>
 <p><strong>Command</strong></p>
-<div class="highlight"><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transform1</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">noop</span><span class="w"></span>
 <span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"></span>
@@ -2346,7 +2364,8 @@
 <h3 id="third-transform">Third Transform</h3>
 <p>The third transform multiplies two fields to produce a new field, then pipes the results into another command that deletes two fields.</p>
 <p><strong>Command</strong></p>
-<div class="highlight"><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transform1</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">noop</span><span class="w"></span>
 <span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"></span>
@@ -2379,7 +2398,8 @@
 <h3 id="fourth-transform">Fourth Transform</h3>
 <p>The fourth transform selects a child object nested within the instance data and makes that into the new instance data.</p>
 <p><strong>Command</strong></p>
-<div class="highlight"><pre><span></span><code><span class="nt">states</span><span class="p">:</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+<span class="nt">states</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transform1</span><span class="w"></span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">noop</span><span class="w"></span>
 <span class="w">  </span><span class="nt">transform</span><span class="p">:</span><span class="w"></span>

@@ -1548,6 +1548,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1598,6 +1600,20 @@
     <li class="md-nav__item">
       <a href="../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2185,7 +2201,9 @@
 <h1 id="conditional-state">Conditional State</h1>
 <p><a href="https://github.com/direktiv/direktiv-examples/tree/main/conditional-states">Conditional State on Github</a></p>
 <p>This example demonstrates the use of a switch state to conditional transition to different states based on a jq expression.  To show this, the example below is a flow that either approves or rejects a loan depending on the provided credit score and required minimum credit score.</p>
-<div class="highlight"><span class="filename">Simple Switch Statement</span><pre><span></span><code><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<div class="highlight"><span class="filename">Simple Switch Statement</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">  </span><span class="no">Conditionally transition to states depending if input credit score is higher</span><span class="w"></span>
 <span class="w">  </span><span class="no">or lower than creditMinRequired.</span><span class="w"></span>
 

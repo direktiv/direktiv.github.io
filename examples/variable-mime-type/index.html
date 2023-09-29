@@ -1548,6 +1548,8 @@
         
           
         
+          
+        
       
       
         <label class="md-nav__link" for="__nav_6">
@@ -1598,6 +1600,20 @@
     <li class="md-nav__item">
       <a href="../../environment/git/" class="md-nav__link">
         Git Sync
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../environment/vscode/" class="md-nav__link">
+        VSCode
       </a>
     </li>
   
@@ -2247,7 +2263,9 @@
 <p>All variables have an associated mime type to distinguish the content type of its value. This example will show two examples, and the special behaviour that happens when mimeType is <code>text/plain</code> or <code>application/octet-stream</code>. </p>
 <h2 id="storing-a-string-as-a-raw-plaintext-variable">Storing a string as a raw plaintext variable.</h2>
 <p>By default (mimeType=application/json) all variables are treated as JSON values. So this means even if you store a string in a variable, it's value is stored with quotes wrapped around it.</p>
-<div class="highlight"><span class="filename">JSON String Data</span><pre><span></span><code><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<div class="highlight"><span class="filename">JSON String Data</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">  </span><span class="no">Store the workflow variable &#39;StringVar&#39; as a json encoded string.  </span><span class="w"></span>
 
 <span class="nt">states</span><span class="p">:</span><span class="w"></span>
@@ -2267,7 +2285,9 @@
 <div class="highlight"><span class="filename">JSON String Variable</span><pre><span></span><code><span class="s2">&quot;hello\nworld&quot;</span><span class="w"></span>
 </code></pre></div>
 <p>If the data is YAML it will be converted to JSON in the variable.</p>
-<div class="highlight"><span class="filename">JSON Data</span><pre><span></span><code><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<div class="highlight"><span class="filename">JSON Data</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">  </span><span class="no">Store the workflow variable &#39;StringVar&#39; as a json.  </span><span class="w"></span>
 
 <span class="nt">states</span><span class="p">:</span><span class="w"></span>
@@ -2286,7 +2306,9 @@
 <div class="highlight"><span class="filename">JSON Variable</span><pre><span></span><code><span class="p">[{</span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="s2">&quot;value&quot;</span><span class="p">}]</span><span class="w"></span>
 </code></pre></div>
 <p>There are certain scenarios where you would not want to store the variable with its quotes. To do this all need to do is simply set the mimeType to <code>text/plain</code> or <code>text/plain; charset=utf-8</code>. This will store the variable as a raw string without quotes. </p>
-<div class="highlight"><span class="filename">Plain Text</span><pre><span></span><code><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<div class="highlight"><span class="filename">Plain Text</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">  </span><span class="no">Store the workflow variable &#39;StringVar&#39; as a plaintext string.  </span><span class="w"></span>
 
 <span class="nt">states</span><span class="p">:</span><span class="w"></span>
@@ -2311,7 +2333,9 @@ world
 </code></pre></div>
 <h2 id="auto-decoding-base64-string">Auto-Decoding Base64 string</h2>
 <p>Another special behaviour is that it's also possible to auto decode a base64 string by setting the <code>mimeType</code> to <code>application/octet-stream</code>. This is used for binaries like Excel files, images etc.</p>
-<div class="highlight"><span class="filename">Base64 Variable</span><pre><span></span><code><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<div class="highlight"><span class="filename">Base64 Variable</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span><span class="w"></span>
+
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">  </span><span class="no">Auto decode base64 string and store the resulting value </span><span class="w"></span>
 <span class="w">  </span><span class="no">as the workflow variable &#39;MessageVar&#39;.  </span><span class="w"></span>
 
