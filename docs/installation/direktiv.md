@@ -15,7 +15,7 @@ Knative is an essential part of Direktiv and can be installed with Knative's ope
 
 
 ```sh title="Install Knative Operator"
-kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.9.4/operator.yaml
+kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.11.7/operator.yaml
 ```
 
 After the deployment of the operator a new instance of Knative Serving can be created. Direktiv requires a certain configuration for Knative to work. There are two examples of configurations in the (Github repository). The first one is the [standard configuration](https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/knative/basic.yaml) and the other one is an [example with proxy settings](https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/knative/basic.yaml). 
@@ -28,7 +28,7 @@ kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubern
 Direktiv supports [Contour](https://projectcontour.io/) as network component. 
 
 ```bash title="Install Contour"
-kubectl apply --filename https://github.com/knative/net-contour/releases/download/knative-v1.9.3/contour.yaml
+kubectl apply --filename https://github.com/knative/net-contour/releases/download/knative-v1.11.1/contour.yaml
 ```
 
 This installs Contour in two namespaces `contour-internal` and `contour-external`. The second namespace is not needed for Direktiv to run and might even block the ingress controller from getting an external IP. This can be deleted with:
