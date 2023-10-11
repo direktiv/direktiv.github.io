@@ -80,6 +80,7 @@ echo "database:
 Using this `direktiv.yaml` configuration, deploy the direktiv helm chart:
 
 ```bash
+helm repo add direktiv https://chart.direktiv.io
 helm install -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
 ```
 
