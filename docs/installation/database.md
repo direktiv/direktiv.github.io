@@ -9,6 +9,7 @@ To install a Postgres instance in Kubernetes we are using [Percona's](https://do
 The operator is provided as [Helm chart](https://helm.sh/) and the installation is straighforward. Add Direktiv's helm chart repository and run the installation command.
 
 ```bash title="Install Postgres Operator"
+kubectl create namespace postgres
 helm repo add percona https://percona.github.io/percona-helm-charts/
 helm install -n postgres pg-operator percona/pg-operator --wait
 ```
