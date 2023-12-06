@@ -24,7 +24,7 @@ Within the settings JSON file that opens up, merge or add the following configur
 
 ```json
 "yaml.schemas": {
-  "https://raw.githubusercontent.com/direktiv/direktiv/stable/resources/direktiv.schema.json": ".wf.yaml"
+  "https://raw.githubusercontent.com/direktiv/direktiv/master/resources/direktiv.schema.json": ".wf.yaml"
 }
 ```
 
