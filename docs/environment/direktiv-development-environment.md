@@ -1,4 +1,4 @@
-To improve function and flow development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom functions is described in <a href="../../getting_started/making-functions">this section</a>.
+To improve function and flow development it is recommended to setup a local development environment. This section explains how to setup the development environment. Details about developing custom functions is described in <a href="../getting_started/advanced/making-functions">this section</a>.
 
 ## Running Direktiv
 
