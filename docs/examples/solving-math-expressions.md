@@ -28,6 +28,7 @@ The example demonstrates the use of an action isolate to solve a number of mathe
 #   ]
 # }
 
+direktiv_api: workflow/v1
 
 description: |
   Executes an action that solves a math expression. 
@@ -35,7 +36,7 @@ description: |
 
 functions:
 - id: solve-math-expression
-  image: gcr.io/direktiv/functions/bash:1.0
+  image: direktiv/bash:dev
   type: knative-workflow
 
 states:

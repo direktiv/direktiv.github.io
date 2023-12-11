@@ -4,6 +4,7 @@
 Oftentimes a flow needs to be a little bit smarter than an immutable sequence of states. That's when conditional transitions are required. For these cases Direktiv provides a `switch` state which can route the flow based on conditions. Each condition can route the flow to a different state but there can be a `defaultTransition` to transition to if none of the conditions are true. 
 
 ```yaml title="Loop Demo"
+direktiv_api: workflow/v1
 functions:
 - id: httprequest
   image: gcr.io/direktiv/functions/http-request:1.0

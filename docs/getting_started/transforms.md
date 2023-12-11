@@ -67,6 +67,7 @@ Javascript snippets have access to the state data as well. The state data in tha
 Although a `transform` can use `jq` or `js` to modify data plain YAML can be used to do the transform. The following example does such a static transform. This can be used to e.g. set-up defaults or a basic object to work with in that flow. 
 
 ```yaml
+direktiv_api: workflow/v1
 states:
 - id: transform1
   type: noop
@@ -100,6 +101,7 @@ The second transform enriches the existing instance data by adding a new field t
 **Command**
 
 ```yaml
+direktiv_api: workflow/v1
 states:
 - id: transform1
   type: noop
@@ -138,6 +140,7 @@ The third transform multiplies two fields to produce a new field, then pipes the
 **Command**
 
 ```yaml
+direktiv_api: workflow/v1
 states:
 - id: transform1
   type: noop
@@ -179,6 +182,7 @@ The fourth transform selects a child object nested within the instance data and 
 **Command**
 
 ```yaml
+direktiv_api: workflow/v1
 states:
 - id: transform1
   type: noop

@@ -201,6 +201,7 @@ curl -X PUT http://<ADDRESS>/api/namespaces/test
 
 # create the workflow file
 cat > helloworld.yml <<- EOF
+direktiv_api: workflow/v1
 functions:
 - id: get
   type: reusable

@@ -6,6 +6,7 @@ Many flows require sensitive information such as passwords or authentication tok
 Stored secrets can be requested in a function via the `secrets` attribute and is available as `.secrets.SECRETNAME`
 
 ```yaml title="Secrets"
+direktiv_api: workflow/v1
 functions:
 - id: httprequest
   image: direktiv/request:v1

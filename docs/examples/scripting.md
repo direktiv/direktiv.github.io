@@ -10,9 +10,11 @@ In the above example there would be a `script.sh` flow variable. The following f
 
 
 ```yaml title="Python Flow"
+direktiv_api: workflow/v1
+
 functions:
 - id: python
-  image: gcr.io/direktiv/functions/python:1.0
+  image: direktiv/python:dev
   type: knative-workflow
 states:
 - id: python

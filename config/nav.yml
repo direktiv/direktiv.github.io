@@ -68,12 +68,14 @@ nav:
       - Standalone Environment: environment/direktiv-development-environment.md
       - direktivctl: environment/cli.md
       - Git Sync: environment/git.md
+      - VSCode: environment/vscode.md
   - Examples:
     - AWS Examples: examples/aws.md
     - Conditional State: examples/conditional-states.md
     - Counter: examples/counter-persistent-data.md
     - Cron: examples/cron.md
     - Foreach : examples/foreach.md
+    - Self-Destroying VM in GCP: examples/gcp-vm-destroy.md
     - Greeting Example: examples/greeting.md
     - Event-based Workflow: examples/greeting-event-listener.md
     - Convert Input: examples/input-convert.md

@@ -6,6 +6,8 @@ Flows wouldn't be very powerful if they were limited to just the predefined stat
 ### Example
 
 ```yaml
+direktiv_api: workflow/v1
+
 functions:
 - id: http-request
   image: gcr.io/direktiv/functions/http-request:1.0
@@ -104,6 +106,8 @@ As mentioned earlier, every return of a function is getting overwritten with the
 
 
 ```yaml
+direktiv_api: workflow/v1
+
 functions:
 - id: http-request
   image: gcr.io/direktiv/functions/http-request:1.0
@@ -127,6 +131,8 @@ The http request function returns an array so the JQ command would be `.return[0
 Another way to call functions is the `foreach` function. This is useful if an array of objects need to be processed the same way, e.g. executing multiple http requests. 
 
 ```yaml
+direktiv_api: workflow/v1
+
 functions:
 - id: http-request
   image: gcr.io/direktiv/functions/http-request:1.0
@@ -158,6 +164,8 @@ The parallel execution can be used if the flow needs to execute functions in par
 
 
 ```yaml
+direktiv_api: workflow/v1
+
 functions:
 - id: http-request
   image: gcr.io/direktiv/functions/http-request:1.0

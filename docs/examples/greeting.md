@@ -18,6 +18,7 @@ This simple example flow uses a single `action` state to call the `hello-world` 
 #     }
 # }
 
+direktiv_api: workflow/v1
 
 description: |
   Execute a action state to call the direktiv/greeting action, which 'greets' 
@@ -25,7 +26,7 @@ description: |
 
 functions:
 - id: greeter
-  image: gcr.io/direktiv/functions/hello-world:1.0
+  image: direktiv/hello-world:dev
   type: knative-workflow
 
 states:

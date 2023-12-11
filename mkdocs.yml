@@ -32,7 +32,7 @@ extra:
       link: https://github.com/direktiv/direktiv
       name: Direktiv on Github
     - icon: fontawesome/brands/slack
-      link: https://direktivio.slack.com/
+      link: https://join.slack.com/t/direktiv-io/shared_invite/zt-zf7gmfaa-rYxxBiB9RpuRGMuIasNO~g
       name: Slack
 
 extra_css:

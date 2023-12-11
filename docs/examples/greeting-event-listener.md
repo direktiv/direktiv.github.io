@@ -32,6 +32,7 @@ The `generate-greeting` flow generates the `greetingcloudevent` that the `eventb
 #     }
 # }
 
+direktiv_api: workflow/v1
 
 description: |
   Passively listen for cloud events where the type equals "greetingcloudevent" and
@@ -53,7 +54,7 @@ start:
 
 functions:
 - id: hello-world
-  image: gcr.io/direktiv/functions/hello-world:1.0
+  image: direktiv/hello-world:dev
   type: knative-workflow
 
   
@@ -79,6 +80,8 @@ states:
 
 
 ```yaml title="Generator Workflow"
+direktiv_api: workflow/v1
+
 description: |
   Generate a cloud with of type "greetingcloudevent" with name data as input.
 

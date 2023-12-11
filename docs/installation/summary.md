@@ -6,7 +6,10 @@ This is a list of "copy&paste" commands which creates a one node Direktiv cluste
 ## K3s
 
 ```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.7+k3s1 sh -s - --disable traefik --write-kubeconfig-mode=644
+curl -sfL https://get.k3s.io | sh -s - --disable traefik --write-kubeconfig-mode=644
+
+sudo swapoff -a
+sudo sed -e '/swap/s/^/#/g' -i /etc/fstab
 ```
 
 ## Linkerd
@@ -26,9 +29,9 @@ echo $(pwd));
 ### Install Linkerd
 
 ```bash
-helm repo add linkerd https://helm.linkerd.io/stable;
+helm repo add linkerd https://helm.linkerd.io/stable
 
-helm install linkerd-crds linkerd/linkerd-crds -n linkerd --create-namespace 
+helm install linkerd-crds linkerd/linkerd-crds -n linkerd --create-namespace
 
 helm install linkerd-control-plane \
   -n linkerd \
@@ -41,14 +44,17 @@ helm install linkerd-control-plane \
 ### Annotate the Namespace
 
 ```bash
+kubectl create namespace direktiv
+
 kubectl annotate ns --overwrite=true direktiv linkerd.io/inject=enabled
 ```
 
 ## Database
 
 ```bash
-helm repo add direktiv https://chart.direktiv.io
-helm install -n postgres --create-namespace --set singleNamespace=true postgres direktiv/pgo
+kubectl create namespace postgres
+helm repo add percona https://percona.github.io/percona-helm-charts/
+helm install -n postgres pg-operator percona/pg-operator --wait
 ```
 
 ```bash
@@ -58,31 +64,32 @@ kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubern
 ## Knative
 
 ```bash
-kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.9.4/operator.yaml
+kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.11.7/operator.yaml
 kubectl create ns knative-serving
 kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/knative/basic.yaml
-kubectl delete ns contour-external
+kubectl apply --filename https://github.com/knative/net-contour/releases/download/knative-v1.11.1/contour.yaml
+kubectl delete namespace contour-external
 ```
 
 ## Direktiv
 
 ```bash
 echo "database:
-  host: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "host"}}' | base64 --decode)\"
-  port: $(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "port"}}' | base64 --decode)
-  user: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "user"}}' | base64 --decode)\"
-  password: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode)\"
-  name: \"$(kubectl get secrets -n postgres direktiv-pguser-direktiv -o 'go-template={{index .data "dbname"}}' | base64 --decode)\"
+  host: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "host"}}' | base64 --decode)\"
+  port: $(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "port"}}' | base64 --decode)
+  user: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "user"}}' | base64 --decode)\"
+  password: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "password"}}' | base64 --decode)\"
+  name: \"$(kubectl get secrets -n postgres direktiv-cluster-pguser-direktiv -o 'go-template={{index .data "dbname"}}' | base64 --decode)\"
   sslmode: require" > direktiv.yaml
 ```
 
 ```bash
-helm install -f direktiv.yaml direktiv direktiv/direktiv
+helm repo add direktiv https://chart.direktiv.io
+helm install -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
 ```
 
 ### Get IP of Direktiv
 
 ```bash
-kubectl get services direktiv-ingress-nginx-controller --output jsonpath='{.status.loadBalancer.ingress[0].ip}'
+kubectl -n direktiv get services direktiv-ingress-nginx-controller --output jsonpath='{.status.loadBalancer.ingress[0].ip}'
 ```
-

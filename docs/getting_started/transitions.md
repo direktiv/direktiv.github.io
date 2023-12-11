@@ -5,6 +5,8 @@ Input data and [transitions](/getting_started/states/#simple-transition), in par
 To execute conditional transitions Direktiv provides a `switch` which makes decisions about where to transition to next based on the instance data by evaluating a number of `jq` or `js` expressions and checking the results. 
 
 ```yaml
+direktiv_api: workflow/v1
+
 states:
 - id: ifelse
   type: switch

@@ -17,7 +17,7 @@ BRANCH=${BRANCH:-'main'}
 # fi
 
 rm -rf direktiv
-cp -Rf /home/jensg/go/src/github.com/direktiv/direktiv direktiv
+cp -Rf $HOME/go/src/github.com/direktiv/direktiv direktiv
 cp -r direktiv/specification/* docs/spec
 rm -rf direktiv
 
