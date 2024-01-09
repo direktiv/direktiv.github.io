@@ -48,7 +48,7 @@ This registry would be used automatically by Direktiv when running the flow in t
 
 To use the Google Artifact Registry a service account with a key is required. How to create a service account and generate a key is documented [here](https://cloud.google.com/artifact-registry/docs/docker/authentication#json-key).
 
-The keed needs to be in base64 format. On linux it can be converted with the following command:
+The keys needs to be in base64 format. On linux it can be converted with the following command:
 
 ```console
 base64 -w 0 mykey-da8c8b573601.json > base64google.json
@@ -77,6 +77,6 @@ IMPORTANT: Be especially wary of subflows. Try to avoid passing secrets to subfl
 
 ## Security
 
-Registry tokens and secrets are stored individually encrypted within Direktiv's database. Each namespace gets its own unique encryption keys, and the decryption key is stored in a different database. For the online Direktiv, these two databases are on different machines and are firewalled apart from one another, and all internal traffic is encrypted.
-
-These measures minimize the risk of damaging data breaches, but we still recommend using tokens rather than passwords wherever possible.
+Secrets are securely stored in an encrypted format within Direktiv's database. Registry tokens are directly passed as Kubernetes Secrets, and they are therefore only Base64 encoded.
+For enhanced security, it is advised to configure system logs (Kubernetes) to the Info level in production environments, as debug-level logs may expose secrets in plain text.
+As a best practice, we recommend opting for tokens over passwords whenever feasible.
