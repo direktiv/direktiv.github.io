@@ -213,7 +213,7 @@ states:
     function: get
     input:
       commands:
-      - command: ehoc Hello
+      - command: echo Hello
 EOF
 
 # upload flow
