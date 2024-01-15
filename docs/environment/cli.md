@@ -17,24 +17,41 @@ curl -L https://github.com/direktiv/direktiv/releases/latest/download/direktivct
 
 ## Setting up a Namespace
 
-Working with the CLI assumes that you create a directory which is mirroring a namespace in Direktiv. This directory can be empty or can be a populated from a `github clone` command. The only requirement is that the namespace already exists. The connection information (address, token and namespace) can be provided with arguments but it is easier to use a `.direktiv.yaml` with that information. Providing a token is optional but `addr` and `namespace` are required.
+Working with the CLI assumes that you create a directory which is mirroring a namespace in Direktiv. This directory can be empty or can be a populated from a `github clone` command. The only requirement is that the namespace already exists. 
 
-```yaml title="Example .direktiv.yaml"
-auth: "my-api-key-token"
-addr: "https://my-direktiv.server"
-namespace: "direktiv"
+## Configuring the CLI-Tool
+
+Connection information (address, token, and namespace) can be provided as arguments, but it is easier to use a configutration file.
+You can use the direktivctl tool to populate a cinfiguration like this: 
+
+```bash
+# Use direktivctl to initialize a configuration file
+direktivctl project-init --addr https://dev.my-direktiv.server --namespace direktiv --profile dev
 ```
 
-This file has to be in the root folder of that project and after creating this, that directory is mirroring the file structure in Direktiv.
+Or create a `~/.config/direktiv/.direktiv.profile.yaml` file with the following file structure:
+
+```yaml title="Example .direktiv.profile.yaml"
+dev:
+  auth: "my-dev-api-token"
+  addr: https://dev.my-direktiv.server
+  namespace: direktiv
+prod:
+  auth: my-prod-api-token
+  addr: https://prod.my-direktiv.server
+  namespace: direktiv
+```
+
+After the creation of a configuration you must use the profile flag to to use a specific profile.
 
 ## Pushing and Executing
 
 After setup there are two commands available. The `push` command pushes a flow to Direktiv but does not execute it. This command works recursively e.g. `direktivctl workflows push .`. The `exec` command uploads and executes the flow. During execution the logs are printed to `stdout`.
 
 ```sh title="CLI Examples"
-direktivctl workflows push myworkflow.yaml
-direktivctl workflows push myfolder/
-direktivctl workflows exec mywf.yaml
+direktivctl workflows push myworkflow.yaml -P dev
+direktivctl workflows push myfolder/ -P dev
+direktivctl workflows exec mywf.yaml -P dev
 ```
 
 ## Workflow Attributes
@@ -47,41 +64,3 @@ mywf.yaml.script.sh
 ```
 
 The above example will create a flow variable `script.sh` for the flow `mywf.yaml`.
-
-## Profiles
-
-If multiple configurations are needed, e.g. for local and remote, direktivctl supports "profiles". A profile is a configuration in a list of configurations in the config file. A valid configuration file might look like this:
-
-```yaml
-profiles:
-- id: dev
-  auth: 123
-  addr: http://localhost:8080
-  namespace: test
-- id: prod
-  auth: 123
-  addr: http://10.100.91.17
-  namespace: test
-```
-
-The tool supports both types of configuration files, but you cannot mix and match. Either it uses profiles or basic configuration.
-
-When using profiles, the default behaviour is to select the first profile defined in the list. To override this behaviour the `-P`/`--profile` flag can be used to select one of the other profiles according to its `id`. For the example above, to push to `prod` can be done with the flag `--profile=prod`.
-
-## Other Ways to Configure
-
-For most configuration settings, direktivctl will check for values in three places in the following order:
-
-* Commandline flags.
-* Environment variables.
-* A configuration file.
-
-As long as direktictl finds all of the values required, it doesn't care where it got them from. This means it's not strictly necessary to have a configuration file at all, so long as the settings are defined elsewhere.
-
-The flags are self explanatory, and otherwise available via help information (`-h`/`--help`). For environment variables, all settings are named the same way they appear in a configuration file, except for the following adjustments:
-
-* All characters are UPPERCASE
-* All dashes are replaced with underscores.
-* All named are prefixed with `DIREKTIV_`.
-
-For example the auth token can be defined with `DIREKTIV_AUTH_TOKEN=my-api-key-token`.
