@@ -15,7 +15,7 @@ Knative is an essential part of Direktiv and can be installed with Knative's ope
 
 
 ```sh title="Install Knative Operator"
-kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.11.7/operator.yaml
+kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.12.2/operator.yaml
 ```
 
 After the deployment of the operator a new instance of Knative Serving can be created. Direktiv requires a certain configuration for Knative to work. There are two examples of configurations in the (Github repository). The first one is the [standard configuration](https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/knative/basic.yaml) and the other one is an [example with proxy settings](https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/knative/basic.yaml). 
