@@ -15,7 +15,7 @@ func main() {
 
 	dir := os.Args[1]
 
-	nav = "  - Examples:\n"
+	// nav = "  - Examples:\n"
 
 	fmt.Printf("building examples from %s\n", dir)
 	entries, err := os.ReadDir(dir)
@@ -29,19 +29,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	os.Chmod(outDir, 0777)
 
 	for _, e := range entries {
 		processExample(filepath.Join(dir, e.Name()), outDir)
 	}
 
-	fmt.Println(outDir)
-
-	err = os.WriteFile(fmt.Sprintf("%s/nav.out", outDir), []byte(nav), 0777)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Printf("generated examples in %s\n", filepath.Join(outDir, "nav.out"))
+	fmt.Println("generated examples")
 
 }
 
@@ -105,5 +99,12 @@ func processExample(dir, out string) {
 	}
 
 	nav = nav + fmt.Sprintf("    - %s: examples/%s\n", title, fmt.Sprintf("%s.md", fileName))
+
+	// items, _ := ioutil.ReadDir(out)
+	entries, _ := os.ReadDir(out)
+	for i := range entries {
+		e := entries[i]
+		os.Chmod(filepath.Join(out, e.Name()), 0777)
+	}
 
 }

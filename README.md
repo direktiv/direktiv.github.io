@@ -1,5 +1,10 @@
 ## Dependencies
 
+
+sudo npm install -g speccy
+
+
+
 1. **mkdocs**  
    Site: https://github.com/mkdocs/mkdocs/releases
 
