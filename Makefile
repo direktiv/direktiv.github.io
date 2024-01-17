@@ -2,8 +2,6 @@ git_prefix = $(if $(DEV),git@github.com:,https://github.com/)
 
 .PHONY: clone
 clone:
-	@echo git@github.com:direktiv/direktiv.git
-	@echo ${git_prefix}github.com/direktiv/direktiv.git
 	git clone --depth 1 ${git_prefix}direktiv/direktiv.git || (cd direktiv ; git pull)
 
 .PHONY: update-spec

@@ -17,6 +17,26 @@ pip install pymdown-extensions
 pip install mkdocs-material
 ```
 
+## Build API Docs and Specification
+
+The API documentation and specification are getting automatically generated. There are two `make` targets for it.
+
+```
+make update-api
+```
+
+
+```
+make update-spec
+```
+
+For both targets the direktiv main repository will be cloned from `main`. If changes in the specification or API documentation are required
+the repository can be cloned `ssh` to be able to push back changes. If the variable `DEV` is set the Makefile will use SSH.
+
+```
+make update spec DEV=true
+```
+
 ## Running
 
 ```
@@ -28,3 +48,4 @@ make serve
 ```
 make publish
 ```
+
