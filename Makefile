@@ -1,6 +1,11 @@
+git_prefix = $(if $(DEV),git@github.com:,https://github.com/)
+
 .PHONY: clone
 clone:
-	git clone --depth 1 https://github.com/direktiv/direktiv.git || (cd direktiv ; git pull)
+	@echo git@github.com:direktiv/direktiv.git
+	@echo ${git_prefix}github.com/direktiv/direktiv.git
+	git clone --depth 1 ${git_prefix}direktiv/direktiv.git || (cd direktiv ; git pull)
+
 .PHONY: update-spec
 update-spec: clone
 	rm -Rf page/docs/spec
@@ -21,4 +26,8 @@ update-api: clone
 
 .PHONY: serve
 serve:
-	mkdocs serve -f page/mkdocs.yml
+	mkdocs serve -s -f page/mkdocs.yml
+
+.PHONY: publish
+publish:
+	mkdocs gh-deploy -f page/mkdocs.yml

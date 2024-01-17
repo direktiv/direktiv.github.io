@@ -6,12 +6,7 @@ repo_url: https://github.com/direktiv/direktiv
 plugins:
 - search
 - awesome-pages
-# - neoteroi.mkdocsoad:
-#     use_pymdownx: true
- # sudo pip install neoteroi-mkdocs / pip install pymdown-extensions
-- render_swagger:
-    # css: assets/css/swagger-ui.css
-      # allow_arbitrary_locations : true
+- render_swagger
 theme:
   name: material
   logo: assets/path36.png
@@ -26,6 +21,16 @@ theme:
     - navigation.tabs.sticky
     - navigation.top
     - navigation.indexes
+
+validation:
+  nav:
+    omitted_files: info
+    not_found: warn
+    absolute_links: info
+  links:
+    not_found: warn
+    absolute_links: info
+    unrecognized_links: info
 
 extra:
   social:
