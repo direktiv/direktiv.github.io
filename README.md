@@ -17,6 +17,14 @@ pip install pymdown-extensions
 pip install mkdocs-material
 ```
 
+## Docker
+
+The doumentation can be started with Docker. Changes in the docuemntation will be hot-swapped.
+
+```
+make docker
+```
+
 ## Build API Docs and Specification
 
 The API documentation and specification are getting automatically generated. There are two `make` targets for it.

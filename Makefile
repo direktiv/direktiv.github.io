@@ -29,3 +29,9 @@ serve:
 .PHONY: publish
 publish:
 	mkdocs gh-deploy -f page/mkdocs.yml
+
+.PHONY: docker
+docker:
+	echo `pwd`
+	docker build -t direktiv-docs .
+	docker run -v `pwd`:/docs  -p 8000:8000 direktiv-docs 
