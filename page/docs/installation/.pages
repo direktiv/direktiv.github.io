@@ -1,0 +1,6 @@
+nav:
+    - Kubernetes: kubernetes.md
+    - Linkerd: linkerd.md
+    - Database: database.md
+    - Direktiv: direktiv.md
+    - Quick Install: summary.md

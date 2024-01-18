@@ -1,41 +1,37 @@
-MKDIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+git_prefix = $(if $(DEV),git@github.com:,https://github.com/)
 
-# clones direktiv and builds api docs
-.PHONY: update-api
-update-api:
-	echo "clean-up old repo if present"
-	rm -rf build/api/direktiv
-	mkdir -p build/api
-	cd build/api; git clone https://github.com/direktiv/direktiv.git;
-	cd build/api/direktiv; make api-docs
-	cat build/api/direktiv/scripts/api/api.md > docs/api.md
-
+.PHONY: clone
+clone:
+	git clone --depth 1 ${git_prefix}direktiv/direktiv.git || (cd direktiv ; git pull)
 
 .PHONY: update-spec
-update-spec:
-	./get-spec.sh
+update-spec: clone
+	rm -Rf page/docs/spec
+	cp -Rf direktiv/specification page/docs/spec
 
-.PHONY: install-deps
-install-deps:
-	./install-swagger.sh
-
-.PHONY: create-examples
-create-examples:
+.PHONY: update-examples
+update-examples: clone
 	rm -Rf direktiv-examples
-	git clone https://github.com/direktiv/direktiv-examples.git
+	git clone https://github.com/direktiv/direktiv-examples.git  || (cd direktiv-examples ; git pull)
 	docker build -f Dockerfile.examples -t exbuilder  .
 	docker run -v $(shell pwd)/direktiv-examples:/examples exbuilder
-	$(shell pwd)/add-example-nav.sh
-	rm -Rf docs/examples
-	cp -Rf direktiv-examples/out docs/examples
-	rm -f docs/examples/nav.out
+	rm -Rf page/docs/examples
+	cp -Rf direktiv-examples/out page/docs/examples
 
+.PHONY: update-api
+update-api: clone
+	speccy resolve direktiv/openapi/src/openapi.yaml -o page/docs/openapi.yaml
 
-.PHONY: update-all
-update-all: update-spec create-examples update-api
+.PHONY: serve
+serve:
+	mkdocs serve -s -f page/mkdocs.yml
 
+.PHONY: publish
+publish:
+	mkdocs gh-deploy -f page/mkdocs.yml
 
-.PHONY: test-links
-test-links:
-	docker build -t linkcheck ${MKDIR}/test/linkcheck
-	docker run --rm -v ${MKDIR}:/testsite linkcheck
+.PHONY: docker
+docker:
+	echo `pwd`
+	docker build -t direktiv-docs .
+	docker run -v `pwd`:/docs  -p 8000:8000 direktiv-docs 

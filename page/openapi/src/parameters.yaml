@@ -1,0 +1,34 @@
+namespace:
+  name: namespace
+  in: path
+  schema:
+    type: string
+  required: true
+
+serviceID:
+  name: serviceID
+  in: path
+  schema:
+    type: string
+  required: true
+
+podID:
+  name: podID
+  in: path
+  schema:
+    type: string
+  required: true
+
+registryID:
+  name: registryID
+  in: path
+  schema:
+    type: string
+  required: true
+
+route-path:
+  name: route-path
+  in: path
+  schema:
+    type: string
+  required: true

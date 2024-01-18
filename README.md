@@ -1,37 +1,59 @@
 ## Dependencies
 
-1. **mkdocs**  
-   Site: https://github.com/mkdocs/mkdocs/releases
+The following dependencies need to be installed:
 
-```sh
-sudo apt-get install mkdocs
+- make
+- git
+- docker
+
+
 ```
-
-2. **mkdocs-material**  
-   Site: https://github.com/squidfunk/mkdocs-material
-
-If you are on a Mac, please follow [these instructions](https://suedbroecker.net/2021/01/25/how-to-install-mkdocs-on-mac-and-setup-the-integration-to-github-pages/).
-
-```sh
+sudo apt install npm
+sudo npm install speccy -g 
+pip install mkdocs
+pip install mkdocs-render-swagger-plugin
+pip install mkdocs-awesome-pages-plugin
+pip install pymdown-extensions
 pip install mkdocs-material
 ```
 
-## Run Locally
+## Docker
 
-```sh
-mkdocs serve
+The doumentation can be started with Docker. Changes in the docuemntation will be hot-swapped.
+
+```
+make docker
 ```
 
-## Test Broken Links
+## Build API Docs and Specification
 
-```sh
-make test-links
+The API documentation and specification are getting automatically generated. There are two `make` targets for it.
+
+```
+make update-api
 ```
 
-## Deploy Docs Live
 
-```sh
-mike deploy --push --update-aliases VERSION_TAG
-# Example: mike deploy --push --update-aliases v0.5.10
-mike set-default --push latest
 ```
+make update-spec
+```
+
+For both targets the direktiv main repository will be cloned from `main`. If changes in the specification or API documentation are required
+the repository can be cloned `ssh` to be able to push back changes. If the variable `DEV` is set the Makefile will use SSH.
+
+```
+make update spec DEV=true
+```
+
+## Running
+
+```
+make serve
+```
+
+## Publishing
+
+```
+make publish
+```
+

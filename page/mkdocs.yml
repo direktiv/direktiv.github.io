@@ -1,0 +1,68 @@
+site_name: direktiv
+site_url: https://docs.direktiv.io
+site_description: Direktiv Documentation
+repo_url: https://github.com/direktiv/direktiv
+
+plugins:
+- search
+- awesome-pages
+- render_swagger
+theme:
+  name: material
+  logo: assets/path36.png
+  favicon: assets/favicon.ico
+  palette:
+    scheme: default
+    primary: Neutral/Gray 900
+    accent: Neutral/Gray 400
+  features:
+    - navigation.tabs
+    - navigation.tracking
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.indexes
+
+validation:
+  nav:
+    omitted_files: info
+    not_found: warn
+    absolute_links: info
+  links:
+    not_found: warn
+    absolute_links: info
+    unrecognized_links: info
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/direktiv_io
+    - icon: fontawesome/brands/github
+      link: https://github.com/direktiv/direktiv
+      name: Direktiv on Github
+    - icon: fontawesome/brands/slack
+      link: https://join.slack.com/t/direktiv-io/shared_invite/zt-zf7gmfaa-rYxxBiB9RpuRGMuIasNO~g
+      name: Slack
+
+extra_css:
+  - stylesheets/extra.css
+
+copyright: "Copyright © 2023 direktiv.io"
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true 
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
+  - toc:
+      toc_depth: 2
+  
+  
