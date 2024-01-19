@@ -678,3 +678,32 @@ label.md-sidebar__scrollwrap {
 .highlight .hll {
   background-color: #dae9ff;
 }
+
+.md-content__button {
+  display: none;
+}
+
+.swagger-ui .renderedMarkdown code {
+  color: #5364fe !important
+}
+
+.swagger-ui .info a {
+  color: #5364fe !important
+}
+
+.swagger-ui .info .title small.version-stamp {
+  background-color: #5364fe !important;
+}
+
+.swagger-ui .opblock.opblock-get .opblock-summary-method {
+  background: #5364fe !important;
+}
+
+/* .swagger-ui .opblock.opblock-get .opblock-summary-method {
+ 
+} */
+
+.swagger-ui .opblock.opblock-get {
+  background: rgb(238 239 255) !important;
+  border-color: #5364fe;
+}
