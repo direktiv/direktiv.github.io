@@ -11,8 +11,7 @@ update-spec: clone
 
 .PHONY: update-examples
 update-examples: clone
-	rm -Rf direktiv-examples
-	git clone https://github.com/direktiv/direktiv-examples.git  || (cd direktiv-examples ; git pull)
+	git clone ${git_prefix}direktiv/direktiv-examples.git  || (cd direktiv-examples ; git pull)
 	docker build -f Dockerfile.examples -t exbuilder  .
 	docker run -v $(shell pwd)/direktiv-examples:/examples exbuilder
 	rm -Rf page/docs/examples

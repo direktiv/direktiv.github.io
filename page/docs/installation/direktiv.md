@@ -22,7 +22,7 @@ After the deployment of the operator a new instance of Knative Serving can be cr
 
 ```sh title="Install Knative"
 kubectl create ns knative-serving
-kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/knative/basic.yaml
+kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/scripts/kubernetes/install/knative/basic.yaml
 ```
 
 Direktiv supports [Contour](https://projectcontour.io/) as network component. 

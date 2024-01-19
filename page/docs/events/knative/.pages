@@ -1,4 +1,4 @@
 nav:
 - Eventing: knative.md
-- Kafka Example: kafka.md
+- Kafka Example: example.md
 - VMWare Example: vmware.md

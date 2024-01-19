@@ -24,7 +24,7 @@ helm install --create-namespace  -n postgres pg-operator percona/pg-operator --w
 This basic configuration is good for small instances and testing. It creates weekly backups and keeps the last 4 backups. Direktiv connects directly to the Database without connection pooling.
 
 ```bash title="Basic Install"
-kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/basic.yaml
+kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/scripts/kubernetes/install/db/basic.yaml
 ```
 
 ```yaml title="Basic Database Configuration"
@@ -96,7 +96,7 @@ spec:
 High-Availabilty can be achieved by scaling the database replicas. The following example has added daily differential backups and pod anti-affinity to spread the pods across the cluster. If anti-affinity is used the cluster needs to have the same number of nodes and database replicas.
 
 ```bash title="Basic Install"
-kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/ha.yaml
+kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/scripts/kubernetes/install/db/ha.yaml
 ```
 
 ```yaml title="High-Availability Configuration"
@@ -208,7 +208,7 @@ kubectl get secret -n postgres direktiv-pgbackrest-secret -o go-template='{{ ind
 High-Availabilty can be achieved by scaling the database replicas. The following example has added daily differential backups and pod anti-affinity and topology spread constraints to spread the pods across the cluster. If anti-affinity is used the cluster needs to have the same number of nodes and database replicas.
 
 ```bash title="S3 Backup Install"
-kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/s3.yaml
+kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/scripts/kubernetes/install/db/s3.yaml
 ```
 
 ```yaml title="S3 Configuration"
