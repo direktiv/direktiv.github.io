@@ -51,3 +51,33 @@ If POST is used the body of the request is getting logged for GET requests add a
 - [Python](https://github.com/direktiv/direktiv.github.io/tree/main/examples/python)
 - [Rust](https://github.com/direktiv/direktiv.github.io/tree/main/examples/rust)
 
+## Using Generic Containers
+
+Direktiv has a special command to use any conatiner from a container registry even if it does not have a server running on port `8080`. If the the command `/usr/share/direktiv/direktiv-cmd` in the `cmd` field is used Direktiv provides a server for this function / container. 
+This can be useful if e.g. a Python container is used for scripting  or `bash` for ssh/scp comands. 
+
+```yaml title="Special Command"
+direktiv_api: workflow/v1
+functions:
+- id: get
+  image: alpine
+  type: knative-workflow
+  cmd: /usr/share/direktiv/direktiv-cmd
+states:
+- id: getter 
+  type: action
+  action:
+    function: get
+    input: 
+      data:
+        commands:
+        - command: echo -n "hello"
+          stop: true
+```
+
+The `commands` block holds an array of individual commands which will be excuted in the function. The commands can have three additional parameters.
+
+- `stop`: If the execution should stop if an error occurs during this command (default: false).
+- `suppress_command`: If the command should be printed when executed. Should be set to true if passwords are part of the command (default: false).
+- `suppress_output`: If the stdout output of the command should be printed (default: false).
+
