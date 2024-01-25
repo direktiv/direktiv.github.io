@@ -70,7 +70,7 @@ There is always the option to use the multipass configuration if the Docker imag
 Multipass creates a virtual machine with Direktiv pre-configured. The configuration is different from the Docker image but all features are available to that approach as well. The cloud-init script will do the configuration during first boot and takes a few minutes to complete. Eventing is anebled by default.
 
 ```sh title="Start Multipass Instance"
-multipass launch --cpus 4 --disk 20G --memory 6G --name direktiv --cloud-init https://raw.githubusercontent.com/direktiv/direktiv/main/build/docker/all/multipass/init.yaml
+multipass launch --cpus 4 --disk 20G --memory 6G --name direktiv --cloud-init https://raw.githubusercontent.com/direktiv/direktiv/main/scripts/build/docker/all/multipass/init.yaml
 ```
 
 After startup the machine can be access with a simple command. For convenience there is a `kubectl` shortcut and code completion installed. 

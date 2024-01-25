@@ -13,7 +13,7 @@ docker run --privileged -p 8080:80 -ti direktiv/direktiv-kube
 For Windows and Mac users in particular there is a [Multipass](https://multipass.run/install) cloud-init script to set up a Direktiv instance for testing and development.
 
 ```sh title="Running Multipass"
-multipass launch --cpus 4 --disk 20G --memory 6G --name direktiv --cloud-init https://raw.githubusercontent.com/direktiv/direktiv/main/build/docker/all/multipass/init.yaml
+multipass launch --cpus 4 --disk 20G --memory 6G --name direktiv --cloud-init https://raw.githubusercontent.com/direktiv/direktiv/main/scripts/build/docker/all/multipass/init.yaml
 ```
 
 !!! warning VPN

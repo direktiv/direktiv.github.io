@@ -28,7 +28,7 @@ states:
 ```
 
 
-Additional Attributes for command
+Additional Attributes for commands:
 
 | Attribute | Description |
 |-----|-------|
