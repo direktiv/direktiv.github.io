@@ -4,7 +4,7 @@ title: Quickstart
 #
 
 <p align=center>
-<img src="../assets/Banner.svg" alt="direktiv-specification"/>
+<img src="../assets/Banner.svg" alt="direktiv logo"/>
 </p>
 
 
