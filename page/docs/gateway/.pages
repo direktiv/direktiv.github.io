@@ -1,0 +1,5 @@
+nav:
+    - Gateway: index.md
+    - Routes: routes.md
+    - Consumers: consumers.md
+    - Plugins: plugins

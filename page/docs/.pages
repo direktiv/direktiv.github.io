@@ -4,6 +4,7 @@ nav:
     - Installation: installation
     - Specification: spec
     - API: api.md
+    - Gateway: gateway
     - Development: environment
     - Examples: examples
     - Events: events
