@@ -64,9 +64,9 @@ kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubern
 ## Knative
 
 ```bash
-kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.11.7/operator.yaml
+kubectl apply -f https://github.com/knative/operator/releases/download/knative-v1.12.2/operator.yaml
 kubectl create ns knative-serving
-kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/knative/basic.yaml
+kubectl apply -f https://raw.githubusercontent.com/direktiv/direktiv/main/scripts/kubernetes/install/knative/basic.yaml
 kubectl apply --filename https://github.com/knative/net-contour/releases/download/knative-v1.11.1/contour.yaml
 kubectl delete namespace contour-external
 ```
@@ -84,7 +84,7 @@ echo "database:
 ```
 
 ```bash
-helm repo add direktiv https://chart.direktiv.io
+helm repo add direktiv https://charts.direktiv.io
 helm install -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
 ```
 
