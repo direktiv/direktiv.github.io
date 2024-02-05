@@ -72,6 +72,9 @@ states:
       data:
         commands:
         - command: echo -n "hello"
+          envs:
+          - name: MYENV
+            value: MYVALUE
           stop: true
 ```
 
@@ -80,4 +83,4 @@ The `commands` block holds an array of individual commands which will be excuted
 - `stop`: If the execution should stop if an error occurs during this command (default: false).
 - `suppress_command`: If the command should be printed when executed. Should be set to true if passwords are part of the command (default: false).
 - `suppress_output`: If the stdout output of the command should be printed (default: false).
-
+- `env`: A list ov environment variables with  `name`/`value` pairs for this single command.
