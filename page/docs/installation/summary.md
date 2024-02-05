@@ -84,6 +84,7 @@ echo "database:
 ```
 
 ```bash
+helm repo add fluent-bit https://fluent.github.io/helm-charts
 helm repo add direktiv https://charts.direktiv.io
 helm install -f direktiv.yaml -n direktiv direktiv direktiv/direktiv
 ```

@@ -57,3 +57,6 @@ make serve
 make publish
 ```
 
+## Changing the Docs
+
+The `release` branch includes the documentation for upcoming releases and `main` for the actual release. Immediate fixes can be added to main. Other changes go into `release`.
