@@ -92,3 +92,27 @@ kubectl -n direktiv get services direktiv-ingress-nginx-controller --output json
 ```
 
 For more configuration options go to Direktiv's [helm charts](https://github.com/direktiv/direktiv-charts/tree/main/charts/direktiv).
+
+
+## Changing Logos
+
+Direktiv can use custom logos for the UI. The only requirement is that the replacements need to be in SVG format (except the favicon). The following files are required:
+
+- icon-light.svg: Small light icon for mobile view.
+- icon-dark.svg: Small dark icon for mobile view.
+- logo-light.svg: Light logo for normal sized UI.
+- logo-dark.svg: Dark logo for normal sized UI.
+- favicon.png: Favicon for Direktiv UI.
+
+The icons can be set via Direktiv's Helm chart.
+
+```console title="Custom Logos"
+helm install --set-file frontend.logos.icon-light=/home/jensg/logos/icon-light.svg  \
+  --set-file frontend.logos.icon-dark=/home/jensg/logos/icon-dark.svg \
+  --set-file frontend.logos.logo-light=/home/jensg/logos/logo-light.svg \
+  --set-file frontend.logos.logo-dark=/home/jensg/logos/logo-dark.svg \
+  --set-file frontend.logos.favicon=/home/jensg/logos/favicon.png \
+  -f direktiv.yaml direktiv charts/direktiv/
+```
+
+
