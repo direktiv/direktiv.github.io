@@ -2,7 +2,7 @@
 
 The Javascript plugin receives the request as an object. This object can be manipulated with the script. The object will be used as a new request in subsequent plugins or send to a flow. 
 
-The `input` object contains `Headers`, `Queries` and `Body` and they can be addressed with the Javascript script in the plugin. 
+The `input` object contains `Headers`, `Queries`, `Body`, `Consumer` and `URLParams` (Parameters like `/{id}` in the route path). They can be addressed with the Javascript script in the plugin. 
 
 ```javascript title="Javascript Request Access"
 # Delete Header
