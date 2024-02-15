@@ -61,7 +61,7 @@ functions:
 - id: checker-sub
   type: subflow
   # relative reference to subflow
-  workflow: checker
+  workflow: checker.yaml
 states:
 - id: notify
   type: action
