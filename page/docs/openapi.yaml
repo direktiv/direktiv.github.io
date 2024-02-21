@@ -112,18 +112,24 @@ info:
 
     | `500` | something went wrong with the server |
 tags:
+  - name: server
+    description: Miscellaneous server endpoints
   - name: services
     description: Endpoints for managing services
   - name: registries
     description: Endpoints for managing registries
   - name: gateway
     description: Endpoints for fetchig API gateway information
+  - name: files
+    description: Endpoints reading and changing filesystem tree nodes
 x-tagGroups:
   - name: Endpoints
     tags:
+      - files
       - services
       - registries
       - gateway
+      - server
 components:
   parameters:
     namespace:
@@ -266,15 +272,229 @@ components:
                   nullable: true
                   example:
                     flow: /directory/myflow.yaml
+    FileNodeWithoutData:
+      type: object
+      description: filesystem node data
+      properties:
+        path:
+          type: string
+          description: path of the node
+        type:
+          type: string
+          enum:
+            - directory
+            - file
+            - workflow
+            - service
+            - endpoint
+            - consumer
+          description: type of the node
+        mimeType:
+          type: string
+          description: (only with type != directory) mime type of the file content
+        size:
+          type: number
+          description: (only with type != directory) file size in bytes
+        createdAt:
+          type: string
+          description: timestamp of node creation date
+        updatedAt:
+          type: string
+          description: timestamp of node last updating date
 paths:
+  "/api/v2/namespaces/{namespace}/files/{path}":
+    get:
+      tags:
+        - files
+      summary: Read any node in the filesystem tree
+      parameters:
+        - name: namespace
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: path
+          in: path
+          schema:
+            type: string
+            description: path of the node to read (with slashes)
+          required: true
+      responses:
+        "200":
+          description: filesystem tree node data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    allOf:
+                      - type: object
+                        description: filesystem node data
+                        properties:
+                          path:
+                            type: string
+                            description: path of the node
+                          type:
+                            type: string
+                            enum:
+                              - directory
+                              - file
+                              - workflow
+                              - service
+                              - endpoint
+                              - consumer
+                            description: type of the node
+                          mimeType:
+                            type: string
+                            description: (only with type != directory) mime type of the file content
+                          size:
+                            type: number
+                            description: (only with type != directory) file size in bytes
+                          createdAt:
+                            type: string
+                            description: timestamp of node creation date
+                          updatedAt:
+                            type: string
+                            description: timestamp of node last updating date
+                      - type: object
+                        description: files node data
+                        properties:
+                          data:
+                            type: string
+                            description: (only with type != directory) base64 encoded string of the file
+                              content
+                          children:
+                            type: array
+                            description: list of files child nodes
+                            items:
+                              $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/re\
+                                sponses/200/content/application~1json/schema/pr\
+                                operties/data/allOf/0"
+    delete:
+      tags:
+        - files
+      summary: Delete any node in the filesystem tree
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: path
+          in: path
+          schema:
+            type: string
+            description: path of the node to delete (with slashes)
+          required: true
+      responses:
+        "200":
+          description: filesystem tree node deleted successfully
+    post:
+      tags:
+        - files
+      summary: Create a node in the filesystem tree
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: path
+          in: path
+          schema:
+            type: string
+            description: path of the parent node (with slashes)
+          required: true
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: name of the node(file or directory name)
+                type:
+                  type: string
+                  enum:
+                    - directory
+                    - file
+                    - workflow
+                    - service
+                    - endpoint
+                    - consumer
+                  description: type of the node
+                mimeType:
+                  type: string
+                  description: (only with type != directory) mime type of the file content
+                data:
+                  type: string
+                  description: (only with type != directory) base64 encoded string of the file
+                    content
+      responses:
+        "200":
+          description: filesystem tree node created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/re\
+                      sponses/200/content/application~1json/schema/properties/d\
+                      ata/allOf/0"
+    patch:
+      tags:
+        - files
+      summary: Update a node in the filesystem tree (change path or data)
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: path
+          in: path
+          schema:
+            type: string
+            description: path of the parent node (with slashes)
+          required: true
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  description: the new absolute path of the node(file or directory name)
+                data:
+                  type: string
+                  description: (only with type != directory) base64 encoded string of the file
+                    content
+      responses:
+        "200":
+          description: filesystem tree node updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/re\
+                      sponses/200/content/application~1json/schema/properties/d\
+                      ata/allOf/0"
+                  - type: object
+                    description: files node data
+                    properties:
+                      data:
+                        type: string
+                        description: (only with type != directory) base64 encoded string of the file
+                          content
   "/api/v2/namespaces/{namespace}/gateway/consumers":
     get:
       tags:
         - gateway
       summary: Get all consumers
       parameters:
-        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1services/get/parameters/\
-            0"
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
       responses:
         "200":
           description: Consumers for gateway in the namespace
@@ -315,8 +535,8 @@ paths:
         - gateway
       summary: Get all routes
       parameters:
-        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1services/get/parameters/\
-            0"
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
         - in: query
           name: path
           schema:
@@ -441,17 +661,102 @@ paths:
                                   nullable: true
                                   example:
                                     flow: /directory/myflow.yaml
+  "/api/v2/namespaces/{namespace}/registries":
+    get:
+      tags:
+        - registries
+      summary: Get all namespace registries
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      responses:
+        "200":
+          description: Registries list returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: a unique string that represent id of the registry
+                        namespace:
+                          type: string
+                          description: the namespace of registry belongs
+                        url:
+                          type: string
+                          description: url of the registry
+                        user:
+                          type: string
+                          description: anonymize username of the registry
+    post:
+      tags:
+        - registries
+      summary: Create a new registry secret
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: url of the registry
+                user:
+                  type: string
+                  description: username of the registry
+                password:
+                  type: string
+                  description: password string
+      responses:
+        "200":
+          description: Created registry object returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: a unique string that represent id of the registry
+                  namespace:
+                    type: string
+                    description: the namespace of registry belongs
+                  url:
+                    type: string
+                    description: url of the registry
+                  user:
+                    type: string
+                    description: anonymize username of the registry
+  "/api/v2/namespaces/{namespace}/registries/{registryID}":
+    delete:
+      tags:
+        - registries
+      summary: Remove a registry secret
+      parameters:
+        - name: registryID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Registry object deleted
   "/api/v2/namespaces/{namespace}/services":
     get:
       tags:
         - services
       summary: Get all services
       parameters:
-        - name: namespace
-          in: path
-          schema:
-            type: string
-          required: true
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
       responses:
         "200":
           description: Services list returned
@@ -534,8 +839,8 @@ paths:
         - services
       summary: Get all pods for a given service
       parameters:
-        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1services/get/parameters/\
-            0"
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
         - name: serviceID
           in: path
           schema:
@@ -563,8 +868,8 @@ paths:
         - services
       summary: Stream logs for a given pod
       parameters:
-        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1services/get/parameters/\
-            0"
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
         - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1services~1%7BserviceID%7\
             D~1pods/get/parameters/1"
         - name: podID
@@ -581,98 +886,27 @@ paths:
         - services
       summary: Rebuilds service
       parameters:
-        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1services/get/parameters/\
-            0"
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
         - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1services~1%7BserviceID%7\
             D~1pods/get/parameters/1"
       responses:
         "200":
           description: Service rebuilds successfully
-  "/api/v2/namespaces/{namespace}/registries":
+  /api/v2/version:
     get:
+      summary: Get server version information.
       tags:
-        - registries
-      summary: Get all namespace registries
-      parameters:
-        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1services/get/parameters/\
-            0"
+        - server
       responses:
         "200":
-          description: Registries list returned
+          description: Server version information.
           content:
             application/json:
+              example:
+                data: 1.0.0
               schema:
                 type: object
                 properties:
                   data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          description: a unique string that represent id of the registry
-                        namespace:
-                          type: string
-                          description: the namespace of registry belongs
-                        url:
-                          type: string
-                          description: url of the registry
-                        user:
-                          type: string
-                          description: anonymize username of the registry
-    post:
-      tags:
-        - registries
-      summary: Create a new registry secret
-      requestBody:
-        description: User data
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                url:
-                  type: string
-                  description: url of the registry
-                user:
-                  type: string
-                  description: username of the registry
-                password:
-                  type: string
-                  description: password string
-      responses:
-        "200":
-          description: Created registry object returned
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
                     type: string
-                    description: a unique string that represent id of the registry
-                  namespace:
-                    type: string
-                    description: the namespace of registry belongs
-                  url:
-                    type: string
-                    description: url of the registry
-                  user:
-                    type: string
-                    description: anonymize username of the registry
-  "/api/v2/namespaces/{namespace}/registries/{registryID}":
-    delete:
-      tags:
-        - registries
-      summary: Remove a registry secret
-      parameters:
-        - name: registryID
-          in: path
-          schema:
-            type: string
-          required: true
-      responses:
-        "200":
-          description: Registry object deleted
