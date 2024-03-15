@@ -6,3 +6,4 @@ Plugins to authenticate consumers or clients.
 - [Key Authentication](key.md)
 - [Github Authentication](git.md)
 - [Gitlab Authentication](gitlab.md)
+- [Slack Authentication](slack.md)
