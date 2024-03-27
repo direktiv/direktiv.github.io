@@ -116,24 +116,39 @@ tags:
     description: Miscellaneous server endpoints
   - name: services
     description: Endpoints for managing services
+  - name: variables
+    description: Endpoints for managing direktiv variables
+  - name: secrets
+    description: Endpoints for managing direktiv secrets
   - name: registries
     description: Endpoints for managing registries
   - name: gateway
     description: Endpoints for fetchig API gateway information
   - name: files
     description: Endpoints reading and changing filesystem tree nodes
+  - name: plattformlogs
+    description: Endpoints to access logs that are exposed by the components
 x-tagGroups:
   - name: Endpoints
     tags:
       - files
       - services
+      - variables
+      - secrets
       - registries
       - gateway
       - server
+      - plattformlogs
 components:
   parameters:
     namespace:
       name: namespace
+      in: path
+      schema:
+        type: string
+      required: true
+    instanceID:
+      name: instanceID
       in: path
       schema:
         type: string
@@ -301,6 +316,55 @@ components:
         updatedAt:
           type: string
           description: timestamp of node last updating date
+    InstanceData:
+      type: object
+      description: filesystem node data
+      properties:
+        id:
+          type: string
+          description: instance uuid
+        created_at:
+          type: string
+          description: timestamp
+        ended_at:
+          type: string
+          description: will be null if the instance is still running
+        status:
+          type: string
+          description: enum describing the current state of the instance
+          enum:
+            - pending
+            - complete
+            - failed
+            - crashed
+            - cancelled
+        path:
+          type: string
+          description: filepath of the workflow
+        error_code:
+          type: string
+          description: error code of a failed workflow
+        invoker:
+          type: string
+          description: information about how the instance was instantiated
+        definition:
+          type: string
+          description: binary data containing a copy of the workflow at the time the
+            instance was created
+        input:
+          type: string
+          description: binary data containing the input to the instance. Will be null
+            unless specifically requested.
+        output:
+          type: string
+          description: binary data containing the output of a finished workflow. Will be
+            null unless specifically requested.
+        metadata:
+          type: string
+          description: binary metadata. Will be null unless requested.
+        error_message:
+          type: string
+          description: binary information about the error, if any.
 paths:
   "/api/v2/namespaces/{namespace}/files/{path}":
     get:
@@ -661,6 +725,238 @@ paths:
                                   nullable: true
                                   example:
                                     flow: /directory/myflow.yaml
+  "/api/v2/namespaces/{namespace}/logs":
+    get:
+      tags:
+        - plattformlogs
+      summary: Api for listing the last 200 log entries for a given resource.
+      parameters:
+        - name: namespace
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: ^(([a-z][a-z0-9_\-\.]*[a-z0-9])|([a-z]))$
+          style: simple
+        - name: instance
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: route
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: activity
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: trace
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: before
+          in: query
+          required: false
+          description: Optional argument for using to request logs older then the given
+            time.
+          schema:
+            type: string
+            format: RFC3339Nano
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                previousPage: 2024-01-17T01:44:08.128136Z
+                startingFrom: 2024-01-16T01:44:08.128136Z
+                data:
+                  - id: 0,
+                    time: 2024-01-17T01:44:08.128136Z
+                    level: INFO
+                    msg: Running state logic
+                    trace: "00000000000000000000000000000000"
+                    span: "0000000000000000"
+                    workflow:
+                      status: running
+                      state: null,
+                      branch: null,
+                      path: /test.yaml
+                      calledAs: null,
+                      instance: 1bdf4042-1708-4212-b21d-7240f4685e4a
+                  - id: 13976,
+                    time: 2024-03-11T12:30:00.007424Z
+                    msg: Workflow has been triggered
+                    level: INFO
+                    namespace: nsfad
+                    trace: "00000000000000000000000000000000"
+                    span: "0000000000000000"
+                    error: null
+                  - id: 14943
+                    time: 2024-03-11T12:35:55.978736Z
+                    msg: File 'variables/README.md' loaded.
+                    level: INFO
+                    namespace: null,
+                    trace: null,
+                    span: null,
+                    activity:
+                      id: 29960091-2797-493e-a262-1a7765146cd4
+                    error: null
+                  - id: 16138
+                    time: 2024-03-11T12:56:51.268669Z
+                    msg: can not process plugin
+                    level: ERROR
+                    namespace: myns
+                    trace: 0
+                    span: 0
+                    route:
+                      path: /consumer
+                    error: forbidden
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    nullable: true
+                    properties:
+                      previousPage:
+                        type: string
+                        format: RFC3339Nano
+                        nullable: true
+                      startingFrom:
+                        type: string
+                        format: RFC3339Nano
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        time:
+                          type: string
+                          format: RFC3339Nano
+                        level:
+                          type: string
+                          enum:
+                            - INFO
+                            - ERROR
+                            - WARNING
+                            - DEBUG
+                        msg:
+                          type: string
+                        id:
+                          type: string
+                        trace:
+                          type: string
+                        span:
+                          type: string
+                        namespace:
+                          type: string
+                        error:
+                          type: object
+                          nullable: true
+                        workflow:
+                          type: object
+                          nullable: true
+                          properties:
+                            status:
+                              type: string
+                              enum:
+                                - error
+                                - unknown
+                                - running
+                                - failed
+                                - completed
+                            state:
+                              type: string
+                            branch:
+                              type: string
+                              nullable: true
+                            workflow:
+                              type: string
+                            calledAs:
+                              type: string
+                              nullable: true
+                            instance:
+                              type: string
+                        activity:
+                          type: object
+                          nullable: true
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                              nullable: true
+                        route:
+                          type: object
+                          nullable: true
+                          properties:
+                            path:
+                              type: string
+                              nullable: true
+  "/api/v2/namespaces/{namespace}/logs/subscribe":
+    get:
+      tags:
+        - plattformlogs
+      summary: Api for SSE streaming of incoming logs stating the systems current time.
+      parameters:
+        - name: namespace
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: ^(([a-z][a-z0-9_\-\.]*[a-z0-9])|([a-z]))$
+          style: simple
+        - name: instance
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: route
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: activity
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: trace
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: Last-Event-ID
+          in: header
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            text/event-stream:
+              example: >
+                id: 4
+
+                event: message
+
+                data: {'id':'4','time':'2024-02-07T08:59:52.666925Z','msg':'Starting workflow /action.yaml','level':'INFO'}
+
+
+                id: 6
+
+                event: message
+
+                data: {'id':'6','time':'2024-02-07T09:00:01.770604Z','msg':'Workflow /action.yaml completed.','level':'INFO'}
   "/api/v2/namespaces/{namespace}/registries":
     get:
       tags:
@@ -749,6 +1045,171 @@ paths:
       responses:
         "200":
           description: Registry object deleted
+  "/api/v2/namespaces/{namespace}/secrets":
+    get:
+      tags:
+        - secrets
+      summary: Gets all direktiv secrets in a namespace
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      responses:
+        "200":
+          description: list of direktiv secrets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: a unique string that represent name of the secret
+                        createdAt:
+                          type: string
+                          description: timestamp of creation date
+                        updatedAt:
+                          type: string
+                          description: timestamp of last updating date
+    post:
+      tags:
+        - secrets
+      summary: Creates a new direktiv secret
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      requestBody:
+        description: Secret's creating data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: a unique name string of the secret
+                data:
+                  type: string
+                  description: base64 encoded string of the secret's data
+      responses:
+        "200":
+          description: data of the created direktiv secret
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: a unique name string of the secret
+                      createdAt:
+                        type: string
+                        description: timestamp of creation date
+                      updatedAt:
+                        type: string
+                        description: timestamp of last updating date
+  "/api/v2/namespaces/{namespace}/secrets/{secretName}":
+    get:
+      tags:
+        - secrets
+      summary: Fetches a direktiv secret
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: secretName
+          in: path
+          required: true
+          schema:
+            type: string
+            description: name of the secret
+      responses:
+        "200":
+          description: data of the direktiv  secret
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: a unique name string of the secret
+                      createdAt:
+                        type: string
+                        description: timestamp of creation date
+                      updatedAt:
+                        type: string
+                        description: timestamp of last updating date
+    delete:
+      tags:
+        - secrets
+      summary: Removes a direktiv  secret
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: secretName
+          in: path
+          required: true
+          schema:
+            type: string
+            description: name of the secret
+      responses:
+        "200":
+          description: object deleted successfully
+    patch:
+      tags:
+        - secrets
+      summary: Updates a direktiv secret
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: secretName
+          in: path
+          required: true
+          schema:
+            type: string
+            description: name of the secret
+      requestBody:
+        description: Secret's patching data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: a unique name string of the secret
+                mimeType:
+                  type: string
+                  description: mime type of the secret's data
+                data:
+                  type: string
+                  description: base64 encoded string of the secret's data
+      responses:
+        "200":
+          description: data of the updated direktiv secret
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      data:
+                        type: string
+                        description: base64 encoded string of the secret's data
   "/api/v2/namespaces/{namespace}/services":
     get:
       tags:
@@ -893,6 +1354,265 @@ paths:
       responses:
         "200":
           description: Service rebuilds successfully
+  "/api/v2/namespaces/{namespace}/variables":
+    get:
+      tags:
+        - variables
+      summary: Gets all direktiv variables in a namespace
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      responses:
+        "200":
+          description: list of direktiv variables
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: a unique string that represent id of the variable
+                        type:
+                          type: string
+                          description: enum value ("namespace-variable", "workflow-variable",
+                            "instance-variable")
+                        reference:
+                          type: string
+                          description: a reference to the object the variable linked to
+                        name:
+                          type: string
+                          description: a unique name string of the variable (unique within the referenced
+                            object)
+                        size:
+                          type: string
+                          description: data size (in bytes) of the variable's data
+                        mimeType:
+                          type: string
+                          description: mime type of the variable's data
+                        data:
+                          type: string
+                          description: base64 encoded string of the variable's data
+                        createdAt:
+                          type: string
+                          description: timestamp of creation date
+                        updatedAt:
+                          type: string
+                          description: timestamp of last updating date
+    post:
+      tags:
+        - variables
+      summary: Creates a new direktiv variable
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      requestBody:
+        description: Variable's creating data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: a unique name string of the variable (unique within the referenced
+                    object)
+                mimeType:
+                  type: string
+                  description: mime type of the variable's data
+                data:
+                  type: string
+                  description: base64 encoded string of the variable's data
+                workflowPath:
+                  type: string
+                  description: (only when linking to a workflow) path string to a workflow file
+      responses:
+        "200":
+          description: data of the created direktiv variable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: a unique string that represent id of the variable
+                      type:
+                        type: string
+                        description: enum value ("namespace-variable", "workflow-variable",
+                          "instance-variable")
+                      reference:
+                        type: string
+                        description: a reference to the object the variable linked to
+                      name:
+                        type: string
+                        description: a unique name string of the variable (unique within the referenced
+                          object)
+                      size:
+                        type: string
+                        description: data size (in bytes) of the variable's data
+                      mimeType:
+                        type: string
+                        description: mime type of the variable's data
+                      data:
+                        type: string
+                        description: base64 encoded string of the variable's data
+                      createdAt:
+                        type: string
+                        description: timestamp of creation date
+                      updatedAt:
+                        type: string
+                        description: timestamp of last updating date
+  "/api/v2/namespaces/{namespace}/variables/{variableID}":
+    get:
+      tags:
+        - variables
+      summary: Fetches a direktiv variable
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: variableID
+          in: path
+          required: true
+          schema:
+            type: string
+            description: id string of the variable
+      responses:
+        "200":
+          description: data of the direktiv  variable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: a unique string that represent id of the variable
+                      type:
+                        type: string
+                        description: enum value ("namespace-variable", "workflow-variable",
+                          "instance-variable")
+                      reference:
+                        type: string
+                        description: a reference to the object the variable linked to
+                      name:
+                        type: string
+                        description: a unique name string of the variable (unique within the referenced
+                          object)
+                      size:
+                        type: string
+                        description: data size (in bytes) of the variable's data
+                      mimeType:
+                        type: string
+                        description: mime type of the variable's data
+                      data:
+                        type: string
+                        description: base64 encoded string of the variable's data
+                      createdAt:
+                        type: string
+                        description: timestamp of creation date
+                      updatedAt:
+                        type: string
+                        description: timestamp of last updating date
+    delete:
+      tags:
+        - variables
+      summary: Removes a direktiv  variable
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: variableID
+          in: path
+          required: true
+          schema:
+            type: string
+            description: id string of the variable
+      responses:
+        "200":
+          description: object deleted successfully
+    patch:
+      tags:
+        - variables
+      summary: Updates a direktiv variable
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: variableID
+          in: path
+          required: true
+          schema:
+            type: string
+            description: id string of the variable
+      requestBody:
+        description: Variable's patching data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: a unique name string of the variable (unique within the referenced
+                    object)
+                mimeType:
+                  type: string
+                  description: mime type of the variable's data
+                data:
+                  type: string
+                  description: base64 encoded string of the variable's data
+      responses:
+        "200":
+          description: data of the updated direktiv variable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: a unique string that represent id of the variable
+                      type:
+                        type: string
+                        description: enum value ("namespace-variable", "workflow-variable",
+                          "instance-variable")
+                      reference:
+                        type: string
+                        description: a reference to the object the variable linked to
+                      name:
+                        type: string
+                        description: a unique name string of the variable (unique within the referenced
+                          object)
+                      size:
+                        type: string
+                        description: data size (in bytes) of the variable's data
+                      mimeType:
+                        type: string
+                        description: mime type of the variable's data
+                      data:
+                        type: string
+                        description: base64 encoded string of the variable's data
+                      createdAt:
+                        type: string
+                        description: timestamp of creation date
+                      updatedAt:
+                        type: string
+                        description: timestamp of last updating date
   /api/v2/version:
     get:
       summary: Get server version information.
