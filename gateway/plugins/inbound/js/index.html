@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://docs.direktiv.io/gateway/plugins/inbound/js/">
       
       
-        <link rel="prev" href="../acl/">
+        <link rel="prev" href="../headers/">
       
       
         <link rel="next" href="../reconv/">
@@ -2648,6 +2648,8 @@
       
         
       
+        
+      
     
     
     
@@ -2966,6 +2968,27 @@
   
   <span class="md-ellipsis">
     Patching Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../examples/python-container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python Container
   </span>
   
 
@@ -3513,7 +3536,7 @@
 
 <h1 id="javascript-manipulation">Javascript Manipulation</h1>
 <p>The Javascript plugin receives the request as an object. This object can be manipulated with the script. The object will be used as a new request in subsequent plugins or send to a flow. </p>
-<p>The <code>input</code> object contains <code>Headers</code>, <code>Queries</code> and <code>Body</code> and they can be addressed with the Javascript script in the plugin. </p>
+<p>The <code>input</code> object contains <code>Headers</code>, <code>Queries</code>, <code>Body</code>, <code>Consumer</code> and <code>URLParams</code> (Parameters like <code>/{id}</code> in the route path). They can be addressed with the Javascript script in the plugin. </p>
 <div class="highlight"><span class="filename">Javascript Request Access</span><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="nx">Delete</span><span class="w"> </span><span class="nx">Header</span>
 <span class="nx">input</span><span class="p">[</span><span class="s2">&quot;Headers&quot;</span><span class="p">].</span><span class="nx">Delete</span><span class="p">(</span><span class="s2">&quot;Header1&quot;</span><span class="p">)</span>
 

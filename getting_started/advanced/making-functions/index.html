@@ -2722,6 +2722,8 @@
       
         
       
+        
+      
     
     
     
@@ -3040,6 +3042,27 @@
   
   <span class="md-ellipsis">
     Patching Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/python-container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python Container
   </span>
   
 
@@ -3657,6 +3680,9 @@ This can be useful if e.g. a Python container is used for scripting  or <code>ba
 <span class="w">      </span><span class="nt">data</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">commands</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo -n &quot;hello&quot;</span>
+<span class="w">          </span><span class="nt">envs</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MYENV</span>
+<span class="w">            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MYVALUE</span>
 <span class="w">          </span><span class="nt">stop</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
 <p>The <code>commands</code> block holds an array of individual commands which will be excuted in the function. The commands can have three additional parameters.</p>
@@ -3664,7 +3690,33 @@ This can be useful if e.g. a Python container is used for scripting  or <code>ba
 <li><code>stop</code>: If the execution should stop if an error occurs during this command (default: false).</li>
 <li><code>suppress_command</code>: If the command should be printed when executed. Should be set to true if passwords are part of the command (default: false).</li>
 <li><code>suppress_output</code>: If the stdout output of the command should be printed (default: false).</li>
+<li><code>env</code>: A list ov environment variables with  <code>name</code>/<code>value</code> pairs for this single command.</li>
 </ul>
+<p>The is an additional files block which allows to pass in files on-demand. A file requires a <code>name</code> and <code>content</code>. The content can be text-based data including
+Direktiv secrets. An additional setting is <code>permission</code>. If the file is an executable script or certificate the permissions can be set via that option.</p>
+<div class="highlight"><span class="filename">Files in Function</span><pre><span></span><code><span class="nt">direktiv_api</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">workflow/v1</span>
+<span class="nt">functions</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alpine</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">knative-workflow</span>
+<span class="w">  </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/share/direktiv/direktiv-cmd</span>
+<span class="nt">states</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">getter</span><span class="w"> </span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">action</span>
+<span class="w">  </span><span class="nt">action</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="w">    </span><span class="nt">input</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">script.sh</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">#!/bin/sh</span>
+
+<span class="w">          </span><span class="no">echo -n &quot;HELLO WORLD&quot;</span>
+<span class="w">        </span><span class="nt">permission</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0755</span><span class="w"> </span>
+<span class="w">      </span><span class="nt">data</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./script.sh</span>
+</code></pre></div>
 
 
 

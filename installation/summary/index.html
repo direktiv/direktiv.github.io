@@ -2729,6 +2729,8 @@
       
         
       
+        
+      
     
     
     
@@ -3047,6 +3049,27 @@
   
   <span class="md-ellipsis">
     Patching Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/python-container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python Container
   </span>
   
 
@@ -3659,7 +3682,7 @@ kubectl<span class="w"> </span>annotate<span class="w"> </span>ns<span class="w"
 helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>percona<span class="w"> </span>https://percona.github.io/percona-helm-charts/
 helm<span class="w"> </span>install<span class="w"> </span>-n<span class="w"> </span>postgres<span class="w"> </span>pg-operator<span class="w"> </span>percona/pg-operator<span class="w"> </span>--wait
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/direktiv/direktiv/main/kubernetes/install/db/basic.yaml
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/direktiv/direktiv/main/scripts/kubernetes/install/db/basic.yaml
 </code></pre></div>
 <h2 id="knative">Knative</h2>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://github.com/knative/operator/releases/download/knative-v1.12.2/operator.yaml
@@ -3677,7 +3700,8 @@ kubectl<span class="w"> </span>delete<span class="w"> </span>namespace<span clas
 <span class="s2">  name: \&quot;</span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span>postgres<span class="w"> </span>direktiv-cluster-pguser-direktiv<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;go-template={{index .data &quot;dbname&quot;}}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="k">)</span><span class="s2">\&quot;</span>
 <span class="s2">  sslmode: require&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>direktiv.yaml
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>direktiv<span class="w"> </span>https://charts.direktiv.io
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>fluent-bit<span class="w"> </span>https://fluent.github.io/helm-charts
+helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>direktiv<span class="w"> </span>https://charts.direktiv.io
 helm<span class="w"> </span>install<span class="w"> </span>-f<span class="w"> </span>direktiv.yaml<span class="w"> </span>-n<span class="w"> </span>direktiv<span class="w"> </span>direktiv<span class="w"> </span>direktiv/direktiv
 </code></pre></div>
 <h3 id="get-ip-of-direktiv">Get IP of Direktiv</h3>
