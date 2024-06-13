@@ -26,41 +26,46 @@ You can use the direktivctl tool to populate a cinfiguration like this:
 
 ```bash
 # Use direktivctl to initialize a configuration file
-direktivctl project-init --addr https://dev.my-direktiv.server --namespace direktiv --profile dev
+direktivctl profile add -n mynamespace -p profilename  -a http://myserver.com
 ```
 
-Or create a `~/.config/direktiv/.direktiv.profile.yaml` file with the following file structure:
+This creates a new file, if it does not exist already, at `$HOME//.direktiv/profiles.yaml` and adds the new profile. 
 
-```yaml title="Example .direktiv.profile.yaml"
-dev:
-  auth: "my-dev-api-token"
-  addr: https://dev.my-direktiv.server
-  namespace: direktiv
-prod:
-  auth: my-prod-api-token
-  addr: https://prod.my-direktiv.server
-  namespace: direktiv
+
+```yaml title="Example profiles.yaml"
+profilename:
+    address: http://myserver.com
+    insecure: true
+    namespace: mynamespace
+    token: ""
 ```
 
-After the creation of a configuration you must use the profile flag to to use a specific profile.
+The token value, provided with the `-t` flag is optional if authentication is required via a token. After the creation of a configuration you must use the profile flag to to use a specific profile. All the profile variables can be overwritten by environment variables:
+
+```sh title="Environment Variables"
+DIREKTIV_ADDRESS
+DIREKTIV_TOKEN
+DIREKTIV_NAMESPACE
+```
+
+## Working Directory
+
+Each project folder requires a `.direktivignore` file in the root folder. This is required to calculate the path on the server. This files can be empty but works exactly like a `.gitignore` file to ignore certain files to be pushed to the server. A project structure can look like this:
+
+```sh title="Project Structure"
+/myfolder
+ .direktivignore
+ myflow.yaml
+ /services
+  myservice.yaml
+```
 
 ## Pushing and Executing
 
 After setup there are two commands available. The `push` command pushes a flow to Direktiv but does not execute it. This command works recursively e.g. `direktivctl workflows push .`. The `exec` command uploads and executes the flow. During execution the logs are printed to `stdout`.
 
 ```sh title="CLI Examples"
-direktivctl workflows push myworkflow.yaml -P dev
-direktivctl workflows push myfolder/ -P dev
-direktivctl workflows exec mywf.yaml -P dev
+direktivctl filesystem push myproject/ -p test
+direktivctl filesystem push . -p test
+direktivctl filesystem exec myflow.yaml -p test
 ```
-
-## Workflow Attributes
-
-Based on naming convetion workflow attributes can be set as well. If the file starts with the characters as the flow direktivctl will assume it is a flow attribute and create it. 
-
-```
-mywf.yaml
-mywf.yaml.script.sh
-```
-
-The above example will create a flow variable `script.sh` for the flow `mywf.yaml`.
