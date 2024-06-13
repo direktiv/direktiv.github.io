@@ -42,11 +42,14 @@ spec:
     - name: direktiv
       databases:
         - direktiv
+      # access to public schema
+      # if no superuser is required, grant privileges manually: GRANT ALL ON SCHEMA public TO direktiv;
+      options: "SUPERUSER"
     - name: postgres
 
-  image: perconalab/percona-postgresql-operator:main-ppg14-postgres
+  image: perconalab/percona-postgresql-operator:main-ppg16-postgres
   imagePullPolicy: Always
-  postgresVersion: 14
+  postgresVersion: 16
   port: 5432
 
   instances:
@@ -62,11 +65,11 @@ spec:
   proxy:
     pgBouncer:
       replicas: 1
-      image: perconalab/percona-postgresql-operator:main-ppg14-pgbouncer
+      image: perconalab/percona-postgresql-operator:main-ppg16-pgbouncer
 
   backups:
     pgbackrest:
-      image: perconalab/percona-postgresql-operator:main-ppg14-pgbackrest
+      image: perconalab/percona-postgresql-operator:main-ppg16-pgbackrest
       global:
         # Keep 4 Backups
         repo1-retention-full: "4"
@@ -80,7 +83,7 @@ spec:
         schedules:
           full: "0 0 * * 6"
         volume:
-          volumeClaimSpec:  
+          volumeClaimSpec:
             accessModes:
             - ReadWriteOnce
             resources:
@@ -88,7 +91,7 @@ spec:
                 storage: 1Gi
   pmm:
     enabled: false
-    image: percona/pmm-client:2.37.0
+    image: percona/pmm-client:2.41.0
 ```
 
 ### High-Availability
@@ -112,11 +115,14 @@ spec:
     - name: direktiv
       databases:
         - direktiv
+      # access to public schema
+      # if no superuser is required, grant privileges manually: GRANT ALL ON SCHEMA public TO direktiv;
+      options: "SUPERUSER"
     - name: postgres
 
-  image: perconalab/percona-postgresql-operator:main-ppg14-postgres
+  image: perconalab/percona-postgresql-operator:main-ppg16-postgres
   imagePullPolicy: Always
-  postgresVersion: 14
+  postgresVersion: 16
   port: 5432
 
   instances:
@@ -143,7 +149,7 @@ spec:
   proxy:
     pgBouncer:
       replicas: 2
-      image: perconalab/percona-postgresql-operator:main-ppg14-pgbouncer
+      image: perconalab/percona-postgresql-operator:main-ppg16-pgbouncer
       affinity:
        podAntiAffinity:
          preferredDuringSchedulingIgnoredDuringExecution:
@@ -157,7 +163,7 @@ spec:
 
   backups:
     pgbackrest:
-      image: perconalab/percona-postgresql-operator:main-ppg14-pgbackrest
+      image: perconalab/percona-postgresql-operator:main-ppg16-pgbackrest
       global:
         repo1-retention-full: "4"
         repo1-retention-full-type: count
@@ -179,7 +185,7 @@ spec:
                 storage: 4Gi
   pmm:
     enabled: false
-    image: percona/pmm-client:2.37.0
+    image: percona/pmm-client:2.41.0
 ```
 
 
@@ -224,11 +230,14 @@ spec:
     - name: direktiv
       databases:
         - direktiv
+      # access to public schema
+      # if no superuser is required, grant privileges manually: GRANT ALL ON SCHEMA public TO direktiv;
+      options: "SUPERUSER"
     - name: postgres
 
-  image: perconalab/percona-postgresql-operator:main-ppg14-postgres
+  image: perconalab/percona-postgresql-operator:main-ppg16-postgres
   imagePullPolicy: Always
-  postgresVersion: 14
+  postgresVersion: 16
   port: 5432
 
   instances:
@@ -244,11 +253,11 @@ spec:
   proxy:
     pgBouncer:
       replicas: 1
-      image: perconalab/percona-postgresql-operator:main-ppg14-pgbouncer
+      image: perconalab/percona-postgresql-operator:main-ppg16-pgbouncer
 
   backups:
     pgbackrest:
-      image: perconalab/percona-postgresql-operator:main-ppg14-pgbackrest
+      image: perconalab/percona-postgresql-operator:main-ppg16-pgbackrest
       global:
         repo1-retention-full: "4"
         repo1-retention-full-type: time
@@ -269,7 +278,7 @@ spec:
           full: "0 1 * * 0"
   pmm:
     enabled: false
-    image: percona/pmm-client:2.37.0
+    image: percona/pmm-client:2.41.0
 ```
 
 ### Connection-Pooling
