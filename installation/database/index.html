@@ -3674,11 +3674,14 @@ helm<span class="w"> </span>install<span class="w"> </span>--create-namespace<sp
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span>
 <span class="w">      </span><span class="nt">databases</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span>
+<span class="w">      </span><span class="c1"># access to public schema</span>
+<span class="w">      </span><span class="c1"># if no superuser is required, grant privileges manually: GRANT ALL ON SCHEMA public TO direktiv;</span>
+<span class="w">      </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SUPERUSER&quot;</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
 
-<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-postgres</span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg16-postgres</span>
 <span class="w">  </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span>
-<span class="w">  </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span>
+<span class="w">  </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
 <span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5432</span>
 
 <span class="w">  </span><span class="nt">instances</span><span class="p">:</span>
@@ -3694,11 +3697,11 @@ helm<span class="w"> </span>install<span class="w"> </span>--create-namespace<sp
 <span class="w">  </span><span class="nt">proxy</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">pgBouncer</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbouncer</span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg16-pgbouncer</span>
 
 <span class="w">  </span><span class="nt">backups</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">pgbackrest</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbackrest</span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg16-pgbackrest</span>
 <span class="w">      </span><span class="nt">global</span><span class="p">:</span>
 <span class="w">        </span><span class="c1"># Keep 4 Backups</span>
 <span class="w">        </span><span class="nt">repo1-retention-full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span>
@@ -3712,7 +3715,7 @@ helm<span class="w"> </span>install<span class="w"> </span>--create-namespace<sp
 <span class="w">        </span><span class="nt">schedules</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">6&quot;</span>
 <span class="w">        </span><span class="nt">volume</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">volumeClaimSpec</span><span class="p">:</span><span class="w">  </span>
+<span class="w">          </span><span class="nt">volumeClaimSpec</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">accessModes</span><span class="p">:</span>
 <span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWriteOnce</span>
 <span class="w">            </span><span class="nt">resources</span><span class="p">:</span>
@@ -3720,7 +3723,7 @@ helm<span class="w"> </span>install<span class="w"> </span>--create-namespace<sp
 <span class="w">                </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
 <span class="w">  </span><span class="nt">pmm</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/pmm-client:2.37.0</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/pmm-client:2.41.0</span>
 </code></pre></div>
 <h3 id="high-availability">High-Availability</h3>
 <p>High-Availabilty can be achieved by scaling the database replicas. The following example has added daily differential backups and pod anti-affinity to spread the pods across the cluster. If anti-affinity is used the cluster needs to have the same number of nodes and database replicas.</p>
@@ -3738,11 +3741,14 @@ helm<span class="w"> </span>install<span class="w"> </span>--create-namespace<sp
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span>
 <span class="w">      </span><span class="nt">databases</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span>
+<span class="w">      </span><span class="c1"># access to public schema</span>
+<span class="w">      </span><span class="c1"># if no superuser is required, grant privileges manually: GRANT ALL ON SCHEMA public TO direktiv;</span>
+<span class="w">      </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SUPERUSER&quot;</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
 
-<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-postgres</span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg16-postgres</span>
 <span class="w">  </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span>
-<span class="w">  </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span>
+<span class="w">  </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
 <span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5432</span>
 
 <span class="w">  </span><span class="nt">instances</span><span class="p">:</span>
@@ -3769,7 +3775,7 @@ helm<span class="w"> </span>install<span class="w"> </span>--create-namespace<sp
 <span class="w">  </span><span class="nt">proxy</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">pgBouncer</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbouncer</span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg16-pgbouncer</span>
 <span class="w">      </span><span class="nt">affinity</span><span class="p">:</span>
 <span class="w">       </span><span class="nt">podAntiAffinity</span><span class="p">:</span>
 <span class="w">         </span><span class="nt">preferredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span>
@@ -3783,7 +3789,7 @@ helm<span class="w"> </span>install<span class="w"> </span>--create-namespace<sp
 
 <span class="w">  </span><span class="nt">backups</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">pgbackrest</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbackrest</span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg16-pgbackrest</span>
 <span class="w">      </span><span class="nt">global</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">repo1-retention-full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span>
 <span class="w">        </span><span class="nt">repo1-retention-full-type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">count</span>
@@ -3805,7 +3811,7 @@ helm<span class="w"> </span>install<span class="w"> </span>--create-namespace<sp
 <span class="w">                </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4Gi</span>
 <span class="w">  </span><span class="nt">pmm</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/pmm-client:2.37.0</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/pmm-client:2.41.0</span>
 </code></pre></div>
 <h3 id="high-availability-with-s3-backup">High-Availability with S3 Backup</h3>
 <p>Percona's Postgres operator can store backups in AWS, Azure and Google Cloud as well. The following example shows how to use AWS S3 as backup storage. A secret is required for the S3 backend with the appropriate permission. This requires a <code>s3.conf</code> file with the S3 key and secret.</p>
@@ -3834,11 +3840,14 @@ repo1-s3-key-secret<span class="o">=</span>MYSECRET
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span>
 <span class="w">      </span><span class="nt">databases</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span>
+<span class="w">      </span><span class="c1"># access to public schema</span>
+<span class="w">      </span><span class="c1"># if no superuser is required, grant privileges manually: GRANT ALL ON SCHEMA public TO direktiv;</span>
+<span class="w">      </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SUPERUSER&quot;</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
 
-<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-postgres</span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg16-postgres</span>
 <span class="w">  </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span>
-<span class="w">  </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span>
+<span class="w">  </span><span class="nt">postgresVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
 <span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5432</span>
 
 <span class="w">  </span><span class="nt">instances</span><span class="p">:</span>
@@ -3854,11 +3863,11 @@ repo1-s3-key-secret<span class="o">=</span>MYSECRET
 <span class="w">  </span><span class="nt">proxy</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">pgBouncer</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbouncer</span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg16-pgbouncer</span>
 
 <span class="w">  </span><span class="nt">backups</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">pgbackrest</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg14-pgbackrest</span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perconalab/percona-postgresql-operator:main-ppg16-pgbackrest</span>
 <span class="w">      </span><span class="nt">global</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">repo1-retention-full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span>
 <span class="w">        </span><span class="nt">repo1-retention-full-type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">time</span>
@@ -3879,7 +3888,7 @@ repo1-s3-key-secret<span class="o">=</span>MYSECRET
 <span class="w">          </span><span class="nt">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">0&quot;</span>
 <span class="w">  </span><span class="nt">pmm</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/pmm-client:2.37.0</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/pmm-client:2.41.0</span>
 </code></pre></div>
 <h3 id="connection-pooling">Connection-Pooling</h3>
 <p>Connection pooling help scaling and maintaining availability between your application and the database. The Postgres Operator provides <code>pgBouncer</code> as connection pooling mechanism. If it is a multi-node cluster the <code>pgBouncer</code> replicas can be increased and spread across the cluster with pod anit-affinity rules. Direktiv can connect to the Postgres instances as well as to <code>pgBouncer</code>.</p>

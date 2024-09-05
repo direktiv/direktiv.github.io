@@ -2597,18 +2597,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pushing-and-executing" class="md-nav__link">
+  <a href="#working-directory" class="md-nav__link">
     <span class="md-ellipsis">
-      Pushing and Executing
+      Working Directory
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#workflow-attributes" class="md-nav__link">
+  <a href="#pushing-and-executing" class="md-nav__link">
     <span class="md-ellipsis">
-      Workflow Attributes
+      Pushing and Executing
     </span>
   </a>
   
@@ -3601,18 +3601,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pushing-and-executing" class="md-nav__link">
+  <a href="#working-directory" class="md-nav__link">
     <span class="md-ellipsis">
-      Pushing and Executing
+      Working Directory
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#workflow-attributes" class="md-nav__link">
+  <a href="#pushing-and-executing" class="md-nav__link">
     <span class="md-ellipsis">
-      Workflow Attributes
+      Pushing and Executing
     </span>
   </a>
   
@@ -3656,31 +3656,34 @@
 <p>Connection information (address, token, and namespace) can be provided as arguments, but it is easier to use a configutration file.
 You can use the direktivctl tool to populate a cinfiguration like this: </p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Use direktivctl to initialize a configuration file</span>
-direktivctl<span class="w"> </span>project-init<span class="w"> </span>--addr<span class="w"> </span>https://dev.my-direktiv.server<span class="w"> </span>--namespace<span class="w"> </span>direktiv<span class="w"> </span>--profile<span class="w"> </span>dev
+direktivctl<span class="w"> </span>profile<span class="w"> </span>add<span class="w"> </span>-n<span class="w"> </span>mynamespace<span class="w"> </span>-p<span class="w"> </span>profilename<span class="w">  </span>-a<span class="w"> </span>http://myserver.com
 </code></pre></div>
-<p>Or create a <code>~/.config/direktiv/.direktiv.profile.yaml</code> file with the following file structure:</p>
-<div class="highlight"><span class="filename">Example .direktiv.profile.yaml</span><pre><span></span><code><span class="nt">dev</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-dev-api-token&quot;</span>
-<span class="w">  </span><span class="nt">addr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://dev.my-direktiv.server</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span>
-<span class="nt">prod</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-prod-api-token</span>
-<span class="w">  </span><span class="nt">addr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://prod.my-direktiv.server</span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">direktiv</span>
+<p>This creates a new file, if it does not exist already, at <code>$HOME//.direktiv/profiles.yaml</code> and adds the new profile. </p>
+<div class="highlight"><span class="filename">Example profiles.yaml</span><pre><span></span><code><span class="nt">profilename</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://myserver.com</span>
+<span class="w">    </span><span class="nt">insecure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mynamespace</span>
+<span class="w">    </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 </code></pre></div>
-<p>After the creation of a configuration you must use the profile flag to to use a specific profile.</p>
+<p>The token value, provided with the <code>-t</code> flag is optional if authentication is required via a token. After the creation of a configuration you must use the profile flag to to use a specific profile. All the profile variables can be overwritten by environment variables:</p>
+<div class="highlight"><span class="filename">Environment Variables</span><pre><span></span><code>DIREKTIV_ADDRESS
+DIREKTIV_TOKEN
+DIREKTIV_NAMESPACE
+</code></pre></div>
+<h2 id="working-directory">Working Directory</h2>
+<p>Each project folder requires a <code>.direktivignore</code> file in the root folder. This is required to calculate the path on the server. This files can be empty but works exactly like a <code>.gitignore</code> file to ignore certain files to be pushed to the server. A project structure can look like this:</p>
+<div class="highlight"><span class="filename">Project Structure</span><pre><span></span><code>/myfolder
+<span class="w"> </span>.direktivignore
+<span class="w"> </span>myflow.yaml
+<span class="w"> </span>/services
+<span class="w">  </span>myservice.yaml
+</code></pre></div>
 <h2 id="pushing-and-executing">Pushing and Executing</h2>
 <p>After setup there are two commands available. The <code>push</code> command pushes a flow to Direktiv but does not execute it. This command works recursively e.g. <code>direktivctl workflows push .</code>. The <code>exec</code> command uploads and executes the flow. During execution the logs are printed to <code>stdout</code>.</p>
-<div class="highlight"><span class="filename">CLI Examples</span><pre><span></span><code>direktivctl<span class="w"> </span>workflows<span class="w"> </span>push<span class="w"> </span>myworkflow.yaml<span class="w"> </span>-P<span class="w"> </span>dev
-direktivctl<span class="w"> </span>workflows<span class="w"> </span>push<span class="w"> </span>myfolder/<span class="w"> </span>-P<span class="w"> </span>dev
-direktivctl<span class="w"> </span>workflows<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>mywf.yaml<span class="w"> </span>-P<span class="w"> </span>dev
+<div class="highlight"><span class="filename">CLI Examples</span><pre><span></span><code>direktivctl<span class="w"> </span>filesystem<span class="w"> </span>push<span class="w"> </span>myproject/<span class="w"> </span>-p<span class="w"> </span><span class="nb">test</span>
+direktivctl<span class="w"> </span>filesystem<span class="w"> </span>push<span class="w"> </span>.<span class="w"> </span>-p<span class="w"> </span><span class="nb">test</span>
+direktivctl<span class="w"> </span>filesystem<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>myflow.yaml<span class="w"> </span>-p<span class="w"> </span><span class="nb">test</span>
 </code></pre></div>
-<h2 id="workflow-attributes">Workflow Attributes</h2>
-<p>Based on naming convetion workflow attributes can be set as well. If the file starts with the characters as the flow direktivctl will assume it is a flow attribute and create it. </p>
-<div class="highlight"><pre><span></span><code>mywf.yaml
-mywf.yaml.script.sh
-</code></pre></div>
-<p>The above example will create a flow variable <code>script.sh</code> for the flow <code>mywf.yaml</code>.</p>
 
 
 
