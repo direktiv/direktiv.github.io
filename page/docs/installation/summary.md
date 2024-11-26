@@ -2,7 +2,6 @@
 
 This is a list of "copy&paste" commands which creates a one node Direktiv cluster.
 
-
 ## K3s
 
 ```bash
@@ -54,7 +53,7 @@ kubectl annotate ns --overwrite=true direktiv linkerd.io/inject=enabled
 ```bash
 kubectl create namespace postgres
 helm repo add percona https://percona.github.io/percona-helm-charts/
-helm install -n postgres pg-operator percona/pg-operator --wait
+helm install --create-namespace --version 2.3.1  -n postgres pg-operator percona/pg-operator --wait
 ```
 
 ```bash
