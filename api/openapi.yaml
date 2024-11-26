@@ -16,11 +16,6 @@ info:
     All request and response bodies are `application/json` format.
 
 
-    # Versioning
-
-    This is v2 api, v1 endpoints will be removed as we implement them in v2. Unitl the transition is finished this API documentation is incomplete.
-
-
     # Methods
 
     We use the following http methods:
@@ -68,10 +63,23 @@ info:
         }
     }
 
+
+    // Example with validation error
+
+    {
+      "error": {
+          "code": "request_data_invalid",
+          "message": "request data has invalid fields",
+          validation: { 
+            gitRef: 'field is required', 
+            url: 'field is required' 
+          }
+    }
+
     ```
 
 
-    Field error.code is one of the following values:
+    Field error.validation is only set when validation errors occur. Field error.code is one of the following values:
 
 
     | value | description |
@@ -114,6 +122,12 @@ info:
 tags:
   - name: server
     description: Miscellaneous server endpoints
+  - name: namespaces
+    description: Endpoints for managing namespaces
+  - name: instances
+    description: Endpoints for managing workflow instances
+  - name: syncs
+    description: Endpoints for managing namespace mirror syncs
   - name: services
     description: Endpoints for managing services
   - name: variables
@@ -128,17 +142,27 @@ tags:
     description: Endpoints reading and changing filesystem tree nodes
   - name: plattformlogs
     description: Endpoints to access logs that are exposed by the components
+  - name: notifications
+    description: Endpoints for managing notifications
+  - name: metrics
+    description: Endpoints for viewing metrics
 x-tagGroups:
   - name: Endpoints
     tags:
+      - server
+      - namespaces
+      - instances
+      - syncs
       - files
       - services
       - variables
       - secrets
       - registries
       - gateway
-      - server
       - plattformlogs
+      - events
+      - metrics
+      - notifications
 components:
   parameters:
     namespace:
@@ -320,52 +344,528 @@ components:
       type: object
       description: filesystem node data
       properties:
-        id:
+        createdAt:
           type: string
-          description: instance uuid
-        created_at:
+        endedAt:
           type: string
-          description: timestamp
-        ended_at:
-          type: string
-          description: will be null if the instance is still running
-        status:
-          type: string
-          description: enum describing the current state of the instance
-          enum:
-            - pending
-            - complete
-            - failed
-            - crashed
-            - cancelled
-        path:
-          type: string
-          description: filepath of the workflow
-        error_code:
-          type: string
-          description: error code of a failed workflow
-        invoker:
-          type: string
-          description: information about how the instance was instantiated
         definition:
           type: string
-          description: binary data containing a copy of the workflow at the time the
-            instance was created
+          description: Base64 encoded copy of the instance's workflow yaml at the time the
+            instance was created.
+        errorCode:
+          type: string
+        flow:
+          type: array
+          description: list of states that the instance has executed
+          items:
+            type: string
+        id:
+          type: string
+        invoker:
+          type: string
+        lineage:
+          type: array
+          description: This will be an empty list if the instance is not a subflow.
+            Otherwise, it will be an array containing information about how this
+            instance relates to its parent, recursively.
+          items:
+            type: object
+            properties:
+              branch:
+                type: integer
+              id:
+                type: string
+                description: instance ID
+              state:
+                type: string
+              step:
+                type: integer
+        path:
+          type: string
+        status:
+          type: string
+          enum:
+            - complete
+            - cancelled
+            - pending
+            - crashed
+            - failed
+        traceId:
+          type: string
+          description: This is currently a placeholder and shouldn't yet be used.
+        inputLength:
+          type: integer
         input:
           type: string
-          description: binary data containing the input to the instance. Will be null
-            unless specifically requested.
+        outputLength:
+          type: integer
         output:
           type: string
-          description: binary data containing the output of a finished workflow. Will be
-            null unless specifically requested.
+        metadataLength:
+          type: integer
         metadata:
           type: string
-          description: binary metadata. Will be null unless requested.
-        error_message:
-          type: string
-          description: binary information about the error, if any.
 paths:
+  "/api/v2/namespaces/{namespace}/events/broadcast":
+    post:
+      tags:
+        - events
+      summary: Broadcast a cloud event to a namespace.
+      description: >
+        This endpoint allows you to broadcast a cloud event to a specific
+        namespace using json encoding. Cloud events are a specification for
+        describing event data in a common way.
+        https://github.com/cloudevents/spec
+      parameters:
+        - name: namespace
+          in: path
+          description: The namespace to which the cloud event will be broadcasted.
+          required: true
+          schema:
+            type: string
+            pattern: ^(([a-z][a-z0-9_\-\.]*[a-z0-9])|([a-z]))$
+          style: simple
+      requestBody:
+        description: Data representing the cloud event(s) to be broadcasted.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                specversion:
+                  type: string
+                  description: The version of the CloudEvents specification.
+                id:
+                  type: string
+                  description: The unique identifier for the event.
+                source:
+                  type: string
+                  format: uri
+                  description: The source of the event.
+                type:
+                  type: string
+                  description: The type of the event.
+                additionalProperties:
+                  type: object
+          application/cloudevents-batch+json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  specversion:
+                    type: string
+                    description: The version of the CloudEvents specification.
+                  id:
+                    type: string
+                    description: The unique identifier for the event.
+                  source:
+                    type: string
+                    format: uri
+                    description: The source of the event.
+                  type:
+                    type: string
+                    description: The type of the event.
+                  additionalProperties:
+                    type: object
+  "/api/v2/namespaces/{namespace}/events/history":
+    get:
+      tags:
+        - events
+      summary: Retrieve the history of events within a specific namespace.
+      description: >
+        This endpoint allows you to retrieve the history of events within the
+        specified namespace. You can filter events based on various criteria
+        such as creation time, reception time, event type, and text contained in
+        the event.
+      parameters:
+        - name: namespace
+          in: path
+          description: The namespace for which to retrieve event history.
+          required: true
+          schema:
+            type: string
+            pattern: ^(([a-z][a-z0-9_\-\.]*[a-z0-9])|([a-z]))$
+          style: simple
+        - name: before
+          in: query
+          description: Retrieve events created before the specified timestamp.
+          schema:
+            type: string
+            format: RFC3339Nano
+        - name: createdBefore
+          in: query
+          description: Retrieve events created before a specific timestamp.
+          schema:
+            type: string
+            format: RFC3339Nano
+        - name: createdAfter
+          in: query
+          description: Retrieve events created after a specific timestamp.
+          schema:
+            type: string
+            format: RFC3339Nano
+        - name: receivedBefore
+          in: query
+          description: Retrieve events received before a specific timestamp.
+          schema:
+            type: string
+            format: RFC3339Nano
+        - name: receivedAfter
+          in: query
+          description: Retrieve events received after a specific timestamp.
+          schema:
+            type: string
+            format: RFC3339Nano
+        - name: eventContains
+          in: query
+          description: Retrieve events containing specific text.
+          schema:
+            type: string
+        - name: typeContains
+          in: query
+          description: Retrieve events containing specific type.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                meta:
+                  previousPage: 2024-04-25T13:39:00.01915Z
+                  startingFrom: 2024-01-16T01:44:08.128136Z
+                data:
+                  - event:
+                      specversion: "1.0"
+                      id: "4"
+                      source: https://direktiv.io/test
+                      type: testerDuplicate
+                    namespaceID: b1e7f55b-3e16-4b9c-b5b5-3f94c5e149c0
+                    namespace: wfeventsv2
+                    receivedAt: 2024-04-25T13:39:00.01915Z
+                    serialID: 1
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    nullable: true
+                    properties:
+                      previousPage:
+                        type: string
+                        format: RFC3339Nano
+                        nullable: true
+                      startingFrom:
+                        type: string
+                        format: RFC3339Nano
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        namespace:
+                          type: string
+                        namespaceID:
+                          type: string
+                        receivedAt:
+                          type: string
+                          format: RFC3339Nano
+                        serialID:
+                          type: int
+                        event:
+                          type: object
+                          required:
+                            - specversion
+                            - id
+                            - source
+                            - type
+                          properties:
+                            specversion:
+                              type: string
+                            id:
+                              type: string
+                            source:
+                              type: string
+                              format: uri
+                            type:
+                              type: string
+                            additionalProperties:
+                              type: object
+  "/api/v2/namespaces/{namespace}/events/history/replay/{eventID}":
+    post:
+      tags:
+        - events
+      summary: Replay a event from the event-history.
+      description: |
+        This endpoint allows to replay a event from the event-history.
+      parameters:
+        - name: namespace
+          in: path
+          description: The namespace to from which the cloud event has to be replayed.
+          required: true
+          schema:
+            type: string
+            pattern: ^(([a-z][a-z0-9_\-\.]*[a-z0-9])|([a-z]))$
+          style: simple
+        - name: eventID
+          in: path
+          description: The event-id of the cloud event.
+          required: true
+          schema:
+            type: string
+  "/api/v2/namespaces/{namespace}/events/subscribe":
+    get:
+      tags:
+        - events
+      summary: Api for SSE streaming of incoming events stating the systems current
+        time.
+      parameters:
+        - name: namespace
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: ^(([a-z][a-z0-9_\-\.]*[a-z0-9])|([a-z]))$
+          style: simple
+        - name: Last-Event-ID
+          in: header
+          required: false
+          schema:
+            type: integer
+        - name: createdBefore
+          in: query
+          description: Retrieve events created before a specific timestamp.
+          schema:
+            type: string
+            format: RFC3339Nano
+        - name: createdAfter
+          in: query
+          description: Retrieve events created after a specific timestamp.
+          schema:
+            type: string
+            format: RFC3339Nano
+        - name: receivedBefore
+          in: query
+          description: Retrieve events received before a specific timestamp.
+          schema:
+            type: string
+            format: RFC3339Nano
+        - name: receivedAfter
+          in: query
+          description: Retrieve events received after a specific timestamp.
+          schema:
+            type: string
+            format: RFC3339Nano
+        - name: eventContains
+          in: query
+          description: Retrieve events containing specific text.
+          schema:
+            type: string
+        - name: typeContains
+          in: query
+          description: Retrieve events containing specific type.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            text/event-stream:
+              example: >
+                id: 1
+
+                event: message
+
+                data: {"Event":{"specversion":"1.0","id":"1234","source":"https://direktiv.io/test","type":"testerDuplicate"},"namespace":"e09f0392-fe09-4378-bc0a-de3ab634f4e6","namespaceName":"wfeventsv2","receivedAt":"2024-04-25T14:28:56.374147Z", "serialID":1}
+
+
+                id: 2
+
+                event: message
+
+                data: {"Event":{"specversion":"1.0","id":"1234-234234","source":"https://direktiv.io/test","type":"testerDuplicate"},"namespace":"e09f0392-fe09-4378-bc0a-de3ab634f4e6","namespaceName":"wfeventsv2","receivedAt":"2024-04-25T14:28:56.374148Z", "serialID":2}
+  "/api/v2/namespaces/{namespace}/events/listeners":
+    get:
+      tags:
+        - events
+      summary: Retrieve a list of event listeners within a specific namespace.
+      description: >
+        This endpoint retrieves a list of the last 200 event listeners
+        configured within the specified namespace. Event listeners are entities
+        that listen for specific events within a workflow environment, allowing
+        for event-driven architecture.
+      parameters:
+        - name: namespace
+          in: path
+          description: The namespace for which to retrieve event listeners.
+          required: true
+          schema:
+            type: string
+            pattern: ^(([a-z][a-z0-9_\-\.]*[a-z0-9])|([a-z]))$
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          required: true
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                meta:
+                  total: 100
+                data:
+                  - id: 977a5b18-27bf-4914-b666-456cc0073ea9
+                    createdAt: 2024-04-25T20:55:00.956697Z
+                    updatedAt: 2024-04-25T20:55:00.956697Z
+                    namespace: wfeventsv2
+                    listeningForEventTypes:
+                      - greeting
+                    triggerType: StartSimple
+                    triggerWorkflow: /listener.yml
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    nullable: true
+                    properties:
+                      total:
+                        type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          required: true
+                          description: The unique identifier of the event listener.
+                        createdAt:
+                          type: string
+                          required: true
+                          description: The timestamp indicating when the event listener was created.
+                        updatedAt:
+                          type: string
+                          required: true
+                          description: The timestamp indicating when the event listener was last updated.
+                        namespace:
+                          type: string
+                          required: true
+                          description: The name of the namespace to which the event listener belongs.
+                        namespaceID:
+                          type: string
+                          required: true
+                          description: The id of the namespace to which the event listener belongs.
+                        listeningForEventTypes:
+                          type: array
+                          items:
+                            type: string
+                          description: The types of events the listener is configured to listen for.
+                        triggerType:
+                          type: string
+                          required: true
+                          description: The type of trigger associated with the event listener.
+                        triggerWorkflow:
+                          type: string
+                          description: The workflow triggered by the event listener.
+                        triggerInstance:
+                          type: string
+                          description: The instance triggered by the event listener.
+                        eventContextFilters:
+                          type: object
+                          description: Glob patterns associated with the event listener.
+  "/api/v2/namespaces/{namespace}/events/listeners/{listenerID}":
+    get:
+      tags:
+        - events
+      summary: Retrieve details of an individual event listener within a namespace.
+      description: >
+        This endpoint retrieves details of an individual event listener
+        identified by the provided listener ID within the specified namespace.
+        Event listeners are entities configured to listen for specific events
+        within a workflow environment, facilitating event-driven interactions.
+      parameters:
+        - name: namespace
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: ^(([a-z][a-z0-9_\-\.]*[a-z0-9])|([a-z]))$
+        - name: listenerID
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: ^(([a-z][a-z0-9_\-\.]*[a-z0-9])|([a-z]))$
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                  id: 977a5b18-27bf-4914-b666-456cc0073ea9
+                  createdAt: 2024-04-25T20:55:00.956697Z
+                  updatedAt: 2024-04-25T20:55:00.956697Z
+                  namespaceID: wfeventsv2
+                  listeningForEventTypes:
+                    - greeting
+                  triggerType: StartSimple
+                  triggerWorkflow: /listener.yml
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        required: true
+                        description: The unique identifier of the event listener.
+                      createdAt:
+                        type: string
+                        required: true
+                        description: The timestamp indicating when the event listener was created.
+                      updatedAt:
+                        type: string
+                        required: true
+                        description: The timestamp indicating when the event listener was last updated.
+                      namespaceID:
+                        type: string
+                        required: true
+                        description: The id of the namespace to which the event listener belongs.
+                      namespace:
+                        type: string
+                        required: true
+                        description: The name of the namespace to which the event listener belongs.
+                      listeningForEventTypes:
+                        type: array
+                        items:
+                          type: string
+                        description: The types of events the listener is configured to listen for.
+                      triggerType:
+                        type: string
+                        required: true
+                        description: The type of trigger associated with the event listener.
+                      triggerWorkflow:
+                        type: string
+                        description: The workflow triggered by the event listener.
+                      triggerInstance:
+                        type: string
+                        description: The instance triggered by the event listener.
+                      eventContextFilters:
+                        type: object
+                        description: Glob patterns associated with the event listener.
   "/api/v2/namespaces/{namespace}/files/{path}":
     get:
       tags:
@@ -725,6 +1225,727 @@ paths:
                                   nullable: true
                                   example:
                                     flow: /directory/myflow.yaml
+  "/api/v2/namespaces/{namespace}/instances":
+    get:
+      tags:
+        - instances
+      summary: Get all instances
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: filter.field
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: filter.type
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: filter.val
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Instances list returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      description: filesystem node data
+                      properties:
+                        createdAt:
+                          type: string
+                        endedAt:
+                          type: string
+                        definition:
+                          type: string
+                          description: Base64 encoded copy of the instance's workflow yaml at the time the
+                            instance was created.
+                        errorCode:
+                          type: string
+                        flow:
+                          type: array
+                          description: list of states that the instance has executed
+                          items:
+                            type: string
+                        id:
+                          type: string
+                        invoker:
+                          type: string
+                        lineage:
+                          type: array
+                          description: This will be an empty list if the instance is not a subflow.
+                            Otherwise, it will be an array containing
+                            information about how this instance relates to its
+                            parent, recursively.
+                          items:
+                            type: object
+                            properties:
+                              branch:
+                                type: integer
+                              id:
+                                type: string
+                                description: instance ID
+                              state:
+                                type: string
+                              step:
+                                type: integer
+                        path:
+                          type: string
+                        status:
+                          type: string
+                          enum:
+                            - complete
+                            - cancelled
+                            - pending
+                            - crashed
+                            - failed
+                        traceId:
+                          type: string
+                          description: This is currently a placeholder and shouldn't yet be used.
+                        inputLength:
+                          type: integer
+                        input:
+                          type: string
+                        outputLength:
+                          type: integer
+                        output:
+                          type: string
+                        metadataLength:
+                          type: integer
+                        metadata:
+                          type: string
+    post:
+      tags:
+        - instances
+      summary: Create an instance
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: path
+          in: query
+          schema:
+            type: string
+            description: filepath of the workflow to base the instance on
+          required: true
+        - name: wait
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Instance created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1instances/get/responses/\
+                      200/content/application~1json/schema/properties/data/item\
+                      s"
+  "/api/v2/namespaces/{namespace}/instances/{instanceID}":
+    patch:
+      tags:
+        - instances
+      summary: Change information about an instance. Right now this can only be used
+        to cancel an instance.
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - name: instanceID
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: Must be 'cancelled'.
+      responses:
+        "200":
+          description: This request returns nothing.
+    get:
+      tags:
+        - instances
+      summary: Get detailed instance information including blob lengths.
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1instances~1%7BinstanceID\
+            %7D/patch/parameters/1"
+      responses:
+        "200":
+          description: Instance summary information only returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1instances/get/responses/\
+                      200/content/application~1json/schema/properties/data/item\
+                      s"
+  "/api/v2/namespaces/{namespace}/instances/{instanceID}/input":
+    get:
+      tags:
+        - instances
+      summary: Get detailed instance information including the input blob.
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1instances~1%7BinstanceID\
+            %7D/patch/parameters/1"
+      responses:
+        "200":
+          description: Instance summary information plus input blob returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1instances/get/responses/\
+                      200/content/application~1json/schema/properties/data/item\
+                      s"
+  "/api/v2/namespaces/{namespace}/instances/{instanceID}/output":
+    get:
+      tags:
+        - instances
+      summary: Get detailed instance information including the output blob.
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1instances~1%7BinstanceID\
+            %7D/patch/parameters/1"
+      responses:
+        "200":
+          description: Instance summary information plus output blob returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1instances/get/responses/\
+                      200/content/application~1json/schema/properties/data/item\
+                      s"
+  "/api/v2/namespaces/{namespace}/instances/{instanceID}/metadata":
+    get:
+      tags:
+        - instances
+      summary: Get detailed instance information including the metadata blob.
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1instances~1%7BinstanceID\
+            %7D/patch/parameters/1"
+      responses:
+        "200":
+          description: Instance summary information plus metadata blob returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1instances/get/responses/\
+                      200/content/application~1json/schema/properties/data/item\
+                      s"
+  "/api/v2/namespaces/{namespace}/instances/{instancesID}/subscribe":
+    get:
+      tags:
+        - instances
+      summary: API for SSE streaming of instance data. The form of the data should
+        match the generic instance request.
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1instances~1%7BinstanceID\
+            %7D/patch/parameters/1"
+      responses:
+        "200":
+          description: Instance summary information only returned.
+          content:
+            text/event-stream:
+              schema:
+                type: object
+  /api/v2/jx:
+    post:
+      summary: Perform a jx query.
+      tags:
+        - server
+      responses:
+        "200":
+          description: JX helper API.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      jx:
+                        type: string
+                      data:
+                        type: string
+                      logs:
+                        type: string
+                      output:
+                        type: array
+                        items:
+                          type: string
+  "/api/v2/namespaces/{namespace}/metrics/instance":
+    get:
+      tags:
+        - metrics
+      summary: Gets all notifications in a namespace
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+        - in: query
+          name: workflowPath
+          required: true
+          schema:
+            type: string
+          description: Defined which workflow the instances will be related to.
+      responses:
+        "200":
+          description: Workflow instance metrics.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      complete:
+                        type: int
+                      failed:
+                        type: int
+                      cancelled:
+                        type: int
+                      crashed:
+                        type: int
+                      pending:
+                        type: int
+                      total:
+                        type: int
+  /api/v2/namespaces:
+    get:
+      tags:
+        - namespaces
+      summary: List all direktiv namespaces
+      responses:
+        "200":
+          description: list of direktiv namespaces
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: a unique string that represent name of the namespace
+                        isSystemNamespace:
+                          type: boolean
+                          description: returns true only if this is a privileged namespace with special
+                            system-wide impacts.
+                        mirror:
+                          type: object
+                          nullable: true
+                          description: git mirror settings associated with the namespace (only with git
+                            mirrored namespace). Null value means this is a none
+                            mirrored (ordinary) namespace
+                          properties:
+                            url:
+                              type: string
+                              description: url of the git repo
+                            gitRef:
+                              type: string
+                              description: git branch name
+                            authType:
+                              type: string
+                              enum:
+                                - public
+                                - ssh
+                                - token
+                              description: this field indicated what kind of authentication is used
+                            publicKey:
+                              type: string(optional)
+                              description: associated publish key ssh credential
+                            insecure:
+                              type: boolean
+                              description: to ignore insecure ssl certificates
+                            createdAt:
+                              type: string
+                              description: timestamp of creation date
+                            updatedAt:
+                              type: string
+                              description: timestamp of last updating date
+                        createdAt:
+                          type: string
+                          description: timestamp of creation date
+                        updatedAt:
+                          type: string
+                          description: timestamp of last updating date
+    post:
+      tags:
+        - namespaces
+      summary: Creates a new direktiv namespace
+      requestBody:
+        description: Namespace's creating data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: a unique name string of the namespace
+                mirror:
+                  type: object
+                  nullable: true
+                  description: git mirror settings associated with the namespace (only with git
+                    mirrored namespace). Null value means this is a none
+                    mirrored (ordinary) namespace
+                  properties:
+                    url:
+                      type: string
+                      description: url of the git repo
+                    gitRef:
+                      type: string
+                      description: git branch name
+                    authType:
+                      type: string
+                      enum:
+                        - public
+                        - ssh
+                        - token
+                      description: this field indicated what kind of authentication is used
+                    authToken:
+                      type: string(optional)
+                      description: auth token used to clone git repo
+                    publicKey:
+                      type: string(optional)
+                      description: associated publish key ssh credential
+                    privateKey:
+                      type: string(optional)
+                      description: associated private key ssh credential
+                    privateKeyPassphrase:
+                      type: string(optional)
+                      description: associated private key passphrase ssh credential
+                    insecure:
+                      type: boolean
+                      description: to ignore insecure ssl certificates
+      responses:
+        "200":
+          description: data of the created direktiv namespace
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: a unique string that represent name of the namespace
+                      isSystemNamespace:
+                        type: boolean
+                        description: returns true only if this is a privileged namespace with special
+                          system-wide impacts.
+                      mirror:
+                        type: object
+                        nullable: true
+                        description: git mirror settings associated with the namespace (only with git
+                          mirrored namespace). Null value means this is a none
+                          mirrored (ordinary) namespace
+                        properties:
+                          url:
+                            type: string
+                            description: url of the git repo
+                          gitRef:
+                            type: string
+                            description: git branch name
+                          authType:
+                            type: string
+                            enum:
+                              - public
+                              - ssh
+                              - token
+                            description: this field indicated what kind of authentication is used
+                          publicKey:
+                            type: string(optional)
+                            description: associated publish key ssh credential
+                          insecure:
+                            type: boolean
+                            description: to ignore insecure ssl certificates
+                          createdAt:
+                            type: string
+                            description: timestamp of creation date
+                          updatedAt:
+                            type: string
+                            description: timestamp of last updating date
+                      createdAt:
+                        type: string
+                        description: timestamp of creation date
+                      updatedAt:
+                        type: string
+                        description: timestamp of last updating date
+  "/api/v2/namespaces/{namespace}":
+    get:
+      tags:
+        - namespaces
+      summary: Fetches a direktiv namespace
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      responses:
+        "200":
+          description: data of the direktiv  namespace
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: a unique name string of the namespace
+                      isSystemNamespace:
+                        type: boolean
+                        description: returns true only if this is a privileged namespace with special
+                          system-wide impacts.
+                      mirror:
+                        type: object
+                        nullable: true
+                        description: git mirror settings associated with the namespace (only with git
+                          mirrored namespace). Null value means this is a none
+                          mirrored (ordinary) namespace
+                        properties:
+                          url:
+                            type: string
+                            description: url of the git repo
+                          gitRef:
+                            type: string
+                            description: git branch name
+                          authType:
+                            type: string
+                            enum:
+                              - public
+                              - ssh
+                              - token
+                            description: this field indicated what kind of authentication is used
+                          publicKey:
+                            type: string(optional)
+                            description: associated publish key ssh credential
+                          insecure:
+                            type: boolean
+                            description: to ignore insecure ssl certificates
+                          createdAt:
+                            type: string
+                            description: timestamp of creation date
+                          updatedAt:
+                            type: string
+                            description: timestamp of last updating date
+                      createdAt:
+                        type: string
+                        description: timestamp of creation date
+                      updatedAt:
+                        type: string
+                        description: timestamp of last updating date
+    delete:
+      tags:
+        - namespaces
+      summary: Removes a direktiv namespace and all related resources
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      responses:
+        "200":
+          description: object deleted successfully
+    patch:
+      tags:
+        - namespaces
+      summary: Patches a direktiv namespace
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      requestBody:
+        description: Namespace's updated data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mirror:
+                  type: object
+                  nullable: true
+                  description: git mirror settings associated with the namespace (only with git
+                    mirrored namespace). Null value means this is a none
+                    mirrored (ordinary) namespace
+                  properties:
+                    url:
+                      type: string
+                      description: url of the git repo
+                    gitRef:
+                      type: string
+                      description: git branch name
+                    authType:
+                      type: string
+                      enum:
+                        - public
+                        - ssh
+                        - token
+                      description: this field indicated what kind of authentication is used
+                    authToken:
+                      type: string(optional)
+                      description: auth token used to clone git repo
+                    publicKey:
+                      type: string(optional)
+                      description: associated publish key ssh credential
+                    privateKey:
+                      type: string(optional)
+                      description: associated private key ssh credential
+                    privateKeyPassphrase:
+                      type: string(optional)
+                      description: associated private key passphrase ssh credential
+                    insecure:
+                      type: boolean
+                      description: to ignore insecure ssl certificates
+      responses:
+        "200":
+          description: data of the updated direktiv namespace
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: a unique string that represent name of the namespace
+                      isSystemNamespace:
+                        type: boolean
+                        description: returns true only if this is a privileged namespace with special
+                          system-wide impacts.
+                      mirror:
+                        type: object
+                        nullable: true
+                        description: git mirror settings associated with the namespace (only with git
+                          mirrored namespace). Null value means this is a none
+                          mirrored (ordinary) namespace
+                        properties:
+                          url:
+                            type: string
+                            description: url of the git repo
+                          gitRef:
+                            type: string
+                            description: git branch name
+                          authType:
+                            type: string
+                            enum:
+                              - public
+                              - ssh
+                              - token
+                            description: this field indicated what kind of authentication is used
+                          publicKey:
+                            type: string(optional)
+                            description: associated publish key ssh credential
+                          insecure:
+                            type: boolean
+                            description: to ignore insecure ssl certificates
+                          createdAt:
+                            type: string
+                            description: timestamp of creation date
+                          updatedAt:
+                            type: string
+                            description: timestamp of last updating date
+                      createdAt:
+                        type: string
+                        description: timestamp of creation date
+                      updatedAt:
+                        type: string
+                        description: timestamp of last updating date
+  "/api/v2/namespaces/{namespace}/notifications":
+    get:
+      tags:
+        - notifications
+      summary: Gets all notifications in a namespace
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      responses:
+        "200":
+          description: list of notifications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        description:
+                          type: string
+                          description: dynamic string for humans to read
+                        count:
+                          type: integer
+                        level:
+                          type: string
+                          description: enum of the notification severity level (currently only 'warning'
+                            exists)
+                        type:
+                          type: string
+                          description: one of many fixed values that can be used as by tools to categorize
+                            the notification
   "/api/v2/namespaces/{namespace}/logs":
     get:
       tags:
@@ -1190,9 +2411,6 @@ paths:
                 name:
                   type: string
                   description: a unique name string of the secret
-                mimeType:
-                  type: string
-                  description: mime type of the secret's data
                 data:
                   type: string
                   description: base64 encoded string of the secret's data
@@ -1354,6 +2572,87 @@ paths:
       responses:
         "200":
           description: Service rebuilds successfully
+  "/api/v2/namespaces/{namespace}/syncs":
+    get:
+      tags:
+        - syncs
+      summary: Gets all direktiv namespace mirroring syncs
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      responses:
+        "200":
+          description: list of direktiv namespace mirroring syncs processes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: a unique uuid string that identifies a namespace mirroring sync
+                            process
+                        status:
+                          type: string
+                          enum:
+                            - complete
+                            - pending
+                            - executing
+                            - failed
+                          description: string that indicate the status of the sync process
+                        endedAt:
+                          type: string
+                          description: timestamp of process completion
+                        createdAt:
+                          type: string
+                          description: timestamp of creation date
+                        updatedAt:
+                          type: string
+                          description: timestamp of last updating date
+    post:
+      tags:
+        - syncs
+      summary: Creates (trigger) a new namespace mirroring sync
+      parameters:
+        - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
+            rameters/0"
+      responses:
+        "200":
+          description: data of the created direktiv namespace mirroring sync status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: a unique uuid string that identifies a namespace mirroring sync
+                          process
+                      status:
+                        type: string
+                        enum:
+                          - complete
+                          - pending
+                          - executing
+                          - failed
+                        description: string that indicate the status of the sync process
+                      endedAt:
+                        type: string
+                        description: timestamp of process completion
+                      createdAt:
+                        type: string
+                        description: timestamp of creation date
+                      updatedAt:
+                        type: string
+                        description: timestamp of last updating date
   "/api/v2/namespaces/{namespace}/variables":
     get:
       tags:
@@ -1362,6 +2661,23 @@ paths:
       parameters:
         - $ref: "#/paths/~1api~1v2~1namespaces~1%7Bnamespace%7D~1files~1%7Bpath%7D/get/pa\
             rameters/0"
+        - in: query
+          name: workflowPath
+          schema:
+            type: string
+          description: When set, the list will contain all variables under this workflow
+            path
+        - in: query
+          name: instanceId
+          schema:
+            type: string
+          description: When set, the list will contain all variables under this instance id
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: When set, the list will contain only variables having this name.
+            Empty list return when the filter matches to no variable
       responses:
         "200":
           description: list of direktiv variables
@@ -1390,14 +2706,11 @@ paths:
                           description: a unique name string of the variable (unique within the referenced
                             object)
                         size:
-                          type: string
+                          type: number
                           description: data size (in bytes) of the variable's data
                         mimeType:
                           type: string
                           description: mime type of the variable's data
-                        data:
-                          type: string
-                          description: base64 encoded string of the variable's data
                         createdAt:
                           type: string
                           description: timestamp of creation date
@@ -1458,7 +2771,7 @@ paths:
                         description: a unique name string of the variable (unique within the referenced
                           object)
                       size:
-                        type: string
+                        type: number
                         description: data size (in bytes) of the variable's data
                       mimeType:
                         type: string
@@ -1512,7 +2825,7 @@ paths:
                         description: a unique name string of the variable (unique within the referenced
                           object)
                       size:
-                        type: string
+                        type: number
                         description: data size (in bytes) of the variable's data
                       mimeType:
                         type: string
@@ -1599,7 +2912,7 @@ paths:
                         description: a unique name string of the variable (unique within the referenced
                           object)
                       size:
-                        type: string
+                        type: number
                         description: data size (in bytes) of the variable's data
                       mimeType:
                         type: string
@@ -1613,14 +2926,14 @@ paths:
                       updatedAt:
                         type: string
                         description: timestamp of last updating date
-  /api/v2/version:
+  /api/v2/status:
     get:
-      summary: Get server version information.
+      summary: Get server status information.
       tags:
         - server
       responses:
         "200":
-          description: Server version information.
+          description: Server status information.
           content:
             application/json:
               example:
@@ -1629,4 +2942,15 @@ paths:
                 type: object
                 properties:
                   data:
-                    type: string
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                        description: a unique string that represent id of the variable
+                      isEnterprise:
+                        type: boolean
+                        description: indicates if the backend is an enterprise installation
+                      requiresAuth:
+                        type: boolean
+                        description: indicates if the backend requires auth token to authenticate
+                          requests
