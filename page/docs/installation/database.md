@@ -11,7 +11,7 @@ The operator is provided as [Helm chart](https://helm.sh/) and the installation 
 ```bash title="Install Postgres Operator"
 kubectl create namespace postgres
 helm repo add percona https://percona.github.io/percona-helm-charts/
-helm install --create-namespace  -n postgres pg-operator percona/pg-operator --wait
+helm install --create-namespace --version 2.3.1  -n postgres pg-operator percona/pg-operator --wait
 ```
 
 !!! warning annotate "Backup Ports"
