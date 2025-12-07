@@ -1,7 +1,7 @@
 
 # Secrets & Registries
 
-Many flows require sensitive information such as passwords or authentication tokens to access third-party APIs. This article shows the best way to handle sensitive data such as this so that they don not need to be stored as plaintext in flow definitions. Additionally this article shows how to pull containers from a private repository.
+Many flows require sensitive information such as passwords or authentication tokens to access third-party APIs. This article shows the best way to handle sensitive data such as this so that they do not need to be stored as plaintext in flow definitions. Additionally this article shows how to pull containers from a private repository.
 
 Stored secrets can be requested in a function via the `secrets` attribute and is available as `.secrets.SECRETNAME`
 
@@ -10,7 +10,7 @@ direktiv_api: workflow/v1
 functions:
 - id: httprequest
   image: direktiv/request:v1
-  type: reusable
+  type: knative-workflow
 states:
 - id: getter
   type: action
@@ -67,7 +67,7 @@ Please make sure that there are no line wraps in the base64 file. For base64 enc
 
 ## Secrets
 
-Similar to how registry tokens are stored, arbitrary secrets can also be stored. That includes passwords, API tokens, certificates, or anything else. Secrets are stored on a namespace-by-namespace basis as key-value pairs. Secreats can be defined with the [Direktiv API](../api.md) or web interface.
+Similar to how registry tokens are stored, arbitrary secrets can also be stored. That includes passwords, API tokens, certificates, or anything else. Secrets are stored on a namespace-by-namespace basis as key-value pairs. Secrets can be defined with the [Direktiv API](../api.md) or web interface.
 
 Wherever actions appear in flow definitions there's always an optional `secrets` field. For every secret named in this field, Direktiv will find and decrypt the relevant secret from your namespace and add it to the data from which the action input is generated just before running the `jq` command that generates that logic. This means your `jq` commands can reference your secret and place it wherever it needs to be.
 

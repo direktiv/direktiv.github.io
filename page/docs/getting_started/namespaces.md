@@ -1,4 +1,4 @@
-Direktiv namespaces allow you the flexibility to divide projects, teams or use-cases. These spaces are totally seperate and independent of each other in terms of e.g. flows, secrets and services. You can easily create a namespace using the user interface or through an API call.
+Direktiv namespaces allow you the flexibility to divide projects, teams or use-cases. These spaces are totally separate and independent of each other in terms of e.g. flows, secrets and services. You can easily create a namespace using the user interface or through an API call.
 
 Namespaces come in two different types. The `standard` version only stores data in Direktiv, while the `mirror` namespaces use Git as their source of truth for configuration and flows. It is recommended to use Git-backed namespaces for projects but for this guide a `standard` namespace will suffice.
 
@@ -59,7 +59,7 @@ EOF
 
 ## Delete Namespace
 
-Delting a namepsace with the API is very simple. The command requires the `recursive` attribute if there is already content in the namespace.
+Deleting a namespace with the API is very simple. The command requires the `recursive` attribute if there is already content in the namespace.
 
 ```sh
 curl -X DELETE http://localhost:8080/api/namespaces/demo?recursive=true

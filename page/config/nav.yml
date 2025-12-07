@@ -64,7 +64,9 @@ nav:
       - Variables:
           - Variables: spec/variables/variables.md
           - System: spec/variables/system.md
-  - API: api.md
+  - API:
+      - API Reference: api.md
+      - Authentication: api/authentication.md
   - Development:
       - Standalone Environment: environment/direktiv-development-environment.md
       - direktivctl: environment/cli.md

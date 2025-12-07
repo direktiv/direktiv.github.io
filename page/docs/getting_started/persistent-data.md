@@ -24,7 +24,7 @@ states:
     value: 'jq(.var.x)'
 ```
 
-This demo increments a counter each time the flow is executed. It gets the variable `x` from `workflow` scope and increments it vi `jq`. The secons state stores the data in the same variable on the same scope.
+This demo increments a counter each time the flow is executed. It gets the variable `x` from `workflow` scope and increments it via `jq`. The second state stores the data in the same variable on the same scope.
 
 ## Scopes
 
@@ -150,4 +150,4 @@ There are three different folders for the three different scopes. For the above 
 /mnt/shared/example/out/namespace
 ```
 
-Files under these folders will be stored with their names under the scope of the folder. Diretories will be stored as tar.gz files.
+Files under these folders will be stored with their names under the scope of the folder. Directories will be stored as tar.gz files.

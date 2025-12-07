@@ -7,29 +7,32 @@ The flow receiving that request will have an additional header called `Header1`.
 
 
 ```yaml title="Javascript Route"
-direktiv_api: "endpoint/v1"
-allow_anonymous: true
-path: "/js"
-methods:
-  - "GET"
-plugins:
-  target:
-    type: "target-flow"
-    configuration:
-      flow: "/js-plugin/wf.yaml"
-      async: false
-  inbound:
-    - type: "js-inbound"
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  allow_anonymous: true
+  path: /js
+  plugins:
+    target:
+      type: target-flow
       configuration:
-        script: |
-          input["Headers"].Add("Header1", "Value1")
-    - type: "request-convert"
-      configuration:
-        omit_headers: false
-        omit_queries: false
-        omit_body: false
-        omit_consumer: false
-
+        flow: /js-plugin/wf.yaml
+        async: false
+    inbound:
+      - type: js-inbound
+        configuration:
+          script: |
+            input.Headers.Add("Header1", "Value1")
+      - type: request-convert
+        configuration:
+          omit_headers: false
+          omit_queries: false
+          omit_body: false
+          omit_consumer: false
+get:
+  summary: JavaScript plugin endpoint
+  responses:
+    "200":
+      description: Success
 ```
 
 
@@ -56,25 +59,29 @@ The URL would look like this: `http://YOUR-SERVER/ns/examples/js-action?action=d
 
 
 ```yaml title="Advanced Javascript"
-direktiv_api: "endpoint/v1"
-allow_anonymous: true
-path: "/js-action"
-methods:
-  - "GET"
-plugins:
-  target:
-    type: "target-flow"
-    configuration:
-      flow: "/js-plugin/wf.yaml"
-      async: false
-  inbound:
-    - type: "js-inbound"
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  allow_anonymous: true
+  path: /js-action
+  plugins:
+    target:
+      type: target-flow
       configuration:
-        script: |
-          b = JSON.parse(input["Body"]) 
-          const body = new Map();
-          body['action'] = input["Queries"].Get("action")[0]
-          body["original"] = b
-          input["Body"] = JSON.stringify(body)  
+        flow: /js-plugin/wf.yaml
+        async: false
+    inbound:
+      - type: js-inbound
+        configuration:
+          script: |
+            b = JSON.parse(input.Body)
+            const body = new Map()
+            body.action = input.Queries.Get("action")[0]
+            body.original = b
+            input.Body = JSON.stringify(body)
+get:
+  summary: Advanced JavaScript endpoint
+  responses:
+    "200":
+      description: Success
 ```
 
