@@ -1113,7 +1113,6 @@ paths:
                 type: object
                 properties:
                   data:
-                    type: object
                     $ref: "#/components/schemas/FileNodeWithoutData"
     patch:
       tags:
