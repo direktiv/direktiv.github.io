@@ -15,17 +15,25 @@ Instantly responds tp the request.
 
 
 ```yaml title="Instant Target"
-direktiv_api: "endpoint/v1"
-path: "/instant"
-methods:
-  - "GET"
-  - "HEAD"
-allow_anonymous: true
-plugins:
-  target:
-    type: "instant-response"
-    configuration:
-      content_type: "application/json"
-      status_code: 201
-      status_message: "{ \"hello\": \"world\" }"
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  allow_anonymous: true
+  path: /instant
+  plugins:
+    target:
+      type: instant-response
+      configuration:
+        content_type: application/json
+        status_code: 201
+        status_message: '{"hello": "world"}'
+get:
+  summary: Instant response
+  responses:
+    "201":
+      description: Success
+head:
+  summary: Instant response
+  responses:
+    "201":
+      description: Success
 ```

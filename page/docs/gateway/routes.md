@@ -1,16 +1,21 @@
 # Routes
 
-Routes are individual URLs defining an entry point into Direktiv. There are three basic settings for a route:
+Routes are individual URLs defining an entry point into Direktiv. Route files use **OpenAPI 3.x PathItem format** with Direktiv-specific extensions.
 
-- `path`: The path defines the URL being used by Direktiv. Usually it will be `https://yourserver.com/ns/NAMESPACE/ROUTEPATH` where `NAMESPACE` is the namespace the route is in. If the namespace is called `gateway` the URL looks
-usually different: `/gw/ROUTEPATH`. The namespace is not required in this case. An additional feature of this namespace is that the gateway can address targets in other namespaces whereas routes in other namespaces can only address targets in it's own namespace. A path can be static but can also contain variables.
-These variables can be used in plugins or can be passed through to the flow, e.g. `/product/{id}`.
+## Route File Structure
 
-- `timeout`: Timeout for the request in seconds.
+Route files must follow the OpenAPI PathItem format with the following required fields:
 
-- `methods`: The HTTP methods this route supports. This is only for the route and is not getting used for making requests to Direktiv, e.g. a GET request to a workflow target is still a POST internally from the gateway to Direktiv.
+- `x-direktiv-api`: Must be set to `endpoint/v2`
+- `x-direktiv-config`: Contains Direktiv-specific configuration:
+  - `path`: The path defines the URL being used by Direktiv. The URL will be `https://yourserver.com/ns/NAMESPACE/ROUTEPATH` where `NAMESPACE` is the namespace the route is in. A path can be static but can also contain variables.
+  These variables can be used in plugins or can be passed through to the flow, e.g. `/product/{id}`.
+  - `timeout`: Timeout for the request in seconds (optional, defaults to 24 hours).
+  - `allow_anonymous`: This boolean defines if a route is accessible for unauthenticated users. [Consumers](consumers.md) can still be used but the service is still accessible without a valid consumer.
+  - `skip_openapi`: If true, this endpoint won't appear in the generated OpenAPI specification (optional, defaults to false).
+  - `plugins`: Plugin configuration (see below).
 
-- `allow_anonymous`: This boolean defines if a route is accessible for unauthenticated users. [Consumers](consumers.md) can still be used but the service is still accessible without a valid consumer.
+- HTTP methods: Define the HTTP methods this route supports as OpenAPI operation objects (e.g., `get:`, `post:`, `put:`, `delete:`). Each method should have at least a `responses` section. The methods defined here determine which HTTP methods are accepted by the route. Note: a GET request to a workflow target is still a POST internally from the gateway to Direktiv.
 
 A route can have multiple plugins active to provide the required functionality. There are different types of plugins:
 
@@ -26,15 +31,23 @@ All plugins have a `type` which is the name of the plugin. They can have a `conf
 
 
 ```yaml title="Example Route"
-direktiv_api: "endpoint/v1"
-path: "/hello"
-methods:
-  - "GET"
-plugins:
-  target:
-    type: "target-flow"
-    configuration:
-      flow: "/envs-wf/wf.yaml"
-      async: false
-allow_anonymous: true
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  allow_anonymous: true
+  path: /hello
+  plugins:
+    target:
+      type: target-flow
+      configuration:
+        flow: /envs-wf/wf.yaml
+        async: false
+get:
+  summary: Hello endpoint
+  responses:
+    "200":
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
 ```

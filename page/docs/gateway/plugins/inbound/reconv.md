@@ -24,22 +24,26 @@ converted request like the following:
 ## Example
 
 ```yaml title="Request Converter Example"
-direktiv_api: "endpoint/v1"
-path: "/convert/{id}"
-methods:
-  - "GET"
-allow_anonymous: true
-plugins:
-  inbound:
-    - type: "request-convert"
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  allow_anonymous: true
+  path: /convert/{id}
+  plugins:
+    inbound:
+      - type: request-convert
+        configuration:
+          omit_headers: false
+          omit_queries: false
+          omit_body: true
+          omit_consumer: false
+    target:
+      type: target-flow
       configuration:
-        omit_headers: false
-        omit_queries: false
-        omit_body: true
-        omit_consumer: false
-  target:
-    type: "target-flow"
-    configuration:
-      flow: "wf.yaml"
-      async: false
+        flow: /workflows/wf.yaml
+        async: false
+get:
+  summary: Request converter endpoint
+  responses:
+    "200":
+      description: Success
 ```

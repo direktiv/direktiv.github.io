@@ -14,32 +14,36 @@ This plugin can add, modify or remove headers fro the request coming in.
 ## Example
 
 ```yaml title="Header Example"
-direktiv_api: endpoint/v1
-allow_anonymous: true
-plugins:
-  target:
-    type: target-flow
-    configuration:
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  allow_anonymous: true
+  path: /target
+  plugins:
+    target:
+      type: target-flow
+      configuration:
         flow: /target.yaml
         content_type: application/json
-  inbound:
-    - type: header-manipulation
-      configuration:
-        headers_to_add:
-        - name: hello
-          value: world
-        headers_to_modify: 
-        - name: header1
-          value: newvalue
-        headers_to_remove:
-          - name: header 
-    - type: "request-convert"
-      configuration:
-        omit_headers: false
-        omit_queries: true
-        omit_body: true
-        omit_consumer: true
-methods: 
-  - POST
-path: /target
+    inbound:
+      - type: header-manipulation
+        configuration:
+          headers_to_add:
+            - name: hello
+              value: world
+          headers_to_modify:
+            - name: header1
+              value: newvalue
+          headers_to_remove:
+            - name: header
+      - type: request-convert
+        configuration:
+          omit_headers: false
+          omit_queries: true
+          omit_body: true
+          omit_consumer: true
+post:
+  summary: Header manipulation endpoint
+  responses:
+    "200":
+      description: Success
 ```

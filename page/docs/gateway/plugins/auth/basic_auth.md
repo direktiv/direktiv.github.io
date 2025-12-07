@@ -12,21 +12,25 @@ Adds Basic Authentication to the route. This requires at least one valid consume
 ## Example
 
 ```yaml title="Basic Authentication"
-direktiv_api: "endpoint/v1"
-allow_anonymous: false
-path: "basicauth"
-methods:
-  - "GET"
-plugins:
-  target:
-    type: "target-flow-var"
-    configuration:
-      flow: "/envs-wf/wf.yaml"
-      variable: "hello"
-  auth:
-    - type: "basic-auth"
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  allow_anonymous: false
+  path: /basicauth
+  plugins:
+    target:
+      type: target-flow-var
       configuration:
-        add_username_header: true
-        add_tags_header: false
-        add_groups_header: true
+        flow: /envs-wf/wf.yaml
+        variable: hello
+    auth:
+      - type: basic-auth
+        configuration:
+          add_username_header: true
+          add_tags_header: false
+          add_groups_header: true
+get:
+  summary: Basic auth endpoint
+  responses:
+    "200":
+      description: Success
 ```
