@@ -19,7 +19,7 @@ update-examples: clone
 
 .PHONY: update-api
 update-api: clone
-	speccy resolve direktiv/docs/openapi/openapi.yaml -o page/docs/openapi.yaml
+	speccy resolve direktiv/openapi/src/openapi.yaml -o page/docs/openapi.yaml
 
 .PHONY: serve
 serve:
