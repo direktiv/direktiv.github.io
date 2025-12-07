@@ -19,6 +19,7 @@ nav:
       - Advanced Topics:
           - Timeouts: getting_started/advanced/timeout.md
           - Custom Functions: getting_started/advanced/making-functions.md
+          - Special Command: getting_started/advanced/special-command.md
           - Metadata: getting_started/advanced/metadata.md
   - Installation:
       - Install: installation/index.md
