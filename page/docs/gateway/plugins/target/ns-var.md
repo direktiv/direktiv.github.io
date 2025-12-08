@@ -5,23 +5,26 @@ Returns a namespace-scoped variable in Direktiv.
 ## Configuration
 | Value | Description |
 | ----- | ----------- |
-| namespace | Only configurable in the `gateway` namespace. In all other namespaces it can only call flows within that namespace.|
+| namespace | Optional. Defaults to the route's namespace. **Cannot target a different namespace** - if specified and different from the route's namespace, the request will be rejected with 403 Forbidden. |
 | variable | Name of the variable. Returns an empty body if not found. |
-| content_type |  The value of the Content-Type header |
+| content_type | Optional. Override the response Content-Type header |
 
 ## Example
 
-
 ```yaml title="Namespace Variable Target"
-direktiv_api: "endpoint/v1"
-path: "nsvar"
-methods:
-  - "GET"
-allow_anonymous: true
-plugins:
-  target:
-    type: "target-namespace-var"
-    configuration:
-      variable: "hello"
-      content_type: "plain/text"
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  allow_anonymous: true
+  path: /nsvar
+  plugins:
+    target:
+      type: target-namespace-var
+      configuration:
+        variable: hello
+        content_type: plain/text
+get:
+  summary: Get namespace variable
+  responses:
+    "200":
+      description: Success
 ```

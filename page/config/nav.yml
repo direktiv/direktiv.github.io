@@ -19,6 +19,7 @@ nav:
       - Advanced Topics:
           - Timeouts: getting_started/advanced/timeout.md
           - Custom Functions: getting_started/advanced/making-functions.md
+          - Special Command: getting_started/advanced/special-command.md
           - Metadata: getting_started/advanced/metadata.md
   - Installation:
       - Install: installation/index.md
@@ -63,7 +64,9 @@ nav:
       - Variables:
           - Variables: spec/variables/variables.md
           - System: spec/variables/system.md
-  - API: api.md
+  - API:
+      - API Reference: api.md
+      - Authentication: api/authentication.md
   - Development:
       - Standalone Environment: environment/direktiv-development-environment.md
       - direktivctl: environment/cli.md

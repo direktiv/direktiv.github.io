@@ -53,8 +53,12 @@ If POST is used the body of the request is getting logged for GET requests add a
 
 ## Using Generic Containers
 
-Direktiv has a special command to use any conatiner from a container registry even if it does not have a server running on port `8080`. If the the command `/usr/share/direktiv/direktiv-cmd` in the `cmd` field is used Direktiv provides a server for this function / container. 
-This can be useful if e.g. a Python container is used for scripting  or `bash` for ssh/scp comands. 
+!!! info "Comprehensive Guide"
+    For complete documentation on using generic containers with the special command, see the [Special Command User Guide](special-command.md).
+
+Direktiv has a special command to use any container from a container registry even if it does not have a server running on port `8080`. If the command `/usr/share/direktiv/direktiv-cmd` in the `cmd` field is used, Direktiv provides a server for this function/container. 
+
+This can be useful if e.g. a Python container is used for scripting or `bash` for ssh/scp commands.
 
 ```yaml title="Special Command"
 direktiv_api: workflow/v1
@@ -78,16 +82,14 @@ states:
           stop: true
 ```
 
-The `commands` block holds an array of individual commands which will be excuted in the function. The commands can have three additional parameters.
+The `commands` block holds an array of individual commands which will be executed in the function. The commands can have additional parameters:
 
 - `stop`: If the execution should stop if an error occurs during this command (default: false).
 - `suppress_command`: If the command should be printed when executed. Should be set to true if passwords are part of the command (default: false).
 - `suppress_output`: If the stdout output of the command should be printed (default: false).
-- `env`: A list ov environment variables with  `name`/`value` pairs for this single command.
+- `envs`: A list of environment variables with `name`/`value` pairs for this single command.
 
-The is an additional files block which allows to pass in files on-demand. A file requires a `name` and `content`. The content can be text-based data including
-Direktiv secrets. An additional setting is `permission`. If the file is an executable script or certificate the permissions can be set via that option.
-
+There is an additional `files` block which allows to pass in files on-demand. A file requires a `name` and `content`. The content can be text-based data including Direktiv secrets. An additional setting is `permission`. If the file is an executable script or certificate the permissions can be set via that option.
 
 ```yaml title="Files in Function"
 direktiv_api: workflow/v1
@@ -106,7 +108,6 @@ states:
       - name: script.sh
         content: |
           #!/bin/sh
-
           echo -n "HELLO WORLD"
         permission: 0755 
       data:

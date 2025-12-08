@@ -37,7 +37,7 @@ The `transform` field can contain a valid `jq` command, which will be applied to
 Transforms can be wrapped in `'jq()'` or `jq()`. The difference between the two is that one instructs YAML more explicitly what's in the string. This can be important if you use `jq` commands containing braces, for example: `jq({a: 1})`. Because if this is not explicitly quoted, YAML interprets it incorrectly and throws errors. The quoted form is always valid and generally safer.
 
 !!! hint 
-    The UI provides a JQ playground to write andf test JQ queries. 
+    The UI provides a JQ playground to write and test JQ queries. 
 
 ## JS introduction
 

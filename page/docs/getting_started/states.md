@@ -26,7 +26,7 @@ states:
     hello: world
 ```
 
-The above flow contains a single `noop` ("no operation") and shows the common attributes in all available states within Dirketiv. When the flow is getting executed Direktiv creates an `instance` of that flow definition and tracks the progress and state data of that instance. The output of that flow would be the following:
+The above flow contains a single `noop` ("no operation") and shows the common attributes in all available states within Direktiv. When the flow is getting executed Direktiv creates an `instance` of that flow definition and tracks the progress and state data of that instance. The output of that flow would be the following:
 
 ```json
 {

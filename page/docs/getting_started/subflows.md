@@ -1,6 +1,6 @@
 # Subflows
 
-Just like scripting or programming, with Direktiv it's possible to organize your logic into reusable modules. Anytime a flow is invoked by another we it is called subflow. A subflow can be called like actions and it uses the same parameters as functions.
+Just like scripting or programming, with Direktiv it's possible to organize your logic into reusable modules. Anytime a flow is invoked by another flow it is called a subflow. A subflow can be called like actions and it uses the same parameters as functions.
 
 ```yaml title="Subflow 'checker'"
 direktiv_api: workflow/v1

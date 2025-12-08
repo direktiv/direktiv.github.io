@@ -5,16 +5,16 @@ The Javascript plugin receives the response from Direktiv as an object. This obj
 The `input` object contains `Headers`, `Code` and `Body` and they can be addressed with the Javascript script in the plugin. 
 
 ```javascript title="Javascript Outbound Access"
-# Add Header
-input["Headers"].Add("new", "param")
+// Add Header
+input.Headers.Add("new", "param")
 
-# Modify Body
-b = JSON.parse(input["Body"])
-b["newvalue"] = "hello world"
-input["Body"] = JSON.stringify(b) 
+// Modify Body
+b = JSON.parse(input.Body)
+b.newvalue = "hello world"
+input.Body = JSON.stringify(b)
 
-# Change Response Code
-input["Code"] = 201
+// Change Response Code
+input.Code = 201
 ```
 
 ## Configuration
@@ -25,26 +25,30 @@ input["Code"] = 201
 ## Example
 
 ```yaml title="Javascript Example"
-direktiv_api: "endpoint/v1"
-path: "convert"
-methods:
-  - "GET"
-allow_anonymous: true
-plugins:
-  inbound: []
-  outbound:
-    - type: "js-outbound"
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  allow_anonymous: true
+  path: /convert
+  plugins:
+    inbound: []
+    outbound:
+      - type: js-outbound
+        configuration:
+          script: |
+            input.Code = 201
+            input.Headers.Add("new", "param")
+            b = JSON.parse(input.Body)
+            b.newvalue = "hello world"
+            input.Body = JSON.stringify(b)
+    auth: []
+    target:
+      type: target-flow
       configuration:
-        script: |
-            input["Code"] = 201
-            input["Headers"].Add("new", "param")
-            b = JSON.parse(input["Body"])
-            b["newvalue"] = "hello world"
-            input["Body"] = JSON.stringify(b) 
-  auth: []
-  target:
-    type: "target-flow"
-    configuration:
-      flow: "wf.yaml"
-      async: false
+        flow: /workflows/wf.yaml
+        async: false
+get:
+  summary: JavaScript outbound endpoint
+  responses:
+    "201":
+      description: Success
 ```

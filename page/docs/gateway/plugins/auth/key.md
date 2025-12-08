@@ -13,23 +13,26 @@ Adds API key Authentication to the route. This requires at least one valid consu
 ## Example
 
 ```yaml title="Key Authentication"
-direktiv_api: "endpoint/v1"
-allow_anonymous: false
-path: "keyauth"
-methods:
-  - "GET"
-plugins:
-  target:
-    type: "target-flow-var"
-    configuration:
-      flow: "/envs-wf/wf.yaml"
-      variable: "hello"
-  auth:
-    - type: "key-auth"
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  allow_anonymous: false
+  path: /keyauth
+  plugins:
+    target:
+      type: target-flow-var
       configuration:
-        add_username_header: false
-        add_tags_header: false
-        add_groups_header: false
-        key_name: "myapikey"
-
+        flow: /envs-wf/wf.yaml
+        variable: hello
+    auth:
+      - type: key-auth
+        configuration:
+          add_username_header: false
+          add_tags_header: false
+          add_groups_header: false
+          key_name: myapikey
+get:
+  summary: Key auth endpoint
+  responses:
+    "200":
+      description: Success
 ```

@@ -3,7 +3,7 @@
 
 The concept of consumers is used in Direktiv's gateway. The following example uses two consumers and an endpoint requiring authentication. 
 
-For auithentication the `key-auth` plugin is used where `key_name` defines the name of the API key. By default all consumers in Direktiv can access an endpoint. 
+For authentication the `key-auth` plugin is used where `key_name` defines the name of the API key. By default all consumers in Direktiv can access an endpoint. 
 
 In this example there ius an additional ACL plugin configured which limits the access by groups. In this case only consumers with `group1` can access the route.
 
@@ -25,54 +25,53 @@ curl --request GET \
 
 
 ```yaml title="Route with Authentication"
-direktiv_api: "endpoint/v1"
-path: "/consumer"
-methods:
-  - "GET"
-plugins:
-  target:
-    type: "target-flow"
-    configuration:
-      flow: "/gw/wf1.yaml"
-      async: false
-  inbound:
-    - type: "acl"
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  path: /consumer
+  plugins:
+    target:
+      type: target-flow
       configuration:
-        allow_groups:
-          - "group1"
-  auth:
-    - type: "key-auth"
-      configuration:
-        add_username_header: false
-        add_tags_header: false
-        add_groups_header: false
-        key_name: "mykey"
-
+        flow: /workflows/wf1.yaml
+        async: false
+    inbound:
+      - type: acl
+        configuration:
+          allow_groups:
+            - group1
+    auth:
+      - type: key-auth
+        configuration:
+          add_username_header: false
+          add_tags_header: false
+          add_groups_header: false
+          key_name: mykey
+get:
+  summary: Consumer endpoint
+  responses:
+    "200":
+      description: Success
 ```
 
 
 
 ```yaml title="Consumer 1"
-direktiv_api: "consumer/v1"
-username: "demo"
-password: "password"
-api_key: "apikey"
+direktiv_api: consumer/v1
+username: demo
+password: password
+api_key: apikey
 tags:
-  - "tag1"
+  - tag1
 groups:
-  - "group1"
-
+  - group1
 ```
 
-
-
 ```yaml title="Consumer 2"
-direktiv_api: "consumer/v1"
-username: "demo2"
-password: "password2"
-api_key: "apikey2"
+direktiv_api: consumer/v1
+username: demo2
+password: password2
+api_key: apikey2
 groups:
-  - "group2"
-
+  - group2
 ```
 

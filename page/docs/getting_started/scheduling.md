@@ -13,7 +13,7 @@ start:
 functions:
 - id: httprequest
   image: gcr.io/direktiv/functions/http-request:1.0
-  type: reusable
+  type: knative-workflow
 states:
 - id: getter
   type: action

@@ -15,29 +15,33 @@ If a route requires authentication all valid consumers have access to the route.
 ## Example
 
 ```yaml title="ACL Example"
-direktiv_api: "endpoint/v1"
-path: "/consumer"
-methods:
-  - "GET"
-plugins:
-  target:
-    type: "target-flow"
-    configuration:
-      flow: "/gw/wf1.yaml"
-      async: false
-  inbound:
-    - type: "acl"
+x-direktiv-api: endpoint/v2
+x-direktiv-config:
+  path: /consumer
+  plugins:
+    target:
+      type: target-flow
       configuration:
-        allow_groups:
-          - "group1"
-          - "group2"
-        allow_tags:
-          - "tag1"
-  auth:
-    - type: "key-auth"
-      configuration:
-        add_username_header: false
-        add_tags_header: false
-        add_groups_header: false
-        key_name: "mykey"
+        flow: /workflows/wf1.yaml
+        async: false
+    inbound:
+      - type: acl
+        configuration:
+          allow_groups:
+            - group1
+            - group2
+          allow_tags:
+            - tag1
+    auth:
+      - type: key-auth
+        configuration:
+          add_username_header: false
+          add_tags_header: false
+          add_groups_header: false
+          key_name: mykey
+get:
+  summary: ACL protected endpoint
+  responses:
+    "200":
+      description: Success
 ```

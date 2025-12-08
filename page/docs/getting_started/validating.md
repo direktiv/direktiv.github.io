@@ -21,7 +21,7 @@ states:
         type: string
 ```
 
-The above example will succedd because the attribute `name` is set and it is a string, in this case `Michael`. If the the value would be an integer the flow would fail.
+The above example will succeed because the attribute `name` is set and it is a string, in this case `Michael`. If the value would be an integer the flow would fail.
 
 
 ```yaml title="Failed Attribute"

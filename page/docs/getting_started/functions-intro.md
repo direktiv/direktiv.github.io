@@ -70,7 +70,7 @@ The input value for the function is set in `input` in. This YAML object under `i
 
 ## Return Value
 
-Every time a function is called the response is stored in `return` in the state data and can be processed via e.g. `transform` or `switch`. The next function call overwrites the `return` value so if data is required from a function accross multiple states it needs to be stored with a transition. 
+Every time a function is called the response is stored in `return` in the state data and can be processed via e.g. `transform` or `switch`. The next function call overwrites the `return` value so if data is required from a function across multiple states it needs to be stored with a transition. 
 
 In the example above the state data after executing the flow would have an additional JSON object with information about the headers and the content of the HTTP request in the `return` attribute.
 

@@ -109,4 +109,4 @@ states:
   message: 'value y not set'
 ```
 
-In this example if the payload does not contain `y: true` the flow fails. The error throwns `badinput` is thrown and the flow failed. The error `badinput` could be caught by a parent flow.
+In this example if the payload does not contain `y: true` the flow fails. The error `badinput` is thrown and the flow failed. The error `badinput` could be caught by a parent flow.

@@ -11,14 +11,20 @@ Because routes and consumers can be stored at any place in the tree it is recomm
 
 
 ```yaml title="Example Consumer"
-direktiv_api: "consumer/v1"
-username: "demo"
-password: "mypassword"
-api_key: "myapikey"
+direktiv_api: consumer/v1
+username: demo
+password: mypassword
+api_key: myapikey
 groups:
-  - "group1"
+  - group1
 tags:
-  - "mytags"
+  - mytags
 ```
+
+!!! note "Secret Interpolation"
+    The `password` and `api_key` fields support the `fetchSecret()` function:
+    ```yaml
+    password: "fetchSecret(my-namespace, my-secret-name)"
+    ```
 
 
