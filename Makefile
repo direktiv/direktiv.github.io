@@ -27,7 +27,8 @@ serve:
 
 .PHONY: publish
 publish:
-	mkdocs gh-deploy -f page/mkdocs.yml
+	docker build -f Dockerfile -t docs-builder  .
+	docker run --rm -it -v `pwd`:/docs  -w /docs docs-builder  mkdocs gh-deploy -f page/mkdocs.yml
 
 .PHONY: docker
 docker:
